@@ -6,8 +6,14 @@
   } @else if (hasHabits()) {
   <section
     class="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
-    aria-label="Tus hábitos"
+    aria-labelledby="habits-title"
   >
+    <h1
+      id="habits-title"
+      class="col-span-full mb-1 text-2xl font-semibold tracking-tight text-text-primary"
+    >
+      Tus hábitos
+    </h1>
     @for (habit of habits(); track habit.id) {
     <app-habit-card
       [id]="habit.id"

@@ -70,6 +70,9 @@ describe('Home', () => {
     expect(compiled.querySelector('[data-testid="home-add-habit"]')).toBeNull();
     expect(compiled.querySelector('[data-testid="home-welcome"]')).toBeNull();
     expect(compiled.querySelector('#home-title')).toBeNull();
+    expect(compiled.querySelector('#habits-title')?.textContent?.trim()).toBe(
+      'Tus hábitos',
+    );
     expect(compiled.querySelectorAll('app-habit-card')).toHaveLength(2);
     expect(
       compiled.querySelector('app-habit-card article')?.classList.contains('mx-auto'),
