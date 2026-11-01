@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn, Unique } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn, Unique } from 'typeorm';
+import { HabitEntity } from '../habits/habit.entity';
 
 export type UserRole = 'admin' | 'user';
 
@@ -19,4 +20,7 @@ export class UserEntity {
 
   @Column({ type: 'varchar', length: 128, select: false })
   passwordHash!: string;
+
+  @OneToMany(() => HabitEntity, (habit) => habit.user)
+  habits!: HabitEntity[];
 }

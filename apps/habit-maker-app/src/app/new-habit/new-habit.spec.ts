@@ -1,12 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { HabitService } from '../habits/habit.service';
 import { NewHabit } from './new-habit';
 
 describe('NewHabit', () => {
   let fixture: ComponentFixture<NewHabit>;
+  let submittedNames: string[];
 
   beforeEach(async () => {
+    submittedNames = [];
     await TestBed.configureTestingModule({
       imports: [NewHabit],
+      providers: [
+        {
+          provide: HabitService,
+          useValue: {
+            createHabit: (name: string) => {
+              submittedNames.push(name);
+              return of({
+                id: 'habit-1',
+                name,
+                createdAt: '',
+                updatedAt: '',
+              });
+            },
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NewHabit);
@@ -42,5 +62,25 @@ describe('NewHabit', () => {
     habitInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     expect(startButton.disabled).toBe(true);
+  });
+
+  it('submits the habit and emits success after the API responds', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const habitInput =
+      compiled.querySelector<HTMLInputElement>('#new-habit-name')!;
+    let emittedCreatedEvent = false;
+    fixture.componentInstance.habitCreated.subscribe(() => {
+      emittedCreatedEvent = true;
+    });
+
+    habitInput.value = '  Leer 10 minutos  ';
+    habitInput.dispatchEvent(new Event('input'));
+    compiled
+      .querySelector<HTMLFormElement>('.new-habit__form')!
+      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+
+    expect(submittedNames).toEqual(['Leer 10 minutos']);
+    expect(emittedCreatedEvent).toBe(true);
   });
 });

@@ -54,6 +54,7 @@ Thumbs.db
 .nx/self-healing
 .nx/migrate-runs
 .angular
+habitmaker.sqljs
 
 __screenshots__/
 vitest.config.*.timestamp*

@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { AuthService } from './auth.service';
+import { HabitEntity } from '../habits/habit.entity';
 import { UserEntity } from './user.entity';
 
 const ADMIN_EMAIL = 'configured-admin@example.com';
@@ -26,7 +27,7 @@ describe('AuthService', () => {
     dataSource = new DataSource({
       type: 'sqljs',
       autoSave: false,
-      entities: [UserEntity],
+      entities: [UserEntity, HabitEntity],
       synchronize: true,
     });
     await dataSource.initialize();

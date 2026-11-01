@@ -63,6 +63,11 @@
   font-weight: 600;
 }
 
+.new-habit__form {
+  display: grid;
+  gap: 1rem;
+}
+
 .new-habit__field input {
   border-radius: 0.85rem;
 }
@@ -72,6 +77,12 @@
   color: var(--color-text-secondary);
   font-size: 0.8rem;
   line-height: 1.45;
+}
+
+.new-habit__error {
+  margin: 0;
+  color: var(--color-danger, #b42318);
+  font-size: 0.875rem;
 }
 
 .new-habit__submit-button {

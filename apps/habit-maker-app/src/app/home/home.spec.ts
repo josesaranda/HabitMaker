@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { Home } from './home';
 
 describe('Home', () => {
   it('opens the first-habit modal from the welcome call to action', async () => {
     await TestBed.configureTestingModule({
       imports: [Home],
+      providers: [provideHttpClient()],
     }).compileComponents();
     const fixture = TestBed.createComponent(Home);
     fixture.detectChanges();
