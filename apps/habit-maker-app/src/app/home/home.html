@@ -2,5 +2,17 @@
   <section class="home-card" aria-labelledby="home-title">
     <h1 id="home-title">¡Bienvenido a casa!</h1>
     <p>Tu espacio para crear hábitos que te hacen bien empieza aquí.</p>
+    <button
+      #addHabitTrigger
+      hmButton="primary"
+      class="home-card__add-habit-button"
+      type="button"
+      (click)="newHabitModal.openFrom(addHabitTrigger)"
+    >
+      Añade tu primer hábito
+    </button>
+    <hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
+      <app-new-habit />
+    </hm-modal>
   </section>
 </main>

@@ -1,0 +1,49 @@
+<div class="new-habit">
+  <header class="new-habit__intro">
+    <span class="new-habit__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 2.5c.8 5.1 2.4 6.7 9.5 7.5-7.1.8-8.7 2.4-9.5 9.5-.8-7.1-2.4-8.7-9.5-9.5 7.1-.8 8.7-2.4 9.5-7.5Z"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
+    <p class="new-habit__eyebrow">Un hábito a la vez</p>
+    <h2 class="new-habit__title">¿Qué hábito quieres crear?</h2>
+    <p class="new-habit__description">
+      Empieza con algo sencillo que te gustaría hacer más a menudo.
+    </p>
+  </header>
+  <div class="new-habit__field">
+    <label for="new-habit-name">Tu hábito</label>
+    <input
+      hmInput
+      id="new-habit-name"
+      name="habit"
+      type="text"
+      autocomplete="off"
+      placeholder="Leer 10 minutos"
+      (input)="updateHabitName($event)"
+    />
+    <p class="new-habit__hint">Cuanto más concreto, más fácil será empezar.</p>
+  </div>
+  <button
+    hmButton="primary"
+    class="new-habit__submit-button"
+    type="button"
+    [disabled]="!canStartHabit()"
+  >
+    <span>Comenzar hábito</span>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4.75 12h14.5m-6-6 6 6-6 6"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </button>
+</div>

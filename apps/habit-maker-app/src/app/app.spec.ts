@@ -62,6 +62,9 @@ describe('App', () => {
       fixture.nativeElement.querySelector('app-home h1')?.textContent,
     ).toContain('¡Bienvenido a casa!');
     expect(
+      fixture.nativeElement.querySelector('app-home button')?.textContent,
+    ).toContain('Añade tu primer hábito');
+    expect(
       fixture.nativeElement.querySelector('hm-navbar hm-brand'),
     ).not.toBeNull();
 

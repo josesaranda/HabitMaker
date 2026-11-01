@@ -1,0 +1,30 @@
+<dialog
+  #dialog
+  class="hm-modal"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="label()"
+  (cancel)="onCancel($event)"
+  (click)="onDialogClick($event)"
+>
+  <section class="hm-modal__surface">
+    <button
+      class="hm-modal__close-button"
+      type="button"
+      [attr.aria-label]="closeLabel()"
+      (click)="close()"
+    >
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="m6 6 12 12M18 6 6 18"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+    <div class="hm-modal__content">
+      <ng-content />
+    </div>
+  </section>
+</dialog>

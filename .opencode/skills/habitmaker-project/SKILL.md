@@ -21,7 +21,8 @@ Use this skill for work specific to the HabitMaker codebase. Follow the reposito
 - Reusable UI primitives belong in `packages/habit-maker-ui/src/lib/`. Existing components include button, checkbox, input, and link. Update the library's public exports in `packages/habit-maker-ui/src/index.ts` when adding a component intended for consumers.
 - App-wide styles are in `apps/habit-maker-app/src/styles.css`. It imports Tailwind and the shared UI styles. Keep component-specific styles with their components and follow the established CSS conventions.
 - When creating a component or directive that needs styles, create a corresponding `.css` file alongside its source and connect it using the project's Angular style conventions. Do not add an otherwise unnecessary stylesheet when no styles are needed.
-- Name CSS classes using BEM: `block__element--modifier` (for example, `login-form__submit-button--disabled`). Keep class names scoped to the component or UI block to avoid unintended style collisions.
+- For pages, sections, and visual compositions in `HabitMakerApp`, Tailwind utility classes may be used instead of BEM.
+- Components created in `HabitMakerUI` must use BEM class names (`block__element--modifier`) and the design tokens defined in CSS. Keep classes scoped to the component to avoid unintended style collisions.
 - Keep tests near the code they cover, following the existing `*.spec.ts` patterns.
 
 ## Current application behavior

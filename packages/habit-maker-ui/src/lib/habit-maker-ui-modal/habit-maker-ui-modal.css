@@ -1,0 +1,79 @@
+.hm-modal {
+  position: fixed;
+  inset: 0;
+  width: min(36rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  overflow: visible;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.hm-modal::backdrop {
+  background-color: rgb(23 47 43 / 0.48);
+  backdrop-filter: blur(2px);
+  transition: background-color 240ms ease;
+}
+
+@starting-style {
+  .hm-modal[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+.hm-modal[data-closing]::backdrop {
+  background-color: transparent;
+}
+
+.hm-modal__surface {
+  position: relative;
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-surface);
+  box-shadow: 0 1.5rem 4rem rgb(23 47 43 / 0.2);
+}
+
+.hm-modal__content {
+  padding: 3.75rem clamp(1.25rem, 5vw, 2rem) clamp(1.5rem, 5vw, 2rem);
+}
+
+.hm-modal__close-button {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  display: inline-grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.hm-modal__close-button:hover {
+  background: var(--color-surface-secondary);
+  color: var(--color-text-primary);
+}
+
+.hm-modal__close-button:focus-visible {
+  outline: 2px solid var(--color-primary-hover);
+  outline-offset: 2px;
+}
+
+.hm-modal__close-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-modal::backdrop {
+    transition: none;
+  }
+}
