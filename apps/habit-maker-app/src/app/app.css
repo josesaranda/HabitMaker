@@ -35,6 +35,10 @@
   outline-offset: 3px;
 }
 
+.app-navbar__mobile-settings {
+  display: none;
+}
+
 @media (max-width: 700px) {
   .app-navbar-shell {
     position: sticky;
@@ -51,5 +55,9 @@
 
   .app-navbar__icon-actions {
     gap: 0.75rem;
+  }
+
+  .app-navbar__mobile-settings {
+    display: inline-grid;
   }
 }

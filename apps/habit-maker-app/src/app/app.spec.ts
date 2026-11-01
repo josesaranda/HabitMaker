@@ -119,6 +119,13 @@ describe('App', () => {
       'button[hmButtonIcon]',
     );
     expect(addHabitButton?.getAttribute('aria-label')).toBe('Añadir hábito');
+    const mobileSettingsLink = compiled.querySelector<HTMLAnchorElement>(
+      'a.app-navbar__mobile-settings',
+    );
+    expect(mobileSettingsLink?.getAttribute('href')).toBe('/settings');
+    expect(mobileSettingsLink?.getAttribute('aria-label')).toBe('Ajustes');
+    expect(mobileSettingsLink?.querySelector('hm-icon')?.getAttribute('name'))
+      .toBe('settings');
     const logoutButton = compiled.querySelector<HTMLButtonElement>(
       'button[aria-label="Cerrar sesión"]',
     );
