@@ -1,6 +1,6 @@
 ---
 name: habitmaker-project
-description: "Use when changing, reviewing, or explaining HabitMaker application code, UI components, routes, styles, tests, or workspace structure. Provides project-specific architecture and implementation guardrails."
+description: 'Use when changing, reviewing, or explaining HabitMaker application code, UI components, routes, styles, tests, or workspace structure. Provides project-specific architecture and implementation guardrails.'
 ---
 
 # HabitMaker Project Guide
@@ -19,9 +19,9 @@ Use this skill for work specific to the HabitMaker codebase. Follow the reposito
 - Add application screens and app-specific behavior under `apps/habit-maker-app/src/app/`.
 - App routes live in `apps/habit-maker-app/src/app/app.routes.ts`; app-level providers are configured in `app.config.ts`.
 - Reusable UI primitives belong in `packages/habit-maker-ui/src/lib/`. Existing components include button, checkbox, input, and link. Update the library's public exports in `packages/habit-maker-ui/src/index.ts` when adding a component intended for consumers.
-- App-wide styles are in `apps/habit-maker-app/src/styles.css`. It imports Tailwind and the shared UI styles. Keep component-specific styles with their components and follow the established CSS conventions.
-- When creating a component or directive that needs styles, create a corresponding `.css` file alongside its source and connect it using the project's Angular style conventions. Do not add an otherwise unnecessary stylesheet when no styles are needed.
-- For pages, sections, and visual compositions in `HabitMakerApp`, Tailwind utility classes may be used instead of BEM.
+- App-wide styles are in `apps/habit-maker-app/src/styles.css`. It imports Tailwind and the shared UI styles.
+- For screens and components in `HabitMakerApp`, use Tailwind utility classes in templates (including host classes where needed) or compose components from `HabitMakerUI`. Do not add app component `.css` files; CSS component stylesheets are reserved for `HabitMakerUI`.
+- When refactoring an app screen, migrate the app-specific stylesheets directly involved in that screen to Tailwind and remove those stylesheets. Leave unrelated legacy/global styles alone unless they are part of the request.
 - Components created in `HabitMakerUI` must use BEM class names (`block__element--modifier`) and the design tokens defined in CSS. Keep classes scoped to the component to avoid unintended style collisions.
 - Keep tests near the code they cover, following the existing `*.spec.ts` patterns.
 

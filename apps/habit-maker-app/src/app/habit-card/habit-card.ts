@@ -3,7 +3,7 @@ import { Component, computed, input } from '@angular/core';
 @Component({
   selector: 'app-habit-card',
   templateUrl: './habit-card.html',
-  styleUrl: './habit-card.css',
+  host: { class: 'block w-full' },
 })
 export class HabitCard {
   name = input.required<string>();

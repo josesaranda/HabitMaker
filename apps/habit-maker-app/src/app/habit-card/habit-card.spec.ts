@@ -28,7 +28,9 @@ describe('HabitCard', () => {
       '2023-10-01',
     );
     expect(compiled.querySelector('time')?.textContent).toContain('1 oct 2023');
-    expect(compiled.querySelectorAll('.day')).toHaveLength(7);
+    expect(compiled.querySelectorAll('[aria-hidden="true"] div')).toHaveLength(
+      7,
+    );
   });
 
   it('shows the provided date if it is not valid', () => {

@@ -12,7 +12,6 @@ import { NewHabit } from '../new-habit/new-habit';
   imports: [HabitMakerUIButton, HabitMakerUIModal, HabitCard, NewHabit],
   selector: 'app-home',
   templateUrl: './home.html',
-  styleUrl: './home.css',
 })
 export class Home implements OnInit {
   private readonly habitService = inject(HabitService);

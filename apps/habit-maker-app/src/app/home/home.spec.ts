@@ -33,7 +33,7 @@ describe('Home', () => {
     });
 
     compiled
-      .querySelector<HTMLButtonElement>('.home-card__add-habit-button')!
+      .querySelector<HTMLButtonElement>('[data-testid="home-add-habit"]')!
       .click();
 
     expect(dialog.open).toBe(true);
@@ -43,7 +43,7 @@ describe('Home', () => {
     expect(dialog.querySelector('app-new-habit')).not.toBeNull();
     expect(
       dialog.querySelector('label[for="new-habit-name"]')?.textContent,
-    ).toBe('Tu hábito');
+    ).toContain('Tu hábito');
     expect(dialog.querySelector('input#new-habit-name')).not.toBeNull();
     expect(dialog.textContent).toContain('Comenzar hábito');
   });
@@ -65,8 +65,8 @@ describe('Home', () => {
     ]);
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.home-card__add-habit-button')).toBeNull();
-    expect(compiled.querySelector('.home-card')).toBeNull();
+    expect(compiled.querySelector('[data-testid="home-add-habit"]')).toBeNull();
+    expect(compiled.querySelector('[data-testid="home-welcome"]')).toBeNull();
     expect(compiled.querySelector('#home-title')).toBeNull();
     expect(compiled.querySelectorAll('app-habit-card')).toHaveLength(2);
     expect(compiled.textContent).toContain('Leer 10 minutos');

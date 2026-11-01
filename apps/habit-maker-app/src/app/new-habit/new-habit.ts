@@ -10,7 +10,7 @@ import { HabitService } from '../habits/habit.service';
   selector: 'app-new-habit',
   imports: [HabitMakerUIButton, HabitMakerUIInput],
   templateUrl: './new-habit.html',
-  styleUrl: './new-habit.css',
+  host: { class: 'block' },
 })
 export class NewHabit {
   private readonly habitService = inject(HabitService);

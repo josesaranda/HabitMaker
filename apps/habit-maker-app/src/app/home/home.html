@@ -1,23 +1,40 @@
-<main class="home-page">
+<main class="flex h-full flex-col bg-background px-4 py-5 sm:px-[4vw] lg:px-12">
   @if (isLoading()) {
-  <p class="home-card__loading" role="status">Cargando tus hábitos…</p>
+  <p class="mt-6 self-center text-text-secondary" role="status">
+    Cargando tus hábitos…
+  </p>
   } @else if (hasHabits()) {
-  <section class="home-habits" aria-label="Tus hábitos">
+  <section
+    class="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
+    aria-label="Tus hábitos"
+  >
     @for (habit of habits(); track habit.id) {
     <app-habit-card [name]="habit.name" [startedAt]="habit.createdAt" />
     }
   </section>
   } @else {
-  <section class="home-card" aria-labelledby="home-title">
-    <h1 id="home-title">¡Bienvenido a casa!</h1>
-    <p>Tu espacio para crear hábitos que te hacen bien empieza aquí.</p>
+  <section
+    class="mx-auto my-auto w-full max-w-xl rounded-2xl border border-border bg-surface p-8 text-center sm:p-12 lg:p-16"
+    aria-labelledby="home-title"
+    data-testid="home-welcome"
+  >
+    <h1
+      id="home-title"
+      class="my-[0.8rem] text-[clamp(2rem,5vw,3rem)] font-semibold tracking-[-0.05em] text-text-primary"
+    >
+      ¡Bienvenido a casa!
+    </h1>
+    <p class="m-0 leading-relaxed text-text-secondary">
+      Tu espacio para crear hábitos que te hacen bien empieza aquí.
+    </p>
     @if (loadError()) {
-    <p class="home-card__error" role="alert">{{ loadError() }}</p>
+    <p class="mt-6 text-error" role="alert">{{ loadError() }}</p>
     }
     <button
       #addHabitTrigger
       hmButton="primary"
-      class="home-card__add-habit-button"
+      class="mt-6"
+      data-testid="home-add-habit"
       type="button"
       (click)="newHabitModal.openFrom(addHabitTrigger)"
     >

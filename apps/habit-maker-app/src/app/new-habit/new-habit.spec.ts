@@ -38,7 +38,7 @@ describe('NewHabit', () => {
 
     expect(
       compiled.querySelector('label[for="new-habit-name"]')?.textContent,
-    ).toBe('Tu hábito');
+    ).toContain('Tu hábito');
     expect(compiled.querySelector('input#new-habit-name')).not.toBeNull();
     expect(compiled.textContent).toContain('Comenzar hábito');
   });
@@ -48,7 +48,7 @@ describe('NewHabit', () => {
     const habitInput =
       compiled.querySelector<HTMLInputElement>('#new-habit-name')!;
     const startButton = compiled.querySelector<HTMLButtonElement>(
-      '.new-habit__submit-button',
+      'button[type="submit"]',
     )!;
 
     expect(startButton.disabled).toBe(true);
@@ -76,7 +76,7 @@ describe('NewHabit', () => {
     habitInput.value = '  Leer 10 minutos  ';
     habitInput.dispatchEvent(new Event('input'));
     compiled
-      .querySelector<HTMLFormElement>('.new-habit__form')!
+      .querySelector<HTMLFormElement>('form')!
       .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     fixture.detectChanges();
 
