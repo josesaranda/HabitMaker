@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Signup } from './signup';
@@ -9,7 +10,7 @@ describe('Signup', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Signup],
-      providers: [provideRouter([])],
+      providers: [provideHttpClient(), provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Signup);
@@ -24,7 +25,9 @@ describe('Signup', () => {
     const email = compiled.querySelector('input#email');
     const password = compiled.querySelector('input#password');
 
-    expect(compiled.querySelector('h2')?.textContent).toContain('Crea tu cuenta');
+    expect(compiled.querySelector('h2')?.textContent).toContain(
+      'Crea tu cuenta',
+    );
     expect(name).not.toBeNull();
     expect(email).not.toBeNull();
     expect(password).not.toBeNull();
@@ -32,19 +35,20 @@ describe('Signup', () => {
   });
 
   it('toggles password visibility', () => {
-    const toggle: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '.password-toggle',
-    );
+    const toggle: HTMLButtonElement =
+      fixture.nativeElement.querySelector('.password-toggle');
     toggle.click();
     fixture.detectChanges();
 
-    const password: HTMLInputElement = fixture.nativeElement.querySelector('#password');
+    const password: HTMLInputElement =
+      fixture.nativeElement.querySelector('#password');
     expect(password.type).toBe('text');
     expect(toggle.getAttribute('aria-pressed')).toBe('true');
   });
 
   it('shows and clears the password length error', () => {
-    const password: HTMLInputElement = fixture.nativeElement.querySelector('#password');
+    const password: HTMLInputElement =
+      fixture.nativeElement.querySelector('#password');
     password.value = 'short';
     password.dispatchEvent(new Event('input'));
     password.dispatchEvent(new Event('blur'));
@@ -66,14 +70,14 @@ describe('Signup', () => {
   });
 
   it('shows an error for an invalid email and clears it when corrected', () => {
-    const email: HTMLInputElement = fixture.nativeElement.querySelector('#email');
+    const email: HTMLInputElement =
+      fixture.nativeElement.querySelector('#email');
     email.value = 'not-an-email';
     email.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    const help: HTMLElement = fixture.nativeElement.querySelector(
-      '#signup-email-help',
-    );
+    const help: HTMLElement =
+      fixture.nativeElement.querySelector('#signup-email-help');
     expect(email.getAttribute('aria-invalid')).toBe('true');
     expect(email.classList).toContain('hm-input--error');
     expect(help.textContent).toContain('correo electrónico válido');

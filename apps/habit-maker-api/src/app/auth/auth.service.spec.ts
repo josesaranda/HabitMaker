@@ -3,69 +3,88 @@ import {
   ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
+  let jwtService: JwtService;
 
   beforeEach(() => {
-    service = new AuthService();
+    jwtService = new JwtService({ secret: 'test-secret' });
+    service = new AuthService(jwtService);
   });
 
   describe('signup', () => {
-    it('creates an account and normalizes its email', () => {
-      const result = service.signup({
+    it('creates an account and returns a JWT without user data', async () => {
+      const result = await service.signup({
         email: '  USER@example.com ',
         password: 'correct-horse',
       });
 
-      expect(result.user.email).toBe('user@example.com');
-      expect(result.user.id).toBeDefined();
+      const payload = await jwtService.verifyAsync(result.accessToken);
+      expect(payload).toMatchObject({ email: 'user@example.com' });
+      expect(payload.sub).toBeDefined();
+      expect(result).not.toHaveProperty('user');
       expect(result).not.toHaveProperty('password');
     });
 
-    it('rejects duplicate emails', () => {
-      service.signup({ email: 'user@example.com', password: 'correct-horse' });
+    it('rejects duplicate emails', async () => {
+      await service.signup({
+        email: 'user@example.com',
+        password: 'correct-horse',
+      });
 
-      expect(() =>
+      await expect(
         service.signup({ email: 'USER@example.com', password: 'another-pass' }),
-      ).toThrow(ConflictException);
+      ).rejects.toThrow(ConflictException);
     });
 
-    it('requires a valid email and a password of at least 8 characters', () => {
-      expect(() =>
+    it('requires a valid email and a password of at least 8 characters', async () => {
+      await expect(
         service.signup({ email: 'not-an-email', password: 'correct-horse' }),
-      ).toThrow(BadRequestException);
-      expect(() =>
+      ).rejects.toThrow(BadRequestException);
+      await expect(
         service.signup({ email: 'user@example.com', password: 'short' }),
-      ).toThrow(BadRequestException);
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('login', () => {
-    it('authenticates a registered account', () => {
-      service.signup({ email: 'user@example.com', password: 'correct-horse' });
+    it('authenticates a registered account and returns a JWT', async () => {
+      await service.signup({
+        email: 'user@example.com',
+        password: 'correct-horse',
+      });
 
-      expect(
-        service.login({ email: 'USER@example.com', password: 'correct-horse' }),
-      ).toMatchObject({ user: { email: 'user@example.com' } });
+      const result = await service.login({
+        email: 'USER@example.com',
+        password: 'correct-horse',
+      });
+
+      const payload = await jwtService.verifyAsync(result.accessToken);
+      expect(payload.email).toBe('user@example.com');
+      expect(result).not.toHaveProperty('user');
     });
 
-    it('rejects unknown accounts and incorrect passwords', () => {
-      service.signup({ email: 'user@example.com', password: 'correct-horse' });
+    it('rejects unknown accounts and incorrect passwords', async () => {
+      await service.signup({
+        email: 'user@example.com',
+        password: 'correct-horse',
+      });
 
-      expect(() =>
+      await expect(
         service.login({
           email: 'user@example.com',
           password: 'wrong-password',
         }),
-      ).toThrow(UnauthorizedException);
-      expect(() =>
+      ).rejects.toThrow(UnauthorizedException);
+      await expect(
         service.login({
           email: 'other@example.com',
           password: 'correct-horse',
         }),
-      ).toThrow(UnauthorizedException);
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 

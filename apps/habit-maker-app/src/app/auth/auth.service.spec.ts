@@ -1,73 +1,124 @@
+import { provideHttpClient } from '@angular/common/http';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
+
+const createJwt = (expiresAt = Math.floor(Date.now() / 1000) + 3600): string =>
+  `header.${btoa(JSON.stringify({ exp: expiresAt }))}.signature`;
+const API_URL = environment.API_URL || '/api';
 
 describe('AuthService', () => {
   let authService: AuthService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     localStorage.clear();
     sessionStorage.clear();
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
     authService = TestBed.inject(AuthService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
+    httpTestingController.verify();
     localStorage.clear();
     sessionStorage.clear();
   });
 
-  it('stores tokens in sessionStorage when remember-session is unchecked', () => {
-    const tokens = authService.login('person@example.com', 'password123');
+  it('sends login credentials and stores the returned JWT in sessionStorage', () => {
+    const token = createJwt();
+    authService.login('person@example.com', 'password123').subscribe();
 
-    expect(tokens).toEqual({
-      authToken: 'habitmaker-demo-auth-token',
-      refreshToken: 'habitmaker-demo-refresh-token',
+    const request = httpTestingController.expectOne(`${API_URL}/auth/login`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({
+      email: 'person@example.com',
+      password: 'password123',
     });
-    expect(authService.getAuthToken()).toBe(tokens.authToken);
-    expect(authService.getRefreshToken()).toBe(tokens.refreshToken);
+    request.flush({ accessToken: token });
+
+    expect(authService.getAuthToken()).toBe(token);
     expect(localStorage.getItem('habitmaker.authToken')).toBeNull();
-    expect(sessionStorage.getItem('habitmaker.authToken')).toBe(tokens.authToken);
+    expect(sessionStorage.getItem('habitmaker.authToken')).toBe(token);
     expect(authService.isAuthenticated()).toBe(true);
   });
 
-  it('stores tokens in localStorage when remember-session is checked', () => {
-    const tokens = authService.login('person@example.com', 'password123', true);
+  it('stores the login JWT in localStorage when remember-session is checked', () => {
+    const token = createJwt();
+    authService.login('person@example.com', 'password123', true).subscribe();
+    httpTestingController
+      .expectOne(`${API_URL}/auth/login`)
+      .flush({ accessToken: token });
 
-    expect(localStorage.getItem('habitmaker.authToken')).toBe(tokens.authToken);
+    expect(localStorage.getItem('habitmaker.authToken')).toBe(token);
     expect(sessionStorage.getItem('habitmaker.authToken')).toBeNull();
     expect(authService.isAuthenticated()).toBe(true);
   });
 
-  it('simulates signup and refresh with fixed tokens', () => {
-    const signupTokens = authService.signup(
-      'Persona',
-      'person@example.com',
-      'password123',
-    );
-    const refreshedTokens = authService.refreshToken(signupTokens.refreshToken);
+  it('sends signup data and stores the returned JWT', () => {
+    const token = createJwt();
+    authService
+      .signup('Persona', 'person@example.com', 'password123')
+      .subscribe();
 
-    expect(refreshedTokens).toEqual(signupTokens);
-    expect(localStorage.getItem('habitmaker.authToken')).toBeNull();
-    expect(sessionStorage.getItem('habitmaker.authToken')).toBe(signupTokens.authToken);
-    expect(authService.refreshToken('invalid-refresh-token')).toBeNull();
+    const request = httpTestingController.expectOne(`${API_URL}/auth/signup`);
+    expect(request.request.body).toEqual({
+      name: 'Persona',
+      email: 'person@example.com',
+      password: 'password123',
+    });
+    request.flush({ accessToken: token });
+
+    expect(authService.getAuthToken()).toBe(token);
+    expect(authService.isAuthenticated()).toBe(true);
   });
 
-  it('rejects unknown tokens and clears credentials on logout', () => {
-    localStorage.setItem('habitmaker.authToken', 'invalid-token');
+  it('sends password-recovery requests to the API', () => {
+    authService.forgotPassword('person@example.com').subscribe();
 
-    expect(authService.isAuthenticated()).toBe(false);
+    const request = httpTestingController.expectOne(
+      `${API_URL}/auth/forgot-password`,
+    );
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({ email: 'person@example.com' });
+    request.flush({
+      message: 'If an account exists, instructions will be sent.',
+    });
+  });
+
+  it('rejects missing, malformed, and expired JWTs', () => {
+    expect(authService.isTokenValid(null)).toBe(false);
     expect(authService.isTokenValid('invalid-token')).toBe(false);
+    expect(
+      authService.isTokenValid(createJwt(Math.floor(Date.now() / 1000) - 1)),
+    ).toBe(false);
+  });
 
-    authService.login('person@example.com', 'password123');
+  it('clears credentials on logout', () => {
+    const token = createJwt();
+    authService.login('person@example.com', 'password123').subscribe();
+    httpTestingController
+      .expectOne(`${API_URL}/auth/login`)
+      .flush({ accessToken: token });
+
     authService.logout();
 
     expect(authService.getAuthToken()).toBeNull();
-    expect(authService.getRefreshToken()).toBeNull();
     expect(authService.isAuthenticated()).toBe(false);
   });
 
   it('can defer the reactive logout state until navigation completes', () => {
-    authService.login('person@example.com', 'password123');
+    const token = createJwt();
+    authService.login('person@example.com', 'password123').subscribe();
+    httpTestingController
+      .expectOne(`${API_URL}/auth/login`)
+      .flush({ accessToken: token });
 
     authService.logout({ deferStateUpdate: true });
 

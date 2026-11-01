@@ -10,6 +10,7 @@ import {
   scryptSync,
   timingSafeEqual,
 } from 'node:crypto';
+import { JwtService } from '@nestjs/jwt';
 
 interface User {
   id: string;
@@ -30,7 +31,9 @@ interface Credentials {
 export class AuthService {
   private readonly users = new Map<string, StoredUser>();
 
-  signup(input: unknown): { user: User } {
+  constructor(private readonly jwtService: JwtService) {}
+
+  async signup(input: unknown): Promise<{ accessToken: string }> {
     const { email, password } = this.parseCredentials(input);
 
     if (password.length < 8) {
@@ -52,10 +55,10 @@ export class AuthService {
     };
     this.users.set(email, user);
 
-    return { user: this.toPublicUser(user) };
+    return this.createAccessToken(user);
   }
 
-  login(input: unknown): { user: User } {
+  async login(input: unknown): Promise<{ accessToken: string }> {
     const { email, password } = this.parseCredentials(input);
     const user = this.users.get(email);
 
@@ -63,7 +66,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    return { user: this.toPublicUser(user) };
+    return this.createAccessToken(user);
   }
 
   forgotPassword(input: unknown): { message: string } {
@@ -119,7 +122,14 @@ export class AuthService {
     return timingSafeEqual(candidateHash, user.passwordHash);
   }
 
-  private toPublicUser(user: User): User {
-    return { id: user.id, email: user.email };
+  private async createAccessToken(
+    user: User,
+  ): Promise<{ accessToken: string }> {
+    const accessToken = await this.jwtService.signAsync({
+      sub: user.id,
+      email: user.email,
+    });
+
+    return { accessToken };
   }
 }

@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { App } from './app';
@@ -10,7 +11,7 @@ describe('App', () => {
     sessionStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter(appRoutes)],
+      providers: [provideHttpClient(), provideRouter(appRoutes)],
     }).compileComponents();
   });
 
@@ -46,23 +47,31 @@ describe('App', () => {
   });
 
   it('redirects authenticated users from login and signup to home', async () => {
-    TestBed.inject(AuthService).login('persona@example.com', 'password123');
+    const payload = btoa(
+      JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 3600 }),
+    );
+    localStorage.setItem('habitmaker.authToken', `header.${payload}.signature`);
+    TestBed.inject(AuthService).syncAuthenticatedState();
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const router = TestBed.inject(Router);
 
     await router.navigateByUrl('/login');
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('app-home h1')?.textContent).toContain(
-      '¡Bienvenido a casa!',
-    );
-    expect(fixture.nativeElement.querySelector('hm-navbar hm-brand')).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('app-home h1')?.textContent,
+    ).toContain('¡Bienvenido a casa!');
+    expect(
+      fixture.nativeElement.querySelector('hm-navbar hm-brand'),
+    ).not.toBeNull();
 
     await router.navigateByUrl('/signup');
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('app-home h1')?.textContent).toContain(
-      '¡Bienvenido a casa!',
-    );
-    expect(fixture.nativeElement.querySelector('hm-navbar hm-brand')).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('app-home h1')?.textContent,
+    ).toContain('¡Bienvenido a casa!');
+    expect(
+      fixture.nativeElement.querySelector('hm-navbar hm-brand'),
+    ).not.toBeNull();
   });
 });

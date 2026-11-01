@@ -63,11 +63,19 @@ export class Signup {
   protected onSubmit(event: SubmitEvent): void {
     event.preventDefault();
     const formData = new FormData(event.currentTarget as HTMLFormElement);
-    this.authService.signup(
-      String(formData.get('name') ?? ''),
-      String(formData.get('email') ?? ''),
-      String(formData.get('password') ?? ''),
-    );
-    void this.router.navigateByUrl('/home');
+    this.message.set('');
+    this.authService
+      .signup(
+        String(formData.get('name') ?? ''),
+        String(formData.get('email') ?? ''),
+        String(formData.get('password') ?? ''),
+      )
+      .subscribe({
+        next: () => void this.router.navigateByUrl('/home'),
+        error: () =>
+          this.message.set(
+            'No se pudo crear la cuenta. Revisa tus datos e inténtalo de nuevo.',
+          ),
+      });
   }
 }

@@ -1,61 +1,104 @@
-import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
+import { map, Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
-export interface AuthTokens {
-  authToken: string;
-  refreshToken: string;
+interface AccessTokenResponse {
+  accessToken: string;
+}
+
+interface MessageResponse {
+  message: string;
 }
 
 export interface LogoutOptions {
   deferStateUpdate?: boolean;
 }
 
-const AUTH_TOKEN = 'habitmaker-demo-auth-token';
-const REFRESH_TOKEN = 'habitmaker-demo-refresh-token';
 const AUTH_TOKEN_STORAGE_KEY = 'habitmaker.authToken';
-const REFRESH_TOKEN_STORAGE_KEY = 'habitmaker.refreshToken';
+const API_URL = environment.API_URL || '/api';
 type TokenStorage = 'local' | 'session';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly http = inject(HttpClient);
   private readonly authenticatedState = signal(this.isTokenValid());
   readonly authenticated = this.authenticatedState.asReadonly();
 
-  login(_email: string, _password: string, rememberSession = false): AuthTokens {
-    return this.saveTokens(rememberSession);
+  login(
+    email: string,
+    password: string,
+    rememberSession = false,
+  ): Observable<void> {
+    return this.http
+      .post<AccessTokenResponse>(`${API_URL}/auth/login`, {
+        email,
+        password,
+      })
+      .pipe(
+        tap(({ accessToken }) => this.saveToken(accessToken, rememberSession)),
+        map(() => undefined),
+      );
   }
 
-  signup(_name: string, _email: string, _password: string): AuthTokens {
-    return this.saveTokens();
+  signup(name: string, email: string, password: string): Observable<void> {
+    return this.http
+      .post<AccessTokenResponse>(`${API_URL}/auth/signup`, {
+        name,
+        email,
+        password,
+      })
+      .pipe(
+        tap(({ accessToken }) => this.saveToken(accessToken)),
+        map(() => undefined),
+      );
+  }
+
+  forgotPassword(email: string): Observable<void> {
+    return this.http
+      .post<MessageResponse>(`${API_URL}/auth/forgot-password`, {
+        email,
+      })
+      .pipe(map(() => undefined));
   }
 
   getAuthToken(): string | null {
     return this.getStoredValue(AUTH_TOKEN_STORAGE_KEY);
   }
 
-  getRefreshToken(): string | null {
-    return this.getStoredValue(REFRESH_TOKEN_STORAGE_KEY);
-  }
-
   isTokenValid(token: string | null = this.getAuthToken()): boolean {
-    return token === AUTH_TOKEN;
+    if (!token) {
+      return false;
+    }
+
+    const payload = token.split('.')[1];
+    if (!payload) {
+      return false;
+    }
+
+    try {
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+      const binaryPayload = atob(paddedBase64);
+      const bytes = Uint8Array.from(binaryPayload, (character) =>
+        character.charCodeAt(0),
+      );
+      const claims = JSON.parse(new TextDecoder().decode(bytes)) as {
+        exp?: unknown;
+      };
+
+      return typeof claims.exp === 'number' && claims.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
   }
 
   isAuthenticated(): boolean {
     return this.isTokenValid();
   }
 
-  refreshToken(refreshToken: string | null = this.getRefreshToken()): AuthTokens | null {
-    if (refreshToken !== REFRESH_TOKEN) {
-      return null;
-    }
-
-    const rememberSession =
-      this.getStorageValue('local', REFRESH_TOKEN_STORAGE_KEY) === refreshToken;
-    return this.saveTokens(rememberSession);
-  }
-
   logout({ deferStateUpdate = false }: LogoutOptions = {}): void {
-    this.clearTokens();
+    this.clearToken();
     if (!deferStateUpdate) {
       this.authenticatedState.set(false);
     }
@@ -65,14 +108,11 @@ export class AuthService {
     this.authenticatedState.set(this.isTokenValid());
   }
 
-  private saveTokens(rememberSession = false): AuthTokens {
-    const tokens = { authToken: AUTH_TOKEN, refreshToken: REFRESH_TOKEN };
-    this.clearTokens();
+  private saveToken(token: string, rememberSession = false): void {
+    this.clearToken();
     const storage: TokenStorage = rememberSession ? 'local' : 'session';
-    this.storeValue(storage, AUTH_TOKEN_STORAGE_KEY, tokens.authToken);
-    this.storeValue(storage, REFRESH_TOKEN_STORAGE_KEY, tokens.refreshToken);
+    this.getStorage(storage)?.setItem(AUTH_TOKEN_STORAGE_KEY, token);
     this.authenticatedState.set(true);
-    return tokens;
   }
 
   private getStoredValue(key: string): string | null {
@@ -85,14 +125,9 @@ export class AuthService {
     return this.getStorage(storage)?.getItem(key) ?? null;
   }
 
-  private storeValue(storage: TokenStorage, key: string, value: string): void {
-    this.getStorage(storage)?.setItem(key, value);
-  }
-
-  private clearTokens(): void {
+  private clearToken(): void {
     for (const storage of ['local', 'session'] as const) {
       this.getStorage(storage)?.removeItem(AUTH_TOKEN_STORAGE_KEY);
-      this.getStorage(storage)?.removeItem(REFRESH_TOKEN_STORAGE_KEY);
     }
   }
 

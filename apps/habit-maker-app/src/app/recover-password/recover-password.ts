@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   HabitMakerUIButton,
@@ -6,6 +6,7 @@ import {
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
 import { AuthStory } from '../auth-story/auth-story';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-recover-password',
@@ -20,13 +21,25 @@ import { AuthStory } from '../auth-story/auth-story';
   styleUrl: './recover-password.css',
 })
 export class RecoverPassword {
+  private readonly authService = inject(AuthService);
   protected readonly requestSent = signal(false);
   protected readonly email = signal('');
+  protected readonly errorMessage = signal('');
 
   protected onSubmit(event: SubmitEvent): void {
     event.preventDefault();
     const formData = new FormData(event.currentTarget as HTMLFormElement);
-    this.email.set(String(formData.get('email') ?? ''));
-    this.requestSent.set(true);
+    const email = String(formData.get('email') ?? '');
+    this.errorMessage.set('');
+    this.authService.forgotPassword(email).subscribe({
+      next: () => {
+        this.email.set(email);
+        this.requestSent.set(true);
+      },
+      error: () =>
+        this.errorMessage.set(
+          'No se pudo procesar la solicitud. Inténtalo de nuevo.',
+        ),
+    });
   }
 }
