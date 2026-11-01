@@ -83,7 +83,7 @@
         <div class="form-field">
           <label for="email">Correo electrónico</label>
           <input
-            [hmInput]="emailInvalid ? 'error' : 'default'"
+            [hmInput]="emailInvalid() ? 'error' : 'default'"
             id="email"
             name="email"
             type="email"
@@ -91,17 +91,17 @@
             placeholder="tu@correo.com"
             (input)="onEmailInput($event)"
             (blur)="onEmailBlur($event)"
-            [attr.aria-invalid]="emailInvalid"
+            [attr.aria-invalid]="emailInvalid()"
             aria-describedby="signup-email-help"
             required
           />
           <span
             id="signup-email-help"
             class="field-help"
-            [class.field-help--error]="emailInvalid"
+            [class.field-help--error]="emailInvalid()"
             aria-live="polite"
           >
-            {{ emailInvalid ? emailValue ? 'Introduce un correo electrónico
+            {{ emailInvalid() ? emailValue() ? 'Introduce un correo electrónico
             válido.' : 'El correo electrónico es obligatorio.' : 'Usaremos tu
             correo para acceder a tu cuenta.' }}
           </span>
@@ -111,15 +111,15 @@
           <label for="password">Contraseña</label>
           <div class="password-field">
             <input
-              [hmInput]="passwordInvalid ? 'error' : 'default'"
+              [hmInput]="passwordInvalid() ? 'error' : 'default'"
               id="password"
               name="password"
-              [type]="passwordVisible ? 'text' : 'password'"
+              [type]="passwordVisible() ? 'text' : 'password'"
               autocomplete="new-password"
               placeholder="Crea una contraseña"
               (input)="onPasswordInput($event)"
-              (blur)="passwordTouched = true"
-              [attr.aria-invalid]="passwordInvalid"
+              (blur)="passwordTouched.set(true)"
+              [attr.aria-invalid]="passwordInvalid()"
               aria-describedby="signup-password-help"
               required
               minlength="8"
@@ -127,11 +127,11 @@
             <button
               class="password-toggle"
               type="button"
-              (click)="passwordVisible = !passwordVisible"
-              [attr.aria-label]="passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'"
-              [attr.aria-pressed]="passwordVisible"
+              (click)="passwordVisible.update((visible) => !visible)"
+              [attr.aria-label]="passwordVisible() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              [attr.aria-pressed]="passwordVisible()"
             >
-              @if (passwordVisible) {
+              @if (passwordVisible()) {
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7"
@@ -169,10 +169,10 @@
           <span
             id="signup-password-help"
             class="field-help"
-            [class.field-help--error]="passwordInvalid"
+            [class.field-help--error]="passwordInvalid()"
             aria-live="polite"
           >
-            {{ passwordInvalid ? 'La contraseña debe tener al menos 8
+            {{ passwordInvalid() ? 'La contraseña debe tener al menos 8
             caracteres.' : 'Usa al menos 8 caracteres.' }}
           </span>
         </div>
@@ -194,7 +194,7 @@
             />
           </svg>
         </button>
-        <p class="form-message" aria-live="polite">{{ message }}</p>
+        <p class="form-message" aria-live="polite">{{ message() }}</p>
       </form>
 
       <p class="auth-account-prompt">
