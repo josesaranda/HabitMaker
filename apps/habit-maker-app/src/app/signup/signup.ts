@@ -6,6 +6,7 @@ import {
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
+import { BrowserService } from '../browser/browser.service';
 import { AuthService } from '../auth/auth.service';
 import { AuthStory } from '../auth-story/auth-story';
 
@@ -22,6 +23,7 @@ import { AuthStory } from '../auth-story/auth-story';
   templateUrl: './signup.html',
 })
 export class Signup {
+  private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   protected passwordVisible = signal(false);
@@ -31,6 +33,10 @@ export class Signup {
   protected emailFormatValid = signal(true);
   protected passwordValue = signal('');
   protected passwordTouched = signal(false);
+
+  constructor() {
+    this.browserService.setTitle('Crear cuenta');
+  }
 
   protected emailInvalid = computed(
     () =>

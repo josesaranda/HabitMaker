@@ -7,6 +7,7 @@ import {
 } from '@habit-maker/habit-maker-ui';
 import { AuthStory } from '../auth-story/auth-story';
 import { AuthService } from '../auth/auth.service';
+import { BrowserService } from '../browser/browser.service';
 
 @Component({
   selector: 'app-recover-password',
@@ -21,10 +22,15 @@ import { AuthService } from '../auth/auth.service';
   styleUrl: './recover-password.css',
 })
 export class RecoverPassword {
+  private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
   protected readonly requestSent = signal(false);
   protected readonly email = signal('');
   protected readonly errorMessage = signal('');
+
+  constructor() {
+    this.browserService.setTitle('Recuperar contraseña');
+  }
 
   protected onSubmit(event: SubmitEvent): void {
     event.preventDefault();

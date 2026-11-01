@@ -10,6 +10,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HabitMakerUIButton } from '@habit-maker/habit-maker-ui';
+import { BrowserService } from '../browser/browser.service';
 import {
   EMPTY,
   catchError,
@@ -26,6 +27,7 @@ import { Habit, HabitService } from '../habits/habit.service';
   templateUrl: './habit-detail.html',
 })
 export class HabitDetail implements OnInit {
+  private readonly browserService = inject(BrowserService);
   private readonly route = inject(ActivatedRoute);
   private readonly habitService = inject(HabitService);
   private readonly destroyRef = inject(DestroyRef);
@@ -53,6 +55,7 @@ export class HabitDetail implements OnInit {
   });
 
   ngOnInit(): void {
+    this.browserService.setTitle('Detalle del hábito');
     this.route.paramMap
       .pipe(
         map((params) => params.get('id') ?? ''),
@@ -87,6 +90,7 @@ export class HabitDetail implements OnInit {
       )
       .subscribe(({ habit, completion }) => {
         this.habit.set(habit);
+        this.browserService.setTitle(`Hábito: ${habit.name}`);
         this.isCompletedToday.set(completion.completed);
         this.isLoading.set(false);
       });

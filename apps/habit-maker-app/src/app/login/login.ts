@@ -6,6 +6,7 @@ import {
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
+import { BrowserService } from '../browser/browser.service';
 import { AuthService } from '../auth/auth.service';
 import { AuthStory } from '../auth-story/auth-story';
 
@@ -22,10 +23,15 @@ import { AuthStory } from '../auth-story/auth-story';
   templateUrl: './login.html',
 })
 export class Login {
+  private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   protected passwordVisible = signal(false);
   protected message = signal('');
+
+  constructor() {
+    this.browserService.setTitle('Iniciar sesión');
+  }
 
   protected onSubmit(event: SubmitEvent): void {
     event.preventDefault();
