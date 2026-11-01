@@ -6,7 +6,10 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { HabitMakerUIIcon, HabitMakerUINavbar } from '@habit-maker/habit-maker-ui';
+import {
+  HabitMakerUIIcon,
+  HabitMakerUINavbar,
+} from '@habit-maker/habit-maker-ui';
 import { filter, map } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 
@@ -28,7 +31,10 @@ export class App {
   );
   protected readonly shouldShowNavbar = computed(() => {
     const currentPath = this.currentUrl().split(/[?#]/, 1)[0];
-    const isAuthPage = currentPath === '/login' || currentPath === '/signup';
+    const isAuthPage =
+      currentPath === '/login' ||
+      currentPath === '/signup' ||
+      currentPath === '/forgot-password';
 
     return this.authService.authenticated() && !isAuthPage;
   });
