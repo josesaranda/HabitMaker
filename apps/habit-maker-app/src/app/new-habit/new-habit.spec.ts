@@ -75,6 +75,7 @@ describe('NewHabit', () => {
 
     habitInput.value = '  Leer 10 minutos  ';
     habitInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
     compiled
       .querySelector<HTMLFormElement>('form')!
       .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
@@ -82,5 +83,6 @@ describe('NewHabit', () => {
 
     expect(submittedNames).toEqual(['Leer 10 minutos']);
     expect(emittedCreatedEvent).toBe(true);
+    expect(habitInput.value).toBe('');
   });
 });

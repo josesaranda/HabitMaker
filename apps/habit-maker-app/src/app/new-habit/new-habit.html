@@ -27,7 +27,11 @@
       Empieza con algo sencillo que te gustaría hacer más a menudo.
     </p>
   </header>
-  <form class="grid gap-4" (submit)="createHabit($event)">
+  <form
+    class="grid gap-4"
+    [formGroup]="habitForm"
+    (ngSubmit)="createHabit()"
+  >
     <div>
       <label
         class="mb-2 block text-[0.92rem] font-semibold text-text-primary"
@@ -39,12 +43,12 @@
         hmInput
         id="new-habit-name"
         name="habit"
+        formControlName="name"
         type="text"
         maxlength="100"
         class="rounded-[0.85rem]"
         autocomplete="off"
         placeholder="Leer 10 minutos"
-        (input)="updateHabitName($event)"
       />
       <p class="mt-[0.55rem] text-[0.8rem] leading-[1.45] text-text-secondary">
         Cuanto más concreto, más fácil será empezar.
