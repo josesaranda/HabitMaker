@@ -22,6 +22,7 @@ export class HabitCard {
 
       return {
         label: weekdayLabels[date.getDay()],
+        dayOfMonth: date.getDate(),
         offset,
       };
     });

@@ -44,6 +44,9 @@ describe('HabitCard', () => {
       ),
     );
     expect(dayItems[3].querySelector('b')?.textContent).toBe('·');
+    expect(dayItems[3].querySelectorAll('span')[1]?.textContent).toBe(
+      String(new Date().getDate()),
+    );
   });
 
   it('shows the provided date if it is not valid', () => {
