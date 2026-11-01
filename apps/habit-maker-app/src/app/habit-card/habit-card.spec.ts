@@ -28,9 +28,22 @@ describe('HabitCard', () => {
       '2023-10-01',
     );
     expect(compiled.querySelector('time')?.textContent).toContain('1 oct 2023');
-    expect(compiled.querySelectorAll('[aria-hidden="true"] div')).toHaveLength(
-      7,
+    const dayItems = compiled.querySelectorAll(
+      'article > div[aria-hidden="true"] > div',
     );
+    expect(dayItems).toHaveLength(7);
+
+    const weekdayLabels = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
+    const today = new Date().getDay();
+    expect(
+      Array.from(dayItems, (item) => item.querySelector('span')?.textContent),
+    ).toEqual(
+      Array.from(
+        { length: 7 },
+        (_, index) => weekdayLabels[(today + index - 3 + 7) % 7],
+      ),
+    );
+    expect(dayItems[3].querySelector('b')?.textContent).toBe('·');
   });
 
   it('shows the provided date if it is not valid', () => {
