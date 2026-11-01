@@ -13,7 +13,11 @@ describe('Home', () => {
         provideRouter([]),
         {
           provide: HabitService,
-          useValue: { getHabits: () => of(habits), habitCreated$: EMPTY },
+          useValue: {
+            getHabits: () => of(habits),
+            getCompletionsForDates: () => of([]),
+            habitCreated$: EMPTY,
+          },
         },
       ],
     }).compileComponents();
@@ -75,7 +79,9 @@ describe('Home', () => {
     );
     expect(compiled.querySelectorAll('app-habit-card')).toHaveLength(2);
     expect(
-      compiled.querySelector('app-habit-card article')?.classList.contains('mx-auto'),
+      compiled
+        .querySelector('app-habit-card article')
+        ?.classList.contains('mx-auto'),
     ).toBe(true);
     expect(compiled.textContent).toContain('Leer 10 minutos');
     expect(compiled.textContent).toContain('Caminar');
@@ -99,6 +105,7 @@ describe('Home', () => {
           provide: HabitService,
           useValue: {
             getHabits: () => of(requestCount++ === 0 ? [] : [habit]),
+            getCompletionsForDates: () => of([]),
             habitCreated$: habitCreated.asObservable(),
           },
         },

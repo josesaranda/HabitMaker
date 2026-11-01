@@ -48,8 +48,13 @@ export class HabitCompletionsController {
   @Get()
   findAll(
     @Param('habitId') habitId: string,
+    @Query('dates') dates: string | undefined,
     @Req() request: AuthenticatedUserRequest,
   ) {
+    if (dates !== undefined) {
+      return this.completions.findForDates(habitId, dates, request.user.id);
+    }
+
     return this.completions.findAll(habitId, request.user.id);
   }
 

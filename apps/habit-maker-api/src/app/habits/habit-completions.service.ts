@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'node:crypto';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { HabitEntity } from './habit.entity';
 import { HabitCompletionEntity } from './habit-completion.entity';
 
@@ -51,6 +51,30 @@ export class HabitCompletionsService {
     return this.completions.find({
       where: { habit: { id: habitId } },
       order: { date: 'DESC' },
+    });
+  }
+
+  async findForDates(
+    habitId: string,
+    datesInput: unknown,
+    userId: string,
+  ): Promise<HabitCompletionStatus[]> {
+    const dates = this.parseDates(datesInput);
+    await this.findOwnedHabit(habitId, userId);
+    const completions = await this.completions.find({
+      where: { habit: { id: habitId }, date: In(dates) },
+    });
+    const completionsByDate = new Map(
+      completions.map((completion) => [completion.date, completion]),
+    );
+
+    return dates.map((date) => {
+      const completion = completionsByDate.get(date);
+      return {
+        date,
+        completed: completion?.completed ?? false,
+        completedAt: completion?.completedAt ?? null,
+      };
     });
   }
 
@@ -111,6 +135,25 @@ export class HabitCompletionsService {
     }
 
     return input;
+  }
+
+  private parseDates(input: unknown): string[] {
+    if (typeof input !== 'string') {
+      throw new BadRequestException(
+        'A comma-separated dates value is required',
+      );
+    }
+
+    const requestedDates = input.split(',');
+    if (
+      requestedDates.length === 0 ||
+      requestedDates.length > 31 ||
+      requestedDates.some((date) => date.length === 0)
+    ) {
+      throw new BadRequestException('Request between 1 and 31 dates');
+    }
+
+    return [...new Set(requestedDates.map((date) => this.parseDate(date)))];
   }
 
   private parseCompleted(input: unknown): boolean {

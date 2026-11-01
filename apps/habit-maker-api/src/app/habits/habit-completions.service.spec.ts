@@ -120,6 +120,52 @@ describe('HabitCompletionsService', () => {
     expect(status.completedAt).toBeInstanceOf(Date);
   });
 
+  it('returns statuses only for the requested dates in their requested order', async () => {
+    await service.setCompletion(
+      habit.id,
+      '2026-11-01',
+      { completed: true },
+      user.id,
+    );
+    await service.setCompletion(
+      habit.id,
+      '2026-11-02',
+      { completed: true },
+      user.id,
+    );
+
+    const statuses = await service.findForDates(
+      habit.id,
+      '2026-11-03,2026-11-01',
+      user.id,
+    );
+
+    expect(
+      statuses.map(({ date, completed }) => ({ date, completed })),
+    ).toEqual([
+      { date: '2026-11-03', completed: false },
+      { date: '2026-11-01', completed: true },
+    ]);
+  });
+
+  it('rejects empty, oversized, and invalid requested date lists', async () => {
+    await expect(service.findForDates(habit.id, '', user.id)).rejects.toThrow(
+      BadRequestException,
+    );
+    await expect(
+      service.findForDates(
+        habit.id,
+        Array.from({ length: 32 }, (_, index) => `2026-11-${index + 1}`).join(
+          ',',
+        ),
+        user.id,
+      ),
+    ).rejects.toThrow(BadRequestException);
+    await expect(
+      service.findForDates(habit.id, '2026-02-30', user.id),
+    ).rejects.toThrow(BadRequestException);
+  });
+
   it('rejects invalid dates and completion values', async () => {
     await expect(
       service.setCompletion(

@@ -129,6 +129,38 @@ describe('HabitService', () => {
     expect(completed).toBe(true);
   });
 
+  it('requests completion statuses for only the selected dates', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    const selectedDates = ['2026-10-30', '2026-10-31', '2026-11-01'];
+    let receivedDates: string[] = [];
+
+    service
+      .getCompletionsForDates('habit-1', selectedDates)
+      .subscribe((statuses) => {
+        receivedDates = statuses.map(({ date }) => date);
+      });
+
+    const request = httpTestingController.expectOne(
+      (candidate) =>
+        candidate.url === `${API_URL}/habits/habit-1/completions` &&
+        candidate.params.has('dates'),
+    );
+    expect(request.request.method).toBe('GET');
+    expect(request.request.params.get('dates')).toBe(selectedDates.join(','));
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush(
+      selectedDates.map((date, index) => ({
+        date,
+        completed: index === 1,
+        completedAt: null,
+      })),
+    );
+
+    expect(receivedDates).toEqual(selectedDates);
+  });
+
   it('marks the habit complete today with the local date', () => {
     sessionStorage.setItem('habitmaker.authToken', 'access-token');
     let completed = false;

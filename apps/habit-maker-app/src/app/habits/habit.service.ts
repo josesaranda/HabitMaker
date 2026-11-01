@@ -89,6 +89,24 @@ export class HabitService {
     );
   }
 
+  getCompletionsForDates(
+    id: string,
+    dates: string[],
+  ): Observable<HabitCompletionStatus[]> {
+    const token = this.authService.getAuthToken();
+    if (!token) {
+      return throwError(() => new Error('Authentication is required'));
+    }
+
+    return this.http.get<HabitCompletionStatus[]>(
+      `${API_URL}/habits/${encodeURIComponent(id)}/completions`,
+      {
+        headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+        params: { dates: dates.join(',') },
+      },
+    );
+  }
+
   markCompletedToday(id: string): Observable<HabitCompletionStatus> {
     const token = this.authService.getAuthToken();
     if (!token) {

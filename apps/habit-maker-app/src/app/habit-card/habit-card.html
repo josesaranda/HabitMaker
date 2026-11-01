@@ -37,7 +37,7 @@
       @for (day of days(); track day.offset) {
       <div class="grid justify-items-center gap-2 text-[0.65rem] text-white/50">
         <span>{{ day.label }}</span>
-        @if (day.offset < 0) {
+        @if (day.completed) {
         <b
           class="grid size-7 place-items-center rounded-full border border-transparent bg-[#a8c5ad] text-xs font-medium text-[#172f2b]"
           >✓</b
@@ -55,5 +55,10 @@
       </div>
       }
     </div>
+    @if (completionError()) {
+    <p class="text-xs text-white/70" role="alert">
+      No se pudo cargar el progreso reciente.
+    </p>
+    }
   </article>
 </a>
