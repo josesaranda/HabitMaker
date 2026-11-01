@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { HabitMakerUIButton, HabitMakerUILink } from '@org/habit-maker-ui';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-  imports: [HabitMakerUIButton, HabitMakerUILink],
+  imports: [RouterOutlet],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  protected title = 'HabitMakerApp';
-}
+export class App {}

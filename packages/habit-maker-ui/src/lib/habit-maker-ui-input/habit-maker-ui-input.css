@@ -1,0 +1,45 @@
+.hm-input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 0.8rem 0.95rem;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  line-height: 1.5;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.hm-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.75;
+}
+
+.hm-input:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+}
+
+.hm-input:focus-visible {
+  border-color: var(--color-primary-hover);
+  outline: 3px solid color-mix(in srgb, var(--color-primary-hover) 18%, transparent);
+  outline-offset: 1px;
+}
+
+.hm-input.hm-input--error,
+.hm-input.hm-input--error:hover:not(:disabled) {
+  border-color: var(--color-error);
+}
+
+.hm-input.hm-input--error:focus-visible {
+  border-color: var(--color-error);
+  outline-color: color-mix(in srgb, var(--color-error) 18%, transparent);
+}
+
+.hm-input:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+  background-color: var(--color-surface-secondary);
+}

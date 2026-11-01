@@ -1,0 +1,213 @@
+<main class="auth-shell">
+  <section class="auth-story" aria-labelledby="story-title">
+    <a class="brand" routerLink="/login" aria-label="HabitMaker, inicio">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path
+            d="M16 25V13"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M16 17c-6.4 0-9.5-3.3-9.5-8.5C12 8.5 16 11 16 17Z"
+            fill="currentColor"
+          />
+          <path
+            d="M16 21c0-5.6 3.3-8.7 9.5-8.7 0 5.3-3.1 8.7-9.5 8.7Z"
+            fill="currentColor"
+            opacity=".62"
+          />
+        </svg>
+      </span>
+      <span>Habit<span class="brand-light">Maker</span></span>
+    </a>
+
+    <div class="auth-story-copy">
+      <span class="eyebrow"
+        ><span class="eyebrow-dot"></span> Pequeños pasos, grandes cambios</span
+      >
+      <h1 id="story-title">Lo que haces cada día <em>te transforma.</em></h1>
+      <p>
+        Crea hábitos que se sientan bien. Un día a la vez, a tu propio ritmo.
+      </p>
+    </div>
+
+    <div class="habit-card" aria-label="Ejemplo de progreso semanal">
+      <div class="habit-card-header">
+        <div class="habit-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 20v-8m0 3c-4.4 0-6.5-2.3-6.5-5.8 3.8 0 6.5 1.7 6.5 5.8Zm0-2c0-3.8 2.2-6 6.5-6 0 3.6-2.1 6-6.5 6Z"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <div class="habit-card-title">
+          <strong>Un poco de lectura</strong>
+          <span>Tu semana, en progreso</span>
+        </div>
+        <span class="streak">✦ 5 días</span>
+      </div>
+      <div class="week-days" aria-hidden="true">
+        <div class="day completed"><span>L</span><b>✓</b></div>
+        <div class="day completed"><span>M</span><b>✓</b></div>
+        <div class="day completed"><span>X</span><b>✓</b></div>
+        <div class="day completed"><span>J</span><b>✓</b></div>
+        <div class="day completed"><span>V</span><b>✓</b></div>
+        <div class="day today"><span>S</span><b>·</b></div>
+        <div class="day"><span>D</span><b></b></div>
+      </div>
+      <div class="card-note">
+        <span class="note-sparkle">✳</span> La constancia también puede ser
+        amable.
+      </div>
+    </div>
+    <span
+      class="story-decoration story-decoration--one"
+      aria-hidden="true"
+    ></span>
+    <span
+      class="story-decoration story-decoration--two"
+      aria-hidden="true"
+    ></span>
+    <p class="story-footer">Cultiva una vida que se parezca a ti.</p>
+  </section>
+
+  <section class="auth-panel" aria-labelledby="login-title">
+    <div class="auth-content">
+      <div class="auth-mobile-brand brand" aria-hidden="true">
+        <span class="brand-mark">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path
+              d="M16 25V13"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+            />
+            <path
+              d="M16 17c-6.4 0-9.5-3.3-9.5-8.5C12 8.5 16 11 16 17Z"
+              fill="currentColor"
+            />
+            <path
+              d="M16 21c0-5.6 3.3-8.7 9.5-8.7 0 5.3-3.1 8.7-9.5 8.7Z"
+              fill="currentColor"
+              opacity=".62"
+            />
+          </svg>
+        </span>
+        <span>Habit<span class="brand-light">Maker</span></span>
+      </div>
+      <span class="auth-welcome-label">Qué bueno tenerte de vuelta</span>
+      <h2 id="login-title">Inicia sesión</h2>
+      <p class="auth-intro">Retoma tus hábitos justo donde los dejaste.</p>
+
+      <form class="auth-form" (submit)="onSubmit($event)">
+        <div class="form-field">
+          <label for="email">Correo electrónico</label>
+          <input
+            hmInput
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            placeholder="tu@correo.com"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <div class="field-heading">
+            <label for="password">Contraseña</label>
+            <a hmLink href="#recuperar">¿La olvidaste?</a>
+          </div>
+          <div class="password-field">
+            <input
+              hmInput
+              id="password"
+              name="password"
+              [type]="passwordVisible ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="Escribe tu contraseña"
+              required
+              minlength="8"
+            />
+            <button
+              class="password-toggle"
+              type="button"
+              (click)="passwordVisible = !passwordVisible"
+              [attr.aria-label]="passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              [attr.aria-pressed]="passwordVisible"
+            >
+              @if (passwordVisible) {
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5.5 0 9 7 9 7a15 15 0 0 1-3 3.9M6.2 6.3C4.1 7.8 3 12 3 12s3.5 7 9 7c1 0 1.9-.2 2.7-.5"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              } @else {
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M3 12s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7Z"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linejoin="round"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2.5"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                />
+              </svg>
+              }
+            </button>
+          </div>
+        </div>
+
+        <label class="remember-option">
+          <input hmCheckbox type="checkbox" name="remember" />
+          <span>Recordar mi sesión</span>
+        </label>
+
+        <button hmButton="primary" class="auth-submit-button" type="submit">
+          Iniciar sesión
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path
+              d="M4 10h12m-5-5 5 5-5 5"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <p class="form-message" aria-live="polite">{{ message }}</p>
+      </form>
+
+      <p class="auth-account-prompt">
+        ¿Aún no tienes cuenta? <a hmLink routerLink="/signup">Empieza gratis</a>
+      </p>
+      <div class="auth-reassurance">
+        <span aria-hidden="true">✳</span> Tus hábitos, solo tuyos. Siempre.
+      </div>
+    </div>
+    <footer class="auth-footer">
+      © 2025 HabitMaker <span>·</span> Un día a la vez
+    </footer>
+  </section>
+</main>

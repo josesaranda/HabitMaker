@@ -1,0 +1,15 @@
+.hm-link {
+  color: var(--color-link);
+  text-underline-offset: 0.25rem;
+  transition: color 150ms ease;
+}
+
+.hm-link:hover {
+  color: var(--color-link-hover);
+  text-decoration-line: underline;
+}
+
+.hm-link:focus-visible {
+  outline: 2px solid var(--color-link-focus);
+  outline-offset: 2px;
+}

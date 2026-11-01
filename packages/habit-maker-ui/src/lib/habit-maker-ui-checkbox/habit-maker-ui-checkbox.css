@@ -1,0 +1,51 @@
+.hm-checkbox {
+  display: inline-grid;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 1.25rem;
+  appearance: none;
+  place-items: center;
+  margin: 0;
+  border: 1.5px solid var(--color-border-strong);
+  border-radius: 0.32rem;
+  background-color: var(--color-surface);
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.hm-checkbox::after {
+  width: 0.34rem;
+  height: 0.58rem;
+  transform: translateY(-0.04rem) rotate(45deg);
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  content: '';
+  opacity: 0;
+}
+
+.hm-checkbox:hover:not(:disabled) {
+  border-color: var(--color-primary-hover);
+}
+
+.hm-checkbox:checked {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+}
+
+.hm-checkbox:checked::after {
+  opacity: 1;
+}
+
+.hm-checkbox:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary-hover) 20%, transparent);
+  outline-offset: 2px;
+}
+
+.hm-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

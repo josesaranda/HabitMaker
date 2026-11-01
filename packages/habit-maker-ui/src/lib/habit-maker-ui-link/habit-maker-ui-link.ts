@@ -4,8 +4,7 @@ import { Directive } from '@angular/core';
   selector: 'a[hmLink]',
   standalone: true,
   host: {
-    class:
-      'text-link underline-offset-4 transition-colors hover:text-link-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link-focus',
+    class: 'hm-link',
   },
 })
 export class HabitMakerUILink {}

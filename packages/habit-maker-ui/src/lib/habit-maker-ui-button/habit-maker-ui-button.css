@@ -23,7 +23,7 @@
   color: var(--color-button-primary-text);
 }
 
-.hm-button--primary:hover {
+.hm-button--primary:hover:not(:disabled) {
   background-color: var(--color-button-primary-hover);
 }
 
@@ -38,7 +38,7 @@
   color: var(--color-button-secondary-text);
 }
 
-.hm-button--secondary:hover {
+.hm-button--secondary:hover:not(:disabled) {
   background-color: var(--color-button-secondary-hover);
 }
 
@@ -50,5 +50,4 @@
 button.hm-button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
-  pointer-events: none;
 }

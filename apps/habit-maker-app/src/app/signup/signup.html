@@ -1,0 +1,182 @@
+<main class="auth-shell">
+  <section class="auth-story" aria-labelledby="story-title">
+    <a class="brand" routerLink="/login" aria-label="HabitMaker, inicio">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M16 25V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M16 17c-6.4 0-9.5-3.3-9.5-8.5C12 8.5 16 11 16 17Z" fill="currentColor" />
+          <path d="M16 21c0-5.6 3.3-8.7 9.5-8.7 0 5.3-3.1 8.7-9.5 8.7Z" fill="currentColor" opacity=".62" />
+        </svg>
+      </span>
+      <span>Habit<span class="brand-light">Maker</span></span>
+    </a>
+
+    <div class="auth-story-copy">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> Un comienzo a tu ritmo</span>
+      <h1 id="story-title">Haz espacio para lo que <em>te hace bien.</em></h1>
+      <p>Empieza con un hábito pequeño y construye una rutina que encaje contigo.</p>
+    </div>
+
+    <div class="habit-card" aria-label="Ejemplo de hábito">
+      <div class="habit-card-header">
+        <div class="habit-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 20v-8m0 3c-4.4 0-6.5-2.3-6.5-5.8 3.8 0 6.5 1.7 6.5 5.8Zm0-2c0-3.8 2.2-6 6.5-6 0 3.6-2.1 6-6.5 6Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="habit-card-title">
+          <strong>Tu primer hábito</strong>
+          <span>Un momento para ti, cada día</span>
+        </div>
+        <span class="streak">✦ Día 1</span>
+      </div>
+      <div class="week-days" aria-hidden="true">
+        <div class="day today"><span>HOY</span><b>✓</b></div>
+        <div class="day"><span>MAR</span><b></b></div>
+        <div class="day"><span>MIÉ</span><b></b></div>
+        <div class="day"><span>JUE</span><b></b></div>
+        <div class="day"><span>VIE</span><b></b></div>
+        <div class="day"><span>SÁB</span><b></b></div>
+        <div class="day"><span>DOM</span><b></b></div>
+      </div>
+      <div class="card-note">
+        <span class="note-sparkle">✳</span> No hace falta hacerlo perfecto, solo empezar.
+      </div>
+    </div>
+    <span class="story-decoration story-decoration--one" aria-hidden="true"></span>
+    <span class="story-decoration story-decoration--two" aria-hidden="true"></span>
+    <p class="story-footer">Cultiva una vida que se parezca a ti.</p>
+  </section>
+
+  <section class="auth-panel" aria-labelledby="signup-title">
+    <div class="auth-content">
+      <div class="auth-mobile-brand brand" aria-hidden="true">
+        <span class="brand-mark">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 25V13" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+            <path d="M16 17c-6.4 0-9.5-3.3-9.5-8.5C12 8.5 16 11 16 17Z" fill="currentColor" />
+            <path d="M16 21c0-5.6 3.3-8.7 9.5-8.7 0 5.3-3.1 8.7-9.5 8.7Z" fill="currentColor" opacity=".62" />
+          </svg>
+        </span>
+        <span>Habit<span class="brand-light">Maker</span></span>
+      </div>
+      <span class="auth-welcome-label">Tu siguiente paso empieza aquí</span>
+      <h2 id="signup-title">Crea tu cuenta</h2>
+      <p class="auth-intro">Solo necesitas unos datos para empezar a cultivar nuevos hábitos.</p>
+
+      <form class="auth-form auth-form--signup" (submit)="onSubmit($event)">
+        <div class="form-field">
+          <label for="name">Nombre</label>
+          <input
+            hmInput
+            id="name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            placeholder="¿Cómo te llamas?"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="email">Correo electrónico</label>
+          <input
+            [hmInput]="emailInvalid ? 'error' : 'default'"
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            placeholder="tu@correo.com"
+            (input)="onEmailInput($event)"
+            (blur)="onEmailBlur($event)"
+            [attr.aria-invalid]="emailInvalid"
+            aria-describedby="signup-email-help"
+            required
+          />
+          <span
+            id="signup-email-help"
+            class="field-help"
+            [class.field-help--error]="emailInvalid"
+            aria-live="polite"
+          >
+            {{
+              emailInvalid
+                ? emailValue
+                  ? 'Introduce un correo electrónico válido.'
+                  : 'El correo electrónico es obligatorio.'
+                : 'Usaremos tu correo para acceder a tu cuenta.'
+            }}
+          </span>
+        </div>
+
+        <div class="form-field">
+          <label for="password">Contraseña</label>
+          <div class="password-field">
+            <input
+              [hmInput]="passwordInvalid ? 'error' : 'default'"
+              id="password"
+              name="password"
+              [type]="passwordVisible ? 'text' : 'password'"
+              autocomplete="new-password"
+              placeholder="Crea una contraseña"
+              (input)="onPasswordInput($event)"
+              (blur)="passwordTouched = true"
+              [attr.aria-invalid]="passwordInvalid"
+              aria-describedby="signup-password-help"
+              required
+              minlength="8"
+            />
+            <button
+              class="password-toggle"
+              type="button"
+              (click)="passwordVisible = !passwordVisible"
+              [attr.aria-label]="passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              [attr.aria-pressed]="passwordVisible"
+            >
+              @if (passwordVisible) {
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+                  <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5.5 0 9 7 9 7a15 15 0 0 1-3 3.9M6.2 6.3C4.1 7.8 3 12 3 12s3.5 7 9 7c1 0 1.9-.2 2.7-.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M3 12s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+                  <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7" />
+                </svg>
+              }
+            </button>
+          </div>
+          <span
+            id="signup-password-help"
+            class="field-help"
+            [class.field-help--error]="passwordInvalid"
+            aria-live="polite"
+          >
+            {{
+              passwordInvalid
+                ? 'La contraseña debe tener al menos 8 caracteres.'
+                : 'Usa al menos 8 caracteres.'
+            }}
+          </span>
+        </div>
+
+        <label class="remember-option">
+          <input hmCheckbox type="checkbox" name="terms" required />
+          <span>Acepto los términos de uso y la política de privacidad.</span>
+        </label>
+
+        <button hmButton="primary" class="auth-submit-button" type="submit">
+          Crear cuenta
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <p class="form-message" aria-live="polite">{{ message }}</p>
+      </form>
+
+      <p class="auth-account-prompt">¿Ya tienes una cuenta? <a hmLink routerLink="/login">Inicia sesión</a></p>
+      <div class="auth-reassurance"><span aria-hidden="true">✳</span> Tus hábitos, solo tuyos. Siempre.</div>
+    </div>
+    <footer class="auth-footer">© 2025 HabitMaker <span>·</span> Un día a la vez</footer>
+  </section>
+</main>

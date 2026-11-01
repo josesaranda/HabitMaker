@@ -1,4 +1,8 @@
 @import 'tailwindcss';
 @import '../../../packages/habit-maker-ui/src/lib/main.css';
 @import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-button/habit-maker-ui-button.css';
+@import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-checkbox/habit-maker-ui-checkbox.css';
+@import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-input/habit-maker-ui-input.css';
+@import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-link/habit-maker-ui-link.css';
+@import './app/auth/auth.css';
 @source "../../../packages/habit-maker-ui/src";
