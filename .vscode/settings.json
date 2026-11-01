@@ -1,0 +1,13 @@
+{
+  "editor.colorDecorators": true,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.colorDecorators": true,
+  "tailwindCSS.experimental.configFile": {
+    "apps/habit-maker-app/src/styles.css": [
+      "apps/habit-maker-app/src/**/*",
+      "packages/habit-maker-ui/src/**/*"
+    ]
+  }
+}

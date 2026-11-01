@@ -1,0 +1,10 @@
+{
+  "name": "HabitMakerUI",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/habit-maker-ui/src",
+  "prefix": "hm",
+  "tags": [],
+  "projectType": "library",
+  "// targets": "to see all targets run: nx show project HabitMakerUI --web",
+  "targets": {}
+}
