@@ -4,7 +4,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
 import { AuthService } from './auth.service';
+import { UserEntity } from './user.entity';
 
 const ADMIN_EMAIL = 'configured-admin@example.com';
 const ADMIN_PASSWORD = 'admin-password-123';
@@ -12,14 +15,27 @@ const ADMIN_PASSWORD = 'admin-password-123';
 describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
+  let dataSource: DataSource;
   let previousAdminEmail: string | undefined;
   let previousAdminPassword: string | undefined;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     process.env.ADMIN_EMAIL = ADMIN_EMAIL;
     process.env.ADMIN_PASSWORD = ADMIN_PASSWORD;
     jwtService = new JwtService({ secret: 'test-secret' });
-    service = new AuthService(jwtService);
+    dataSource = new DataSource({
+      type: 'sqljs',
+      autoSave: false,
+      entities: [UserEntity],
+      synchronize: true,
+    });
+    await dataSource.initialize();
+    service = new AuthService(jwtService, dataSource.getRepository(UserEntity));
+    await service.onModuleInit();
+  });
+
+  afterEach(async () => {
+    await dataSource.destroy();
   });
 
   afterAll(() => {

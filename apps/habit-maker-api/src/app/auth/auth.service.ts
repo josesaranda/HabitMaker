@@ -2,8 +2,10 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   randomBytes,
   randomUUID,
@@ -11,19 +13,8 @@ import {
   timingSafeEqual,
 } from 'node:crypto';
 import { JwtService } from '@nestjs/jwt';
-
-type UserRole = 'admin' | 'user';
-
-interface User {
-  id: string;
-  email: string;
-  role: UserRole;
-}
-
-interface StoredUser extends User {
-  salt: string;
-  passwordHash: Buffer;
-}
+import { Repository } from 'typeorm';
+import { UserEntity } from './user.entity';
 
 interface Credentials {
   email: string;
@@ -31,11 +22,15 @@ interface Credentials {
 }
 
 @Injectable()
-export class AuthService {
-  private readonly users = new Map<string, StoredUser>();
+export class AuthService implements OnModuleInit {
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectRepository(UserEntity)
+    private readonly users: Repository<UserEntity>,
+  ) {}
 
-  constructor(private readonly jwtService: JwtService) {
-    this.seedAdminFromEnvironment();
+  async onModuleInit(): Promise<void> {
+    await this.seedAdminFromEnvironment();
   }
 
   async signup(input: unknown): Promise<{ accessToken: string }> {
@@ -47,26 +42,41 @@ export class AuthService {
       );
     }
 
-    if (this.users.has(email)) {
+    if (await this.users.findOneBy({ email })) {
       throw new ConflictException('An account with this email already exists');
     }
 
     const salt = randomBytes(16).toString('hex');
-    const user: StoredUser = {
+    const user = this.users.create({
       id: randomUUID(),
       email,
       role: 'user',
-      salt,
+      passwordSalt: salt,
       passwordHash: this.hashPassword(password, salt),
-    };
-    this.users.set(email, user);
+    });
+
+    try {
+      await this.users.save(user);
+    } catch (error) {
+      // Keep duplicate-email responses consistent even for concurrent signups.
+      if (await this.users.findOneBy({ email })) {
+        throw new ConflictException(
+          'An account with this email already exists',
+        );
+      }
+      throw error;
+    }
 
     return this.createAccessToken(user);
   }
 
   async login(input: unknown): Promise<{ accessToken: string }> {
     const { email, password } = this.parseCredentials(input);
-    const user = this.users.get(email);
+    const user = await this.users
+      .createQueryBuilder('user')
+      .addSelect('user.passwordHash')
+      .where('user.email = :email', { email })
+      .getOne();
 
     if (!user || !this.passwordMatches(password, user)) {
       throw new UnauthorizedException('Invalid email or password');
@@ -119,16 +129,24 @@ export class AuthService {
     return value.trim().toLowerCase();
   }
 
-  private hashPassword(password: string, salt: string): Buffer {
-    return scryptSync(password, salt, 64);
+  private hashPassword(password: string, salt: string): string {
+    return scryptSync(password, salt, 64).toString('hex');
   }
 
-  private passwordMatches(password: string, user: StoredUser): boolean {
-    const candidateHash = this.hashPassword(password, user.salt);
-    return timingSafeEqual(candidateHash, user.passwordHash);
+  private passwordMatches(password: string, user: UserEntity): boolean {
+    const candidateHash = Buffer.from(
+      this.hashPassword(password, user.passwordSalt),
+      'hex',
+    );
+    const storedHash = Buffer.from(user.passwordHash, 'hex');
+
+    return (
+      candidateHash.length === storedHash.length &&
+      timingSafeEqual(candidateHash, storedHash)
+    );
   }
 
-  private seedAdminFromEnvironment(): void {
+  private async seedAdminFromEnvironment(): Promise<void> {
     const adminEmail = process.env.ADMIN_EMAIL;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
@@ -148,20 +166,23 @@ export class AuthService {
     if (adminPassword.length < 8) {
       throw new Error('ADMIN_PASSWORD must be at least 8 characters long');
     }
+    if (await this.users.findOneBy({ email })) {
+      return;
+    }
 
     const salt = randomBytes(16).toString('hex');
-    const admin: StoredUser = {
+    const admin = this.users.create({
       id: randomUUID(),
       email,
       role: 'admin',
-      salt,
+      passwordSalt: salt,
       passwordHash: this.hashPassword(adminPassword, salt),
-    };
-    this.users.set(email, admin);
+    });
+    await this.users.save(admin);
   }
 
   private async createAccessToken(
-    user: User,
+    user: UserEntity,
   ): Promise<{ accessToken: string }> {
     const accessToken = await this.jwtService.signAsync({
       sub: user.id,
