@@ -1,58 +1,64 @@
 @theme {
-  /* Brand */
+  /* Primitive tokens */
   --color-green-950: #172f2b;
+  --color-green-800: #3f5f53;
   --color-green-600: #668f7a;
   --color-green-300: #a8c5ad;
-
-  /* Neutral */
   --color-neutral-50: #f3f1e9;
   --color-neutral-0: #ffffff;
   --color-neutral-200: #e5e3db;
   --color-neutral-500: #85877f;
   --color-neutral-800: #343a35;
-
-  /* Accent */
   --color-amber-400: #e6b875;
-
-  /* Feedback */
   --color-coral-400: #e58b7b;
   --color-red-600: #c65c55;
 
+  /* Semantic tokens */
   /* Brand */
   --color-primary: var(--color-green-950);
   --color-primary-hover: var(--color-green-600);
   --color-primary-soft: var(--color-green-300);
   --color-accent: var(--color-amber-400);
-
   /* Backgrounds */
   --color-background: var(--color-neutral-50);
   --color-surface: var(--color-neutral-0);
   --color-surface-secondary: var(--color-neutral-50);
   --color-surface-hover: var(--color-green-300);
-
   /* Text */
   --color-text-primary: var(--color-green-950);
   --color-text-secondary: var(--color-neutral-500);
   --color-text-inverse: var(--color-neutral-0);
   --color-text-disabled: var(--color-neutral-500);
-
   /* Borders */
   --color-border: var(--color-neutral-200);
   --color-border-strong: var(--color-green-300);
-
   /* Habit states */
   --color-habit-completed: var(--color-green-600);
   --color-habit-pending: var(--color-neutral-200);
   --color-habit-skipped: var(--color-coral-400);
-
   /* Progress */
   --color-progress-track: var(--color-neutral-200);
   --color-progress-fill: var(--color-green-600);
   --color-progress-highlight: var(--color-green-300);
-
   /* Feedback */
   --color-success: var(--color-green-600);
   --color-warning: var(--color-amber-400);
   --color-error: var(--color-red-600);
   --color-info: var(--color-green-600);
+
+  /* Component tokens */
+  /* Link */
+  --color-link: var(--color-green-800);
+  --color-link-hover: var(--color-primary-hover);
+  --color-link-focus: var(--color-primary-hover);
+  /* Button */
+  --color-button-primary: var(--color-primary);
+  --color-button-primary-hover: var(--color-green-800);
+  --color-button-primary-focus: var(--color-green-800);
+  --color-button-primary-text: var(--color-text-inverse);
+  --color-button-secondary: var(--color-surface);
+  --color-button-secondary-hover: var(--color-neutral-50);
+  --color-button-secondary-focus: var(--color-primary-hover);
+  --color-button-secondary-text: var(--color-primary);
+  --color-button-secondary-border: var(--color-border-strong);
 }

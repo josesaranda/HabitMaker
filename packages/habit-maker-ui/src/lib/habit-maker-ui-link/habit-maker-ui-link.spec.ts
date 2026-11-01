@@ -9,7 +9,7 @@ import { HabitMakerUILink } from './habit-maker-ui-link';
 class HostComponent {}
 
 describe('HabitMakerUILink', () => {
-  it('applies the green link styles to anchors', async () => {
+  it('applies link component styles to anchors', async () => {
     await TestBed.configureTestingModule({
       imports: [HostComponent],
     }).compileComponents();
@@ -18,7 +18,7 @@ describe('HabitMakerUILink', () => {
     fixture.detectChanges();
 
     const anchor: HTMLAnchorElement = fixture.nativeElement.querySelector('a');
-    expect(anchor.classList).toContain('text-green-950');
-    expect(anchor.classList).toContain('hover:text-green-600');
+    expect(anchor.classList).toContain('text-link');
+    expect(anchor.classList).toContain('hover:text-link-hover');
   });
 });

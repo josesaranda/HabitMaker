@@ -14,8 +14,14 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     const link = compiled.querySelector('a[hmLink]');
+    const primaryButton = compiled.querySelector('button[hmButton="primary"]');
+    const secondaryButton = compiled.querySelector(
+      'button[hmButton="secondary"]',
+    );
 
     expect(link?.textContent).toContain('Hello world');
-    expect(link?.classList).toContain('hover:text-green-600');
+    expect(link?.classList).toContain('hover:text-link-hover');
+    expect(primaryButton).not.toBeNull();
+    expect(secondaryButton).not.toBeNull();
   });
 });

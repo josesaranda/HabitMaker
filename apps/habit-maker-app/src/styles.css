@@ -1,3 +1,4 @@
 @import 'tailwindcss';
 @import '../../../packages/habit-maker-ui/src/lib/main.css';
+@import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-button/habit-maker-ui-button.css';
 @source "../../../packages/habit-maker-ui/src";

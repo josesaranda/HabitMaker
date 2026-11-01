@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { HabitMakerUILink } from '@org/habit-maker-ui';
+import { HabitMakerUIButton, HabitMakerUILink } from '@org/habit-maker-ui';
 
 @Component({
-  imports: [HabitMakerUILink],
+  imports: [HabitMakerUIButton, HabitMakerUILink],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
