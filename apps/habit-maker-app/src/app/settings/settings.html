@@ -1,0 +1,37 @@
+<main class="min-h-full bg-background px-4 py-8 sm:px-[4vw] lg:px-12">
+  <div class="mx-auto w-full max-w-3xl">
+    <h1
+      class="mb-8 text-[clamp(2rem,5vw,3rem)] font-semibold tracking-[-0.05em] text-text-primary"
+    >
+      Ajustes
+    </h1>
+    <section
+      class="rounded-2xl border border-border bg-surface p-6 sm:p-8"
+      aria-labelledby="user-settings-title"
+    >
+      <h2
+        id="user-settings-title"
+        class="mb-6 text-xl font-semibold tracking-tight text-text-primary"
+      >
+        Ajustes de usuario
+      </h2>
+      <div class="max-w-xl">
+        <label
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          for="user-email"
+        >
+          Correo electrónico
+        </label>
+        <input
+          hmInput
+          id="user-email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          [value]="email()"
+          readonly
+        />
+      </div>
+    </section>
+  </div>
+</main>

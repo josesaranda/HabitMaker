@@ -66,6 +66,24 @@ export class AuthService {
     return this.getStoredValue(AUTH_TOKEN_STORAGE_KEY);
   }
 
+  getUserEmail(): string {
+    const token = this.getAuthToken();
+    const payload = token?.split('.')[1];
+    if (!payload) {
+      return '';
+    }
+
+    try {
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+      const claims = JSON.parse(atob(paddedBase64)) as { email?: unknown };
+
+      return typeof claims.email === 'string' ? claims.email : '';
+    } catch {
+      return '';
+    }
+  }
+
   isTokenValid(token: string | null = this.getAuthToken()): boolean {
     if (!token) {
       return false;

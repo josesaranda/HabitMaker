@@ -79,6 +79,18 @@ describe('AuthService', () => {
     expect(authService.isAuthenticated()).toBe(true);
   });
 
+  it('reads the email claim from the stored access token', () => {
+    const payload = btoa(
+      JSON.stringify({
+        exp: Math.floor(Date.now() / 1000) + 3600,
+        email: 'person@example.com',
+      }),
+    );
+    sessionStorage.setItem('habitmaker.authToken', `header.${payload}.signature`);
+
+    expect(authService.getUserEmail()).toBe('person@example.com');
+  });
+
   it('sends password-recovery requests to the API', () => {
     authService.forgotPassword('person@example.com').subscribe();
 
