@@ -1,18 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
-  HabitMakerUIBrand,
   HabitMakerUIButton,
   HabitMakerUICheckbox,
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
 import { AuthService } from '../auth/auth.service';
+import { AuthStory } from '../auth-story/auth-story';
 
 @Component({
   selector: 'app-login',
   imports: [
-    HabitMakerUIBrand,
+    AuthStory,
     HabitMakerUIButton,
     HabitMakerUICheckbox,
     HabitMakerUIInput,

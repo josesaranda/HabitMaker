@@ -1,16 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
-  HabitMakerUIBrand,
   HabitMakerUIButton,
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
+import { AuthStory } from '../auth-story/auth-story';
 
 @Component({
   selector: 'app-recover-password',
   imports: [
-    HabitMakerUIBrand,
+    AuthStory,
     HabitMakerUIButton,
     HabitMakerUIInput,
     HabitMakerUILink,
