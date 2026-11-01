@@ -36,4 +36,42 @@
       </p>
     }
   </section>
+  @if (habit()) {
+    <section
+      class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-border bg-surface p-6 sm:p-8"
+      [attr.aria-labelledby]="isCompletedToday() ? null : 'habit-completion-title'"
+      [attr.aria-label]="isCompletedToday() ? 'Hábito completado hoy' : null"
+    >
+      @if (!isCompletedToday()) {
+        <h2
+          id="habit-completion-title"
+          class="text-xl font-semibold text-text-primary"
+        >
+          ¿Ya has completado tu hábito hoy?
+        </h2>
+        <p
+          id="habit-completion-help"
+          class="mt-2 text-sm text-text-secondary"
+        >
+          Pulsa el botón cuando hayas completado este hábito hoy.
+        </p>
+      } @else {
+        <p class="mt-5 font-medium text-text-primary" role="status">
+          ¡Enhorabuena, ya has completado tu hábito hoy!
+        </p>
+      }
+      <button
+        class="mt-5"
+        hmButton="primary"
+        type="button"
+        [attr.aria-describedby]="
+          isCompletedToday() ? null : 'habit-completion-help'
+        "
+        [disabled]="isCompletedToday()"
+        (click)="markCompletedToday()"
+      >
+        {{ isCompletedToday() ? '¡Completado hoy!' : 'Marcar como completado' }}
+      </button>
+    </section>
+  }
 </main>

@@ -40,5 +40,31 @@ describe('HabitDetail', () => {
     expect(fixture.nativeElement.querySelector('time')?.textContent).toContain(
       '1 de noviembre de 2026',
     );
+    const compiled = fixture.nativeElement as HTMLElement;
+    const completionButton = compiled.querySelector<HTMLButtonElement>(
+      'button[hmButton="primary"]',
+    );
+    expect(completionButton?.textContent?.trim()).toBe('Marcar como completado');
+    expect(
+      completionButton?.closest('section[aria-labelledby="habit-completion-title"]'),
+    ).not.toBeNull();
+    expect(completionButton?.getAttribute('aria-describedby')).toBe(
+      'habit-completion-help',
+    );
+    expect(
+      compiled.querySelector('#habit-completion-help')?.textContent?.trim(),
+    ).toBe('Pulsa el botón cuando hayas completado este hábito hoy.');
+
+    completionButton?.click();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('[role="status"]')?.textContent?.trim()).toBe(
+      '¡Enhorabuena, ya has completado tu hábito hoy!',
+    );
+    expect(compiled.querySelector('#habit-completion-title')).toBeNull();
+    expect(compiled.querySelector('#habit-completion-help')).toBeNull();
+    expect(completionButton?.disabled).toBe(true);
+    expect(completionButton?.textContent?.trim()).toBe('¡Completado hoy!');
+    expect(completionButton?.hasAttribute('aria-describedby')).toBe(false);
   });
 });

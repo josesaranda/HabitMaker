@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { HabitMakerUIButton } from '@habit-maker/habit-maker-ui';
 import {
   EMPTY,
   catchError,
@@ -20,7 +21,7 @@ import {
 import { Habit, HabitService } from '../habits/habit.service';
 
 @Component({
-  imports: [RouterLink],
+  imports: [HabitMakerUIButton, RouterLink],
   selector: 'app-habit-detail',
   templateUrl: './habit-detail.html',
 })
@@ -32,6 +33,7 @@ export class HabitDetail implements OnInit {
   protected readonly habit = signal<Habit | null>(null);
   protected readonly isLoading = signal(true);
   protected readonly isNotFound = signal(false);
+  protected readonly isCompletedToday = signal(false);
   protected readonly loadError = signal('');
   protected readonly createdAtLabel = computed(() => {
     const createdAt = this.habit()?.createdAt;
@@ -78,5 +80,9 @@ export class HabitDetail implements OnInit {
         this.habit.set(habit);
         this.isLoading.set(false);
       });
+  }
+
+  protected markCompletedToday(): void {
+    this.isCompletedToday.set(true);
   }
 }
