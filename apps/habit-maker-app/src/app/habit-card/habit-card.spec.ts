@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { HabitCard } from './habit-card';
 
 describe('HabitCard', () => {
@@ -8,10 +9,12 @@ describe('HabitCard', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HabitCard],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HabitCard);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('id', 'habit-1');
   });
 
   it('renders the habit name and formatted start date', () => {
@@ -23,6 +26,9 @@ describe('HabitCard', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('strong')?.textContent).toBe(
       'Un poco de lectura',
+    );
+    expect(compiled.querySelector('a')?.getAttribute('href')).toBe(
+      '/habits/habit-1',
     );
     expect(compiled.querySelector('time')?.getAttribute('datetime')).toBe(
       '2023-10-01',

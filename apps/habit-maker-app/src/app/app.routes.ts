@@ -27,6 +27,12 @@ export const appRoutes: Route[] = [
     canActivate: [authGuard],
   },
   {
+    path: 'habits/:id',
+    loadComponent: () =>
+      import('./habit-detail/habit-detail').then((module) => module.HabitDetail),
+    canActivate: [authGuard],
+  },
+  {
     path: 'settings',
     loadComponent: () =>
       import('./settings/settings').then((module) => module.Settings),

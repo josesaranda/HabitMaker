@@ -1,53 +1,60 @@
-<article
-  class="relative z-[1] mx-auto w-full max-w-md rounded-2xl border border-white/15 bg-[#2b3f3c] p-[1.15rem_1.25rem_1rem] text-white shadow-[0_1.5rem_4rem_rgb(0_0_0_/_12%)] backdrop-blur-xl"
-  [attr.aria-label]="'Ejemplo de progreso semanal para ' + name()"
+<a
+  class="block rounded-2xl no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e6b875]"
+  [routerLink]="['/habits', id()]"
+  [attr.aria-label]="'Ver hábito ' + name()"
 >
-  <div class="flex items-center gap-3">
-    <div
-      class="grid size-[2.6rem] shrink-0 place-items-center rounded-xl bg-[#a8c5ad]/15 text-[#c0d8b9]"
-      aria-hidden="true"
-    >
-      <svg class="size-[1.4rem]" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 20v-8m0 3c-4.4 0-6.5-2.3-6.5-5.8 3.8 0 6.5 1.7 6.5 5.8Zm0-2c0-3.8 2.2-6 6.5-6 0 3.6-2.1 6-6.5 6Z"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </div>
-    <div class="grid gap-0.5 text-text-white">
-      <strong class="text-sm font-semibold">{{ name() }}</strong>
-      <span class="text-[0.7rem] text-white/60">Tu semana, en progreso</span>
-    </div>
-    <time
-      class="ml-auto whitespace-nowrap rounded-full border border-[#e6b875]/30 px-2 py-1 text-[0.7rem] text-[#f0c98d]"
-      [attr.datetime]="startedAt()"
-    >
-      ✦ Desde {{ startedAtLabel() }}
-    </time>
-  </div>
-  <div class="mb-4 mt-[1.4rem] grid grid-cols-7 gap-2" aria-hidden="true">
-    @for (day of days(); track day.offset) {
-    <div class="grid justify-items-center gap-2 text-[0.65rem] text-white/50">
-      <span>{{ day.label }}</span>
-      @if (day.offset < 0) {
-      <b
-        class="grid size-7 place-items-center rounded-full border border-transparent bg-[#a8c5ad] text-xs font-medium text-[#172f2b]"
-        >✓</b
+  <article
+    class="relative z-[1] mx-auto w-full max-w-md rounded-2xl border border-white/15 bg-[#2b3f3c] p-[1.15rem_1.25rem_1rem] text-white shadow-[0_1.5rem_4rem_rgb(0_0_0_/_12%)] backdrop-blur-xl"
+    [attr.aria-label]="'Progreso semanal para ' + name()"
+  >
+    <div class="flex items-center gap-3">
+      <div
+        class="grid size-[2.6rem] shrink-0 place-items-center rounded-xl bg-[#a8c5ad]/15 text-[#c0d8b9]"
+        aria-hidden="true"
       >
-      } @else if (day.offset === 0) {
-      <b
-        class="grid size-7 place-items-center rounded-full border border-[#e6b875] text-xl font-medium text-[#e6b875]"
-      ></b>
-      } @else {
-      <b
-        class="grid size-7 place-items-center rounded-full border border-white/15 text-xs font-medium text-white/35"
-      ></b>
-      }
-      <span class="text-[0.6rem] text-white/50">{{ day.dayOfMonth }}</span>
+        <svg class="size-[1.4rem]" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 20v-8m0 3c-4.4 0-6.5-2.3-6.5-5.8 3.8 0 6.5 1.7 6.5 5.8Zm0-2c0-3.8 2.2-6 6.5-6 0 3.6-2.1 6-6.5 6Z"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <div class="grid gap-0.5 text-text-white">
+        <strong class="text-sm font-semibold">{{ name() }}</strong>
+        <span class="text-[0.7rem] text-white/60">Tu semana, en progreso</span>
+      </div>
+      <time
+        class="ml-auto whitespace-nowrap rounded-full border border-[#e6b875]/30 px-2 py-1 text-[0.7rem] text-[#f0c98d]"
+        [attr.datetime]="startedAt()"
+      >
+        ✦ Desde {{ startedAtLabel() }}
+      </time>
     </div>
-    }
-  </div>
-</article>
+    <div class="mb-4 mt-[1.4rem] grid grid-cols-7 gap-2" aria-hidden="true">
+      @for (day of days(); track day.offset) {
+      <div class="grid justify-items-center gap-2 text-[0.65rem] text-white/50">
+        <span>{{ day.label }}</span>
+        @if (day.offset < 0) {
+        <b
+          class="grid size-7 place-items-center rounded-full border border-transparent bg-[#a8c5ad] text-xs font-medium text-[#172f2b]"
+          >✓</b
+        >
+        } @else if (day.offset === 0) {
+        <b
+          class="grid size-7 place-items-center rounded-full border border-[#e6b875] text-xl font-medium text-[#e6b875]"
+          >·</b
+        >
+        } @else {
+        <b
+          class="grid size-7 place-items-center rounded-full border border-white/15 text-xs font-medium text-white/35"
+        ></b>
+        }
+        <span class="text-[0.6rem] text-white/50">{{ day.dayOfMonth }}</span>
+      </div>
+      }
+    </div>
+  </article>
+</a>

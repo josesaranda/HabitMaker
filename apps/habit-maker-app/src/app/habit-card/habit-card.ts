@@ -1,11 +1,14 @@
 import { Component, computed, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
+  imports: [RouterLink],
   selector: 'app-habit-card',
   templateUrl: './habit-card.html',
   host: { class: 'block w-full' },
 })
 export class HabitCard {
+  id = input.required<string>();
   name = input.required<string>();
   startedAt = input.required<string>();
   private readonly today = signal(new Date());

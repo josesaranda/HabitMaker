@@ -47,4 +47,16 @@ export class HabitService {
       headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
     });
   }
+
+  getHabit(id: string): Observable<Habit> {
+    const token = this.authService.getAuthToken();
+    if (!token) {
+      return throwError(() => new Error('Authentication is required'));
+    }
+
+    return this.http.get<Habit>(
+      `${API_URL}/habits/${encodeURIComponent(id)}`,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) },
+    );
+  }
 }

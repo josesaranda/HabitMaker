@@ -9,7 +9,11 @@
     aria-label="Tus hábitos"
   >
     @for (habit of habits(); track habit.id) {
-    <app-habit-card [name]="habit.name" [startedAt]="habit.createdAt" />
+    <app-habit-card
+      [id]="habit.id"
+      [name]="habit.name"
+      [startedAt]="habit.createdAt"
+    />
     }
   </section>
   } @else {

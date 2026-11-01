@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { EMPTY, of, Subject } from 'rxjs';
 import { Habit } from '../habits/habit.service';
 import { HabitService } from '../habits/habit.service';
@@ -9,6 +10,7 @@ describe('Home', () => {
     await TestBed.configureTestingModule({
       imports: [Home],
       providers: [
+        provideRouter([]),
         {
           provide: HabitService,
           useValue: { getHabits: () => of(habits), habitCreated$: EMPTY },
@@ -89,6 +91,7 @@ describe('Home', () => {
     await TestBed.configureTestingModule({
       imports: [Home],
       providers: [
+        provideRouter([]),
         {
           provide: HabitService,
           useValue: {

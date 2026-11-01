@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -58,6 +59,23 @@ export class HabitsService {
       createdAt,
       updatedAt,
     }));
+  }
+
+  async findOne(id: string, userId: string): Promise<CreatedHabit> {
+    const habit = await this.habits.findOne({
+      where: { id, user: { id: userId } },
+    });
+
+    if (!habit) {
+      throw new NotFoundException('Habit not found');
+    }
+
+    return {
+      id: habit.id,
+      name: habit.name,
+      createdAt: habit.createdAt,
+      updatedAt: habit.updatedAt,
+    };
   }
 
   private parseName(input: unknown): string {

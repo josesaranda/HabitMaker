@@ -1,0 +1,39 @@
+<main class="min-h-full bg-background px-4 py-8 sm:px-[4vw] lg:px-12">
+  <section
+    class="mx-auto w-full max-w-3xl rounded-2xl border border-border bg-surface p-6 sm:p-10"
+  >
+    <a
+      class="inline-flex items-center gap-2 text-sm text-text-secondary no-underline hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-4"
+      routerLink="/home"
+    >
+      ← Volver a mis hábitos
+    </a>
+
+    @if (isLoading()) {
+      <p class="mt-8 text-text-secondary" role="status">Cargando hábito…</p>
+    } @else if (loadError()) {
+      <p class="mt-8 text-error" role="alert">{{ loadError() }}</p>
+    } @else if (isNotFound()) {
+      <p class="mt-8 text-text-secondary" role="status">
+        No encontramos este hábito.
+      </p>
+    } @else if (habit(); as currentHabit) {
+      <article class="mt-8">
+        <p class="text-sm font-medium text-text-secondary">Mi hábito</p>
+        <h1 class="mt-2 text-3xl font-semibold text-text-primary">
+          {{ currentHabit.name }}
+        </h1>
+        <p class="mt-4 text-text-secondary">
+          Empezaste este hábito el
+          <time [attr.datetime]="currentHabit.createdAt">
+            {{ createdAtLabel() }}
+          </time>.
+        </p>
+      </article>
+    } @else {
+      <p class="mt-8 text-text-secondary" role="status">
+        No encontramos este hábito.
+      </p>
+    }
+  </section>
+</main>

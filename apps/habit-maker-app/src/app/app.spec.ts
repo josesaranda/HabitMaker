@@ -20,6 +20,13 @@ describe('App', () => {
           provide: HabitService,
           useValue: {
             getHabits: () => of([]),
+            getHabit: (id: string) =>
+              of({
+                id,
+                name: 'Leer 10 minutos',
+                createdAt: '2026-11-01T00:00:00.000Z',
+                updatedAt: '2026-11-01T00:00:00.000Z',
+              }),
             habitCreated$: EMPTY,
             createHabit: (name: string) =>
               of({
@@ -63,6 +70,27 @@ describe('App', () => {
     expect(compiled.querySelector('app-signup h2')?.textContent).toContain(
       'Crea tu cuenta',
     );
+  });
+
+  it('opens the detail page for a habit route', async () => {
+    const payload = btoa(
+      JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 3600 }),
+    );
+    localStorage.setItem('habitmaker.authToken', `header.${payload}.signature`);
+    TestBed.inject(AuthService).syncAuthenticatedState();
+
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl('/habits/habit-1');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('app-habit-detail'),
+    ).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('app-habit-detail h1')?.textContent,
+    ).toContain('Leer 10 minutos');
   });
 
   it('redirects authenticated users from login and signup to home', async () => {

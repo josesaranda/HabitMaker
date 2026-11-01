@@ -1,4 +1,8 @@
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { UserEntity } from '../auth/user.entity';
@@ -66,6 +70,21 @@ describe('HabitsService', () => {
     await expect(service.findAll(user.id)).resolves.toMatchObject([
       { name: 'Leer' },
     ]);
+  });
+
+  it('returns a habit by id only for its owner', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+
+    await expect(service.findOne(created.id, user.id)).resolves.toMatchObject({
+      id: created.id,
+      name: 'Leer',
+    });
+    await expect(service.findOne(created.id, 'another-user')).rejects.toThrow(
+      NotFoundException,
+    );
+    await expect(service.findOne('missing-habit', user.id)).rejects.toThrow(
+      NotFoundException,
+    );
   });
 
   it('rejects missing, blank, and overly long habit names', async () => {

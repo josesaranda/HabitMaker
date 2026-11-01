@@ -82,6 +82,29 @@ describe('HabitService', () => {
     expect(receivedNames).toEqual(['Leer 10 minutos']);
   });
 
+  it('loads one habit by id with the saved access token', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    let receivedName = '';
+
+    service.getHabit('habit-1').subscribe((habit) => {
+      receivedName = habit.name;
+    });
+
+    const request = httpTestingController.expectOne(`${API_URL}/habits/habit-1`);
+    expect(request.request.method).toBe('GET');
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush({
+      id: 'habit-1',
+      name: 'Leer 10 minutos',
+      createdAt: '2026-11-01T00:00:00.000Z',
+      updatedAt: '2026-11-01T00:00:00.000Z',
+    });
+
+    expect(receivedName).toBe('Leer 10 minutos');
+  });
+
   it('does not send a request when no access token is available', () => {
     let hasError = false;
     service.createHabit('Leer').subscribe({ error: () => (hasError = true) });
