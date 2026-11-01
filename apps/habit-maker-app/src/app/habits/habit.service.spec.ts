@@ -1,10 +1,14 @@
-import { provideHttpClient } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from '../../environments/environment';
+import { authTokenInterceptor } from '../auth/auth-token.interceptor';
 import { HabitService } from './habit.service';
 
 const API_URL = environment.API_URL || '/api';
@@ -17,7 +21,10 @@ describe('HabitService', () => {
     sessionStorage.clear();
     localStorage.clear();
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(withInterceptors([authTokenInterceptor])),
+        provideHttpClientTesting(),
+      ],
     });
     service = TestBed.inject(HabitService);
     httpTestingController = TestBed.inject(HttpTestingController);

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, Subject, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -36,56 +36,29 @@ export class HabitService {
   readonly habitCreated$ = this.habitCreatedSubject.asObservable();
 
   createHabit(name: string): Observable<Habit> {
-    const token = this.authService.getAuthToken();
-    if (!token) {
-      return throwError(() => new Error('Authentication is required'));
-    }
-
-    return this.http
-      .post<Habit>(
-        `${API_URL}/habits`,
-        { name: name.trim() },
-        {
-          headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-        },
-      )
-      .pipe(tap(() => this.habitCreatedSubject.next()));
+    return this.requireAuthentication(
+      this.http
+        .post<Habit>(`${API_URL}/habits`, { name: name.trim() })
+        .pipe(tap(() => this.habitCreatedSubject.next())),
+    );
   }
 
   getHabits(): Observable<Habit[]> {
-    const token = this.authService.getAuthToken();
-    if (!token) {
-      return throwError(() => new Error('Authentication is required'));
-    }
-
-    return this.http.get<Habit[]>(`${API_URL}/habits`, {
-      headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-    });
+    return this.requireAuthentication(this.http.get<Habit[]>(`${API_URL}/habits`));
   }
 
   getHabit(id: string): Observable<Habit> {
-    const token = this.authService.getAuthToken();
-    if (!token) {
-      return throwError(() => new Error('Authentication is required'));
-    }
-
-    return this.http.get<Habit>(`${API_URL}/habits/${encodeURIComponent(id)}`, {
-      headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-    });
+    return this.requireAuthentication(
+      this.http.get<Habit>(`${API_URL}/habits/${encodeURIComponent(id)}`),
+    );
   }
 
   getTodayCompletion(id: string): Observable<HabitCompletionStatus> {
-    const token = this.authService.getAuthToken();
-    if (!token) {
-      return throwError(() => new Error('Authentication is required'));
-    }
-
-    return this.http.get<HabitCompletionStatus>(
-      `${API_URL}/habits/${encodeURIComponent(id)}/completions/today`,
-      {
-        headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-        params: { date: getLocalDate() },
-      },
+    return this.requireAuthentication(
+      this.http.get<HabitCompletionStatus>(
+        `${API_URL}/habits/${encodeURIComponent(id)}/completions/today`,
+        { params: { date: getLocalDate() } },
+      ),
     );
   }
 
@@ -93,33 +66,27 @@ export class HabitService {
     id: string,
     dates: string[],
   ): Observable<HabitCompletionStatus[]> {
-    const token = this.authService.getAuthToken();
-    if (!token) {
-      return throwError(() => new Error('Authentication is required'));
-    }
-
-    return this.http.get<HabitCompletionStatus[]>(
-      `${API_URL}/habits/${encodeURIComponent(id)}/completions`,
-      {
-        headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-        params: { dates: dates.join(',') },
-      },
+    return this.requireAuthentication(
+      this.http.get<HabitCompletionStatus[]>(
+        `${API_URL}/habits/${encodeURIComponent(id)}/completions`,
+        { params: { dates: dates.join(',') } },
+      ),
     );
   }
 
   markCompletedToday(id: string): Observable<HabitCompletionStatus> {
-    const token = this.authService.getAuthToken();
-    if (!token) {
-      return throwError(() => new Error('Authentication is required'));
-    }
-
-    return this.http.put<HabitCompletionStatus>(
-      `${API_URL}/habits/${encodeURIComponent(id)}/completions/today`,
-      { completed: true },
-      {
-        headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
-        params: { date: getLocalDate() },
-      },
+    return this.requireAuthentication(
+      this.http.put<HabitCompletionStatus>(
+        `${API_URL}/habits/${encodeURIComponent(id)}/completions/today`,
+        { completed: true },
+        { params: { date: getLocalDate() } },
+      ),
     );
+  }
+
+  private requireAuthentication<T>(request: Observable<T>): Observable<T> {
+    return this.authService.getAuthToken()
+      ? request
+      : throwError(() => new Error('Authentication is required'));
   }
 }

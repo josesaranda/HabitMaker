@@ -1,0 +1,35 @@
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
+
+const API_URL = (environment.API_URL || '/api').replace(/\/$/, '');
+const PUBLIC_AUTH_ENDPOINTS = ['login', 'signup', 'forgot-password'];
+
+function isApiRequest(url: string): boolean {
+  return url === API_URL || url.startsWith(`${API_URL}/`);
+}
+
+function isPublicAuthRequest(url: string): boolean {
+  const requestPath = url.split('?')[0];
+
+  return PUBLIC_AUTH_ENDPOINTS.some(
+    (endpoint) => requestPath === `${API_URL}/auth/${endpoint}`,
+  );
+}
+
+export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
+  const token = inject(AuthService).getAuthToken();
+
+  if (!isApiRequest(request.url) || isPublicAuthRequest(request.url)) {
+    return next(request);
+  }
+
+  return next(
+    token
+      ? request.clone({
+          setHeaders: { Authorization: `Bearer ${token}` },
+        })
+      : request,
+  );
+};
