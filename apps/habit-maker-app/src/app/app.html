@@ -1,4 +1,4 @@
-@if (authService.authenticated()) {
+@if (shouldShowNavbar()) {
   <div class="app-navbar-shell">
     <hm-navbar brandLink="/home">
       <a class="app-navbar__link" routerLink="/home" aria-current="page">
