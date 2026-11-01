@@ -6,13 +6,58 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 
+const ADMIN_EMAIL = 'configured-admin@example.com';
+const ADMIN_PASSWORD = 'admin-password-123';
+
 describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
+  let previousAdminEmail: string | undefined;
+  let previousAdminPassword: string | undefined;
 
   beforeEach(() => {
+    process.env.ADMIN_EMAIL = ADMIN_EMAIL;
+    process.env.ADMIN_PASSWORD = ADMIN_PASSWORD;
     jwtService = new JwtService({ secret: 'test-secret' });
     service = new AuthService(jwtService);
+  });
+
+  afterAll(() => {
+    if (previousAdminEmail === undefined) {
+      delete process.env.ADMIN_EMAIL;
+    } else {
+      process.env.ADMIN_EMAIL = previousAdminEmail;
+    }
+    if (previousAdminPassword === undefined) {
+      delete process.env.ADMIN_PASSWORD;
+    } else {
+      process.env.ADMIN_PASSWORD = previousAdminPassword;
+    }
+  });
+
+  beforeAll(() => {
+    previousAdminEmail = process.env.ADMIN_EMAIL;
+    previousAdminPassword = process.env.ADMIN_PASSWORD;
+  });
+
+  it('seeds the administrator from environment credentials with the admin role', async () => {
+    const result = await service.login({
+      email: ADMIN_EMAIL.toUpperCase(),
+      password: ADMIN_PASSWORD,
+    });
+
+    const payload = await jwtService.verifyAsync(result.accessToken);
+    expect(payload).toMatchObject({
+      email: ADMIN_EMAIL,
+      role: 'admin',
+    });
+    expect(result).not.toHaveProperty('user');
+  });
+
+  it('does not allow signup to replace the configured administrator account', async () => {
+    await expect(
+      service.signup({ email: ADMIN_EMAIL, password: 'another-password' }),
+    ).rejects.toThrow(ConflictException);
   });
 
   describe('signup', () => {
@@ -23,7 +68,10 @@ describe('AuthService', () => {
       });
 
       const payload = await jwtService.verifyAsync(result.accessToken);
-      expect(payload).toMatchObject({ email: 'user@example.com' });
+      expect(payload).toMatchObject({
+        email: 'user@example.com',
+        role: 'user',
+      });
       expect(payload.sub).toBeDefined();
       expect(result).not.toHaveProperty('user');
       expect(result).not.toHaveProperty('password');
@@ -63,7 +111,10 @@ describe('AuthService', () => {
       });
 
       const payload = await jwtService.verifyAsync(result.accessToken);
-      expect(payload.email).toBe('user@example.com');
+      expect(payload).toMatchObject({
+        email: 'user@example.com',
+        role: 'user',
+      });
       expect(result).not.toHaveProperty('user');
     });
 
