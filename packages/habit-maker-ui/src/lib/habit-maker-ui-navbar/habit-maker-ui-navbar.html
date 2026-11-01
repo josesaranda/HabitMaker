@@ -1,0 +1,13 @@
+<header class="hm-navbar">
+  <a
+    class="hm-navbar__brand"
+    [routerLink]="brandLink()"
+    [attr.aria-label]="brandLabel()"
+  >
+    <hm-brand />
+  </a>
+
+  <nav class="hm-navbar__actions" [attr.aria-label]="navigationLabel()">
+    <ng-content />
+  </nav>
+</header>
