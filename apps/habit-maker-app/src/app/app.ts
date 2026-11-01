@@ -7,14 +7,25 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import {
+  HabitMakerUIButtonIcon,
   HabitMakerUIIcon,
+  HabitMakerUIModal,
   HabitMakerUINavbar,
 } from '@habit-maker/habit-maker-ui';
 import { filter, map } from 'rxjs';
 import { AuthService } from './auth/auth.service';
+import { NewHabit } from './new-habit/new-habit';
 
 @Component({
-  imports: [HabitMakerUIIcon, HabitMakerUINavbar, RouterLink, RouterOutlet],
+  imports: [
+    HabitMakerUIButtonIcon,
+    HabitMakerUIIcon,
+    HabitMakerUIModal,
+    HabitMakerUINavbar,
+    NewHabit,
+    RouterLink,
+    RouterOutlet,
+  ],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',

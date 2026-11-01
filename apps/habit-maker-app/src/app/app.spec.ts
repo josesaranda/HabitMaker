@@ -67,6 +67,28 @@ describe('App', () => {
     expect(
       fixture.nativeElement.querySelector('hm-navbar hm-brand'),
     ).not.toBeNull();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const addHabitButton = compiled.querySelector<HTMLButtonElement>(
+      'button[hmButtonIcon]',
+    );
+    expect(addHabitButton?.getAttribute('aria-label')).toBe('Añadir hábito');
+    const logoutButton = compiled.querySelector<HTMLButtonElement>(
+      'button[aria-label="Cerrar sesión"]',
+    );
+    expect(logoutButton?.getAttribute('hmButtonIcon')).toBe('secondary');
+    expect(logoutButton?.getAttribute('size')).toBe('small');
+
+    const dialog =
+      compiled.querySelector<HTMLDialogElement>('hm-modal dialog')!;
+    Object.defineProperty(dialog, 'showModal', {
+      configurable: true,
+      value: () => dialog.setAttribute('open', ''),
+    });
+    addHabitButton?.click();
+    fixture.detectChanges();
+
+    expect(dialog.open).toBe(true);
+    expect(dialog.querySelector('app-new-habit')).not.toBeNull();
 
     await router.navigateByUrl('/signup');
     fixture.detectChanges();

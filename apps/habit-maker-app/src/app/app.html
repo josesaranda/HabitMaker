@@ -1,12 +1,25 @@
 @if (shouldShowNavbar()) {
-  <div class="app-navbar-shell">
-    <hm-navbar brandLink="/home">
-      <a class="app-navbar__link" routerLink="/home" aria-current="page">
-        Inicio
-      </a>
-      <a class="app-navbar__link" routerLink="/home">Ajustes</a>
+<div class="app-navbar-shell">
+  <hm-navbar brandLink="/home">
+    <a class="app-navbar__link" routerLink="/home" aria-current="page">
+      Inicio
+    </a>
+    <a class="app-navbar__link" routerLink="/home">Ajustes</a>
+    <div class="flex flex-row gap-3">
       <button
-        class="app-navbar__logout"
+        #addHabitTrigger
+        hmButtonIcon="primary"
+        size="small"
+        type="button"
+        aria-label="Añadir hábito"
+        title="Añadir hábito"
+        (click)="newHabitModal.openFrom(addHabitTrigger)"
+      >
+        <hm-icon name="add" />
+      </button>
+      <button
+        hmButtonIcon="secondary"
+        size="small"
         type="button"
         aria-label="Cerrar sesión"
         title="Cerrar sesión"
@@ -14,7 +27,11 @@
       >
         <hm-icon name="logout" />
       </button>
-    </hm-navbar>
-  </div>
+    </div>
+  </hm-navbar>
+</div>
+<hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
+  <app-new-habit />
+</hm-modal>
 }
 <router-outlet />

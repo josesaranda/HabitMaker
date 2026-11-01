@@ -8,6 +8,12 @@ import { HabitMakerUIIcon } from './habit-maker-ui-icon';
 })
 class HostComponent {}
 
+@Component({
+  imports: [HabitMakerUIIcon],
+  template: '<hm-icon name="add" />',
+})
+class AddIconHostComponent {}
+
 describe('HabitMakerUIIcon', () => {
   it('references the SVG asset for its icon name decoratively', async () => {
     await TestBed.configureTestingModule({
@@ -21,5 +27,18 @@ describe('HabitMakerUIIcon', () => {
     const use = icon.querySelector('use');
     expect(use?.getAttribute('href')).toBe('assets/icons/logout.svg#logout');
     expect(icon.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('references the add SVG asset', async () => {
+    await TestBed.configureTestingModule({
+      imports: [AddIconHostComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(AddIconHostComponent);
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('use')?.getAttribute('href'),
+    ).toBe('assets/icons/add.svg#add');
   });
 });
