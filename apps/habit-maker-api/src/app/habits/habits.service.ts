@@ -46,6 +46,20 @@ export class HabitsService {
     };
   }
 
+  async findAll(userId: string): Promise<CreatedHabit[]> {
+    const habits = await this.habits.find({
+      where: { user: { id: userId } },
+      order: { createdAt: 'DESC' },
+    });
+
+    return habits.map(({ id, name, createdAt, updatedAt }) => ({
+      id,
+      name,
+      createdAt,
+      updatedAt,
+    }));
+  }
+
   private parseName(input: unknown): string {
     if (!input || typeof input !== 'object') {
       throw new BadRequestException('A request body is required');

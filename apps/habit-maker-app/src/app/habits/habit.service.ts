@@ -32,4 +32,15 @@ export class HabitService {
       },
     );
   }
+
+  getHabits(): Observable<Habit[]> {
+    const token = this.authService.getAuthToken();
+    if (!token) {
+      return throwError(() => new Error('Authentication is required'));
+    }
+
+    return this.http.get<Habit[]>(`${API_URL}/habits`, {
+      headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+    });
+  }
 }

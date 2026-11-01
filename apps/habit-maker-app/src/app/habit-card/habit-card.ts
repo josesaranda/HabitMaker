@@ -2,7 +2,6 @@ import { Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'app-habit-card',
-  imports: [],
   templateUrl: './habit-card.html',
   styleUrl: './habit-card.css',
 })
@@ -11,7 +10,7 @@ export class HabitCard {
   startedAt = input.required<string>();
 
   protected readonly startedAtLabel = computed(() => {
-    const rawDate = this.startedAt();
+    const rawDate = this.startedAt().split('T', 1)[0];
     const date = new Date(`${rawDate}T00:00:00`);
 
     if (Number.isNaN(date.getTime())) return rawDate;

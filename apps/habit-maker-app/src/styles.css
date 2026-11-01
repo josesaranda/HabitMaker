@@ -8,6 +8,10 @@
 @import './app/auth/auth.css';
 @source "../../../packages/habit-maker-ui/src";
 
+body {
+  background: var(--color-background);
+}
+
 ::view-transition-old(root) {
   animation: page-fade-out 180ms ease both;
 }

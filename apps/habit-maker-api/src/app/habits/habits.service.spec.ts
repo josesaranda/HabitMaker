@@ -52,6 +52,22 @@ describe('HabitsService', () => {
     expect(stored.user.id).toBe(user.id);
   });
 
+  it('returns only habits belonging to the requested user', async () => {
+    await service.create({ name: 'Leer' }, user.id);
+    const otherUser = await dataSource.getRepository(UserEntity).save({
+      id: 'user-2',
+      email: 'other@example.com',
+      role: 'user',
+      passwordSalt: 'salt',
+      passwordHash: 'hash',
+    });
+    await service.create({ name: 'Correr' }, otherUser.id);
+
+    await expect(service.findAll(user.id)).resolves.toMatchObject([
+      { name: 'Leer' },
+    ]);
+  });
+
   it('rejects missing, blank, and overly long habit names', async () => {
     await expect(service.create(null, user.id)).rejects.toThrow(
       BadRequestException,

@@ -1,7 +1,19 @@
 <main class="home-page">
+  @if (isLoading()) {
+  <p class="home-card__loading" role="status">Cargando tus hábitos…</p>
+  } @else if (hasHabits()) {
+  <section class="home-habits" aria-label="Tus hábitos">
+    @for (habit of habits(); track habit.id) {
+    <app-habit-card [name]="habit.name" [startedAt]="habit.createdAt" />
+    }
+  </section>
+  } @else {
   <section class="home-card" aria-labelledby="home-title">
     <h1 id="home-title">¡Bienvenido a casa!</h1>
     <p>Tu espacio para crear hábitos que te hacen bien empieza aquí.</p>
+    @if (loadError()) {
+    <p class="home-card__error" role="alert">{{ loadError() }}</p>
+    }
     <button
       #addHabitTrigger
       hmButton="primary"
@@ -11,8 +23,9 @@
     >
       Añade tu primer hábito
     </button>
-    <hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
-      <app-new-habit (habitCreated)="newHabitModal.close()" />
-    </hm-modal>
   </section>
+  }
+  <hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
+    <app-new-habit (habitCreated)="newHabitModal.close(); refreshHabits()" />
+  </hm-modal>
 </main>

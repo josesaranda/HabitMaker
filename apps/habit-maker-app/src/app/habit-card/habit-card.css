@@ -10,7 +10,7 @@
   border: 1px solid rgb(255 255 255 / 14%);
   border-radius: 1rem;
   padding: 1.15rem 1.25rem 1rem;
-  background: rgb(255 255 255 / 8%);
+  background: rgb(43 63 60 / 90%);
   box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 12%);
   backdrop-filter: blur(12px);
 }
@@ -40,6 +40,7 @@
 .habit-card-title {
   display: grid;
   gap: 0.15rem;
+  color: var(--color-text-white);
 }
 
 .habit-card-title strong {

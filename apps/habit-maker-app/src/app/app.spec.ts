@@ -1,9 +1,11 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { App } from './app';
 import { appRoutes } from './app.routes';
 import { AuthService } from './auth/auth.service';
+import { HabitService } from './habits/habit.service';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -11,7 +13,11 @@ describe('App', () => {
     sessionStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideHttpClient(), provideRouter(appRoutes)],
+      providers: [
+        provideHttpClient(),
+        provideRouter(appRoutes),
+        { provide: HabitService, useValue: { getHabits: () => of([]) } },
+      ],
     }).compileComponents();
   });
 
