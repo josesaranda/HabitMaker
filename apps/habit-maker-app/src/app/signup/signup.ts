@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import {
   HabitMakerUIBrand,
   HabitMakerUIButton,
@@ -7,6 +7,7 @@ import {
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -21,6 +22,8 @@ import {
   templateUrl: './signup.html',
 })
 export class Signup {
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   protected passwordVisible = false;
   protected message = '';
   protected emailValue = '';
@@ -61,6 +64,12 @@ export class Signup {
 
   protected onSubmit(event: SubmitEvent): void {
     event.preventDefault();
-    this.message = 'La creación de cuenta estará disponible próximamente.';
+    const formData = new FormData(event.currentTarget as HTMLFormElement);
+    this.authService.signup(
+      String(formData.get('name') ?? ''),
+      String(formData.get('email') ?? ''),
+      String(formData.get('password') ?? ''),
+    );
+    void this.router.navigateByUrl('/home');
   }
 }
