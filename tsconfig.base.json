@@ -20,7 +20,7 @@
     "noUncheckedSideEffectImports": false,
     "types": ["*"],
     "paths": {
-      "@org/habit-maker-ui": ["./packages/habit-maker-ui/src/index.ts"]
+      "@habit-maker/habit-maker-ui": ["./packages/habit-maker-ui/src/index.ts"]
     }
   }
 }

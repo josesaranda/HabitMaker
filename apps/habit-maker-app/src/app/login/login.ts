@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
+  HabitMakerUIBrand,
   HabitMakerUIButton,
   HabitMakerUICheckbox,
   HabitMakerUIInput,
   HabitMakerUILink,
-} from '@org/habit-maker-ui';
+} from '@habit-maker/habit-maker-ui';
 
 @Component({
   selector: 'app-login',
   imports: [
+    HabitMakerUIBrand,
     HabitMakerUIButton,
     HabitMakerUICheckbox,
     HabitMakerUIInput,
@@ -19,11 +21,11 @@ import {
   templateUrl: './login.html',
 })
 export class Login {
-  protected passwordVisible = false;
-  protected message = '';
+  protected passwordVisible = signal(false);
+  protected message = signal('');
 
   protected onSubmit(event: SubmitEvent): void {
     event.preventDefault();
-    this.message = 'El acceso estará disponible próximamente.';
+    this.message.set('El acceso estará disponible próximamente.');
   }
 }

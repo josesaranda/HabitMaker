@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
+  HabitMakerUIBrand,
   HabitMakerUIButton,
   HabitMakerUICheckbox,
   HabitMakerUIInput,
   HabitMakerUILink,
-} from '@org/habit-maker-ui';
+} from '@habit-maker/habit-maker-ui';
 
 @Component({
   selector: 'app-signup',
   imports: [
+    HabitMakerUIBrand,
     HabitMakerUIButton,
     HabitMakerUICheckbox,
     HabitMakerUIInput,
@@ -28,7 +30,10 @@ export class Signup {
   protected passwordTouched = false;
 
   protected get emailInvalid(): boolean {
-    return (this.emailTouched || this.emailValue.length > 0) && !this.emailFormatValid;
+    return (
+      (this.emailTouched || this.emailValue.length > 0) &&
+      !this.emailFormatValid
+    );
   }
 
   protected get passwordInvalid(): boolean {

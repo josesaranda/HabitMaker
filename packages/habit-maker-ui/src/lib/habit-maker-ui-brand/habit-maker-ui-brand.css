@@ -1,0 +1,31 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.brand-mark {
+  display: grid;
+  width: 2.3rem;
+  height: 2.3rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid
+    var(--hm-brand-mark-border, rgb(255 255 255 / 20%));
+  border-radius: 0.75rem;
+  background: var(--hm-brand-mark-background, rgb(255 255 255 / 9%));
+  color: var(--hm-brand-mark-color, #c0d8b9);
+}
+
+.brand-mark svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.brand-light {
+  color: var(--hm-brand-light-color, #c0d8b9);
+  font-weight: 400;
+}

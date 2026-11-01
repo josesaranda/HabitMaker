@@ -33,6 +33,7 @@ Use this skill for work specific to the HabitMaker codebase. Follow the reposito
 ## Working practices
 
 - Inspect neighboring components, templates, styles, and tests before making changes. Prefer established Angular patterns over introducing a new architecture or dependency without a clear need.
+- Use Angular signals for component state that changes and is read by the template; read signals by calling them and update them with `set` or `update`. Avoid mutable plain properties for reactive template state to support zoneless change detection.
 - Keep reusable presentation components in `HabitMakerUI`; keep screen-specific composition and behavior in `HabitMakerApp`.
 - Preserve accessibility, responsive behavior, and existing styling conventions when changing UI.
 - Use Nx targets for workspace tasks and check the project's resolved configuration if a target is unclear. The repository instructions require prefixing Nx commands with the package manager.

@@ -3,5 +3,9 @@
   "compileOnSave": false,
   "files": [],
   "compilerOptions": {},
-  "references": []
+  "references": [
+    {
+      "path": "./packages/habit-maker-ui"
+    }
+  ]
 }

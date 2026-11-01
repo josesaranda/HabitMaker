@@ -1,26 +1,7 @@
 <main class="auth-shell">
   <section class="auth-story" aria-labelledby="story-title">
     <a class="brand" routerLink="/login" aria-label="HabitMaker, inicio">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 32 32" fill="none">
-          <path
-            d="M16 25V13"
-            stroke="currentColor"
-            stroke-width="2.4"
-            stroke-linecap="round"
-          />
-          <path
-            d="M16 17c-6.4 0-9.5-3.3-9.5-8.5C12 8.5 16 11 16 17Z"
-            fill="currentColor"
-          />
-          <path
-            d="M16 21c0-5.6 3.3-8.7 9.5-8.7 0 5.3-3.1 8.7-9.5 8.7Z"
-            fill="currentColor"
-            opacity=".62"
-          />
-        </svg>
-      </span>
-      <span>Habit<span class="brand-light">Maker</span></span>
+      <hm-brand />
     </a>
 
     <div class="auth-story-copy">
@@ -79,29 +60,6 @@
 
   <section class="auth-panel" aria-labelledby="login-title">
     <div class="auth-content">
-      <div class="auth-mobile-brand brand" aria-hidden="true">
-        <span class="brand-mark">
-          <svg viewBox="0 0 32 32" fill="none">
-            <path
-              d="M16 25V13"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-            />
-            <path
-              d="M16 17c-6.4 0-9.5-3.3-9.5-8.5C12 8.5 16 11 16 17Z"
-              fill="currentColor"
-            />
-            <path
-              d="M16 21c0-5.6 3.3-8.7 9.5-8.7 0 5.3-3.1 8.7-9.5 8.7Z"
-              fill="currentColor"
-              opacity=".62"
-            />
-          </svg>
-        </span>
-        <span>Habit<span class="brand-light">Maker</span></span>
-      </div>
-      <span class="auth-welcome-label">Qué bueno tenerte de vuelta</span>
       <h2 id="login-title">Inicia sesión</h2>
       <p class="auth-intro">Retoma tus hábitos justo donde los dejaste.</p>
 
@@ -129,7 +87,7 @@
               hmInput
               id="password"
               name="password"
-              [type]="passwordVisible ? 'text' : 'password'"
+              [type]="passwordVisible() ? 'text' : 'password'"
               autocomplete="current-password"
               placeholder="Escribe tu contraseña"
               required
@@ -138,11 +96,11 @@
             <button
               class="password-toggle"
               type="button"
-              (click)="passwordVisible = !passwordVisible"
-              [attr.aria-label]="passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'"
-              [attr.aria-pressed]="passwordVisible"
+              (click)="passwordVisible.update((visible) => !visible)"
+              [attr.aria-label]="passwordVisible() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              [attr.aria-pressed]="passwordVisible()"
             >
-              @if (passwordVisible) {
+              @if (passwordVisible()) {
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                   d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7"
@@ -196,7 +154,7 @@
             />
           </svg>
         </button>
-        <p class="form-message" aria-live="polite">{{ message }}</p>
+        <p class="form-message" aria-live="polite">{{ message() }}</p>
       </form>
 
       <p class="auth-account-prompt">

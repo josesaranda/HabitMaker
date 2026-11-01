@@ -2,13 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
+    "rootDir": "../..",
     "types": []
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "references": [
     {
-      "path": "../../packages/habit-maker-ui"
+      "path": "../../packages/habit-maker-ui/tsconfig.lib.json"
     }
   ]
 }
