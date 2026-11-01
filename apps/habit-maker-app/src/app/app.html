@@ -1,11 +1,11 @@
 @if (shouldShowNavbar()) {
 <div class="app-navbar-shell">
-  <hm-navbar brandLink="/home">
+  <hm-navbar class="app-navbar" brandLink="/home">
     <a class="app-navbar__link" routerLink="/home" aria-current="page">
       Inicio
     </a>
     <a class="app-navbar__link" routerLink="/home">Ajustes</a>
-    <div class="flex flex-row gap-3">
+    <div class="app-navbar__icon-actions flex flex-row gap-3">
       <button
         #addHabitTrigger
         hmButtonIcon="primary"
@@ -34,4 +34,6 @@
   <app-new-habit (habitCreated)="newHabitModal.close()" />
 </hm-modal>
 }
-<router-outlet />
+<div class="app-content-shell">
+  <router-outlet />
+</div>

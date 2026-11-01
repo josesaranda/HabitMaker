@@ -1,3 +1,14 @@
+:host {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.app-content-shell {
+  min-height: 0;
+  flex: 1;
+}
+
 .app-navbar-shell {
   position: sticky;
   z-index: 1000;
@@ -22,4 +33,23 @@
 .app-navbar__link:focus-visible {
   outline: 2px solid var(--color-primary-hover);
   outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  .app-navbar-shell {
+    position: sticky;
+    inset: auto;
+    bottom: 8px;
+    order: 1;
+    padding-inline: 1rem;
+    background: transparent;
+  }
+
+  .app-navbar__link {
+    display: none;
+  }
+
+  .app-navbar__icon-actions {
+    gap: 0.75rem;
+  }
 }
