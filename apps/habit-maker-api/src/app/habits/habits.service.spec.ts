@@ -7,6 +7,7 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { UserEntity } from '../auth/user.entity';
 import { HabitEntity } from './habit.entity';
+import { HabitCompletionEntity } from './habit-completion.entity';
 import { HabitsService } from './habits.service';
 
 describe('HabitsService', () => {
@@ -18,7 +19,7 @@ describe('HabitsService', () => {
     dataSource = new DataSource({
       type: 'sqljs',
       autoSave: false,
-      entities: [UserEntity, HabitEntity],
+      entities: [UserEntity, HabitEntity, HabitCompletionEntity],
       synchronize: true,
     });
     await dataSource.initialize();

@@ -8,6 +8,7 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { AuthService } from './auth.service';
 import { HabitEntity } from '../habits/habit.entity';
+import { HabitCompletionEntity } from '../habits/habit-completion.entity';
 import { UserEntity } from './user.entity';
 
 const ADMIN_EMAIL = 'configured-admin@example.com';
@@ -27,7 +28,7 @@ describe('AuthService', () => {
     dataSource = new DataSource({
       type: 'sqljs',
       autoSave: false,
-      entities: [UserEntity, HabitEntity],
+      entities: [UserEntity, HabitEntity, HabitCompletionEntity],
       synchronize: true,
     });
     await dataSource.initialize();

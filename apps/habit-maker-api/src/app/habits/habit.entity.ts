@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../auth/user.entity';
+import { HabitCompletionEntity } from './habit-completion.entity';
 
 @Entity({ name: 'habits' })
 export class HabitEntity {
@@ -26,4 +28,7 @@ export class HabitEntity {
   @ManyToOne(() => UserEntity, (user) => user.habits, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
+
+  @OneToMany(() => HabitCompletionEntity, (completion) => completion.habit)
+  completions!: HabitCompletionEntity[];
 }

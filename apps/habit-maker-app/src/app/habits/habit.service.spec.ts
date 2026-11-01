@@ -90,7 +90,9 @@ describe('HabitService', () => {
       receivedName = habit.name;
     });
 
-    const request = httpTestingController.expectOne(`${API_URL}/habits/habit-1`);
+    const request = httpTestingController.expectOne(
+      `${API_URL}/habits/habit-1`,
+    );
     expect(request.request.method).toBe('GET');
     expect(request.request.headers.get('Authorization')).toBe(
       'Bearer access-token',
@@ -103,6 +105,51 @@ describe('HabitService', () => {
     });
 
     expect(receivedName).toBe('Leer 10 minutos');
+  });
+
+  it('checks whether the habit is complete today using the local date', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    let completed = false;
+
+    service.getTodayCompletion('habit-1').subscribe((status) => {
+      completed = status.completed;
+    });
+
+    const request = httpTestingController.expectOne(
+      (candidate) =>
+        candidate.url === `${API_URL}/habits/habit-1/completions/today`,
+    );
+    expect(request.request.method).toBe('GET');
+    expect(request.request.params.get('date')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush({ date: '2026-11-01', completed: true, completedAt: null });
+
+    expect(completed).toBe(true);
+  });
+
+  it('marks the habit complete today with the local date', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    let completed = false;
+
+    service.markCompletedToday('habit-1').subscribe((status) => {
+      completed = status.completed;
+    });
+
+    const request = httpTestingController.expectOne(
+      (candidate) =>
+        candidate.url === `${API_URL}/habits/habit-1/completions/today`,
+    );
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual({ completed: true });
+    expect(request.request.params.get('date')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush({ date: '2026-11-01', completed: true, completedAt: null });
+
+    expect(completed).toBe(true);
   });
 
   it('does not send a request when no access token is available', () => {

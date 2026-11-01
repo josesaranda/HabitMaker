@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserEntity } from './auth/user.entity';
 import { HabitEntity } from './habits/habit.entity';
+import { HabitCompletionEntity } from './habits/habit-completion.entity';
 import { HabitsModule } from './habits/habits.module';
 
 @Module({
@@ -13,7 +14,7 @@ import { HabitsModule } from './habits/habits.module';
       type: 'sqljs',
       // sql.js creates a fresh in-memory database when no location is set.
       autoSave: false,
-      entities: [UserEntity, HabitEntity],
+      entities: [UserEntity, HabitEntity, HabitCompletionEntity],
       synchronize: true,
     }),
     AuthModule,

@@ -27,6 +27,14 @@ describe('App', () => {
                 createdAt: '2026-11-01T00:00:00.000Z',
                 updatedAt: '2026-11-01T00:00:00.000Z',
               }),
+            getTodayCompletion: () =>
+              of({ date: '2026-11-01', completed: false, completedAt: null }),
+            markCompletedToday: () =>
+              of({
+                date: '2026-11-01',
+                completed: true,
+                completedAt: '2026-11-01T12:00:00.000Z',
+              }),
             habitCreated$: EMPTY,
             createHabit: (name: string) =>
               of({
@@ -124,8 +132,9 @@ describe('App', () => {
     );
     expect(mobileSettingsLink?.getAttribute('href')).toBe('/settings');
     expect(mobileSettingsLink?.getAttribute('aria-label')).toBe('Ajustes');
-    expect(mobileSettingsLink?.querySelector('hm-icon')?.getAttribute('name'))
-      .toBe('settings');
+    expect(
+      mobileSettingsLink?.querySelector('hm-icon')?.getAttribute('name'),
+    ).toBe('settings');
     const logoutButton = compiled.querySelector<HTMLButtonElement>(
       'button[aria-label="Cerrar sesión"]',
     );

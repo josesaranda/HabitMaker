@@ -34,6 +34,8 @@ export class HabitDetail implements OnInit {
   protected readonly isLoading = signal(true);
   protected readonly isNotFound = signal(false);
   protected readonly isCompletedToday = signal(false);
+  protected readonly isSavingCompletion = signal(false);
+  protected readonly completionError = signal('');
   protected readonly loadError = signal('');
   protected readonly createdAtLabel = computed(() => {
     const createdAt = this.habit()?.createdAt;
@@ -60,9 +62,16 @@ export class HabitDetail implements OnInit {
           this.habit.set(null);
           this.isNotFound.set(false);
           this.loadError.set('');
+          this.isCompletedToday.set(false);
+          this.completionError.set('');
         }),
         switchMap((id) =>
           this.habitService.getHabit(id).pipe(
+            switchMap((habit) =>
+              this.habitService
+                .getTodayCompletion(habit.id)
+                .pipe(map((completion) => ({ habit, completion }))),
+            ),
             catchError((error: unknown) => {
               this.isLoading.set(false);
               if (error instanceof HttpErrorResponse && error.status === 404) {
@@ -76,13 +85,35 @@ export class HabitDetail implements OnInit {
         ),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((habit) => {
+      .subscribe(({ habit, completion }) => {
         this.habit.set(habit);
+        this.isCompletedToday.set(completion.completed);
         this.isLoading.set(false);
       });
   }
 
   protected markCompletedToday(): void {
-    this.isCompletedToday.set(true);
+    const currentHabit = this.habit();
+    if (!currentHabit || this.isCompletedToday() || this.isSavingCompletion()) {
+      return;
+    }
+
+    this.isSavingCompletion.set(true);
+    this.completionError.set('');
+    this.habitService
+      .markCompletedToday(currentHabit.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (completion) => {
+          this.isCompletedToday.set(completion.completed);
+          this.isSavingCompletion.set(false);
+        },
+        error: () => {
+          this.isSavingCompletion.set(false);
+          this.completionError.set(
+            'No se pudo guardar la actividad. Inténtalo de nuevo.',
+          );
+        },
+      });
   }
 }

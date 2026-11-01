@@ -55,6 +55,11 @@
         >
           Pulsa el botón cuando hayas completado este hábito hoy.
         </p>
+        @if (completionError()) {
+          <p class="mt-3 text-sm text-error" role="alert">
+            {{ completionError() }}
+          </p>
+        }
       } @else {
         <p class="mt-5 font-medium text-text-primary" role="status">
           ¡Enhorabuena, ya has completado tu hábito hoy!
@@ -67,10 +72,16 @@
         [attr.aria-describedby]="
           isCompletedToday() ? null : 'habit-completion-help'
         "
-        [disabled]="isCompletedToday()"
+        [disabled]="isCompletedToday() || isSavingCompletion()"
         (click)="markCompletedToday()"
       >
-        {{ isCompletedToday() ? '¡Completado hoy!' : 'Marcar como completado' }}
+        {{
+          isCompletedToday()
+            ? '¡Completado hoy!'
+            : isSavingCompletion()
+              ? 'Guardando…'
+              : 'Marcar como completado'
+        }}
       </button>
     </section>
   }

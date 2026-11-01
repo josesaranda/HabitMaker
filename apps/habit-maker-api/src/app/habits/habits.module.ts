@@ -3,13 +3,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../auth/auth.module';
 import { UserEntity } from '../auth/user.entity';
 import { HabitEntity } from './habit.entity';
+import { HabitCompletionEntity } from './habit-completion.entity';
 import { HabitsController } from './habits.controller';
 import { HabitsService } from './habits.service';
+import { HabitCompletionsController } from './habit-completions.controller';
+import { HabitCompletionsService } from './habit-completions.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([HabitEntity, UserEntity]), AuthModule],
-  controllers: [HabitsController],
-  providers: [HabitsService, JwtAuthGuard],
+  imports: [
+    TypeOrmModule.forFeature([HabitEntity, HabitCompletionEntity, UserEntity]),
+    AuthModule,
+  ],
+  controllers: [HabitsController, HabitCompletionsController],
+  providers: [HabitsService, HabitCompletionsService, JwtAuthGuard],
 })
 export class HabitsModule {}
