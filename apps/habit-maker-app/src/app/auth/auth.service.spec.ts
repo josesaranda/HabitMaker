@@ -6,13 +6,17 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     localStorage.clear();
+    sessionStorage.clear();
     TestBed.configureTestingModule({});
     authService = TestBed.inject(AuthService);
   });
 
-  afterEach(() => localStorage.clear());
+  afterEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
 
-  it('returns and stores fixed tokens when logging in', () => {
+  it('stores tokens in sessionStorage when remember-session is unchecked', () => {
     const tokens = authService.login('person@example.com', 'password123');
 
     expect(tokens).toEqual({
@@ -21,6 +25,16 @@ describe('AuthService', () => {
     });
     expect(authService.getAuthToken()).toBe(tokens.authToken);
     expect(authService.getRefreshToken()).toBe(tokens.refreshToken);
+    expect(localStorage.getItem('habitmaker.authToken')).toBeNull();
+    expect(sessionStorage.getItem('habitmaker.authToken')).toBe(tokens.authToken);
+    expect(authService.isAuthenticated()).toBe(true);
+  });
+
+  it('stores tokens in localStorage when remember-session is checked', () => {
+    const tokens = authService.login('person@example.com', 'password123', true);
+
+    expect(localStorage.getItem('habitmaker.authToken')).toBe(tokens.authToken);
+    expect(sessionStorage.getItem('habitmaker.authToken')).toBeNull();
     expect(authService.isAuthenticated()).toBe(true);
   });
 
@@ -33,6 +47,8 @@ describe('AuthService', () => {
     const refreshedTokens = authService.refreshToken(signupTokens.refreshToken);
 
     expect(refreshedTokens).toEqual(signupTokens);
+    expect(localStorage.getItem('habitmaker.authToken')).toBeNull();
+    expect(sessionStorage.getItem('habitmaker.authToken')).toBe(signupTokens.authToken);
     expect(authService.refreshToken('invalid-refresh-token')).toBeNull();
   });
 

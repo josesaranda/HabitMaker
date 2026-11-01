@@ -33,6 +33,7 @@ export class Login {
     this.authService.login(
       String(formData.get('email') ?? ''),
       String(formData.get('password') ?? ''),
+      formData.has('remember'),
     );
     void this.router.navigateByUrl('/home');
   }

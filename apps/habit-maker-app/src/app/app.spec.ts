@@ -51,11 +51,13 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('app-home h1')?.textContent).toContain(
       '¡Bienvenido a casa!',
     );
+    expect(fixture.nativeElement.querySelector('app-home hm-brand')).not.toBeNull();
 
     await router.navigateByUrl('/signup');
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('app-home h1')?.textContent).toContain(
       '¡Bienvenido a casa!',
     );
+    expect(fixture.nativeElement.querySelector('app-home hm-brand')).not.toBeNull();
   });
 });

@@ -32,6 +32,7 @@
   font-weight: 700;
   letter-spacing: -0.045em;
   text-decoration: none;
+  view-transition-name: habitmaker-brand;
 }
 
 .auth-story-copy {
