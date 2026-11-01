@@ -86,9 +86,27 @@ describe('AuthService', () => {
         email: 'person@example.com',
       }),
     );
-    sessionStorage.setItem('habitmaker.authToken', `header.${payload}.signature`);
+    sessionStorage.setItem(
+      'habitmaker.authToken',
+      `header.${payload}.signature`,
+    );
 
     expect(authService.getUserEmail()).toBe('person@example.com');
+  });
+
+  it('reads the role claim from the stored access token', () => {
+    const payload = btoa(
+      JSON.stringify({
+        exp: Math.floor(Date.now() / 1000) + 3600,
+        role: 'admin',
+      }),
+    );
+    sessionStorage.setItem(
+      'habitmaker.authToken',
+      `header.${payload}.signature`,
+    );
+
+    expect(authService.getUserRole()).toBe('admin');
   });
 
   it('sends password-recovery requests to the API', () => {

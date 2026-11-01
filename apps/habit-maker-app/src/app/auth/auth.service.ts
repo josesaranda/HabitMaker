@@ -67,21 +67,13 @@ export class AuthService {
   }
 
   getUserEmail(): string {
-    const token = this.getAuthToken();
-    const payload = token?.split('.')[1];
-    if (!payload) {
-      return '';
-    }
+    const claims = this.getTokenClaims();
+    return typeof claims?.email === 'string' ? claims.email : '';
+  }
 
-    try {
-      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-      const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
-      const claims = JSON.parse(atob(paddedBase64)) as { email?: unknown };
-
-      return typeof claims.email === 'string' ? claims.email : '';
-    } catch {
-      return '';
-    }
+  getUserRole(): 'admin' | 'user' | null {
+    const role = this.getTokenClaims()?.role;
+    return role === 'admin' || role === 'user' ? role : null;
   }
 
   isTokenValid(token: string | null = this.getAuthToken()): boolean {
@@ -155,5 +147,27 @@ export class AuthService {
     }
 
     return storage === 'local' ? window.localStorage : window.sessionStorage;
+  }
+
+  private getTokenClaims(): { email?: unknown; role?: unknown } | null {
+    const payload = this.getAuthToken()?.split('.')[1];
+    if (!payload) {
+      return null;
+    }
+
+    try {
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+      const binaryPayload = atob(paddedBase64);
+      const bytes = Uint8Array.from(binaryPayload, (character) =>
+        character.charCodeAt(0),
+      );
+      return JSON.parse(new TextDecoder().decode(bytes)) as {
+        email?: unknown;
+        role?: unknown;
+      };
+    } catch {
+      return null;
+    }
   }
 }
