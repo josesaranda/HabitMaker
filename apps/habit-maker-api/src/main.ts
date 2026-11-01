@@ -14,7 +14,7 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.CORS_ORIGIN ?? 'http://localhost:4200',
   });
-  const port = process.env.PORT || 3000;
+  const port = process.env.SERVER_PORT || 3000;
   await app.listen(port);
   // Set when Nx waits for this server to be ready
   if (process.env.NX_READY_SIGNAL_SOCKET) {
