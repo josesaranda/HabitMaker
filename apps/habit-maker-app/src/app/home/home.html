@@ -43,6 +43,6 @@
   </section>
   }
   <hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
-    <app-new-habit (habitCreated)="newHabitModal.close(); refreshHabits()" />
+    <app-new-habit (habitCreated)="newHabitModal.close()" />
   </hm-modal>
 </main>

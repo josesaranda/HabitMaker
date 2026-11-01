@@ -31,7 +31,7 @@
   </hm-navbar>
 </div>
 <hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
-  <app-new-habit />
+  <app-new-habit (habitCreated)="newHabitModal.close()" />
 </hm-modal>
 }
 <router-outlet />

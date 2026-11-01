@@ -1,4 +1,12 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   HabitMakerUIButton,
   HabitMakerUIModal,
@@ -15,6 +23,7 @@ import { NewHabit } from '../new-habit/new-habit';
 })
 export class Home implements OnInit {
   private readonly habitService = inject(HabitService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly habits = signal<Habit[]>([]);
   protected readonly isLoading = signal(true);
@@ -22,10 +31,9 @@ export class Home implements OnInit {
   protected readonly hasHabits = computed(() => this.habits().length > 0);
 
   ngOnInit(): void {
-    this.loadHabits();
-  }
-
-  protected refreshHabits(): void {
+    this.habitService.habitCreated$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadHabits());
     this.loadHabits();
   }
 

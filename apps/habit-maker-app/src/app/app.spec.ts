@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { App } from './app';
 import { appRoutes } from './app.routes';
 import { AuthService } from './auth/auth.service';
@@ -16,7 +16,20 @@ describe('App', () => {
       providers: [
         provideHttpClient(),
         provideRouter(appRoutes),
-        { provide: HabitService, useValue: { getHabits: () => of([]) } },
+        {
+          provide: HabitService,
+          useValue: {
+            getHabits: () => of([]),
+            habitCreated$: EMPTY,
+            createHabit: (name: string) =>
+              of({
+                id: 'habit-1',
+                name,
+                createdAt: '',
+                updatedAt: '',
+              }),
+          },
+        },
       ],
     }).compileComponents();
   });
@@ -95,6 +108,15 @@ describe('App', () => {
 
     expect(dialog.open).toBe(true);
     expect(dialog.querySelector('app-new-habit')).not.toBeNull();
+
+    const input = dialog.querySelector<HTMLInputElement>('#new-habit-name')!;
+    input.value = 'Leer 10 minutos';
+    input.dispatchEvent(new Event('input'));
+    dialog
+      .querySelector<HTMLFormElement>('form')!
+      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    fixture.detectChanges();
+    expect(dialog.open).toBe(false);
 
     await router.navigateByUrl('/signup');
     fixture.detectChanges();

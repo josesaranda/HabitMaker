@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { EMPTY, of, Subject } from 'rxjs';
 import { Habit } from '../habits/habit.service';
 import { HabitService } from '../habits/habit.service';
 import { Home } from './home';
@@ -11,7 +11,7 @@ describe('Home', () => {
       providers: [
         {
           provide: HabitService,
-          useValue: { getHabits: () => of(habits) },
+          useValue: { getHabits: () => of(habits), habitCreated$: EMPTY },
         },
       ],
     }).compileComponents();
@@ -71,5 +71,43 @@ describe('Home', () => {
     expect(compiled.querySelectorAll('app-habit-card')).toHaveLength(2);
     expect(compiled.textContent).toContain('Leer 10 minutos');
     expect(compiled.textContent).toContain('Caminar');
+  });
+
+  it('reloads the list when a habit is created from the global modal', async () => {
+    const habitCreated = new Subject<void>();
+    const habit: Habit = {
+      id: 'habit-1',
+      name: 'Leer 10 minutos',
+      createdAt: '2026-11-01T00:00:00.000Z',
+      updatedAt: '2026-11-01T00:00:00.000Z',
+    };
+    let requestCount = 0;
+
+    await TestBed.configureTestingModule({
+      imports: [Home],
+      providers: [
+        {
+          provide: HabitService,
+          useValue: {
+            getHabits: () => of(requestCount++ === 0 ? [] : [habit]),
+            habitCreated$: habitCreated.asObservable(),
+          },
+        },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(Home);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.nativeElement.querySelector('app-habit-card')).toBeNull();
+
+    habitCreated.next();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('app-habit-card'),
+    ).not.toBeNull();
   });
 });

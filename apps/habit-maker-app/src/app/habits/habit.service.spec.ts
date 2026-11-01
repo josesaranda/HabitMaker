@@ -32,10 +32,13 @@ describe('HabitService', () => {
   it('sends a trimmed habit name with the saved access token', () => {
     sessionStorage.setItem('habitmaker.authToken', 'access-token');
     let responseName = '';
+    let createEventEmitted = false;
+    service.habitCreated$.subscribe(() => (createEventEmitted = true));
 
     service.createHabit('  Leer 10 minutos  ').subscribe((habit) => {
       responseName = habit.name;
     });
+    expect(createEventEmitted).toBe(false);
 
     const request = httpTestingController.expectOne(`${API_URL}/habits`);
     expect(request.request.method).toBe('POST');
@@ -51,6 +54,7 @@ describe('HabitService', () => {
     });
 
     expect(responseName).toBe('Leer 10 minutos');
+    expect(createEventEmitted).toBe(true);
   });
 
   it('loads the authenticated user habits', () => {
