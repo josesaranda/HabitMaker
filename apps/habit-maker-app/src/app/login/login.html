@@ -80,7 +80,6 @@
         <div class="form-field">
           <div class="field-heading">
             <label for="password">Contraseña</label>
-            <a hmLink href="#recuperar">¿La olvidaste?</a>
           </div>
           <div class="password-field">
             <input
@@ -137,10 +136,15 @@
           </div>
         </div>
 
-        <label class="remember-option">
-          <input hmCheckbox type="checkbox" name="remember" />
-          <span>Recordar mi sesión</span>
-        </label>
+        <div class="flex flew-wrap gap-2 justify-between items-center">
+          <label class="remember-option">
+            <input hmCheckbox type="checkbox" name="remember" />
+            <span>Recordar mi sesión</span>
+          </label>
+          <a class="text-xs" hmLink href="#recuperar"
+            >¿Olvidaste la contraseña?</a
+          >
+        </div>
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
           Iniciar sesión

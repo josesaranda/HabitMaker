@@ -65,4 +65,16 @@ describe('AuthService', () => {
     expect(authService.getRefreshToken()).toBeNull();
     expect(authService.isAuthenticated()).toBe(false);
   });
+
+  it('can defer the reactive logout state until navigation completes', () => {
+    authService.login('person@example.com', 'password123');
+
+    authService.logout({ deferStateUpdate: true });
+
+    expect(authService.isAuthenticated()).toBe(false);
+    expect(authService.authenticated()).toBe(true);
+
+    authService.syncAuthenticatedState();
+    expect(authService.authenticated()).toBe(false);
+  });
 });

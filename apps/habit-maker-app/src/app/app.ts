@@ -34,7 +34,9 @@ export class App {
   });
 
   protected logout(): void {
-    this.authService.logout();
-    void this.router.navigateByUrl('/login');
+    this.authService.logout({ deferStateUpdate: true });
+    void this.router
+      .navigateByUrl('/login')
+      .finally(() => this.authService.syncAuthenticatedState());
   }
 }

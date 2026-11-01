@@ -5,6 +5,10 @@ export interface AuthTokens {
   refreshToken: string;
 }
 
+export interface LogoutOptions {
+  deferStateUpdate?: boolean;
+}
+
 const AUTH_TOKEN = 'habitmaker-demo-auth-token';
 const REFRESH_TOKEN = 'habitmaker-demo-refresh-token';
 const AUTH_TOKEN_STORAGE_KEY = 'habitmaker.authToken';
@@ -50,9 +54,15 @@ export class AuthService {
     return this.saveTokens(rememberSession);
   }
 
-  logout(): void {
+  logout({ deferStateUpdate = false }: LogoutOptions = {}): void {
     this.clearTokens();
-    this.authenticatedState.set(false);
+    if (!deferStateUpdate) {
+      this.authenticatedState.set(false);
+    }
+  }
+
+  syncAuthenticatedState(): void {
+    this.authenticatedState.set(this.isTokenValid());
   }
 
   private saveTokens(rememberSession = false): AuthTokens {
