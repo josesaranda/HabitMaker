@@ -7,13 +7,17 @@ import { AuthService } from './auth/auth.service';
 describe('App', () => {
   beforeEach(async () => {
     localStorage.clear();
+    sessionStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [provideRouter(appRoutes)],
     }).compileComponents();
   });
 
-  afterEach(() => localStorage.clear());
+  afterEach(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
 
   it('renders the router outlet and opens the login route by default', async () => {
     const fixture = TestBed.createComponent(App);
@@ -26,6 +30,7 @@ describe('App', () => {
     expect(compiled.querySelector('app-login h2')?.textContent).toContain(
       'Inicia sesión',
     );
+    expect(compiled.querySelector('hm-navbar')).toBeNull();
   });
 
   it('navigates to the signup page', async () => {
@@ -51,13 +56,13 @@ describe('App', () => {
     expect(fixture.nativeElement.querySelector('app-home h1')?.textContent).toContain(
       '¡Bienvenido a casa!',
     );
-    expect(fixture.nativeElement.querySelector('app-home hm-brand')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('hm-navbar hm-brand')).not.toBeNull();
 
     await router.navigateByUrl('/signup');
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('app-home h1')?.textContent).toContain(
       '¡Bienvenido a casa!',
     );
-    expect(fixture.nativeElement.querySelector('app-home hm-brand')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('hm-navbar hm-brand')).not.toBeNull();
   });
 });

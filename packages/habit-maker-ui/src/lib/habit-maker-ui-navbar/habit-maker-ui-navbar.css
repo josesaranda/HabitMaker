@@ -6,7 +6,7 @@
 .hm-navbar {
   display: flex;
   width: 100%;
-  min-height: 4rem;
+  height: 3rem;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;

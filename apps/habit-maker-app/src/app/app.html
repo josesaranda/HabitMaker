@@ -1,1 +1,20 @@
+@if (authService.authenticated()) {
+  <div class="app-navbar-shell">
+    <hm-navbar brandLink="/home">
+      <a class="app-navbar__link" routerLink="/home" aria-current="page">
+        Inicio
+      </a>
+      <a class="app-navbar__link" routerLink="/home">Ajustes</a>
+      <button
+        class="app-navbar__logout"
+        type="button"
+        aria-label="Cerrar sesión"
+        title="Cerrar sesión"
+        (click)="logout()"
+      >
+        <hm-icon name="logout" />
+      </button>
+    </hm-navbar>
+  </div>
+}
 <router-outlet />

@@ -18,6 +18,11 @@
           {
             "glob": "**/*",
             "input": "apps/habit-maker-app/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "packages/habit-maker-ui/src/assets",
+            "output": "assets"
           }
         ],
         "styles": ["apps/habit-maker-app/src/styles.css"]

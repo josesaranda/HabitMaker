@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 export interface AuthTokens {
   authToken: string;
@@ -13,6 +13,9 @@ type TokenStorage = 'local' | 'session';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly authenticatedState = signal(this.isTokenValid());
+  readonly authenticated = this.authenticatedState.asReadonly();
+
   login(_email: string, _password: string, rememberSession = false): AuthTokens {
     return this.saveTokens(rememberSession);
   }
@@ -49,6 +52,7 @@ export class AuthService {
 
   logout(): void {
     this.clearTokens();
+    this.authenticatedState.set(false);
   }
 
   private saveTokens(rememberSession = false): AuthTokens {
@@ -57,6 +61,7 @@ export class AuthService {
     const storage: TokenStorage = rememberSession ? 'local' : 'session';
     this.storeValue(storage, AUTH_TOKEN_STORAGE_KEY, tokens.authToken);
     this.storeValue(storage, REFRESH_TOKEN_STORAGE_KEY, tokens.refreshToken);
+    this.authenticatedState.set(true);
     return tokens;
   }
 
