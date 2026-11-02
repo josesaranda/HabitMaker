@@ -6,11 +6,9 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { HabitCompletionStatus, HabitService } from '../habits/habit.service';
 
 @Component({
-  imports: [RouterLink],
   selector: 'app-habit-card',
   templateUrl: './habit-card.html',
   host: { class: 'block w-full' },
@@ -22,9 +20,6 @@ export class HabitCard {
   startedAt = input.required<string>();
   protected readonly containerTransitionName = computed(
     () => `habit-container-${this.id().replace(/[^a-zA-Z0-9_-]/g, '-')}`,
-  );
-  protected readonly titleTransitionName = computed(
-    () => `habit-title-${this.id().replace(/[^a-zA-Z0-9_-]/g, '-')}`,
   );
   private readonly today = signal(new Date());
   private readonly completions = signal<Record<string, boolean>>({});

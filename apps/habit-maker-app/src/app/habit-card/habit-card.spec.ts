@@ -56,12 +56,8 @@ describe('HabitCard', () => {
     expect(compiled.querySelector('strong')?.textContent).toBe(
       'Un poco de lectura',
     );
-    expect(compiled.querySelector('a')?.getAttribute('href')).toBe(
-      '/habits/habit-1',
-    );
-    expect(compiled.querySelector('strong')?.getAttribute('style')).toContain(
-      'view-transition-name: habit-title-habit-1',
-    );
+    expect(compiled.querySelector('a')).toBeNull();
+    expect(compiled.querySelector('strong')?.getAttribute('style')).toBeNull();
     expect(compiled.querySelector('article')?.getAttribute('style')).toContain(
       'view-transition-name: habit-container-habit-1',
     );

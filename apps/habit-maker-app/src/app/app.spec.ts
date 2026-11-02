@@ -98,7 +98,9 @@ describe('App', () => {
       fixture.nativeElement.querySelector('app-habit-detail'),
     ).not.toBeNull();
     expect(
-      fixture.nativeElement.querySelector('app-habit-detail h1')?.textContent,
+      fixture.nativeElement.querySelector(
+        'app-habit-detail app-habit-card article strong',
+      )?.textContent,
     ).toContain('Leer 10 minutos');
   });
 

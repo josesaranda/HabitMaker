@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   HabitMakerUIButton,
   HabitMakerUIModal,
@@ -20,7 +20,13 @@ import { NewHabit } from '../new-habit/new-habit';
 import { HomeHabitsResolveResult } from './home.resolver';
 
 @Component({
-  imports: [HabitMakerUIButton, HabitMakerUIModal, HabitCard, NewHabit],
+  imports: [
+    HabitMakerUIButton,
+    HabitMakerUIModal,
+    HabitCard,
+    NewHabit,
+    RouterLink,
+  ],
   selector: 'app-home',
   templateUrl: './home.html',
 })

@@ -12,6 +12,7 @@ describe('HabitDetail', () => {
   it('shows the habit matching the route id', async () => {
     const paramMap = convertToParamMap({ id: 'habit-1' });
     const habitService = {
+      getCompletionsForDates: () => of([]),
       getTodayCompletion: () =>
         of({ date: '2026-11-01', completed: false, completedAt: null }),
       markCompletedToday: vi.fn(() =>
@@ -54,20 +55,26 @@ describe('HabitDetail', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('h1')?.textContent).toContain(
-      'Leer 10 minutos',
+    const habitCard = fixture.nativeElement.querySelector('app-habit-card');
+    expect(
+      habitCard?.querySelector('article strong')?.textContent?.trim(),
+    ).toBe('Leer 10 minutos');
+    expect(habitCard?.querySelector('time')?.textContent).toContain(
+      'Desde 1 nov 2026',
     );
+    const pageContent = fixture.nativeElement.querySelector('main > div');
+    expect(pageContent?.classList.contains('max-w-6xl')).toBe(true);
+    const backLink = pageContent?.querySelector(':scope > a');
+    expect(backLink?.textContent).toContain('Volver a mis hábitos');
+    expect(backLink?.nextElementSibling).toBe(habitCard);
+    expect(habitCard?.querySelector('a')).toBeNull();
+    expect(habitCard?.classList.contains('max-w-3xl')).toBe(true);
+    const habitArticle = habitCard?.querySelector('article');
+    expect(habitArticle?.classList.contains('w-full')).toBe(true);
+    expect(habitArticle?.classList.contains('max-w-md')).toBe(false);
     expect(
-      fixture.nativeElement.querySelector('h1')?.getAttribute('style'),
-    ).toContain('view-transition-name: habit-title-habit-1');
-    expect(
-      fixture.nativeElement
-        .querySelector('main > section')
-        ?.getAttribute('style'),
+      habitArticle?.getAttribute('style'),
     ).toContain('view-transition-name: habit-container-habit-1');
-    expect(fixture.nativeElement.querySelector('time')?.textContent).toContain(
-      '1 de noviembre de 2026',
-    );
     const compiled = fixture.nativeElement as HTMLElement;
     const completionButton = compiled.querySelector<HTMLButtonElement>(
       'button[hmButton="primary"]',
