@@ -19,6 +19,7 @@ Use this skill for work specific to the HabitMaker codebase. Follow the reposito
 - Add application screens and app-specific behavior under `apps/habit-maker-app/src/app/`.
 - App routes live in `apps/habit-maker-app/src/app/app.routes.ts`; app-level providers are configured in `app.config.ts`.
 - Reusable UI primitives belong in `packages/habit-maker-ui/src/lib/`. Existing components include button, checkbox, input, and link. Update the library's public exports in `packages/habit-maker-ui/src/index.ts` when adding a component intended for consumers.
+- `HabitMakerUIIcon` (`<hm-icon>`) is the required source for every UI icon. When adding, changing, or reviewing iconography, follow the `habitmaker-icons` skill; do not add inline SVGs or one-off icon artwork.
 - App-wide styles are in `apps/habit-maker-app/src/styles.css`. It imports Tailwind and the shared UI styles.
 - For screens and components in `HabitMakerApp`, use Tailwind utility classes in templates (including host classes where needed) or compose components from `HabitMakerUI`. Do not add app component `.css` files; CSS component stylesheets are reserved for `HabitMakerUI`.
 - When refactoring an app screen, migrate the app-specific stylesheets directly involved in that screen to Tailwind and remove those stylesheets. Leave unrelated legacy/global styles alone unless they are part of the request.

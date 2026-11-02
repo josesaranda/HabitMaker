@@ -1,9 +1,16 @@
 import { Component, computed, input } from '@angular/core';
 
-export type HabitMakerUIIconName = 'add' | 'logout' | 'settings';
+export type HabitMakerUIIconName =
+  | 'add'
+  | 'check'
+  | 'clock'
+  | 'logout'
+  | 'settings';
 
 const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   add: 'assets/icons/add.svg#add',
+  check: 'assets/icons/check.svg#check',
+  clock: 'assets/icons/clock.svg#clock',
   logout: 'assets/icons/logout.svg#logout',
   settings: 'assets/icons/settings.svg#settings',
 };

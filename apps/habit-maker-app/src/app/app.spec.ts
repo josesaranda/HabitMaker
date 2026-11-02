@@ -30,12 +30,6 @@ describe('App', () => {
             getTodayCompletion: () =>
               of({ date: '2026-11-01', completed: false, completedAt: null }),
             getCompletionsForDates: () => of([]),
-            markCompletedToday: () =>
-              of({
-                date: '2026-11-01',
-                completed: true,
-                completedAt: '2026-11-01T12:00:00.000Z',
-              }),
             habitCreated$: EMPTY,
             createHabit: (name: string) =>
               of({

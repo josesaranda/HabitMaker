@@ -74,16 +74,6 @@ export class HabitService {
     );
   }
 
-  markCompletedToday(id: string): Observable<HabitCompletionStatus> {
-    return this.requireAuthentication(
-      this.http.put<HabitCompletionStatus>(
-        `${API_URL}/habits/${encodeURIComponent(id)}/completions/today`,
-        { completed: true },
-        { params: { date: getLocalDate() } },
-      ),
-    );
-  }
-
   setCompletion(
     id: string,
     date: string,

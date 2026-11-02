@@ -52,47 +52,53 @@
             {{ dayCompletionError() }}
           </p>
         }
-        @if (!isCompletedToday()) {
-          <h2
-            id="habit-completion-title"
-            class="text-xl font-semibold text-text-primary"
+        <div class="mt-5 flex items-start gap-4">
+          <div
+            class="grid size-11 shrink-0 place-items-center rounded-full border border-[#a8c5ad]/40 bg-[#a8c5ad]/10 text-[#55785f]"
+            aria-hidden="true"
           >
-            ¿Ya has completado tu hábito hoy?
-          </h2>
-          <p
-            id="habit-completion-help"
-            class="mt-2 text-sm text-text-secondary"
-          >
-            Pulsa el botón cuando hayas completado este hábito hoy.
-          </p>
-          @if (completionError()) {
-            <p class="mt-3 text-sm text-error" role="alert">
-              {{ completionError() }}
-            </p>
-          }
-        } @else {
-          <p class="mt-5 font-medium text-text-primary" role="status">
-            ¡Enhorabuena, ya has completado tu hábito hoy!
-          </p>
-        }
-        <button
-          class="mt-5"
-          hmButton="primary"
-          type="button"
-          [attr.aria-describedby]="
-            isCompletedToday() ? null : 'habit-completion-help'
-          "
-          [disabled]="isCompletedToday() || isSavingCompletion()"
-          (click)="markCompletedToday()"
-        >
-          {{
-            isCompletedToday()
-              ? '¡Completado hoy!'
-              : isSavingCompletion()
-                ? 'Guardando…'
-                : 'Marcar como completado'
-          }}
-        </button>
+            <hm-icon
+              class="size-5"
+              [name]="isCompletedToday() ? 'check' : 'clock'"
+            />
+          </div>
+          <div class="min-w-0 pt-0.5">
+            <span
+              class="text-[0.65rem] font-bold tracking-[0.16em] text-[#55785f]"
+            >
+              {{
+                isCompletedToday()
+                  ? 'OBJETIVO DE HOY CUMPLIDO'
+                  : 'TU OBJETIVO DE HOY'
+              }}
+            </span>
+            @if (isCompletedToday()) {
+              <h2
+                class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
+                role="status"
+              >
+                ¡Enhorabuena, ya has completado tu hábito hoy!
+              </h2>
+              <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+                La constancia se construye con cada pequeño paso. ¡Sigue así!
+              </p>
+            } @else {
+              <h2
+                id="habit-completion-title"
+                class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
+              >
+                ¿Ya has completado tu hábito hoy?
+              </h2>
+              <p
+                id="habit-completion-help"
+                class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary"
+              >
+                Pulsa el día de hoy en la tarjeta del hábito para marcarlo como
+                completado.
+              </p>
+            }
+          </div>
+        </div>
       </section>
     }
   </div>

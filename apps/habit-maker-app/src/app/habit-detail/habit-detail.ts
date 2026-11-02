@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { HabitMakerUIButton } from '@habit-maker/habit-maker-ui';
+import { HabitMakerUIIcon } from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card/habit-card';
 import type { HabitCardDayToggleEvent } from '../habit-card/habit-card';
@@ -24,7 +24,7 @@ import { Habit, HabitService } from '../habits/habit.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
-  imports: [HabitCard, HabitMakerUIButton, RouterLink],
+  imports: [HabitCard, HabitMakerUIIcon, RouterLink],
   selector: 'app-habit-detail',
   templateUrl: './habit-detail.html',
 })
@@ -38,10 +38,8 @@ export class HabitDetail implements OnInit {
   protected readonly isLoading = signal(true);
   protected readonly isNotFound = signal(false);
   protected readonly isCompletedToday = signal(false);
-  protected readonly isSavingCompletion = signal(false);
   protected readonly isSavingDayCompletion = signal(false);
   protected readonly completionRefresh = signal(0);
-  protected readonly completionError = signal('');
   protected readonly dayCompletionError = signal('');
   protected readonly loadError = signal('');
 
@@ -62,7 +60,6 @@ export class HabitDetail implements OnInit {
           this.isNotFound.set(false);
           this.loadError.set('');
           this.isCompletedToday.set(false);
-          this.completionError.set('');
           this.isSavingDayCompletion.set(false);
           this.dayCompletionError.set('');
         }),
@@ -91,31 +88,6 @@ export class HabitDetail implements OnInit {
       )
       .subscribe((completion) => {
         this.isCompletedToday.set(completion.completed);
-      });
-  }
-
-  protected markCompletedToday(): void {
-    const currentHabit = this.habit();
-    if (!currentHabit || this.isCompletedToday() || this.isSavingCompletion()) {
-      return;
-    }
-
-    this.isSavingCompletion.set(true);
-    this.completionError.set('');
-    this.habitService
-      .markCompletedToday(currentHabit.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (completion) => {
-          this.isCompletedToday.set(completion.completed);
-          this.isSavingCompletion.set(false);
-        },
-        error: () => {
-          this.isSavingCompletion.set(false);
-          this.completionError.set(
-            'No se pudo guardar la actividad. Inténtalo de nuevo.',
-          );
-        },
       });
   }
 

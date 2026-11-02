@@ -30,9 +30,6 @@ export class HabitCard {
   dayToggleDisabled = input(false);
   completionRefresh = input(0);
   dayToggled = output<HabitCardDayToggleEvent>();
-  protected readonly containerTransitionName = computed(
-    () => `habit-container-${this.id().replace(/[^a-zA-Z0-9_-]/g, '-')}`,
-  );
   private readonly today = signal(new Date());
   private readonly completions = signal<Record<string, boolean>>({});
   protected readonly completionError = signal(false);

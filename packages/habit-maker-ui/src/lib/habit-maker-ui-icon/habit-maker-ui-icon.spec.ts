@@ -14,6 +14,12 @@ class HostComponent {}
 })
 class AddIconHostComponent {}
 
+@Component({
+  imports: [HabitMakerUIIcon],
+  template: '<hm-icon name="check" /><hm-icon name="clock" />',
+})
+class CompletionIconsHostComponent {}
+
 describe('HabitMakerUIIcon', () => {
   it('references the SVG asset for its icon name decoratively', async () => {
     await TestBed.configureTestingModule({
@@ -40,5 +46,21 @@ describe('HabitMakerUIIcon', () => {
     expect(
       fixture.nativeElement.querySelector('use')?.getAttribute('href'),
     ).toBe('assets/icons/add.svg#add');
+  });
+
+  it('references the completion status SVG assets', async () => {
+    await TestBed.configureTestingModule({
+      imports: [CompletionIconsHostComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(CompletionIconsHostComponent);
+    fixture.detectChanges();
+
+    expect(
+      Array.from(
+        fixture.nativeElement.querySelectorAll('use'),
+        (use: SVGUseElement) => use.getAttribute('href'),
+      ),
+    ).toEqual(['assets/icons/check.svg#check', 'assets/icons/clock.svg#clock']);
   });
 });

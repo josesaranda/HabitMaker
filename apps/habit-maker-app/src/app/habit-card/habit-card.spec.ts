@@ -60,9 +60,7 @@ describe('HabitCard', () => {
     expect(compiled.querySelector('a')).toBeNull();
     expect(compiled.querySelector('button')).toBeNull();
     expect(compiled.querySelector('strong')?.getAttribute('style')).toBeNull();
-    expect(compiled.querySelector('article')?.getAttribute('style')).toContain(
-      'view-transition-name: habit-container-habit-1',
-    );
+    expect(compiled.querySelector('article')?.getAttribute('style')).toBeNull();
     expect(compiled.querySelector('time')?.getAttribute('datetime')).toBe(
       '2023-10-01',
     );
