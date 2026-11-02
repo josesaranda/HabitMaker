@@ -48,7 +48,7 @@
           "
           [attr.aria-pressed]="day.completed"
           [disabled]="dayToggleDisabled() || day.offset > 0"
-          (click)="toggleDay(day)"
+          (click)="toggleDay(day, $event)"
         >
           <ng-container
             [ngTemplateOutlet]="dayContent"

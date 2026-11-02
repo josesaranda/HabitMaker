@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import confetti from '@hiseb/confetti';
 import {
   HabitMakerHeader,
   HabitMakerUIIcon,
@@ -107,6 +108,12 @@ export class HabitDetail implements OnInit {
         next: (completion) => {
           this.isSavingDayCompletion.set(false);
           this.completionRefresh.update((version) => version + 1);
+          if (completion.completed) {
+            confetti({
+              position: event.position,
+              color: ['#a8c5ad', '#e6b875', '#ffffff'],
+            });
+          }
           if (completion.date === this.getLocalDate()) {
             this.isCompletedToday.set(completion.completed);
           }

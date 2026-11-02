@@ -3,9 +3,12 @@ import {
   ActivatedRoute,
   convertToParamMap,
 } from '@angular/router';
+import confetti from '@hiseb/confetti';
 import { of } from 'rxjs';
 import { HabitService } from '../habits/habit.service';
 import { HabitDetail } from './habit-detail';
+
+vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));
 
 describe('HabitDetail', () => {
   it('shows the habit matching the route id', async () => {
@@ -86,20 +89,25 @@ describe('HabitDetail', () => {
 
   it('persists day toggles and updates the current-day completion state', async () => {
     const today = toLocalDate(new Date());
-    let todayCompleted = false;
+    const completedDates = new Set<string>();
     const habitService = {
       getCompletionsForDates: (_id: string, dates: string[]) =>
         of(
           dates.map((date) => ({
             date,
-            completed: date === today && todayCompleted,
+            completed: completedDates.has(date),
             completedAt: null,
           })),
         ),
       getTodayCompletion: () =>
-        of({ date: today, completed: false, completedAt: null }),
+        of({
+          date: today,
+          completed: completedDates.has(today),
+          completedAt: null,
+        }),
       setCompletion: vi.fn((_id: string, date: string, completed: boolean) => {
-        if (date === today) todayCompleted = completed;
+        if (completed) completedDates.add(date);
+        else completedDates.delete(date);
         return of({ date, completed, completedAt: null });
       }),
     };
@@ -138,6 +146,9 @@ describe('HabitDetail', () => {
       `[aria-label="Marcar como completado el ${today}"]`,
     );
     expect(dayButton).not.toBeNull();
+    vi.spyOn(dayButton!, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(40, 60, 40, 40),
+    );
     dayButton?.click();
     fixture.detectChanges();
     await fixture.whenStable();
@@ -152,6 +163,35 @@ describe('HabitDetail', () => {
     expect(compiled.querySelector('[role="status"]')?.textContent).toContain(
       '¡Enhorabuena, ya has completado tu hábito hoy!',
     );
+    expect(confetti).toHaveBeenCalledWith({
+      position: { x: 60, y: 80 },
+      color: ['#a8c5ad', '#e6b875', '#ffffff'],
+    });
+
+    const previousDate = new Date();
+    previousDate.setDate(previousDate.getDate() - 1);
+    const previousDateLabel = toLocalDate(previousDate);
+    const previousDayButton = compiled.querySelector<HTMLButtonElement>(
+      `[aria-label="Marcar como completado el ${previousDateLabel}"]`,
+    );
+    expect(previousDayButton).not.toBeNull();
+    vi.spyOn(previousDayButton!, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(100, 120, 20, 20),
+    );
+    previousDayButton?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(habitService.setCompletion).toHaveBeenLastCalledWith(
+      'habit-1',
+      previousDateLabel,
+      true,
+    );
+    expect(confetti).toHaveBeenLastCalledWith({
+      position: { x: 110, y: 130 },
+      color: ['#a8c5ad', '#e6b875', '#ffffff'],
+    });
   });
 });
 

@@ -107,7 +107,11 @@ describe('HabitCard', () => {
     futureDate.setDate(futureDate.getDate() + 3);
     const futureDateLabel = toLocalDate(futureDate);
     completedDates.add(date);
-    const emitted: { date: string; completed: boolean }[] = [];
+    const emitted: {
+      date: string;
+      completed: boolean;
+      position: { x: number; y: number };
+    }[] = [];
     component.dayToggled.subscribe((event) => emitted.push(event));
 
     fixture.detectChanges();
@@ -120,9 +124,14 @@ describe('HabitCard', () => {
       `[aria-label="Desmarcar como completado el ${date}"]`,
     );
     expect(dayButton?.getAttribute('aria-pressed')).toBe('true');
+    vi.spyOn(dayButton!, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(10, 20, 30, 40),
+    );
     dayButton?.click();
 
-    expect(emitted).toEqual([{ date, completed: false }]);
+    expect(emitted).toEqual([
+      { date, completed: false, position: { x: 25, y: 40 } },
+    ]);
     const futureDayButton = (
       fixture.nativeElement as HTMLElement
     ).querySelector<HTMLButtonElement>(
@@ -130,7 +139,9 @@ describe('HabitCard', () => {
     );
     expect(futureDayButton?.disabled).toBe(true);
     futureDayButton?.click();
-    expect(emitted).toEqual([{ date, completed: false }]);
+    expect(emitted).toEqual([
+      { date, completed: false, position: { x: 25, y: 40 } },
+    ]);
   });
 
   it('shows the provided date if it is not valid', async () => {

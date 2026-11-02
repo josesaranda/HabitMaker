@@ -13,6 +13,7 @@ import { HabitCompletionStatus, HabitService } from '../habits/habit.service';
 export interface HabitCardDayToggleEvent {
   date: string;
   completed: boolean;
+  position: { x: number; y: number };
 }
 
 @Component({
@@ -101,13 +102,21 @@ export class HabitCard {
   }
 
   protected toggleDay(
-    day: HabitCardDayToggleEvent & { offset: number },
+    day: { date: string; completed: boolean; offset: number },
+    event: MouseEvent,
   ): void {
     if (!this.dayToggleEnabled() || this.dayToggleDisabled() || day.offset > 0) {
       return;
     }
 
-    this.dayToggled.emit({ date: day.date, completed: !day.completed });
+    const { left, top, width, height } = (
+      event.currentTarget as HTMLButtonElement
+    ).getBoundingClientRect();
+    this.dayToggled.emit({
+      date: day.date,
+      completed: !day.completed,
+      position: { x: left + width / 2, y: top + height / 2 },
+    });
   }
 
   private toLocalDate(date: Date): string {
