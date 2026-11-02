@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start:app": "nx serve HabitMakerApp",
-    "start:api": "nx serve HabitMakerApi"
+    "start:api": "nx serve HabitMakerApi",
+    "test": "nx run-many -t lint test build typecheck --parallel --maxParallel=3"
   },
   "private": true,
   "devDependencies": {

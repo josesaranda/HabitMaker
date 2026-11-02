@@ -240,7 +240,7 @@
   outline-offset: 2px;
 }
 
-.password-toggle svg {
+.password-toggle hm-icon {
   width: 1.2rem;
   height: 1.2rem;
 }
@@ -266,13 +266,13 @@
   font-weight: 600;
 }
 
-.auth-submit-button svg {
+.auth-submit-button hm-icon {
   width: 1.15rem;
   height: 1.15rem;
   transition: transform 150ms ease;
 }
 
-.auth-submit-button:hover svg {
+.auth-submit-button:hover hm-icon {
   transform: translateX(0.2rem);
 }
 

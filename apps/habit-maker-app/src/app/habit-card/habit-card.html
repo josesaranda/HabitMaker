@@ -7,15 +7,7 @@
       class="grid size-[2.6rem] shrink-0 place-items-center rounded-xl bg-[#a8c5ad]/15 text-[#c0d8b9]"
       aria-hidden="true"
     >
-      <svg class="size-[1.4rem]" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 20v-8m0 3c-4.4 0-6.5-2.3-6.5-5.8 3.8 0 6.5 1.7 6.5 5.8Zm0-2c0-3.8 2.2-6 6.5-6 0 3.6-2.1 6-6.5 6Z"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <hm-icon class="size-[1.4rem]" name="sprout" />
     </div>
     <div class="grid gap-0.5 text-text-white">
       <time
@@ -40,15 +32,7 @@
         aria-label="Mostrar los tres días anteriores"
         (click)="showPreviousDays()"
       >
-        <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="m15 18-6-6 6-6"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <hm-icon class="size-4" name="chevron-left" />
       </button>
     }
     <div
@@ -124,15 +108,7 @@
         [disabled]="isAtFutureLimit()"
         (click)="showNextDays()"
       >
-        <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="m9 18 6-6-6-6"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <hm-icon class="size-4" name="chevron-right" />
       </button>
     }
   </div>

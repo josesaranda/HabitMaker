@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import {
   HabitMakerUIButton,
+  HabitMakerUIIcon,
   HabitMakerUIInput,
 } from '@habit-maker/habit-maker-ui';
 import { finalize, startWith } from 'rxjs';
@@ -23,6 +24,7 @@ const nonBlankValidator: ValidatorFn = (control) =>
   selector: 'app-new-habit',
   imports: [
     HabitMakerUIButton,
+    HabitMakerUIIcon,
     HabitMakerUIInput,
     ReactiveFormsModule,
   ],

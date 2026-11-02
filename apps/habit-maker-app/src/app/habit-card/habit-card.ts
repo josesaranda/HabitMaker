@@ -8,6 +8,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { HabitMakerUIIcon } from '@habit-maker/habit-maker-ui';
 import { HabitCompletionStatus, HabitService } from '../habits/habit.service';
 
 export interface HabitCardDayToggleEvent {
@@ -17,7 +18,7 @@ export interface HabitCardDayToggleEvent {
 }
 
 @Component({
-  imports: [NgTemplateOutlet],
+  imports: [HabitMakerUIIcon, NgTemplateOutlet],
   selector: 'app-habit-card',
   templateUrl: './habit-card.html',
   host: { class: 'block w-full' },

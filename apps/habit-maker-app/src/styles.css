@@ -20,19 +20,19 @@ body {
   animation: none;
 }
 
-::view-transition-old(habit-maker-header-title) {
+::view-transition-old(habit-maker-ui-header-title) {
   animation: header-title-out 140ms ease-in both;
 }
 
-::view-transition-new(habit-maker-header-title) {
+::view-transition-new(habit-maker-ui-header-title) {
   animation: header-title-in 220ms ease-out both;
 }
 
-::view-transition-old(habit-maker-header-back) {
+::view-transition-old(habit-maker-ui-header-back) {
   animation: header-back-out 140ms ease-in both;
 }
 
-::view-transition-new(habit-maker-header-back) {
+::view-transition-new(habit-maker-ui-header-back) {
   animation: header-back-in 220ms ease-out both;
 }
 
@@ -114,10 +114,10 @@ body {
   ::view-transition-group(*),
   ::view-transition-old(root),
   ::view-transition-new(root),
-  ::view-transition-old(habit-maker-header-title),
-  ::view-transition-new(habit-maker-header-title),
-  ::view-transition-old(habit-maker-header-back),
-  ::view-transition-new(habit-maker-header-back) {
+  ::view-transition-old(habit-maker-ui-header-title),
+  ::view-transition-new(habit-maker-ui-header-title),
+  ::view-transition-old(habit-maker-ui-header-back),
+  ::view-transition-new(habit-maker-ui-header-back) {
     animation-duration: 1ms;
   }
 

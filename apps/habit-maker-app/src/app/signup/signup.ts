@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import {
   HabitMakerUIButton,
   HabitMakerUICheckbox,
+  HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
@@ -16,6 +17,7 @@ import { AuthStory } from '../auth-story/auth-story';
     AuthStory,
     HabitMakerUIButton,
     HabitMakerUICheckbox,
+    HabitMakerUIIcon,
     HabitMakerUIInput,
     HabitMakerUILink,
     RouterLink,

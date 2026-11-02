@@ -1,23 +1,23 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { HabitMakerHeader } from './habit-maker-header';
+import { HabitMakerUIHeader } from './habit-maker-ui-header';
 
 @Component({
-  imports: [HabitMakerHeader],
+  imports: [HabitMakerUIHeader],
   template: `
-    <habit-maker-header backNavigation="/">Tus hábitos</habit-maker-header>
+    <habit-maker-ui-header backNavigation="/">Tus hábitos</habit-maker-ui-header>
   `,
 })
 class HeaderWithBackNavigation {}
 
 @Component({
-  imports: [HabitMakerHeader],
-  template: '<habit-maker-header>Configuración</habit-maker-header>',
+  imports: [HabitMakerUIHeader],
+  template: '<habit-maker-ui-header>Configuración</habit-maker-ui-header>',
 })
 class HeaderWithoutBackNavigation {}
 
-describe('HabitMakerHeader', () => {
+describe('HabitMakerUIHeader', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideRouter([])],
@@ -33,7 +33,7 @@ describe('HabitMakerHeader', () => {
     fixture.detectChanges();
 
     const header = fixture.nativeElement.querySelector(
-      'habit-maker-header',
+      'habit-maker-ui-header',
     ) as HTMLElement;
     const backLink = header.querySelector('a');
 
@@ -51,7 +51,7 @@ describe('HabitMakerHeader', () => {
     fixture.detectChanges();
 
     const header = fixture.nativeElement.querySelector(
-      'habit-maker-header',
+      'habit-maker-ui-header',
     ) as HTMLElement;
 
     expect(header.querySelector('h1')?.textContent?.trim()).toBe(

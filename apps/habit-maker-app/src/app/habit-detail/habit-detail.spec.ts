@@ -63,7 +63,7 @@ describe('HabitDetail', () => {
     );
     const pageContent = fixture.nativeElement.querySelector('main > div');
     expect(pageContent?.classList.contains('max-w-6xl')).toBe(true);
-    const header = pageContent?.querySelector(':scope > habit-maker-header');
+    const header = pageContent?.querySelector(':scope > habit-maker-ui-header');
     expect(header?.querySelector('h1')?.textContent?.trim()).toBe(
       'Detalle del hábito',
     );

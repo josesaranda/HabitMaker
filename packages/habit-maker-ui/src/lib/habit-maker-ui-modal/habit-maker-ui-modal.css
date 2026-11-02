@@ -67,7 +67,7 @@
   outline-offset: 2px;
 }
 
-.hm-modal__close-button svg {
+.hm-modal__close-button hm-icon {
   width: 1.25rem;
   height: 1.25rem;
 }

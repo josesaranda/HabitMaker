@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   HabitMakerUIButton,
+  HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
@@ -14,6 +15,7 @@ import { BrowserService } from '../browser/browser.service';
   imports: [
     AuthStory,
     HabitMakerUIButton,
+    HabitMakerUIIcon,
     HabitMakerUIInput,
     HabitMakerUILink,
     RouterLink,

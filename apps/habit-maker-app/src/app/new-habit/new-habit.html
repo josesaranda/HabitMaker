@@ -4,14 +4,7 @@
       class="mb-4 grid size-[3.25rem] place-items-center rounded-[1.1rem] border border-accent/55 bg-accent/20 text-primary"
       aria-hidden="true"
     >
-      <svg class="size-[1.6rem]" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 2.5c.8 5.1 2.4 6.7 9.5 7.5-7.1.8-8.7 2.4-9.5 9.5-.8-7.1-2.4-8.7-9.5-9.5 7.1-.8 8.7-2.4 9.5-7.5Z"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <hm-icon class="size-[1.6rem]" name="sparkle" />
     </span>
     <p
       class="mb-2 mt-0 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-green-800"
@@ -64,20 +57,7 @@
       [disabled]="!canStartHabit()"
     >
       <span>{{ isSubmitting() ? 'Guardando…' : 'Comenzar hábito' }}</span>
-      <svg
-        class="size-[1.15rem]"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M4.75 12h14.5m-6-6 6 6-6 6"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <hm-icon class="size-[1.15rem]" name="arrow-right" />
     </button>
   </form>
 </div>

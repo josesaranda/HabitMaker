@@ -42,39 +42,7 @@
               [attr.aria-label]="passwordVisible() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
               [attr.aria-pressed]="passwordVisible()"
             >
-              @if (passwordVisible()) {
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                />
-                <path
-                  d="M9.9 5.2A10.8 10.8 0 0 1 12 5c5.5 0 9 7 9 7a15 15 0 0 1-3 3.9M6.2 6.3C4.1 7.8 3 12 3 12s3.5 7 9 7c1 0 1.9-.2 2.7-.5"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              } @else {
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path
-                  d="M3 12s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7Z"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linejoin="round"
-                />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="2.5"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                />
-              </svg>
-              }
+              <hm-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
             </button>
           </div>
         </div>
@@ -91,15 +59,7 @@
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
           Iniciar sesión
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path
-              d="M4 10h12m-5-5 5 5-5 5"
-              stroke="currentColor"
-              stroke-width="1.7"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <hm-icon name="arrow-right" />
         </button>
         <p class="form-message" aria-live="polite">{{ message() }}</p>
       </form>

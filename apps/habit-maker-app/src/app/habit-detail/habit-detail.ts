@@ -9,7 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import confetti from '@hiseb/confetti';
 import {
-  HabitMakerHeader,
+  HabitMakerUIHeader,
   HabitMakerUIIcon,
 } from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
@@ -28,7 +28,7 @@ import { Habit, HabitService } from '../habits/habit.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
-  imports: [HabitCard, HabitMakerHeader, HabitMakerUIIcon],
+  imports: [HabitCard, HabitMakerUIHeader, HabitMakerUIIcon],
   selector: 'app-habit-detail',
   templateUrl: './habit-detail.html',
 })
