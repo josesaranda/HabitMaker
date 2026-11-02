@@ -11,7 +11,27 @@ permissions:
   contents: read
 
 jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - run: npm ci
+      - run: tar -czf node_modules.tar.gz node_modules
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: node-modules
+          path: node_modules.tar.gz
+          retention-days: 1
+
   main:
+    needs: dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -30,7 +50,10 @@ jobs:
           node-version: 24
           cache: 'npm'
 
-      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-modules
+      - run: tar -xzf node_modules.tar.gz && rm node_modules.tar.gz
 
       # Prepend any command with "nx record --" to record its logs to Nx Cloud
       - run: npx nx record -- npx nx format:check --base="remotes/origin/main"
@@ -55,7 +78,11 @@ jobs:
           node-version: 24
           cache: 'npm'
 
-      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-modules
+      - run: tar -xzf node_modules.tar.gz && rm node_modules.tar.gz
+
       - run: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
