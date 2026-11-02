@@ -118,6 +118,11 @@ describe('Settings', () => {
     expect(
       compiled.querySelector('#app-settings-title')?.textContent,
     ).toContain('Versión de la aplicación');
+    expect(
+      Array.from(
+        compiled.querySelectorAll('#admin-users-title, #app-settings-title'),
+      ).map((heading) => heading.textContent?.trim()),
+    ).toEqual(['Usuarios de la aplicación', 'Versión de la aplicación']);
     expect(compiled.textContent).toContain('1.2.3');
     expect(checkForUpdates).toHaveBeenCalledOnce();
     expect(compiled.textContent).toContain(

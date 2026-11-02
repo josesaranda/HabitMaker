@@ -42,10 +42,45 @@
       >
         Ajustes de administración
       </h2>
-      <section
-        class="mb-8"
-        aria-labelledby="app-settings-title"
-      >
+      <section aria-labelledby="admin-users-title">
+        <h3
+          id="admin-users-title"
+          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+        >
+          Usuarios de la aplicación
+        </h3>
+        @if (isLoadingUsers()) {
+        <p class="text-text-secondary" role="status">Cargando usuarios…</p>
+        } @else if (usersLoadError()) {
+        <p class="text-error" role="alert">{{ usersLoadError() }}</p>
+        } @else if (users().length === 0) {
+        <p class="text-text-secondary">No hay usuarios para mostrar.</p>
+        } @else {
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[24rem] text-left text-sm">
+            <thead class="border-b border-border text-text-secondary">
+              <tr>
+                <th class="px-3 py-3 font-semibold" scope="col">
+                  Correo electrónico
+                </th>
+                <th class="px-3 py-3 font-semibold" scope="col">Rol</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of users(); track user.id) {
+              <tr class="border-b border-border last:border-0">
+                <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
+                <td class="px-3 py-3 text-text-secondary">
+                  {{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        }
+      </section>
+      <section class="mt-8" aria-labelledby="app-settings-title">
         <h3
           id="app-settings-title"
           class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
@@ -119,44 +154,6 @@
             }
           </div>
         </div>
-      </section>
-      <section aria-labelledby="admin-users-title">
-        <h3
-          id="admin-users-title"
-          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
-        >
-          Usuarios de la aplicación
-        </h3>
-        @if (isLoadingUsers()) {
-        <p class="text-text-secondary" role="status">Cargando usuarios…</p>
-        } @else if (usersLoadError()) {
-        <p class="text-error" role="alert">{{ usersLoadError() }}</p>
-        } @else if (users().length === 0) {
-        <p class="text-text-secondary">No hay usuarios para mostrar.</p>
-        } @else {
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[24rem] text-left text-sm">
-            <thead class="border-b border-border text-text-secondary">
-              <tr>
-                <th class="px-3 py-3 font-semibold" scope="col">
-                  Correo electrónico
-                </th>
-                <th class="px-3 py-3 font-semibold" scope="col">Rol</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (user of users(); track user.id) {
-              <tr class="border-b border-border last:border-0">
-                <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
-                <td class="px-3 py-3 text-text-secondary">
-                  {{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-        }
       </section>
     </section>
     }
