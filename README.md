@@ -1,82 +1,90 @@
 # HabitMaker
 
-Aplicación web de HabitMaker organizada como un workspace Nx. Actualmente incluye las vistas de inicio de sesión y registro, además de una librería interna de componentes reutilizables.
+HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an Angular frontend, a NestJS API, and a shared UI component library.
 
-## Tecnologías
+## Features
 
-- **Angular 22** y **TypeScript 6** para la aplicación.
-- **Nx 24** para gestionar el workspace, proyectos y tareas.
-- **Tailwind CSS 4** y CSS para los estilos.
-- **RxJS 7** para programación reactiva.
-- **Vitest 4** para las pruebas.
-- **npm workspaces** para la gestión de dependencias.
+- Create habits and view them from a personal home page.
+- Track daily completions and browse completion history in a habit calendar.
+- Sign up, log in, and submit a password-recovery request.
+- Switch the interface between English and Spanish.
+- View account settings; administrators can also view registered users and check the app version for updates.
 
-## Estructura del proyecto
+## Tech stack
+
+- **Angular 22** and **TypeScript 6** for the frontend.
+- **NestJS 11** for the API.
+- **Nx 24** for the monorepo and task orchestration.
+- **Tailwind CSS 4** and CSS for styling.
+- **TypeORM** with **sql.js** for the API data store.
+- **RxJS 7** and **Vitest 4**.
+- **npm workspaces** for package management.
+
+## Workspace structure
 
 ```text
 .
 ├── apps/
-│   └── habit-maker-app/          # Aplicación web Angular
-│       └── src/
-│           ├── app/
-│           │   ├── login/        # Vista y pruebas de inicio de sesión
-│           │   ├── signup/       # Vista y pruebas de registro
-│           │   ├── app.routes.ts # Rutas de la aplicación
-│           │   └── ...
-│           ├── main.ts           # Punto de entrada
-│           └── styles.css        # Estilos globales y Tailwind
+│   ├── habit-maker-app/       # Angular web application
+│   │   └── src/app/           # Routes, screens, auth, habits, and localization
+│   └── habit-maker-api/       # NestJS API (auth, habits, completions, admin, version)
 ├── packages/
-│   └── habit-maker-ui/            # Librería de componentes reutilizables
-│       └── src/lib/               # Botón, checkbox, input y link
-├── nx.json                       # Configuración de Nx
-├── package.json                  # Dependencias y scripts npm
-└── tsconfig.base.json            # Configuración base de TypeScript
+│   └── habit-maker-ui/        # Shared Angular UI components
+├── nx.json                   # Nx workspace configuration
+├── package.json              # Workspace dependencies and npm scripts
+└── tsconfig.base.json        # Shared TypeScript configuration
 ```
 
-## Requisitos
+The frontend routes include `/login`, `/signup`, `/forgot-password`, `/home`, `/habits/:id`, and `/settings`. The home, habit detail, and settings pages require authentication. The root route and unknown routes redirect to `/login`.
+
+## Requirements
 
 - Node.js
-- npm
+- npm (the workspace specifies npm `12.2.1`)
 
-## Instalación y ejecución
+## Getting started
 
-Desde la raíz del repositorio, instala las dependencias:
+Install dependencies from the repository root:
 
 ```bash
 npm install
 ```
 
-Inicia la aplicación en modo desarrollo:
+Run the API and frontend in separate terminals:
+
+```bash
+npm run start:api
+```
 
 ```bash
 npm run start:app
 ```
 
-Después, abre [http://localhost:4200](http://localhost:4200). La ruta inicial redirige a `/login`; también puedes visitar `/signup` para ver el registro.
+The frontend is available at [http://localhost:4200](http://localhost:4200). During local development, it connects to the API at `http://localhost:3000/api`.
 
-También puedes iniciar la app directamente con Nx:
+The API accepts `SERVER_PORT` and `CORS_ORIGIN` environment variables; by default it listens on port `3000` and allows requests from `http://localhost:4200`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD` before starting the API. The password must be at least eight characters long.
 
-```bash
-npm exec nx serve HabitMakerApp
-```
+> **Development data:** The API currently uses an in-memory sql.js database. Users, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
 
-## Comandos útiles
+## Nx commands
 
-Ejecuta las pruebas de la aplicación o de la librería de UI:
+Run tests for each project:
 
 ```bash
 npm exec nx test HabitMakerApp
+npm exec nx test HabitMakerApi
 npm exec nx test HabitMakerUI
 ```
 
-Genera una compilación de producción de la aplicación:
+Build the frontend or API:
 
 ```bash
 npm exec nx build HabitMakerApp
+npm exec nx build HabitMakerApi
 ```
 
-Los artefactos de compilación se generan en `dist/apps/habit-maker-app`.
+The frontend build output is written to `dist/apps/habit-maker-app` and the API build output to `dist/apps/habit-maker-api`.
 
 ## Releases
 
-Los releases se generan automáticamente al integrar cambios en `main`, una vez que CI termina correctamente. Los commits deben seguir Conventional Commits: `fix:` genera una versión patch, `feat:` una minor y los cambios incompatibles (`!` o `BREAKING CHANGE:`) una major. Cada release actualiza la versión raíz, `CHANGELOG.md` y crea un GitHub Release; el paquete privado no se publica en npm.
+Releases are managed by `semantic-release` on the `main` branch. Use [Conventional Commits](https://www.conventionalcommits.org/): `fix:` creates a patch release, `feat:` a minor release, and breaking changes (for example, `feat!:` or a `BREAKING CHANGE:` footer) a major release. A release updates the root `package.json` and `CHANGELOG.md` and creates a GitHub Release; the package is not published to npm.
