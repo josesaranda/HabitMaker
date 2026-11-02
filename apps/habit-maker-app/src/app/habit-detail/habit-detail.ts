@@ -6,8 +6,11 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { HabitMakerUIIcon } from '@habit-maker/habit-maker-ui';
+import { ActivatedRoute } from '@angular/router';
+import {
+  HabitMakerHeader,
+  HabitMakerUIIcon,
+} from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card/habit-card';
 import type { HabitCardDayToggleEvent } from '../habit-card/habit-card';
@@ -24,7 +27,7 @@ import { Habit, HabitService } from '../habits/habit.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
-  imports: [HabitCard, HabitMakerUIIcon, RouterLink],
+  imports: [HabitCard, HabitMakerHeader, HabitMakerUIIcon],
   selector: 'app-habit-detail',
   templateUrl: './habit-detail.html',
 })

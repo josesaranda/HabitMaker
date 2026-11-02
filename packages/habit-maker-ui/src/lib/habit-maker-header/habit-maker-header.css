@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.habit-maker-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.habit-maker-header__back {
+  display: inline-grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-text-primary);
+  view-transition-name: habit-maker-header-back;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.habit-maker-header__back:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-primary);
+}
+
+.habit-maker-header__back:focus-visible {
+  outline: 2px solid var(--color-primary-hover);
+  outline-offset: 3px;
+}
+
+.habit-maker-header__title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  view-transition-name: habit-maker-header-title;
+}

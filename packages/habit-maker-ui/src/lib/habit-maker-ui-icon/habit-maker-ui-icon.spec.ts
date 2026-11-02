@@ -20,6 +20,12 @@ class AddIconHostComponent {}
 })
 class CompletionIconsHostComponent {}
 
+@Component({
+  imports: [HabitMakerUIIcon],
+  template: '<hm-icon name="arrow-left" />',
+})
+class ArrowLeftIconHostComponent {}
+
 describe('HabitMakerUIIcon', () => {
   it('references the SVG asset for its icon name decoratively', async () => {
     await TestBed.configureTestingModule({
@@ -62,5 +68,18 @@ describe('HabitMakerUIIcon', () => {
         (use: SVGUseElement) => use.getAttribute('href'),
       ),
     ).toEqual(['assets/icons/check.svg#check', 'assets/icons/clock.svg#clock']);
+  });
+
+  it('references the arrow-left SVG asset', async () => {
+    await TestBed.configureTestingModule({
+      imports: [ArrowLeftIconHostComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(ArrowLeftIconHostComponent);
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('use')?.getAttribute('href'),
+    ).toBe('assets/icons/arrow-left.svg#arrow-left');
   });
 });

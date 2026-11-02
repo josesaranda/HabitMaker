@@ -20,16 +20,64 @@ body {
   animation: none;
 }
 
+::view-transition-old(habit-maker-header-title) {
+  animation: header-title-out 140ms ease-in both;
+}
+
+::view-transition-new(habit-maker-header-title) {
+  animation: header-title-in 220ms ease-out both;
+}
+
+::view-transition-old(habit-maker-header-back) {
+  animation: header-back-out 140ms ease-in both;
+}
+
+::view-transition-new(habit-maker-header-back) {
+  animation: header-back-in 220ms ease-out both;
+}
+
 @keyframes page-fade-out {
   to {
     opacity: 0;
   }
 }
 
+@keyframes header-title-out {
+  to {
+    opacity: 0;
+    transform: translateY(-0.15em);
+  }
+}
+
+@keyframes header-title-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.15em);
+  }
+}
+
+@keyframes header-back-out {
+  to {
+    opacity: 0;
+    transform: translateX(-0.25rem) scale(0.9);
+  }
+}
+
+@keyframes header-back-in {
+  from {
+    opacity: 0;
+    transform: translateX(-0.25rem) scale(0.9);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(root),
-  ::view-transition-new(root) {
+  ::view-transition-new(root),
+  ::view-transition-old(habit-maker-header-title),
+  ::view-transition-new(habit-maker-header-title),
+  ::view-transition-old(habit-maker-header-back),
+  ::view-transition-new(habit-maker-header-back) {
     animation-duration: 1ms;
   }
 }

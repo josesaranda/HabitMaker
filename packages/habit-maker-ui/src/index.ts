@@ -6,5 +6,6 @@ export * from './lib/habit-maker-ui-input/habit-maker-ui-input';
 export * from './lib/habit-maker-ui-icon/habit-maker-ui-icon';
 export * from './lib/habit-maker-ui-link/habit-maker-ui-link';
 export * from './lib/habit-maker-ui-navbar/habit-maker-ui-navbar';
+export * from './lib/habit-maker-header/habit-maker-header';
 
 export * from './lib/habit-maker-ui-modal/habit-maker-ui-modal';

@@ -1,12 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  HabitMakerHeader,
+  HabitMakerUIInput,
+} from '@habit-maker/habit-maker-ui';
 import { finalize } from 'rxjs';
-import { HabitMakerUIInput } from '@habit-maker/habit-maker-ui';
 import { AdminService, AdminUser } from '../admin/admin.service';
 import { BrowserService } from '../browser/browser.service';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
-  imports: [HabitMakerUIInput],
+  imports: [HabitMakerHeader, HabitMakerUIInput],
   selector: 'app-settings',
   templateUrl: './settings.html',
 })

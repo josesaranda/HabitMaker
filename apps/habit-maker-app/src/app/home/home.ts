@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   HabitMakerUIButton,
+  HabitMakerHeader,
   HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
 import { finalize } from 'rxjs';
@@ -22,6 +23,7 @@ import { HomeHabitsResolveResult } from './home.resolver';
 @Component({
   imports: [
     HabitMakerUIButton,
+    HabitMakerHeader,
     HabitMakerUIModal,
     HabitCard,
     NewHabit,

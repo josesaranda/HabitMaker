@@ -1,11 +1,8 @@
 <main class="min-h-full bg-background px-4 pb-8 pt-5 sm:px-[4vw] lg:px-12">
   <div class="mx-auto grid w-full max-w-6xl grid-cols-1">
-    <a
-      class="inline-flex w-full items-center gap-2 text-2xl font-semibold tracking-tight text-text-primary no-underline hover:text-text-secondary focus-visible:outline-2 focus-visible:outline-offset-4"
-      routerLink="/home"
-    >
-      ← Volver a mis hábitos
-    </a>
+    <habit-maker-header backNavigation="/home">
+      Detalle del hábito
+    </habit-maker-header>
 
     @if (isLoading()) {
       <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">

@@ -56,9 +56,12 @@ describe('HabitDetail', () => {
     );
     const pageContent = fixture.nativeElement.querySelector('main > div');
     expect(pageContent?.classList.contains('max-w-6xl')).toBe(true);
-    const backLink = pageContent?.querySelector(':scope > a');
-    expect(backLink?.textContent).toContain('Volver a mis hábitos');
-    expect(backLink?.nextElementSibling).toBe(habitCard);
+    const header = pageContent?.querySelector(':scope > habit-maker-header');
+    expect(header?.querySelector('h1')?.textContent?.trim()).toBe(
+      'Detalle del hábito',
+    );
+    expect(header?.querySelector('a')?.getAttribute('href')).toBe('/home');
+    expect(header?.nextElementSibling).toBe(habitCard);
     expect(habitCard?.querySelector('a')).toBeNull();
     expect(habitCard?.classList.contains('max-w-3xl')).toBe(true);
     const habitArticle = habitCard?.querySelector('article');
