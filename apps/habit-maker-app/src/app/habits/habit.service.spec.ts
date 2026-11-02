@@ -191,6 +191,27 @@ describe('HabitService', () => {
     expect(completed).toBe(true);
   });
 
+  it('sets completion for a specific date', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    let completed = true;
+
+    service.setCompletion('habit-1', '2026-10-30', false).subscribe((status) => {
+      completed = status.completed;
+    });
+
+    const request = httpTestingController.expectOne(
+      `${API_URL}/habits/habit-1/completions/2026-10-30`,
+    );
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual({ completed: false });
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush({ date: '2026-10-30', completed: false, completedAt: null });
+
+    expect(completed).toBe(false);
+  });
+
   it('does not send a request when no access token is available', () => {
     let hasError = false;
     service.createHabit('Leer').subscribe({ error: () => (hasError = true) });

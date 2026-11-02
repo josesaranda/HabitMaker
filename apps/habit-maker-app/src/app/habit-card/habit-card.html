@@ -31,28 +31,61 @@
       >
     </div>
   </div>
-  <div class="mb-4 mt-[1.4rem] grid grid-cols-7 gap-2" aria-hidden="true">
+  <div
+    class="mb-4 mt-[1.4rem] grid grid-cols-7 gap-2"
+    [attr.aria-hidden]="dayToggleEnabled() ? null : 'true'"
+  >
     @for (day of days(); track day.offset) {
-    <div class="grid justify-items-center gap-2 text-[0.65rem] text-white/50">
-      <span>{{ day.label }}</span>
-      @if (day.completed) {
+      @if (dayToggleEnabled()) {
+        <button
+          class="grid w-full cursor-pointer justify-items-center gap-2 border-0 bg-transparent p-0 text-[0.65rem] text-white/50 transition-transform duration-150 hover:scale-105 hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]"
+          type="button"
+          [attr.aria-label]="
+            day.offset > 0
+              ? 'No se puede completar el día ' + day.date
+              : day.completed
+                ? 'Desmarcar como completado el ' + day.date
+                : 'Marcar como completado el ' + day.date
+          "
+          [attr.aria-pressed]="day.completed"
+          [disabled]="dayToggleDisabled() || day.offset > 0"
+          (click)="toggleDay(day)"
+        >
+          <ng-container
+            [ngTemplateOutlet]="dayContent"
+            [ngTemplateOutletContext]="{ $implicit: day }"
+          />
+        </button>
+      } @else {
+        <div class="grid justify-items-center gap-2 text-[0.65rem] text-white/50">
+          <ng-container
+            [ngTemplateOutlet]="dayContent"
+            [ngTemplateOutletContext]="{ $implicit: day }"
+          />
+        </div>
+      }
+    }
+  </div>
+  <ng-template #dayContent let-day>
+    <span>{{ day.label }}</span>
+    @if (day.completed) {
       <b
-        class="grid size-7 place-items-center rounded-full border border-transparent bg-[#a8c5ad] text-xs font-medium text-[#172f2b]"
+        class="grid size-7 place-items-center rounded-full border bg-[#a8c5ad] text-xs font-medium text-[#172f2b]"
+        [class.border-accent]="day.offset === 0"
+        [class.border-transparent]="day.offset !== 0"
         >✓</b
       >
-      } @else if (day.offset === 0) {
+    } @else if (day.offset === 0) {
       <b
         class="grid size-7 place-items-center rounded-full border border-[#e6b875] text-xl font-medium text-[#e6b875]"
       ></b>
-      } @else {
+    } @else {
       <b
         class="grid size-7 place-items-center rounded-full border border-white/15 text-xs font-medium text-white/35"
       ></b>
-      }
-      <span class="text-[0.6rem] text-white/50">{{ day.dayOfMonth }}</span>
-    </div>
     }
-  </div>
+    <span class="text-[0.6rem] text-white/50">{{ day.dayOfMonth }}</span>
+  </ng-template>
   @if (completionError()) {
   <p class="text-xs text-white/70" role="alert">
     No se pudo cargar el progreso reciente.

@@ -110,4 +110,81 @@ describe('HabitDetail', () => {
     expect(completionButton?.textContent?.trim()).toBe('¡Completado hoy!');
     expect(completionButton?.hasAttribute('aria-describedby')).toBe(false);
   });
+
+  it('persists day toggles and updates the current-day completion state', async () => {
+    const today = toLocalDate(new Date());
+    let todayCompleted = false;
+    const habitService = {
+      getCompletionsForDates: (_id: string, dates: string[]) =>
+        of(
+          dates.map((date) => ({
+            date,
+            completed: date === today && todayCompleted,
+            completedAt: null,
+          })),
+        ),
+      getTodayCompletion: () =>
+        of({ date: today, completed: false, completedAt: null }),
+      setCompletion: vi.fn((_id: string, date: string, completed: boolean) => {
+        if (date === today) todayCompleted = completed;
+        return of({ date, completed, completedAt: null });
+      }),
+    };
+
+    await TestBed.configureTestingModule({
+      imports: [HabitDetail],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
+          },
+        },
+        { provide: HabitService, useValue: habitService },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(HabitDetail);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const dayButton = compiled.querySelector<HTMLButtonElement>(
+      `[aria-label="Marcar como completado el ${today}"]`,
+    );
+    expect(dayButton).not.toBeNull();
+    dayButton?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(habitService.setCompletion).toHaveBeenCalledWith(
+      'habit-1',
+      today,
+      true,
+    );
+    expect(dayButton?.getAttribute('aria-pressed')).toBe('true');
+    expect(compiled.querySelector('[role="status"]')?.textContent).toContain(
+      '¡Enhorabuena, ya has completado tu hábito hoy!',
+    );
+  });
 });
+
+function toLocalDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}

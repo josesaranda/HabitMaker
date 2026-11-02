@@ -1,14 +1,22 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   computed,
   effect,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { HabitCompletionStatus, HabitService } from '../habits/habit.service';
 
+export interface HabitCardDayToggleEvent {
+  date: string;
+  completed: boolean;
+}
+
 @Component({
+  imports: [NgTemplateOutlet],
   selector: 'app-habit-card',
   templateUrl: './habit-card.html',
   host: { class: 'block w-full' },
@@ -18,6 +26,10 @@ export class HabitCard {
   id = input.required<string>();
   name = input.required<string>();
   startedAt = input.required<string>();
+  dayToggleEnabled = input(false);
+  dayToggleDisabled = input(false);
+  completionRefresh = input(0);
+  dayToggled = output<HabitCardDayToggleEvent>();
   protected readonly containerTransitionName = computed(
     () => `habit-container-${this.id().replace(/[^a-zA-Z0-9_-]/g, '-')}`,
   );
@@ -67,6 +79,7 @@ export class HabitCard {
   constructor() {
     effect((onCleanup) => {
       const habitId = this.id();
+      this.completionRefresh();
       const dates = this.calendarDays().map(({ date }) => date);
       this.completions.set({});
       this.completionError.set(false);
@@ -88,6 +101,16 @@ export class HabitCard {
         completions.map(({ date, completed }) => [date, completed]),
       ),
     );
+  }
+
+  protected toggleDay(
+    day: HabitCardDayToggleEvent & { offset: number },
+  ): void {
+    if (!this.dayToggleEnabled() || this.dayToggleDisabled() || day.offset > 0) {
+      return;
+    }
+
+    this.dayToggled.emit({ date: day.date, completed: !day.completed });
   }
 
   private toLocalDate(date: Date): string {

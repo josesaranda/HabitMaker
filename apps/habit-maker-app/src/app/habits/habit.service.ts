@@ -84,6 +84,19 @@ export class HabitService {
     );
   }
 
+  setCompletion(
+    id: string,
+    date: string,
+    completed: boolean,
+  ): Observable<HabitCompletionStatus> {
+    return this.requireAuthentication(
+      this.http.put<HabitCompletionStatus>(
+        `${API_URL}/habits/${encodeURIComponent(id)}/completions/${encodeURIComponent(date)}`,
+        { completed },
+      ),
+    );
+  }
+
   private requireAuthentication<T>(request: Observable<T>): Observable<T> {
     return this.authService.getAuthToken()
       ? request

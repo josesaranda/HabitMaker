@@ -47,6 +47,7 @@ describe('HabitCard', () => {
     previousDate.setHours(0, 0, 0, 0);
     previousDate.setDate(previousDate.getDate() - 3);
     completedDates.add(toLocalDate(previousDate));
+    completedDates.add(toLocalDate(new Date()));
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
@@ -57,6 +58,7 @@ describe('HabitCard', () => {
       'Un poco de lectura',
     );
     expect(compiled.querySelector('a')).toBeNull();
+    expect(compiled.querySelector('button')).toBeNull();
     expect(compiled.querySelector('strong')?.getAttribute('style')).toBeNull();
     expect(compiled.querySelector('article')?.getAttribute('style')).toContain(
       'view-transition-name: habit-container-habit-1',
@@ -85,10 +87,52 @@ describe('HabitCard', () => {
     expect(requestedDates[0]).toContain(toLocalDate(new Date()));
     expect(dayItems[0].querySelector('b')?.textContent).toBe('✓');
     expect(dayItems[1].querySelector('b')?.textContent).toBe('');
-    expect(dayItems[3].querySelector('b')?.textContent).toBe('');
+    expect(dayItems[3].querySelector('b')?.textContent).toBe('✓');
+    expect(dayItems[3].querySelector('b')?.classList.contains('border-accent')).toBe(
+      true,
+    );
     expect(dayItems[3].querySelectorAll('span')[1]?.textContent).toBe(
       String(new Date().getDate()),
     );
+  });
+
+  it('emits the selected date with the inverse completion state when enabled', async () => {
+    fixture.componentRef.setInput('name', 'Un poco de lectura');
+    fixture.componentRef.setInput('startedAt', '2023-10-01');
+    fixture.componentRef.setInput('dayToggleEnabled', true);
+    const completedDate = new Date();
+    completedDate.setHours(0, 0, 0, 0);
+    completedDate.setDate(completedDate.getDate() - 3);
+    const date = toLocalDate(completedDate);
+    const futureDate = new Date();
+    futureDate.setHours(0, 0, 0, 0);
+    futureDate.setDate(futureDate.getDate() + 3);
+    const futureDateLabel = toLocalDate(futureDate);
+    completedDates.add(date);
+    const emitted: { date: string; completed: boolean }[] = [];
+    component.dayToggled.subscribe((event) => emitted.push(event));
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const dayButton = (
+      fixture.nativeElement as HTMLElement
+    ).querySelector<HTMLButtonElement>(
+      `[aria-label="Desmarcar como completado el ${date}"]`,
+    );
+    expect(dayButton?.getAttribute('aria-pressed')).toBe('true');
+    dayButton?.click();
+
+    expect(emitted).toEqual([{ date, completed: false }]);
+    const futureDayButton = (
+      fixture.nativeElement as HTMLElement
+    ).querySelector<HTMLButtonElement>(
+      `[aria-label="No se puede completar el día ${futureDateLabel}"]`,
+    );
+    expect(futureDayButton?.disabled).toBe(true);
+    futureDayButton?.click();
+    expect(emitted).toEqual([{ date, completed: false }]);
   });
 
   it('shows the provided date if it is not valid', async () => {

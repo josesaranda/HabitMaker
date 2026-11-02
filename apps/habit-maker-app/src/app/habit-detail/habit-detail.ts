@@ -10,6 +10,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HabitMakerUIButton } from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card/habit-card';
+import type { HabitCardDayToggleEvent } from '../habit-card/habit-card';
 import {
   EMPTY,
   catchError,
@@ -38,7 +39,10 @@ export class HabitDetail implements OnInit {
   protected readonly isNotFound = signal(false);
   protected readonly isCompletedToday = signal(false);
   protected readonly isSavingCompletion = signal(false);
+  protected readonly isSavingDayCompletion = signal(false);
+  protected readonly completionRefresh = signal(0);
   protected readonly completionError = signal('');
+  protected readonly dayCompletionError = signal('');
   protected readonly loadError = signal('');
 
   ngOnInit(): void {
@@ -59,6 +63,8 @@ export class HabitDetail implements OnInit {
           this.loadError.set('');
           this.isCompletedToday.set(false);
           this.completionError.set('');
+          this.isSavingDayCompletion.set(false);
+          this.dayCompletionError.set('');
         }),
         switchMap((result) => {
           if (!result.habit) {
@@ -111,5 +117,40 @@ export class HabitDetail implements OnInit {
           );
         },
       });
+  }
+
+  protected toggleDayCompletion(event: HabitCardDayToggleEvent): void {
+    const currentHabit = this.habit();
+    if (!currentHabit || this.isSavingDayCompletion()) return;
+
+    this.isSavingDayCompletion.set(true);
+    this.dayCompletionError.set('');
+    this.habitService
+      .setCompletion(currentHabit.id, event.date, event.completed)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (completion) => {
+          this.isSavingDayCompletion.set(false);
+          this.completionRefresh.update((version) => version + 1);
+          if (completion.date === this.getLocalDate()) {
+            this.isCompletedToday.set(completion.completed);
+          }
+        },
+        error: () => {
+          this.isSavingDayCompletion.set(false);
+          this.dayCompletionError.set(
+            'No se pudo actualizar la actividad. Inténtalo de nuevo.',
+          );
+        },
+      });
+  }
+
+  private getLocalDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 }
