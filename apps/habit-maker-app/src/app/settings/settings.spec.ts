@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { AdminService } from '../admin/admin.service';
 import { AuthService } from '../auth/auth.service';
@@ -9,6 +10,7 @@ describe('Settings', () => {
     await TestBed.configureTestingModule({
       imports: [Settings],
       providers: [
+        provideRouter([]),
         {
           provide: AuthService,
           useValue: {
@@ -47,6 +49,7 @@ describe('Settings', () => {
     await TestBed.configureTestingModule({
       imports: [Settings],
       providers: [
+        provideRouter([]),
         {
           provide: AuthService,
           useValue: {
