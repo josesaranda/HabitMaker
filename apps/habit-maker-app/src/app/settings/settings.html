@@ -43,20 +43,17 @@
         Ajustes de administración
       </h2>
       <section
-        class="mb-8 rounded-xl border border-border p-5 sm:p-6"
+        class="mb-8"
         aria-labelledby="app-settings-title"
       >
         <h3
           id="app-settings-title"
-          class="mb-6 text-lg font-semibold tracking-tight text-text-primary"
+          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
         >
           Versión de la aplicación
         </h3>
         <div class="space-y-5">
           <div>
-            <h4 class="mb-2 text-base font-semibold text-text-primary">
-              Versión actual
-            </h4>
             @if (isLoadingAppVersion()) {
             <p class="text-sm text-text-secondary" role="status">
               Cargando versión…
