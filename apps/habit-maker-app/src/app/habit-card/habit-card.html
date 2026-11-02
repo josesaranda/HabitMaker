@@ -31,42 +31,113 @@
     </div>
   </div>
   <div
-    class="mb-4 mt-[1.4rem] grid grid-cols-7 gap-2"
-    [attr.aria-hidden]="dayToggleEnabled() ? null : 'true'"
+    class="mb-4 mt-[1.4rem] flex items-center gap-2"
   >
-    @for (day of days(); track day.offset) {
-      @if (dayToggleEnabled()) {
-        <button
-          class="grid w-fit cursor-pointer justify-self-center justify-items-center gap-2 border-0 bg-transparent p-0 text-[0.65rem] text-white/50 transition-transform duration-150 hover:scale-105 hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]"
-          type="button"
-          [attr.aria-label]="
-            day.offset > 0
-              ? 'No se puede completar el día ' + day.date
-              : day.completed
-                ? 'Desmarcar como completado el ' + day.date
-                : 'Marcar como completado el ' + day.date
-          "
-          [attr.aria-pressed]="day.completed"
-          [disabled]="dayToggleDisabled() || day.offset > 0"
-          (click)="toggleDay(day, $event)"
-        >
-          <ng-container
-            [ngTemplateOutlet]="dayContent"
-            [ngTemplateOutletContext]="{ $implicit: day }"
+    @if (showDayNavigation()) {
+      <button
+        class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 bg-transparent text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]"
+        type="button"
+        aria-label="Mostrar los tres días anteriores"
+        (click)="showPreviousDays()"
+      >
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="m15 18-6-6 6-6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           />
-        </button>
-      } @else {
-        <div class="grid justify-items-center gap-2 text-[0.65rem] text-white/50">
-          <ng-container
-            [ngTemplateOutlet]="dayContent"
-            [ngTemplateOutletContext]="{ $implicit: day }"
+        </svg>
+      </button>
+    }
+    <div
+      class="habit-card__days-viewport min-w-0 flex-1 overflow-hidden"
+      [class.touch-pan-y]="showDayNavigation()"
+      [attr.aria-hidden]="dayToggleEnabled() ? null : 'true'"
+      (pointerdown)="startDaySwipe($event)"
+      (pointermove)="moveDaySwipe($event)"
+      (pointerup)="finishDaySwipe($event)"
+      (pointercancel)="cancelDaySwipe()"
+      (lostpointercapture)="cancelDaySwipe()"
+    >
+      <div
+        class="habit-card__days-track grid grid-cols-[repeat(13,minmax(0,1fr))]"
+        [class.habit-card__days-track--dragging]="isDragging()"
+        [class.select-none]="isDragging()"
+        [style.--habit-card-drag-offset.px]="dragOffset()"
+        (transitionend)="completeDaySnap($event)"
+      >
+        @for (day of days(); track day.date) {
+          @if (dayToggleEnabled()) {
+            <button
+              class="grid w-fit cursor-pointer justify-self-center justify-items-center gap-2 border-0 bg-transparent p-0 text-[0.65rem] text-white/50 transition-transform duration-150 hover:scale-105 hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]"
+              [class.habit-card__day--enter-from-right]="
+                day.entering && navigationDirection() === 'future'
+              "
+              [class.habit-card__day--enter-from-left]="
+                day.entering && navigationDirection() === 'past'
+              "
+              type="button"
+              [attr.aria-hidden]="day.buffer ? 'true' : null"
+              [attr.aria-label]="
+                day.offset > 0
+                  ? 'No se puede completar el día ' + day.date
+                  : day.completed
+                    ? 'Desmarcar como completado el ' + day.date
+                    : 'Marcar como completado el ' + day.date
+              "
+              [attr.aria-pressed]="day.completed"
+              [disabled]="dayToggleDisabled() || day.offset > 0 || day.buffer"
+              (click)="toggleDay(day, $event)"
+            >
+              <ng-container
+                [ngTemplateOutlet]="dayContent"
+                [ngTemplateOutletContext]="{ $implicit: day }"
+              />
+            </button>
+          } @else {
+            <div
+              class="grid justify-items-center gap-2 text-[0.65rem] text-white/50"
+              [attr.aria-hidden]="day.buffer ? 'true' : null"
+              [class.habit-card__day--enter-from-right]="
+                day.entering && navigationDirection() === 'future'
+              "
+              [class.habit-card__day--enter-from-left]="
+                day.entering && navigationDirection() === 'past'
+              "
+            >
+              <ng-container
+                [ngTemplateOutlet]="dayContent"
+                [ngTemplateOutletContext]="{ $implicit: day }"
+              />
+            </div>
+          }
+        }
+      </div>
+    </div>
+    @if (showDayNavigation()) {
+      <button
+        class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 bg-transparent text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]"
+        type="button"
+        aria-label="Mostrar los tres días siguientes"
+        [disabled]="isAtFutureLimit()"
+        (click)="showNextDays()"
+      >
+        <svg class="size-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path
+            d="m9 18 6-6-6-6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           />
-        </div>
-      }
+        </svg>
+      </button>
     }
   </div>
   <ng-template #dayContent let-day>
-    <span>{{ day.label }}</span>
+    <span class="select-none">{{ day.label }}</span>
     @if (day.completed) {
       <b
         class="grid size-7 place-items-center rounded-full border bg-[#a8c5ad] text-xs font-medium text-[#172f2b]"
@@ -83,7 +154,7 @@
         class="grid size-7 place-items-center rounded-full border border-white/15 text-xs font-medium text-white/35"
       ></b>
     }
-    <span class="text-[0.6rem] text-white/50">{{ day.dayOfMonth }}</span>
+    <span class="select-none text-[0.6rem] text-white/50">{{ day.dayOfMonth }}</span>
   </ng-template>
   @if (completionError()) {
   <p class="text-xs text-white/70" role="alert">

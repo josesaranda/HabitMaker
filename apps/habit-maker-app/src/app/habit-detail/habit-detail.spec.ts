@@ -1,7 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRoute,
+  Router,
   convertToParamMap,
+  provideRouter,
 } from '@angular/router';
 import confetti from '@hiseb/confetti';
 import { of } from 'rxjs';
@@ -21,6 +23,7 @@ describe('HabitDetail', () => {
     await TestBed.configureTestingModule({
       imports: [HabitDetail],
       providers: [
+        provideRouter([]),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -35,6 +38,7 @@ describe('HabitDetail', () => {
                 error: null,
               },
             }),
+            queryParamMap: of(convertToParamMap({})),
             snapshot: { paramMap },
           },
         },
@@ -66,6 +70,9 @@ describe('HabitDetail', () => {
     expect(header?.querySelector('a')?.getAttribute('href')).toBe('/home');
     expect(header?.nextElementSibling).toBe(habitCard);
     expect(habitCard?.querySelector('a')).toBeNull();
+    expect(
+      habitCard?.querySelectorAll('button[aria-label^="Mostrar los tres días"]'),
+    ).toHaveLength(2);
     expect(habitCard?.classList.contains('max-w-3xl')).toBe(true);
     const habitArticle = habitCard?.querySelector('article');
     expect(habitArticle?.classList.contains('w-full')).toBe(true);
@@ -85,6 +92,87 @@ describe('HabitDetail', () => {
     ).toBe(
       'Pulsa el día de hoy en la tarjeta del hábito para marcarlo como completado.',
     );
+  });
+
+  it('restores the calendar window from the URL and updates it on navigation', async () => {
+    const initialStart = new Date();
+    initialStart.setHours(0, 0, 0, 0);
+    initialStart.setDate(initialStart.getDate() - 12);
+    const initialStartDate = toLocalDate(initialStart);
+    const nextStart = new Date(initialStart);
+    nextStart.setDate(nextStart.getDate() + 3);
+    const nextStartDate = toLocalDate(nextStart);
+    await TestBed.configureTestingModule({
+      imports: [HabitDetail],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            queryParamMap: of(
+              convertToParamMap({ from: initialStartDate }),
+            ),
+            snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
+          },
+        },
+        {
+          provide: HabitService,
+          useValue: {
+            getCompletionsForDates: () => of([]),
+            getTodayCompletion: () =>
+              of({ date: toLocalDate(new Date()), completed: false }),
+          },
+        },
+      ],
+    }).compileComponents();
+
+    const navigate = vi
+      .spyOn(TestBed.inject(Router), 'navigate')
+      .mockResolvedValue(true);
+    const fixture = TestBed.createComponent(HabitDetail);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(
+      compiled.querySelector(
+        `[aria-label="Marcar como completado el ${initialStartDate}"]`,
+      ),
+    ).not.toBeNull();
+
+    compiled
+      .querySelector<HTMLButtonElement>(
+        '[aria-label="Mostrar los tres días siguientes"]',
+      )!
+      .click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(navigate).toHaveBeenCalledWith(
+      [],
+      expect.objectContaining({
+        queryParams: { from: nextStartDate },
+        queryParamsHandling: 'merge',
+      }),
+    );
+    expect(
+      compiled.querySelector(
+        `[aria-label="Marcar como completado el ${nextStartDate}"]`,
+      ),
+    ).not.toBeNull();
   });
 
   it('persists day toggles and updates the current-day completion state', async () => {
@@ -115,6 +203,7 @@ describe('HabitDetail', () => {
     await TestBed.configureTestingModule({
       imports: [HabitDetail],
       providers: [
+        provideRouter([]),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -129,6 +218,7 @@ describe('HabitDetail', () => {
                 error: null,
               },
             }),
+            queryParamMap: of(convertToParamMap({})),
             snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
           },
         },

@@ -19,9 +19,12 @@
         [name]="currentHabit.name"
         [startedAt]="currentHabit.createdAt"
         [dayToggleEnabled]="true"
+        [showDayNavigation]="true"
+        [windowStartDate]="calendarWindowStart()"
         [dayToggleDisabled]="isSavingDayCompletion()"
         [completionRefresh]="completionRefresh()"
         (dayToggled)="toggleDayCompletion($event)"
+        (windowStartDateChange)="updateCalendarWindow($event)"
       />
       @if (loadError()) {
         <p class="mx-auto mt-3 w-full max-w-3xl text-error" role="alert">
