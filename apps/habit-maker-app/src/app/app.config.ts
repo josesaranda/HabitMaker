@@ -1,5 +1,8 @@
 import {
   ApplicationConfig,
+  inject,
+  isDevMode,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -8,13 +11,29 @@ import {
   provideRouter,
   withViewTransitions,
 } from '@angular/router';
+import { provideTransloco } from '@jsverse/transloco';
 import { appRoutes } from './app.routes';
 import { authTokenInterceptor } from './auth/auth-token.interceptor';
+import { TranslocoHttpLoader } from './i18n/transloco-loader';
+import { LanguageService } from './i18n/language.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideAppInitializer(() => {
+      inject(LanguageService);
+    }),
     provideHttpClient(withInterceptors([authTokenInterceptor])),
+    provideTransloco({
+      config: {
+        availableLangs: ['en', 'es'],
+        defaultLang: 'en',
+        fallbackLang: 'en',
+        reRenderOnLangChange: true,
+        prodMode: !isDevMode(),
+      },
+      loader: TranslocoHttpLoader,
+    }),
     provideRouter(
       appRoutes,
       withViewTransitions({

@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIHeader,
   HabitMakerUIInput,
@@ -9,11 +10,17 @@ import { AdminService, AdminUser } from '../admin/admin.service';
 import { BrowserService } from '../browser/browser.service';
 import { AuthService } from '../auth/auth.service';
 import { AppVersionService, VersionCheckResult } from './app-version.service';
+import { LanguageService, SupportedLanguage } from '../i18n/language.service';
 
 const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
 
 @Component({
-  imports: [HabitMakerUIHeader, HabitMakerUIInput, HabitMakerUIButton],
+  imports: [
+    HabitMakerUIHeader,
+    HabitMakerUIInput,
+    HabitMakerUIButton,
+    TranslocoPipe,
+  ],
   selector: 'app-settings',
   templateUrl: './settings.html',
 })
@@ -22,6 +29,7 @@ export class Settings implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly adminService = inject(AdminService);
   private readonly appVersionService = inject(AppVersionService);
+  protected readonly languageService = inject(LanguageService);
   protected readonly email = signal(this.authService.getUserEmail());
   protected readonly isAdmin = signal(
     this.authService.getUserRole() === 'admin',
@@ -39,7 +47,7 @@ export class Settings implements OnInit {
   protected readonly releasesUrl = signal(RELEASES_URL);
 
   constructor() {
-    this.browserService.setTitle('Ajustes');
+    this.browserService.setTitle('pageTitles.settings');
   }
 
   ngOnInit(): void {
@@ -61,7 +69,7 @@ export class Settings implements OnInit {
         error: () => {
           this.updateAvailable.set(null);
           this.updateCheckError.set(
-            'No se pudo comprobar si hay una nueva versión. Inténtalo de nuevo.',
+            'settings.checkError',
           );
         },
       });
@@ -74,7 +82,7 @@ export class Settings implements OnInit {
       .subscribe({
         next: ({ version }) => this.appVersion.set(version),
         error: () => {
-          this.appVersionLoadError.set('No se pudo cargar la versión actual.');
+          this.appVersionLoadError.set('settings.versionError');
         },
       });
   }
@@ -96,8 +104,14 @@ export class Settings implements OnInit {
         next: (users) => this.users.set(users),
         error: () => {
           this.users.set([]);
-          this.usersLoadError.set('No se pudieron cargar los usuarios.');
+          this.usersLoadError.set('settings.usersError');
         },
       });
+  }
+
+  protected setLanguage(event: Event): void {
+    const language = (event.target as HTMLSelectElement)
+      .value as SupportedLanguage;
+    this.languageService.setLanguage(language);
   }
 }

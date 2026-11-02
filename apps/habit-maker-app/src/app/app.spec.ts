@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { EMPTY, of } from 'rxjs';
+import { provideTranslocoTesting } from '../../test-support/transloco-testing';
 import { App } from './app';
 import { appRoutes } from './app.routes';
 import { AuthService } from './auth/auth.service';
@@ -14,6 +15,7 @@ describe('App', () => {
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
+        provideTranslocoTesting(),
         provideHttpClient(),
         provideRouter(appRoutes),
         {

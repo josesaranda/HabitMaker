@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUICheckbox,
@@ -21,6 +22,7 @@ import { AuthStory } from '../auth-story/auth-story';
     HabitMakerUIInput,
     HabitMakerUILink,
     RouterLink,
+    TranslocoPipe,
   ],
   templateUrl: './login.html',
 })
@@ -32,7 +34,7 @@ export class Login {
   protected message = signal('');
 
   constructor() {
-    this.browserService.setTitle('Iniciar sesión');
+    this.browserService.setTitle('pageTitles.login');
   }
 
   protected onSubmit(event: SubmitEvent): void {
@@ -49,7 +51,7 @@ export class Login {
         next: () => void this.router.navigateByUrl('/home'),
         error: () =>
           this.message.set(
-            'No se pudo iniciar sesión. Comprueba tus credenciales.',
+            'login.error',
           ),
       });
   }

@@ -3,35 +3,35 @@
 
   <section class="auth-panel" aria-labelledby="signup-title">
     <div class="auth-content">
-      <span class="auth-welcome-label">Tu siguiente paso empieza aquí</span>
-      <h2 id="signup-title">Crea tu cuenta</h2>
+      <span class="auth-welcome-label">{{ 'signup.welcome' | transloco }}</span>
+      <h2 id="signup-title">{{ 'signup.title' | transloco }}</h2>
       <p class="auth-intro">
-        Solo necesitas unos datos para empezar a cultivar nuevos hábitos.
+        {{ 'signup.intro' | transloco }}
       </p>
 
       <form class="auth-form auth-form--signup" (submit)="onSubmit($event)">
         <div class="form-field">
-          <label for="name">Nombre</label>
+          <label for="name">{{ 'signup.name' | transloco }}</label>
           <input
             hmInput
             id="name"
             name="name"
             type="text"
             autocomplete="name"
-            placeholder="¿Cómo te llamas?"
+            [placeholder]="'signup.namePlaceholder' | transloco"
             required
           />
         </div>
 
         <div class="form-field">
-          <label for="email">Correo electrónico</label>
+          <label for="email">{{ 'signup.email' | transloco }}</label>
           <input
             [hmInput]="emailInvalid() ? 'error' : 'default'"
             id="email"
             name="email"
             type="email"
             autocomplete="email"
-            placeholder="tu@correo.com"
+            [placeholder]="'signup.emailPlaceholder' | transloco"
             (input)="onEmailInput($event)"
             (blur)="onEmailBlur($event)"
             [attr.aria-invalid]="emailInvalid()"
@@ -44,14 +44,13 @@
             [class.field-help--error]="emailInvalid()"
             aria-live="polite"
           >
-            {{ emailInvalid() ? emailValue() ? 'Introduce un correo electrónico
-            válido.' : 'El correo electrónico es obligatorio.' : 'Usaremos tu
-            correo para acceder a tu cuenta.' }}
+            {{ (emailInvalid() ? emailValue() ? 'signup.emailInvalid' :
+            'signup.emailRequired' : 'signup.emailHelp') | transloco }}
           </span>
         </div>
 
         <div class="form-field">
-          <label for="password">Contraseña</label>
+          <label for="password">{{ 'signup.password' | transloco }}</label>
           <div class="password-field">
             <input
               [hmInput]="passwordInvalid() ? 'error' : 'default'"
@@ -59,7 +58,7 @@
               name="password"
               [type]="passwordVisible() ? 'text' : 'password'"
               autocomplete="new-password"
-              placeholder="Crea una contraseña"
+              [placeholder]="'signup.passwordPlaceholder' | transloco"
               (input)="onPasswordInput($event)"
               (blur)="passwordTouched.set(true)"
               [attr.aria-invalid]="passwordInvalid()"
@@ -71,7 +70,7 @@
               class="password-toggle"
               type="button"
               (click)="passwordVisible.update((visible) => !visible)"
-              [attr.aria-label]="passwordVisible() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
               [attr.aria-pressed]="passwordVisible()"
             >
               <hm-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
@@ -83,32 +82,34 @@
             [class.field-help--error]="passwordInvalid()"
             aria-live="polite"
           >
-            {{ passwordInvalid() ? 'La contraseña debe tener al menos 8
-            caracteres.' : 'Usa al menos 8 caracteres.' }}
+            {{ (passwordInvalid() ? 'signup.passwordInvalid' :
+            'signup.passwordHelp') | transloco }}
           </span>
         </div>
 
         <label class="remember-option">
           <input hmCheckbox type="checkbox" name="terms" required />
-          <span>Acepto los términos de uso y la política de privacidad.</span>
+          <span>{{ 'signup.terms' | transloco }}</span>
         </label>
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
-          Crear cuenta
+          {{ 'signup.submit' | transloco }}
           <hm-icon name="arrow-right" />
         </button>
-        <p class="form-message" aria-live="polite">{{ message() }}</p>
+        <p class="form-message" aria-live="polite">{{ message() | transloco }}</p>
       </form>
 
       <p class="auth-account-prompt">
-        ¿Ya tienes una cuenta? <a hmLink routerLink="/login">Inicia sesión</a>
+        {{ 'signup.accountPrompt' | transloco }}
+        <a hmLink routerLink="/login">{{ 'signup.loginLink' | transloco }}</a>
       </p>
       <div class="auth-reassurance">
-        <span aria-hidden="true">✳</span> Tus hábitos, solo tuyos. Siempre.
+        <span aria-hidden="true">✳</span>
+        {{ 'login.reassurance' | transloco }}
       </div>
     </div>
     <footer class="auth-footer">
-      © 2025 HabitMaker <span>·</span> Un día a la vez
+      © 2025 HabitMaker <span>·</span> {{ 'login.footer' | transloco }}
     </footer>
   </section>
 </main>

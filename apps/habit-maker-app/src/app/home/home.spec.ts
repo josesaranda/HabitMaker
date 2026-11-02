@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { EMPTY, of, Subject } from 'rxjs';
+import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { Habit } from '../habits/habit.service';
 import { HabitService } from '../habits/habit.service';
 import { Home } from './home';
@@ -10,6 +11,7 @@ describe('Home', () => {
     await TestBed.configureTestingModule({
       imports: [Home],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: ActivatedRoute,
@@ -112,6 +114,7 @@ describe('Home', () => {
     await TestBed.configureTestingModule({
       imports: [Home],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: ActivatedRoute,

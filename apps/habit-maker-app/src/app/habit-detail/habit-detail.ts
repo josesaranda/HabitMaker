@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import confetti from '@hiseb/confetti';
 import {
   HabitMakerUIHeader,
@@ -28,7 +29,7 @@ import { Habit, HabitService } from '../habits/habit.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
-  imports: [HabitCard, HabitMakerUIHeader, HabitMakerUIIcon],
+  imports: [HabitCard, HabitMakerUIHeader, HabitMakerUIIcon, TranslocoPipe],
   selector: 'app-habit-detail',
   templateUrl: './habit-detail.html',
 })
@@ -50,7 +51,7 @@ export class HabitDetail implements OnInit {
   protected readonly loadError = signal('');
 
   ngOnInit(): void {
-    this.browserService.setTitle('Detalle del hábito');
+    this.browserService.setTitle('pageTitles.habitDetail');
     this.route.queryParamMap
       .pipe(
         map((params) => params.get('from')),
@@ -93,18 +94,20 @@ export class HabitDetail implements OnInit {
             this.isLoading.set(false);
             this.isNotFound.set(result.error === 'not-found');
             if (result.error === 'load') {
-              this.loadError.set('No se pudo cargar este hábito.');
+              this.loadError.set('habitDetail.loadError');
             }
             return EMPTY;
           }
 
           const habit = result.habit;
           this.habit.set(habit);
-          this.browserService.setTitle(`Hábito: ${habit.name}`);
+          this.browserService.setTitle('pageTitles.habitNamed', {
+            name: habit.name,
+          });
           this.isLoading.set(false);
           return this.habitService.getTodayCompletion(habit.id).pipe(
             catchError(() => {
-              this.loadError.set('No se pudo cargar este hábito.');
+              this.loadError.set('habitDetail.loadError');
               return EMPTY;
             }),
           );
@@ -182,7 +185,7 @@ export class HabitDetail implements OnInit {
         error: () => {
           this.isSavingDayCompletion.set(false);
           this.dayCompletionError.set(
-            'No se pudo actualizar la actividad. Inténtalo de nuevo.',
+            'habitDetail.activityError',
           );
         },
       });

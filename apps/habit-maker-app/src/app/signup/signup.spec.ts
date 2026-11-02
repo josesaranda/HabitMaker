@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { Signup } from './signup';
 
 describe('Signup', () => {
@@ -10,7 +11,11 @@ describe('Signup', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Signup],
-      providers: [provideHttpClient(), provideRouter([])],
+      providers: [
+        provideHttpClient(),
+        provideRouter([]),
+        provideTranslocoTesting(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Signup);

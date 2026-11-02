@@ -1,6 +1,10 @@
 <main class="min-h-full bg-background px-4 pb-8 pt-5 sm:px-[4vw] lg:px-12">
   <div class="mx-auto w-full max-w-6xl">
-    <habit-maker-ui-header backNavigation="/">Ajustes</habit-maker-ui-header>
+    <habit-maker-ui-header
+      backNavigation="/"
+      [backLabel]="'navigation.back' | transloco"
+      [backTitle]="'navigation.backTitle' | transloco"
+    >{{ 'settings.title' | transloco }}</habit-maker-ui-header>
   </div>
   <div class="mx-auto w-full max-w-3xl">
     <section
@@ -11,14 +15,11 @@
         id="user-settings-title"
         class="mb-6 text-xl font-semibold tracking-tight text-text-primary"
       >
-        Ajustes de usuario
+        {{ 'settings.userTitle' | transloco }}
       </h2>
       <div class="max-w-xl">
-        <label
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          for="user-email"
-        >
-          Correo electrónico
+        <label class="mb-2 block text-sm font-semibold text-text-primary" for="user-email">
+          {{ 'settings.email' | transloco }}
         </label>
         <input
           hmInput
@@ -29,6 +30,18 @@
           [value]="email()"
           readonly
         />
+        <label class="mb-2 mt-5 block text-sm font-semibold text-text-primary" for="language">
+          {{ 'settings.language' | transloco }}
+        </label>
+        <select
+          id="language"
+          class="w-full rounded-lg border border-border bg-background px-3 py-2 text-text-primary"
+          [value]="languageService.language()"
+          (change)="setLanguage($event)"
+        >
+          <option value="en">{{ 'settings.english' | transloco }}</option>
+          <option value="es">{{ 'settings.spanish' | transloco }}</option>
+        </select>
       </div>
     </section>
     @if (isAdmin()) {
@@ -40,30 +53,30 @@
         id="admin-settings-title"
         class="mb-6 text-xl font-semibold tracking-tight text-text-primary"
       >
-        Ajustes de administración
+        {{ 'settings.adminTitle' | transloco }}
       </h2>
       <section aria-labelledby="admin-users-title">
         <h3
           id="admin-users-title"
           class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
         >
-          Usuarios de la aplicación
+          {{ 'settings.usersTitle' | transloco }}
         </h3>
         @if (isLoadingUsers()) {
-        <p class="text-text-secondary" role="status">Cargando usuarios…</p>
+        <p class="text-text-secondary" role="status">{{ 'settings.loadingUsers' | transloco }}</p>
         } @else if (usersLoadError()) {
-        <p class="text-error" role="alert">{{ usersLoadError() }}</p>
+        <p class="text-error" role="alert">{{ usersLoadError() | transloco }}</p>
         } @else if (users().length === 0) {
-        <p class="text-text-secondary">No hay usuarios para mostrar.</p>
+        <p class="text-text-secondary">{{ 'settings.noUsers' | transloco }}</p>
         } @else {
         <div class="overflow-x-auto">
           <table class="w-full min-w-[24rem] text-left text-sm">
             <thead class="border-b border-border text-text-secondary">
               <tr>
                 <th class="px-3 py-3 font-semibold" scope="col">
-                  Correo electrónico
+                  {{ 'settings.email' | transloco }}
                 </th>
-                <th class="px-3 py-3 font-semibold" scope="col">Rol</th>
+                <th class="px-3 py-3 font-semibold" scope="col">{{ 'settings.role' | transloco }}</th>
               </tr>
             </thead>
             <tbody>
@@ -71,7 +84,7 @@
               <tr class="border-b border-border last:border-0">
                 <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
                 <td class="px-3 py-3 text-text-secondary">
-                  {{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}
+                  {{ (user.role === 'admin' ? 'settings.adminRole' : 'settings.userRole') | transloco }}
                 </td>
               </tr>
               }
@@ -85,17 +98,17 @@
           id="app-settings-title"
           class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
         >
-          Versión de la aplicación
+          {{ 'settings.appVersion' | transloco }}
         </h3>
         <div class="space-y-5">
           <div>
             @if (isLoadingAppVersion()) {
             <p class="text-sm text-text-secondary" role="status">
-              Cargando versión…
+              {{ 'settings.loadingVersion' | transloco }}
             </p>
             } @else if (appVersionLoadError()) {
             <p class="text-sm text-error" role="alert">
-              {{ appVersionLoadError() }}
+              {{ appVersionLoadError() | transloco }}
             </p>
             } @else {
             <p class="text-sm text-text-secondary">{{ appVersion() }}</p>
@@ -105,19 +118,19 @@
           <div aria-live="polite">
             @if (isCheckingUpdates()) {
             <p class="text-sm text-text-secondary" role="status">
-              Comprobando si hay una versión nueva…
+              {{ 'settings.checkingUpdates' | transloco }}
             </p>
             } @else if (updateCheckError()) {
             <p class="text-sm text-error" role="alert">
-              {{ updateCheckError() }}
+              {{ updateCheckError() | transloco }}
             </p>
             } @else if (updateAvailable()) {
             <p class="text-sm font-medium text-text-primary" role="status">
-              Hay una nueva versión disponible: {{ latestVersion() }}.
+              {{ 'settings.updateAvailable' | transloco: { version: latestVersion() } }}
             </p>
             } @else if (updateAvailable() === false) {
             <p class="text-sm text-text-secondary" role="status">
-              Tienes la versión más reciente.
+              {{ 'settings.upToDate' | transloco }}
             </p>
             }
           </div>
@@ -130,8 +143,7 @@
               [disabled]="isCheckingUpdates()"
               (click)="checkForUpdates()"
             >
-              {{ isCheckingUpdates() ? 'Comprobando…' : 'Comprobar
-              actualizaciones' }}
+              {{ (isCheckingUpdates() ? 'settings.checkingUpdates' : 'settings.checkUpdates') | transloco }}
             </button>
             <a
               class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
@@ -139,7 +151,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              Ver releases en GitHub
+              {{ 'settings.viewReleases' | transloco }}
             </a>
             @if (updateAvailable() && releasesUrl() !==
             'https://github.com/josesaranda/HabitMaker/releases') {
@@ -149,7 +161,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              Ver versión {{ latestVersion() }}
+              {{ 'settings.viewVersion' | transloco: { version: latestVersion() } }}
             </a>
             }
           </div>

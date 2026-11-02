@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import confetti from '@hiseb/confetti';
 import { of } from 'rxjs';
+import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { HabitService } from '../habits/habit.service';
 import { HabitDetail } from './habit-detail';
 
@@ -23,6 +24,7 @@ describe('HabitDetail', () => {
     await TestBed.configureTestingModule({
       imports: [HabitDetail],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: ActivatedRoute,
@@ -105,6 +107,7 @@ describe('HabitDetail', () => {
     await TestBed.configureTestingModule({
       imports: [HabitDetail],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: ActivatedRoute,
@@ -148,7 +151,7 @@ describe('HabitDetail', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
       compiled.querySelector(
-        `[aria-label="Marcar como completado el ${initialStartDate}"]`,
+        `[aria-label="Marcar como completado el ${formatSpanishDate(initialStartDate)}"]`,
       ),
     ).not.toBeNull();
 
@@ -170,7 +173,7 @@ describe('HabitDetail', () => {
     );
     expect(
       compiled.querySelector(
-        `[aria-label="Marcar como completado el ${nextStartDate}"]`,
+        `[aria-label="Marcar como completado el ${formatSpanishDate(nextStartDate)}"]`,
       ),
     ).not.toBeNull();
   });
@@ -203,6 +206,7 @@ describe('HabitDetail', () => {
     await TestBed.configureTestingModule({
       imports: [HabitDetail],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: ActivatedRoute,
@@ -233,7 +237,7 @@ describe('HabitDetail', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const dayButton = compiled.querySelector<HTMLButtonElement>(
-      `[aria-label="Marcar como completado el ${today}"]`,
+      `[aria-label="Marcar como completado el ${formatSpanishDate(today)}"]`,
     );
     expect(dayButton).not.toBeNull();
     vi.spyOn(dayButton!, 'getBoundingClientRect').mockReturnValue(
@@ -262,7 +266,7 @@ describe('HabitDetail', () => {
     previousDate.setDate(previousDate.getDate() - 1);
     const previousDateLabel = toLocalDate(previousDate);
     const previousDayButton = compiled.querySelector<HTMLButtonElement>(
-      `[aria-label="Marcar como completado el ${previousDateLabel}"]`,
+      `[aria-label="Marcar como completado el ${formatSpanishDate(previousDateLabel)}"]`,
     );
     expect(previousDayButton).not.toBeNull();
     vi.spyOn(previousDayButton!, 'getBoundingClientRect').mockReturnValue(
@@ -290,4 +294,10 @@ function toLocalDate(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function formatSpanishDate(date: string): string {
+  return new Intl.DateTimeFormat('es-ES', { dateStyle: 'full' }).format(
+    new Date(`${date}T00:00:00`),
+  );
 }

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
+import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { HabitService } from '../habits/habit.service';
 import { HabitCard } from './habit-card';
 
@@ -16,6 +17,7 @@ describe('HabitCard', () => {
     await TestBed.configureTestingModule({
       imports: [HabitCard],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: HabitService,
@@ -223,7 +225,7 @@ describe('HabitCard', () => {
     const dayButton = (
       fixture.nativeElement as HTMLElement
     ).querySelector<HTMLButtonElement>(
-      `[aria-label="Desmarcar como completado el ${date}"]`,
+      `[aria-label="Desmarcar como completado el ${formatSpanishDate(date)}"]`,
     );
     expect(dayButton?.getAttribute('aria-pressed')).toBe('true');
     const daysViewport = (
@@ -258,7 +260,7 @@ describe('HabitCard', () => {
     const futureDayButton = (
       fixture.nativeElement as HTMLElement
     ).querySelector<HTMLButtonElement>(
-      `[aria-label="No se puede completar el día ${futureDateLabel}"]`,
+      `[aria-label="No se puede completar el día ${formatSpanishDate(futureDateLabel)}"]`,
     );
     expect(futureDayButton?.disabled).toBe(true);
     futureDayButton?.click();
@@ -285,6 +287,12 @@ function toLocalDate(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function formatSpanishDate(date: string): string {
+  return new Intl.DateTimeFormat('es-ES', { dateStyle: 'full' }).format(
+    new Date(`${date}T00:00:00`),
+  );
 }
 
 interface SwipeableHabitCard {

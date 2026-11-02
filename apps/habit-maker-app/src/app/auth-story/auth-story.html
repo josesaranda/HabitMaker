@@ -5,15 +5,15 @@
 
   <div class="auth-story-copy">
     <span class="eyebrow">
-      <span class="eyebrow-dot"></span> Pequeños pasos, grandes cambios
+      <span class="eyebrow-dot"></span> {{ 'authStory.eyebrow' | transloco }}
     </span>
-    <h1 id="story-title">Lo que haces cada día <em>te transforma.</em></h1>
-    <p>Crea hábitos que se sientan bien. Un día a la vez, a tu propio ritmo.</p>
+    <h1 id="story-title" [innerHTML]="'authStory.title' | transloco"></h1>
+    <p>{{ 'authStory.intro' | transloco }}</p>
   </div>
 
   <app-habit-card
     id="example"
-    name="Un poco de lectura"
+    [name]="'authStory.exampleHabit' | transloco"
     startedAt="2023-10-01"
   />
   <span
@@ -24,5 +24,5 @@
     class="story-decoration story-decoration--two"
     aria-hidden="true"
   ></span>
-  <p class="story-footer">Cultiva una vida que se parezca a ti.</p>
+  <p class="story-footer">{{ 'authStory.footer' | transloco }}</p>
 </section>

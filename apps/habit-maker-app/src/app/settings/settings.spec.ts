@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
+import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { AdminService } from '../admin/admin.service';
 import { AuthService } from '../auth/auth.service';
 import { AppVersionService } from './app-version.service';
 import { Settings } from './settings';
 
 describe('Settings', () => {
+  beforeEach(() => localStorage.removeItem('habitmaker.language'));
+
   it('shows the user settings with the signed-in email in a readonly input', async () => {
     const getCurrentVersion = vi.fn(() => of({ version: '1.2.3' }));
     const checkForUpdates = vi.fn(() =>
@@ -22,6 +25,7 @@ describe('Settings', () => {
     await TestBed.configureTestingModule({
       imports: [Settings],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: AuthService,
@@ -48,6 +52,7 @@ describe('Settings', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const email = compiled.querySelector<HTMLInputElement>('#user-email');
+    const language = compiled.querySelector<HTMLSelectElement>('#language');
 
     expect(compiled.querySelector('h1')?.textContent).toContain('Ajustes');
     expect(compiled.querySelector('h2')?.textContent).toContain(
@@ -55,6 +60,12 @@ describe('Settings', () => {
     );
     expect(email?.value).toBe('persona@example.com');
     expect(email?.readOnly).toBe(true);
+    expect(language?.value).toBe('es');
+    language!.value = 'en';
+    language!.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(compiled.querySelector('h2')?.textContent).toContain('User settings');
+    expect(language?.value).toBe('en');
     expect(compiled.querySelector('#admin-settings-title')).toBeNull();
     expect(compiled.querySelector('#app-settings-title')).toBeNull();
     expect(compiled.textContent).not.toContain('Versión actual');
@@ -82,6 +93,7 @@ describe('Settings', () => {
     await TestBed.configureTestingModule({
       imports: [Settings],
       providers: [
+        provideTranslocoTesting(),
         provideRouter([]),
         {
           provide: AuthService,

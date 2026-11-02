@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { HabitService } from '../habits/habit.service';
 import { NewHabit } from './new-habit';
 
@@ -12,6 +13,7 @@ describe('NewHabit', () => {
     await TestBed.configureTestingModule({
       imports: [NewHabit],
       providers: [
+        provideTranslocoTesting(),
         {
           provide: HabitService,
           useValue: {

@@ -3,26 +3,26 @@
 
   <section class="auth-panel" aria-labelledby="login-title">
     <div class="auth-content">
-      <h2 id="login-title">Inicia sesión</h2>
-      <p class="auth-intro">Retoma tus hábitos justo donde los dejaste.</p>
+      <h2 id="login-title">{{ 'login.title' | transloco }}</h2>
+      <p class="auth-intro">{{ 'login.intro' | transloco }}</p>
 
       <form class="auth-form" (submit)="onSubmit($event)">
         <div class="form-field">
-          <label for="email">Correo electrónico</label>
+          <label for="email">{{ 'login.email' | transloco }}</label>
           <input
             hmInput
             id="email"
             name="email"
             type="email"
             autocomplete="email"
-            placeholder="tu@correo.com"
+            [placeholder]="'login.emailPlaceholder' | transloco"
             required
           />
         </div>
 
         <div class="form-field">
           <div class="field-heading">
-            <label for="password">Contraseña</label>
+            <label for="password">{{ 'login.password' | transloco }}</label>
           </div>
           <div class="password-field">
             <input
@@ -31,7 +31,7 @@
               name="password"
               [type]="passwordVisible() ? 'text' : 'password'"
               autocomplete="current-password"
-              placeholder="Escribe tu contraseña"
+              [placeholder]="'login.passwordPlaceholder' | transloco"
               required
               minlength="8"
             />
@@ -39,7 +39,7 @@
               class="password-toggle"
               type="button"
               (click)="passwordVisible.update((visible) => !visible)"
-              [attr.aria-label]="passwordVisible() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
               [attr.aria-pressed]="passwordVisible()"
             >
               <hm-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
@@ -50,29 +50,31 @@
         <div class="flex flew-wrap gap-2 justify-between items-center">
           <label class="remember-option">
             <input hmCheckbox type="checkbox" name="remember" />
-            <span>Recordar mi sesión</span>
+            <span>{{ 'login.remember' | transloco }}</span>
           </label>
           <a class="text-xs" hmLink routerLink="/forgot-password"
-            >¿Olvidaste la contraseña?</a
+            >{{ 'login.forgot' | transloco }}</a
           >
         </div>
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
-          Iniciar sesión
+          {{ 'login.submit' | transloco }}
           <hm-icon name="arrow-right" />
         </button>
-        <p class="form-message" aria-live="polite">{{ message() }}</p>
+        <p class="form-message" aria-live="polite">{{ message() | transloco }}</p>
       </form>
 
       <p class="auth-account-prompt">
-        ¿Aún no tienes cuenta? <a hmLink routerLink="/signup">Empieza gratis</a>
+        {{ 'login.accountPrompt' | transloco }}
+        <a hmLink routerLink="/signup">{{ 'login.signupLink' | transloco }}</a>
       </p>
       <div class="auth-reassurance">
-        <span aria-hidden="true">✳</span> Tus hábitos, solo tuyos. Siempre.
+        <span aria-hidden="true">✳</span>
+        {{ 'login.reassurance' | transloco }}
       </div>
     </div>
     <footer class="auth-footer">
-      © 2025 HabitMaker <span>·</span> Un día a la vez
+      © 2025 HabitMaker <span>·</span> {{ 'login.footer' | transloco }}
     </footer>
   </section>
 </main>

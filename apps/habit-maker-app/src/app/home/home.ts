@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUIHeader,
@@ -28,6 +29,7 @@ import { HomeHabitsResolveResult } from './home.resolver';
     HabitCard,
     NewHabit,
     RouterLink,
+    TranslocoPipe,
   ],
   selector: 'app-home',
   templateUrl: './home.html',
@@ -44,7 +46,7 @@ export class Home implements OnInit {
   protected readonly hasHabits = computed(() => this.habits().length > 0);
 
   ngOnInit(): void {
-    this.browserService.setTitle('Mis hábitos');
+    this.browserService.setTitle('pageTitles.home');
     this.route.data
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
@@ -55,7 +57,7 @@ export class Home implements OnInit {
 
         this.habits.set(result.habits);
         this.loadError.set(
-          result.hasError ? 'No se pudieron cargar tus hábitos.' : '',
+          result.hasError ? 'home.loadError' : '',
         );
         this.isLoading.set(false);
       });
@@ -74,7 +76,7 @@ export class Home implements OnInit {
         next: (habits) => this.habits.set(habits),
         error: () => {
           this.habits.set([]);
-          this.loadError.set('No se pudieron cargar tus hábitos.');
+          this.loadError.set('home.loadError');
         },
       });
   }

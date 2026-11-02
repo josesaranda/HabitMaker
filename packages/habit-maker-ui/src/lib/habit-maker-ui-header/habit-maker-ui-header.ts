@@ -11,4 +11,6 @@ import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
 })
 export class HabitMakerUIHeader {
   backNavigation = input<string | undefined>();
+  backLabel = input('Back to previous page');
+  backTitle = input('Back');
 }

@@ -1,7 +1,7 @@
 <main class="flex h-full flex-col bg-background px-4 py-5 sm:px-[4vw] lg:px-12">
   @if (isLoading()) {
   <p class="mt-6 self-center text-text-secondary" role="status">
-    Cargando tus hábitos…
+    {{ 'home.loading' | transloco }}
   </p>
   } @else if (hasHabits()) {
   <section
@@ -9,13 +9,13 @@
     aria-labelledby="habits-title"
   >
     <habit-maker-ui-header id="habits-title" class="col-span-full !mb-1">
-      Tus hábitos
+      {{ 'home.title' | transloco }}
     </habit-maker-ui-header>
     @for (habit of habits(); track habit.id) {
     <a
       class="block rounded-2xl no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e6b875] hover:shadow-[0_0.5rem_1rem_rgb(0_0_0_/_55%)] hover:transform hover:scale-[1.02] transition-all duration-300 ease-in-out"
       [routerLink]="['/habits', habit.id]"
-      [attr.aria-label]="'Ver hábito ' + habit.name"
+      [attr.aria-label]="'home.habitLink' | transloco: { name: habit.name }"
     >
       <app-habit-card
         [id]="habit.id"
@@ -35,13 +35,13 @@
       id="home-title"
       class="my-[0.8rem] text-[clamp(2rem,5vw,3rem)] font-semibold tracking-[-0.05em] text-text-primary"
     >
-      ¡Bienvenido a casa!
+      {{ 'home.welcome' | transloco }}
     </h1>
     <p class="m-0 leading-relaxed text-text-secondary">
-      Tu espacio para crear hábitos que te hacen bien empieza aquí.
+      {{ 'home.intro' | transloco }}
     </p>
     @if (loadError()) {
-    <p class="mt-6 text-error" role="alert">{{ loadError() }}</p>
+    <p class="mt-6 text-error" role="alert">{{ loadError() | transloco }}</p>
     }
     <button
       #addHabitTrigger
@@ -51,11 +51,15 @@
       type="button"
       (click)="newHabitModal.openFrom(addHabitTrigger)"
     >
-      Añade tu primer hábito
+      {{ 'home.addFirst' | transloco }}
     </button>
   </section>
   }
-  <hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
+  <hm-modal
+    #newHabitModal
+    [label]="'home.newHabitModal' | transloco"
+    [closeLabel]="'navigation.closeDialog' | transloco"
+  >
     <app-new-habit (habitCreated)="newHabitModal.close()" />
   </hm-modal>
 </main>

@@ -7,6 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUIIcon,
@@ -27,6 +28,7 @@ const nonBlankValidator: ValidatorFn = (control) =>
     HabitMakerUIIcon,
     HabitMakerUIInput,
     ReactiveFormsModule,
+    TranslocoPipe,
   ],
   templateUrl: './new-habit.html',
   host: { class: 'block' },
@@ -74,7 +76,7 @@ export class NewHabit {
         },
         error: () =>
           this.errorMessage.set(
-            'No se pudo guardar el hábito. Inténtalo de nuevo.',
+            'newHabit.error',
           ),
       });
   }

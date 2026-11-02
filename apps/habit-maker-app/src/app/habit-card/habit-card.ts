@@ -9,7 +9,9 @@ import {
   signal,
 } from '@angular/core';
 import { HabitMakerUIIcon } from '@habit-maker/habit-maker-ui';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { HabitCompletionStatus, HabitService } from '../habits/habit.service';
+import { LanguageService } from '../i18n/language.service';
 
 export interface HabitCardDayToggleEvent {
   date: string;
@@ -18,13 +20,15 @@ export interface HabitCardDayToggleEvent {
 }
 
 @Component({
-  imports: [HabitMakerUIIcon, NgTemplateOutlet],
+  imports: [HabitMakerUIIcon, NgTemplateOutlet, TranslocoPipe],
   selector: 'app-habit-card',
   templateUrl: './habit-card.html',
   host: { class: 'block w-full' },
 })
 export class HabitCard {
   private readonly habitService = inject(HabitService);
+  private readonly languageService = inject(LanguageService);
+  private readonly transloco = inject(TranslocoService);
   id = input.required<string>();
   name = input.required<string>();
   startedAt = input.required<string>();
@@ -59,7 +63,6 @@ export class HabitCard {
   protected readonly completionError = signal(false);
 
   private readonly calendarDays = computed(() => {
-    const weekdayLabels = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
     const today = new Date(this.today());
     today.setHours(0, 0, 0, 0);
     const firstDayOffset = this.firstDayOffset();
@@ -70,7 +73,9 @@ export class HabitCard {
       date.setDate(today.getDate() + offset);
 
       return {
-        label: weekdayLabels[date.getDay()],
+        label: new Intl.DateTimeFormat(this.languageService.locale(), {
+          weekday: 'narrow',
+        }).format(date),
         dayOfMonth: date.getDate(),
         date: this.toLocalDate(date),
         offset,
@@ -84,6 +89,10 @@ export class HabitCard {
       ...day,
       completed: this.completions()[day.date] ?? false,
       entering: this.enteringDates().has(day.date),
+      ariaLabel: this.getDayAriaLabel({
+        ...day,
+        completed: this.completions()[day.date] ?? false,
+      }),
     })),
   );
 
@@ -97,7 +106,7 @@ export class HabitCard {
 
     if (Number.isNaN(date.getTime())) return rawDate;
 
-    return new Intl.DateTimeFormat('es-ES', {
+    return new Intl.DateTimeFormat(this.languageService.locale(), {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -272,6 +281,32 @@ export class HabitCard {
     this.dragOffset.set(0);
     this.moveDays(direction === 'past' ? -dayCount : dayCount);
     requestAnimationFrame(() => this.isDragging.set(false));
+  }
+
+  protected formatDayDate(date: string): string {
+    const parsedDate = new Date(`${date}T00:00:00`);
+    if (Number.isNaN(parsedDate.getTime())) return date;
+
+    return new Intl.DateTimeFormat(this.languageService.locale(), {
+      dateStyle: 'full',
+    }).format(parsedDate);
+  }
+
+  private getDayAriaLabel(day: {
+    date: string;
+    offset: number;
+    completed: boolean;
+  }): string {
+    if (day.offset > 0) {
+      return this.transloco.translate('habitCard.cannotCompleteFuture', {
+        date: this.formatDayDate(day.date),
+      });
+    }
+
+    return this.transloco.translate(
+      day.completed ? 'habitCard.unmarkCompleted' : 'habitCard.markCompleted',
+      { date: this.formatDayDate(day.date) },
+    );
   }
 
   private moveDays(amount: number): void {

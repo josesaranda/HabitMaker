@@ -3,8 +3,8 @@
     <a
       class="habit-maker-ui-header__back"
       [routerLink]="backUrl"
-      aria-label="Volver a la página anterior"
-      title="Volver"
+      [attr.aria-label]="backLabel()"
+      [title]="backTitle()"
     >
       <hm-icon class="size-5" name="arrow-left" />
     </a>

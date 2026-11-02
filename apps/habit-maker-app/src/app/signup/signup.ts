@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUICheckbox,
@@ -21,6 +22,7 @@ import { AuthStory } from '../auth-story/auth-story';
     HabitMakerUIInput,
     HabitMakerUILink,
     RouterLink,
+    TranslocoPipe,
   ],
   templateUrl: './signup.html',
 })
@@ -37,7 +39,7 @@ export class Signup {
   protected passwordTouched = signal(false);
 
   constructor() {
-    this.browserService.setTitle('Crear cuenta');
+    this.browserService.setTitle('pageTitles.signup');
   }
 
   protected emailInvalid = computed(
@@ -82,7 +84,7 @@ export class Signup {
         next: () => void this.router.navigateByUrl('/home'),
         error: () =>
           this.message.set(
-            'No se pudo crear la cuenta. Revisa tus datos e inténtalo de nuevo.',
+            'signup.error',
           ),
       });
   }

@@ -9,15 +9,15 @@
     <p
       class="mb-2 mt-0 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-green-800"
     >
-      Un hábito a la vez
+      {{ 'newHabit.eyebrow' | transloco }}
     </p>
     <h2
       class="m-0 text-[clamp(1.45rem,4vw,1.8rem)] leading-[1.2] tracking-[-0.045em] text-text-primary"
     >
-      ¿Qué hábito quieres crear?
+      {{ 'newHabit.title' | transloco }}
     </h2>
     <p class="mt-[0.65rem] max-w-[25rem] leading-[1.55] text-text-secondary">
-      Empieza con algo sencillo que te gustaría hacer más a menudo.
+      {{ 'newHabit.intro' | transloco }}
     </p>
   </header>
   <form
@@ -30,7 +30,7 @@
         class="mb-2 block text-[0.92rem] font-semibold text-text-primary"
         for="new-habit-name"
       >
-        Tu hábito
+        {{ 'newHabit.label' | transloco }}
       </label>
       <input
         hmInput
@@ -41,14 +41,14 @@
         maxlength="100"
         class="rounded-[0.85rem]"
         autocomplete="off"
-        placeholder="Leer 10 minutos"
+        [placeholder]="'newHabit.placeholder' | transloco"
       />
       <p class="mt-[0.55rem] text-[0.8rem] leading-[1.45] text-text-secondary">
-        Cuanto más concreto, más fácil será empezar.
+        {{ 'newHabit.hint' | transloco }}
       </p>
     </div>
     @if (errorMessage()) {
-    <p class="m-0 text-sm text-error" role="alert">{{ errorMessage() }}</p>
+    <p class="m-0 text-sm text-error" role="alert">{{ errorMessage() | transloco }}</p>
     }
     <button
       hmButton="primary"
@@ -56,7 +56,7 @@
       type="submit"
       [disabled]="!canStartHabit()"
     >
-      <span>{{ isSubmitting() ? 'Guardando…' : 'Comenzar hábito' }}</span>
+      <span>{{ (isSubmitting() ? 'newHabit.saving' : 'newHabit.submit') | transloco }}</span>
       <hm-icon class="size-[1.15rem]" name="arrow-right" />
     </button>
   </form>

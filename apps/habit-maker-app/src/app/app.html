@@ -1,18 +1,23 @@
 @if (shouldShowNavbar()) {
 <div class="app-navbar-shell">
-  <hm-navbar class="app-navbar" brandLink="/home">
+  <hm-navbar
+    class="app-navbar"
+    brandLink="/home"
+    [brandLabel]="'navigation.brandLabel' | transloco"
+    [navigationLabel]="'navigation.main' | transloco"
+  >
     <a class="app-navbar__link" routerLink="/home" aria-current="page">
-      Inicio
+      {{ 'navigation.home' | transloco }}
     </a>
-    <a class="app-navbar__link" routerLink="/settings">Ajustes</a>
+    <a class="app-navbar__link" routerLink="/settings">{{ 'navigation.settings' | transloco }}</a>
     <div class="app-navbar__icon-actions flex flex-row gap-3">
       <button
         #addHabitTrigger
         hmButtonIcon="primary"
         size="small"
         type="button"
-        aria-label="Añadir hábito"
-        title="Añadir hábito"
+        [attr.aria-label]="'navigation.addHabit' | transloco"
+        [title]="'navigation.addHabit' | transloco"
         (click)="newHabitModal.openFrom(addHabitTrigger)"
       >
         <hm-icon name="add" />
@@ -22,8 +27,8 @@
         hmButtonIcon="secondary"
         size="small"
         routerLink="/settings"
-        aria-label="Ajustes"
-        title="Ajustes"
+        [attr.aria-label]="'navigation.settings' | transloco"
+        [title]="'navigation.settings' | transloco"
       >
         <hm-icon name="settings" />
       </a>
@@ -31,8 +36,8 @@
         hmButtonIcon="secondary"
         size="small"
         type="button"
-        aria-label="Cerrar sesión"
-        title="Cerrar sesión"
+        [attr.aria-label]="'navigation.logout' | transloco"
+        [title]="'navigation.logout' | transloco"
         (click)="logout()"
       >
         <hm-icon name="logout" />
@@ -40,7 +45,11 @@
     </div>
   </hm-navbar>
 </div>
-<hm-modal #newHabitModal label="¿Qué hábito quieres crear?">
+<hm-modal
+  #newHabitModal
+  [label]="'home.newHabitModal' | transloco"
+  [closeLabel]="'navigation.closeDialog' | transloco"
+>
   <app-new-habit (habitCreated)="newHabitModal.close()" />
 </hm-modal>
 }

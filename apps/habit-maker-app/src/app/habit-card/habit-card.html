@@ -1,6 +1,6 @@
 <article
   class="relative z-1 mx-auto w-full rounded-2xl border border-white/15 bg-[#2b3f3c] p-[1.15rem_1.25rem_1rem] text-white shadow-[0_1.5rem_4rem_rgb(0_0_0_/_12%)] backdrop-blur-xl"
-  [attr.aria-label]="'Progreso semanal para ' + name()"
+  [attr.aria-label]="'habitCard.weeklyProgress' | transloco: { name: name() }"
 >
   <div class="flex items-start gap-3">
     <div
@@ -14,7 +14,7 @@
         class="w-fit rounded-full border border-[#e6b875]/30 px-2 py-1 text-[0.7rem] text-[#f0c98d]"
         [attr.datetime]="startedAt()"
       >
-        ✦ Desde {{ startedAtLabel() }}
+        ✦ {{ 'habitCard.since' | transloco: { date: startedAtLabel() } }}
       </time>
       <strong class="text-sm font-semibold"
         >{{ name().substring(0, 30) + (name().length > 30 ? '...' : '')
@@ -29,7 +29,7 @@
       <button
         class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 bg-transparent text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]"
         type="button"
-        aria-label="Mostrar los tres días anteriores"
+        [attr.aria-label]="'habitCard.previousDays' | transloco"
         (click)="showPreviousDays()"
       >
         <hm-icon class="size-4" name="chevron-left" />
@@ -64,13 +64,7 @@
               "
               type="button"
               [attr.aria-hidden]="day.buffer ? 'true' : null"
-              [attr.aria-label]="
-                day.offset > 0
-                  ? 'No se puede completar el día ' + day.date
-                  : day.completed
-                    ? 'Desmarcar como completado el ' + day.date
-                    : 'Marcar como completado el ' + day.date
-              "
+              [attr.aria-label]="day.ariaLabel"
               [attr.aria-pressed]="day.completed"
               [disabled]="dayToggleDisabled() || day.offset > 0 || day.buffer"
               (click)="toggleDay(day, $event)"
@@ -104,7 +98,7 @@
       <button
         class="grid size-6 shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 bg-transparent text-white/70 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]"
         type="button"
-        aria-label="Mostrar los tres días siguientes"
+        [attr.aria-label]="'habitCard.nextDays' | transloco"
         [disabled]="isAtFutureLimit()"
         (click)="showNextDays()"
       >
@@ -134,7 +128,7 @@
   </ng-template>
   @if (completionError()) {
   <p class="text-xs text-white/70" role="alert">
-    No se pudo cargar el progreso reciente.
+    {{ 'habitCard.completionError' | transloco }}
   </p>
   }
 </article>

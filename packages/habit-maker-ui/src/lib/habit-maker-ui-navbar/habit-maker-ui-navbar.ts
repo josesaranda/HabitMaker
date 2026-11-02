@@ -11,6 +11,6 @@ import { HabitMakerUIBrand } from '../habit-maker-ui-brand/habit-maker-ui-brand'
 })
 export class HabitMakerUINavbar {
   brandLink = input('/');
-  brandLabel = input('HabitMaker, inicio');
-  navigationLabel = input('Navegación principal');
+  brandLabel = input('HabitMaker, home');
+  navigationLabel = input('Main navigation');
 }

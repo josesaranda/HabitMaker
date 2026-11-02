@@ -49,7 +49,7 @@ describe('HabitMakerUIModal', () => {
     expect(dialog.querySelector('h2')?.textContent).toContain('Crear hábito');
     expect(dialog.querySelector('ng-content')).toBeNull();
     expect(
-      dialog.querySelector('[aria-label="Cerrar diálogo"]'),
+      dialog.querySelector('[aria-label="Close dialog"]'),
     ).not.toBeNull();
   });
 
@@ -67,7 +67,7 @@ describe('HabitMakerUIModal', () => {
     expect(dialog.open).toBe(true);
 
     fixture.nativeElement
-      .querySelector<HTMLButtonElement>('[aria-label="Cerrar diálogo"]')!
+      .querySelector<HTMLButtonElement>('[aria-label="Close dialog"]')!
       .click();
 
     expect(dialog.open).toBe(false);

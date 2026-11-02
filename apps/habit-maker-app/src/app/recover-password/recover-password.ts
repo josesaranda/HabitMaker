@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUIIcon,
@@ -19,6 +20,7 @@ import { BrowserService } from '../browser/browser.service';
     HabitMakerUIInput,
     HabitMakerUILink,
     RouterLink,
+    TranslocoPipe,
   ],
   templateUrl: './recover-password.html',
   styleUrl: './recover-password.css',
@@ -31,7 +33,7 @@ export class RecoverPassword {
   protected readonly errorMessage = signal('');
 
   constructor() {
-    this.browserService.setTitle('Recuperar contraseña');
+    this.browserService.setTitle('pageTitles.recover');
   }
 
   protected onSubmit(event: SubmitEvent): void {
@@ -46,7 +48,7 @@ export class RecoverPassword {
       },
       error: () =>
         this.errorMessage.set(
-          'No se pudo procesar la solicitud. Inténtalo de nuevo.',
+          'recover.error',
         ),
     });
   }

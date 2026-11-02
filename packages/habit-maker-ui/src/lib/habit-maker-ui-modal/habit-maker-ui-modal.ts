@@ -12,7 +12,7 @@ const MODAL_TRANSITION_EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 })
 export class HabitMakerUIModal {
   label = input.required<string>();
-  closeLabel = input('Cerrar diálogo');
+  closeLabel = input('Close dialog');
 
   private readonly dialogRef =
     viewChild.required<ElementRef<HTMLDialogElement>>('dialog');

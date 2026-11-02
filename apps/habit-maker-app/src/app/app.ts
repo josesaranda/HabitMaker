@@ -1,5 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   NavigationEnd,
   Router,
@@ -25,6 +26,7 @@ import { NewHabit } from './new-habit/new-habit';
     NewHabit,
     RouterLink,
     RouterOutlet,
+    TranslocoPipe,
   ],
   selector: 'app-root',
   templateUrl: './app.html',
