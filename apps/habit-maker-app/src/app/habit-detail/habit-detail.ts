@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   computed,
@@ -15,11 +14,13 @@ import {
   EMPTY,
   catchError,
   distinctUntilChanged,
+  filter,
   map,
   switchMap,
   tap,
 } from 'rxjs';
 import { Habit, HabitService } from '../habits/habit.service';
+import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
   imports: [HabitMakerUIButton, RouterLink],
@@ -33,6 +34,16 @@ export class HabitDetail implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly habit = signal<Habit | null>(null);
+  protected readonly containerTransitionName = computed(() => {
+    const id =
+      this.habit()?.id ?? this.route.snapshot.paramMap.get('id') ?? '';
+    return `habit-container-${id.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+  });
+  protected readonly titleTransitionName = computed(() => {
+    const id =
+      this.habit()?.id ?? this.route.snapshot.paramMap.get('id') ?? '';
+    return `habit-title-${id.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+  });
   protected readonly isLoading = signal(true);
   protected readonly isNotFound = signal(false);
   protected readonly isCompletedToday = signal(false);
@@ -56,9 +67,14 @@ export class HabitDetail implements OnInit {
 
   ngOnInit(): void {
     this.browserService.setTitle('Detalle del hábito');
-    this.route.paramMap
+    this.route.data
       .pipe(
-        map((params) => params.get('id') ?? ''),
+        map(
+          (data) => data['habitResult'] as HabitDetailResolveResult | undefined,
+        ),
+        filter(
+          (result): result is HabitDetailResolveResult => result !== undefined,
+        ),
         distinctUntilChanged(),
         tap(() => {
           this.isLoading.set(true);
@@ -68,31 +84,31 @@ export class HabitDetail implements OnInit {
           this.isCompletedToday.set(false);
           this.completionError.set('');
         }),
-        switchMap((id) =>
-          this.habitService.getHabit(id).pipe(
-            switchMap((habit) =>
-              this.habitService
-                .getTodayCompletion(habit.id)
-                .pipe(map((completion) => ({ habit, completion }))),
-            ),
-            catchError((error: unknown) => {
-              this.isLoading.set(false);
-              if (error instanceof HttpErrorResponse && error.status === 404) {
-                this.isNotFound.set(true);
-              } else {
-                this.loadError.set('No se pudo cargar este hábito.');
-              }
+        switchMap((result) => {
+          if (!result.habit) {
+            this.isLoading.set(false);
+            this.isNotFound.set(result.error === 'not-found');
+            if (result.error === 'load') {
+              this.loadError.set('No se pudo cargar este hábito.');
+            }
+            return EMPTY;
+          }
+
+          const habit = result.habit;
+          this.habit.set(habit);
+          this.browserService.setTitle(`Hábito: ${habit.name}`);
+          this.isLoading.set(false);
+          return this.habitService.getTodayCompletion(habit.id).pipe(
+            catchError(() => {
+              this.loadError.set('No se pudo cargar este hábito.');
               return EMPTY;
             }),
-          ),
-        ),
+          );
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(({ habit, completion }) => {
-        this.habit.set(habit);
-        this.browserService.setTitle(`Hábito: ${habit.name}`);
+      .subscribe((completion) => {
         this.isCompletedToday.set(completion.completed);
-        this.isLoading.set(false);
       });
   }
 

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { EMPTY, of, Subject } from 'rxjs';
 import { Habit } from '../habits/habit.service';
 import { HabitService } from '../habits/habit.service';
@@ -11,6 +11,12 @@ describe('Home', () => {
       imports: [Home],
       providers: [
         provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({ habitsResult: { habits, hasError: false } }),
+          },
+        },
         {
           provide: HabitService,
           useValue: {
@@ -102,9 +108,18 @@ describe('Home', () => {
       providers: [
         provideRouter([]),
         {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({ habitsResult: { habits: [], hasError: false } }),
+          },
+        },
+        {
           provide: HabitService,
           useValue: {
-            getHabits: () => of(requestCount++ === 0 ? [] : [habit]),
+            getHabits: () => {
+              requestCount++;
+              return of([habit]);
+            },
             getCompletionsForDates: () => of([]),
             habitCreated$: habitCreated.asObservable(),
           },
@@ -125,5 +140,6 @@ describe('Home', () => {
     expect(
       fixture.nativeElement.querySelector('app-habit-card'),
     ).not.toBeNull();
+    expect(requestCount).toBe(1);
   });
 });

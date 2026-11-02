@@ -6,6 +6,7 @@
   <article
     class="relative z-1 mx-auto w-full max-w-md rounded-2xl border border-white/15 bg-[#2b3f3c] p-[1.15rem_1.25rem_1rem] text-white shadow-[0_1.5rem_4rem_rgb(0_0_0_/_12%)] backdrop-blur-xl"
     [attr.aria-label]="'Progreso semanal para ' + name()"
+    [style.view-transition-name]="containerTransitionName()"
   >
     <div class="flex items-start gap-3">
       <div
@@ -29,7 +30,9 @@
         >
           ✦ Desde {{ startedAtLabel() }}
         </time>
-        <strong class="text-sm font-semibold"
+        <strong
+          class="text-sm font-semibold"
+          [style.view-transition-name]="titleTransitionName()"
           >{{ name().substring(0, 30) + (name().length > 30 ? '...' : '')
           }}</strong
         >

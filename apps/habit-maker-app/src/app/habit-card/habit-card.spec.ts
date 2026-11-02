@@ -59,6 +59,12 @@ describe('HabitCard', () => {
     expect(compiled.querySelector('a')?.getAttribute('href')).toBe(
       '/habits/habit-1',
     );
+    expect(compiled.querySelector('strong')?.getAttribute('style')).toContain(
+      'view-transition-name: habit-title-habit-1',
+    );
+    expect(compiled.querySelector('article')?.getAttribute('style')).toContain(
+      'view-transition-name: habit-container-habit-1',
+    );
     expect(compiled.querySelector('time')?.getAttribute('datetime')).toBe(
       '2023-10-01',
     );

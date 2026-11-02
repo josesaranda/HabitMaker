@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import {
+  ActivatedRoute,
+  convertToParamMap,
+} from '@angular/router';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 import { HabitService } from '../habits/habit.service';
@@ -9,13 +12,6 @@ describe('HabitDetail', () => {
   it('shows the habit matching the route id', async () => {
     const paramMap = convertToParamMap({ id: 'habit-1' });
     const habitService = {
-      getHabit: () =>
-        of({
-          id: 'habit-1',
-          name: 'Leer 10 minutos',
-          createdAt: '2026-11-01T00:00:00.000Z',
-          updatedAt: '2026-11-01T00:00:00.000Z',
-        }),
       getTodayCompletion: () =>
         of({ date: '2026-11-01', completed: false, completedAt: null }),
       markCompletedToday: vi.fn(() =>
@@ -31,7 +27,20 @@ describe('HabitDetail', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { paramMap: of(paramMap), snapshot: { paramMap } },
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            snapshot: { paramMap },
+          },
         },
         {
           provide: HabitService,
@@ -48,6 +57,14 @@ describe('HabitDetail', () => {
     expect(fixture.nativeElement.querySelector('h1')?.textContent).toContain(
       'Leer 10 minutos',
     );
+    expect(
+      fixture.nativeElement.querySelector('h1')?.getAttribute('style'),
+    ).toContain('view-transition-name: habit-title-habit-1');
+    expect(
+      fixture.nativeElement
+        .querySelector('main > section')
+        ?.getAttribute('style'),
+    ).toContain('view-transition-name: habit-container-habit-1');
     expect(fixture.nativeElement.querySelector('time')?.textContent).toContain(
       '1 de noviembre de 2026',
     );

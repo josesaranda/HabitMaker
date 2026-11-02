@@ -33,6 +33,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation-duration: 1ms;

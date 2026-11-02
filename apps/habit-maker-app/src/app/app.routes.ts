@@ -1,6 +1,8 @@
 import { Route } from '@angular/router';
 import { authGuard } from './auth/auth.guard';
 import { guestGuard } from './auth/guest.guard';
+import { habitDetailResolver } from './habit-detail/habit-detail.resolver';
+import { homeHabitsResolver } from './home/home.resolver';
 
 export const appRoutes: Route[] = [
   {
@@ -25,12 +27,14 @@ export const appRoutes: Route[] = [
     path: 'home',
     loadComponent: () => import('./home/home').then((module) => module.Home),
     canActivate: [authGuard],
+    resolve: { habitsResult: homeHabitsResolver },
   },
   {
     path: 'habits/:id',
     loadComponent: () =>
       import('./habit-detail/habit-detail').then((module) => module.HabitDetail),
     canActivate: [authGuard],
+    resolve: { habitResult: habitDetailResolver },
   },
   {
     path: 'settings',
