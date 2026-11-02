@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/josesaranda/HabitMaker/compare/v1.0.0...v1.1.0) (2026-11-02)
+
+
+### Features
+
+* add MIT License to the repository ([8c2b44a](https://github.com/josesaranda/HabitMaker/commit/8c2b44a0edbcb0f67beb498565e4d9124063dd7f))
+
 # 1.0.0 (2026-11-02)
 
 
