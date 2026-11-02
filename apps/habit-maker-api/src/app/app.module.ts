@@ -8,6 +8,7 @@ import { HabitEntity } from './habits/habit.entity';
 import { HabitCompletionEntity } from './habits/habit-completion.entity';
 import { HabitsModule } from './habits/habits.module';
 import { AdminModule } from './admin/admin.module';
+import { VersionModule } from './version/version.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AdminModule } from './admin/admin.module';
     AuthModule,
     HabitsModule,
     AdminModule,
+    VersionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
