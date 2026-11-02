@@ -76,3 +76,7 @@ npm exec nx build HabitMakerApp
 ```
 
 Los artefactos de compilación se generan en `dist/apps/habit-maker-app`.
+
+## Releases
+
+Los releases se generan automáticamente al integrar cambios en `main`, una vez que CI termina correctamente. Los commits deben seguir Conventional Commits: `fix:` genera una versión patch, `feat:` una minor y los cambios incompatibles (`!` o `BREAKING CHANGE:`) una major. Cada release actualiza la versión raíz, `CHANGELOG.md` y crea un GitHub Release; el paquete privado no se publica en npm.

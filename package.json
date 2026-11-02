@@ -5,7 +5,8 @@
   "scripts": {
     "start:app": "nx serve HabitMakerApp",
     "start:api": "nx serve HabitMakerApi",
-    "test": "nx run-many -t lint test build typecheck --parallel --maxParallel=3"
+    "test": "nx run-many -t lint test build typecheck --parallel --maxParallel=3",
+    "release": "semantic-release"
   },
   "private": true,
   "devDependencies": {
@@ -28,6 +29,12 @@
     "@nx/webpack": "24.0.0",
     "@oxc-project/runtime": "^0.115.0",
     "@schematics/angular": "~22.2.0",
+    "@semantic-release/changelog": "^7.0.0",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^11.0.1",
+    "@semantic-release/github": "^12.0.10",
+    "@semantic-release/npm": "^13.2.0",
+    "@semantic-release/release-notes-generator": "^14.1.1",
     "@swc-node/register": "1.11.1",
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",
@@ -39,6 +46,7 @@
     "nx": "24.0.0",
     "postcss": "^8.5.32",
     "prettier": "^3.8.1",
+    "semantic-release": "^25.0.9",
     "tailwindcss": "^4.3.3",
     "tslib": "^2.3.0",
     "typescript": "~6.0.3",
