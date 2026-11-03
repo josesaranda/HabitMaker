@@ -153,7 +153,18 @@
     "congratulations": "Congratulations, you've completed your habit today!",
     "encouragement": "Consistency is built one small step at a time. Keep it up!",
     "question": "Have you completed your habit today?",
-    "instructions": "Tap today on the habit card to mark it as complete."
+    "instructions": "Tap today on the habit card to mark it as complete.",
+    "reminderTitle": "Daily reminder",
+    "reminderDescription": "Choose a time for a push notification. It follows your device's local time, including daylight saving changes. Reminders are skipped after you complete this habit for the day.",
+    "reminderToggle": "Remind me every day",
+    "reminderTime": "Reminder time",
+    "reminderLoading": "Loading reminder settings…",
+    "reminderSaving": "Saving reminder…",
+    "reminderEnabled": "Daily reminder enabled.",
+    "reminderDisabled": "Daily reminder disabled.",
+    "reminderBlocked": "Notifications are blocked. Allow them in your browser or device settings to enable reminders.",
+    "reminderUnsupported": "Push notifications are unavailable in this browser or have not been configured for this app.",
+    "reminderError": "Couldn't update the reminder. Please try again."
   },
   "settings": {
     "title": "Settings",

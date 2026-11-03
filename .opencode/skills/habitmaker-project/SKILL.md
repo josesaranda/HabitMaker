@@ -34,6 +34,7 @@ Use this skill for work specific to the HabitMaker codebase. Follow the reposito
 
 ## Working practices
 
+- **Branch naming:** create issue branches as `{{type}}/{{issue_id}}_{{description}}`. Use a concise, lowercase, hyphen-separated description (for example, `feature/2_daily-web-push-reminders`); choose a type that matches the work, such as `feature`, `fix`, or `chore`.
 - Inspect neighboring components, templates, styles, and tests before making changes. Prefer established Angular patterns over introducing a new architecture or dependency without a clear need.
 - **Zoneless/template reactivity is mandatory:** every dynamic value consumed by a component template (interpolation, conditionals, and property/class/style bindings) must be a signal or a `computed` signal, and templates must read it by calling it (for example, `state()` or `isInvalid()`). Update signals with `set` or `update`.
 - Do not bind plain mutable fields, getters, or recalculating methods as template state. Derive values with `computed`; convert router state or RxJS streams with `toSignal`. Use signal inputs for reactive component inputs. Plain constants are fine only when they are truly static and do not represent template state.

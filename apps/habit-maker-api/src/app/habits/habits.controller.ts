@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -44,5 +45,22 @@ export class HabitsController {
   @Post()
   create(@Body() body: unknown, @Req() request: AuthenticatedUserRequest) {
     return this.habitsService.create(body, request.user.id);
+  }
+
+  @Get(':id/reminder')
+  getReminder(
+    @Param('id') id: string,
+    @Req() request: AuthenticatedUserRequest,
+  ) {
+    return this.habitsService.getReminder(id, request.user.id);
+  }
+
+  @Put(':id/reminder')
+  updateReminder(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Req() request: AuthenticatedUserRequest,
+  ) {
+    return this.habitsService.updateReminder(id, body, request.user.id);
   }
 }

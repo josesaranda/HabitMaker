@@ -32,6 +32,9 @@ describe('App', () => {
             getTodayCompletion: () =>
               of({ date: '2026-11-01', completed: false, completedAt: null }),
             getCompletionsForDates: () => of([]),
+            getReminder: () =>
+              of({ enabled: false, time: null, timeZone: null }),
+            getPushPublicKey: () => of({ publicKey: null }),
             habitCreated$: EMPTY,
             createHabit: (name: string) =>
               of({

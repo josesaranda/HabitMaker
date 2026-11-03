@@ -7,6 +7,7 @@ import { HabitsModule } from './habits/habits.module';
 import { AdminModule } from './admin/admin.module';
 import { VersionModule } from './version/version.module';
 import { getDatabaseConfig } from './database.config';
+import { PushModule } from './push/push.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { getDatabaseConfig } from './database.config';
     HabitsModule,
     AdminModule,
     VersionModule,
+    PushModule,
   ],
   controllers: [AppController],
   providers: [AppService],

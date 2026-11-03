@@ -2,8 +2,16 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { HabitEntity } from './habits/habit.entity';
 import { HabitCompletionEntity } from './habits/habit-completion.entity';
 import { UserEntity } from './auth/user.entity';
+import { PushSubscriptionEntity } from './push/push-subscription.entity';
+import { PushDeliveryEntity } from './push/push-delivery.entity';
 
-const entities = [UserEntity, HabitEntity, HabitCompletionEntity];
+const entities = [
+  UserEntity,
+  HabitEntity,
+  HabitCompletionEntity,
+  PushSubscriptionEntity,
+  PushDeliveryEntity,
+];
 const postgresVariables = [
   'POSTGRES_HOST',
   'POSTGRES_PORT',

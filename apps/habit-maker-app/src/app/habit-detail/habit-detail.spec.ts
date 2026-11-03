@@ -18,6 +18,8 @@ describe('HabitDetail', () => {
     const paramMap = convertToParamMap({ id: 'habit-1' });
     const habitService = {
       getCompletionsForDates: () => of([]),
+      getReminder: () => of({ enabled: false, time: null, timeZone: null }),
+      getPushPublicKey: () => of({ publicKey: null }),
       getTodayCompletion: () =>
         of({ date: '2026-11-01', completed: false, completedAt: null }),
     };
@@ -99,6 +101,8 @@ describe('HabitDetail', () => {
   it('asks for confirmation before deleting and returns to home on success', async () => {
     const habitService = {
       getCompletionsForDates: () => of([]),
+      getReminder: () => of({ enabled: false, time: null, timeZone: null }),
+      getPushPublicKey: () => of({ publicKey: null }),
       getTodayCompletion: () =>
         of({ date: '2026-11-01', completed: false, completedAt: null }),
       deleteHabit: vi.fn(() => of(void 0)),
@@ -201,6 +205,9 @@ describe('HabitDetail', () => {
           provide: HabitService,
           useValue: {
             getCompletionsForDates: () => of([]),
+            getReminder: () =>
+              of({ enabled: false, time: null, timeZone: null }),
+            getPushPublicKey: () => of({ publicKey: null }),
             getTodayCompletion: () =>
               of({ date: toLocalDate(new Date()), completed: false }),
           },
@@ -259,6 +266,8 @@ describe('HabitDetail', () => {
             completedAt: null,
           })),
         ),
+      getReminder: () => of({ enabled: false, time: null, timeZone: null }),
+      getPushPublicKey: () => of({ publicKey: null }),
       getTodayCompletion: () =>
         of({
           date: today,

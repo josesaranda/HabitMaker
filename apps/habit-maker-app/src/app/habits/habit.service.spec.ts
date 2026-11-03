@@ -189,6 +189,73 @@ describe('HabitService', () => {
     expect(completed).toBe(false);
   });
 
+  it('loads and updates authenticated per-habit reminder preferences', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    let loadedTime: string | null = null;
+    service.getReminder('habit-1').subscribe((reminder) => {
+      loadedTime = reminder.time;
+    });
+    const getRequest = httpTestingController.expectOne(
+      `${API_URL}/habits/habit-1/reminder`,
+    );
+    expect(getRequest.request.method).toBe('GET');
+    expect(getRequest.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    getRequest.flush({
+      enabled: true,
+      time: '08:30',
+      timeZone: 'Europe/Madrid',
+    });
+    expect(loadedTime).toBe('08:30');
+
+    let saved = false;
+    service
+      .saveReminder('habit-1', {
+        enabled: true,
+        time: '09:00',
+        timeZone: 'Europe/Madrid',
+      })
+      .subscribe(() => (saved = true));
+    const putRequest = httpTestingController.expectOne(
+      `${API_URL}/habits/habit-1/reminder`,
+    );
+    expect(putRequest.request.method).toBe('PUT');
+    expect(putRequest.request.body).toEqual({
+      enabled: true,
+      time: '09:00',
+      timeZone: 'Europe/Madrid',
+    });
+    putRequest.flush({
+      enabled: true,
+      time: '09:00',
+      timeZone: 'Europe/Madrid',
+    });
+    expect(saved).toBe(true);
+  });
+
+  it('stores push subscriptions using the authenticated request', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    const subscription = {
+      endpoint: 'https://push.example.com/subscription/1',
+      keys: { p256dh: 'p256dh-key', auth: 'auth-key' },
+    } as PushSubscriptionJSON;
+    let saved = false;
+
+    service.savePushSubscription(subscription).subscribe(() => (saved = true));
+
+    const request = httpTestingController.expectOne(
+      `${API_URL}/push/subscriptions`,
+    );
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual(subscription);
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush(null);
+    expect(saved).toBe(true);
+  });
+
   it('deletes a habit by its encoded id with the saved access token', () => {
     sessionStorage.setItem('habitmaker.authToken', 'access-token');
     let completed = false;

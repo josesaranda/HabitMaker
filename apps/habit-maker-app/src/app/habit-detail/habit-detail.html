@@ -97,6 +97,64 @@
       </div>
     </section>
     <section
+      class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-border bg-surface p-6 sm:p-8"
+      aria-labelledby="habit-reminder-title"
+    >
+      <h2
+        id="habit-reminder-title"
+        class="m-0 text-lg font-semibold text-text-primary"
+      >
+        {{ 'habitDetail.reminderTitle' | transloco }}
+      </h2>
+      <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+        {{ 'habitDetail.reminderDescription' | transloco }}
+      </p>
+      <label
+        class="mt-5 flex w-fit items-center gap-3 text-sm font-medium text-text-primary"
+      >
+        <input
+          class="size-4 accent-primary"
+          type="checkbox"
+          [checked]="reminderEnabled()"
+          [disabled]="isLoadingReminder() || isSavingReminder()"
+          (change)="toggleReminder($any($event.target).checked)"
+        />
+        {{ 'habitDetail.reminderToggle' | transloco }}
+      </label>
+      @if (reminderEnabled()) {
+      <div class="mt-4 max-w-xs">
+        <label
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          for="habit-reminder-time"
+        >
+          {{ 'habitDetail.reminderTime' | transloco }}
+        </label>
+        <input
+          class="w-full rounded-lg border border-border bg-background px-3 py-2 text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          id="habit-reminder-time"
+          type="time"
+          [value]="reminderTime()"
+          [disabled]="isSavingReminder()"
+          (change)="setReminderTime($any($event.target).value)"
+        />
+      </div>
+      } @if (isLoadingReminder() || isSavingReminder()) {
+      <p class="mt-3 text-sm text-text-secondary" role="status">
+        {{ (isSavingReminder() ? 'habitDetail.reminderSaving' :
+        'habitDetail.reminderLoading') | transloco }}
+      </p>
+      } @if (reminderNotice()) {
+      <p
+        class="mt-3 text-sm"
+        [class.text-error]="reminderNotice() === 'habitDetail.reminderError' || reminderNotice() === 'habitDetail.reminderBlocked' || reminderNotice() === 'habitDetail.reminderUnsupported'"
+        [class.text-text-secondary]="reminderNotice() !== 'habitDetail.reminderError' && reminderNotice() !== 'habitDetail.reminderBlocked' && reminderNotice() !== 'habitDetail.reminderUnsupported'"
+        [attr.role]="reminderNotice() === 'habitDetail.reminderError' || reminderNotice() === 'habitDetail.reminderBlocked' || reminderNotice() === 'habitDetail.reminderUnsupported' ? 'alert' : 'status'"
+      >
+        {{ reminderNotice() | transloco }}
+      </p>
+      }
+    </section>
+    <section
       class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-error/30 bg-surface p-6 sm:p-8"
       aria-labelledby="delete-habit-title"
     >

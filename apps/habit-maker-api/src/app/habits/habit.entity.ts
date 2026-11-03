@@ -19,6 +19,15 @@ export class HabitEntity {
   @Column({ type: 'varchar', length: 100 })
   name!: string;
 
+  @Column({ type: 'boolean', default: false })
+  reminderEnabled!: boolean;
+
+  @Column({ type: 'varchar', length: 5, nullable: true })
+  reminderTime!: string | null;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  reminderTimeZone!: string | null;
+
   @CreateDateColumn()
   createdAt!: Date;
 
