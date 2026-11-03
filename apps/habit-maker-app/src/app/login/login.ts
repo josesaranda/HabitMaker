@@ -32,6 +32,7 @@ export class Login {
   private readonly router = inject(Router);
   protected passwordVisible = signal(false);
   protected message = signal('');
+  protected readonly currentYear = signal(new Date().getFullYear());
 
   constructor() {
     this.browserService.setTitle('pageTitles.login');

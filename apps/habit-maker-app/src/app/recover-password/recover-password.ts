@@ -32,6 +32,7 @@ export class RecoverPassword {
   protected readonly submitting = signal(false);
   protected readonly email = signal('');
   protected readonly errorMessage = signal('');
+  protected readonly currentYear = signal(new Date().getFullYear());
 
   constructor() {
     this.browserService.setTitle('pageTitles.recover');

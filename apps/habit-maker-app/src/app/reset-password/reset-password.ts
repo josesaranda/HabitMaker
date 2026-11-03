@@ -44,6 +44,7 @@ export class ResetPassword {
   protected readonly submitting = signal(false);
   protected readonly passwordUpdated = signal(false);
   protected readonly errorMessage = signal('');
+  protected readonly currentYear = signal(new Date().getFullYear());
 
   constructor() {
     this.browserService.setTitle('pageTitles.resetPassword');
