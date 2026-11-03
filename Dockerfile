@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:24.21.0-alpine AS build
 
 WORKDIR /workspace
 
@@ -9,7 +9,7 @@ COPY . .
 RUN npm exec -- nx build HabitMakerApp --configuration=production \
     && npm exec -- nx build HabitMakerApi --configuration=production
 
-FROM node:24-alpine AS api
+FROM node:24.21.0-alpine AS api
 
 ENV NODE_ENV=production
 WORKDIR /app
