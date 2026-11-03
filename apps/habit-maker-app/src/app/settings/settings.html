@@ -114,7 +114,181 @@
         </div>
         }
       </section>
-      <section class="mt-8" aria-labelledby="app-settings-title">
+      <section
+        class="mt-8 border-t border-border pt-8"
+        aria-labelledby="email-settings-title"
+      >
+        <h3
+          id="email-settings-title"
+          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+        >
+          {{ 'settings.emailTitle' | transloco }}
+        </h3>
+        @if (isLoadingEmailConfiguration()) {
+        <p class="text-sm text-text-secondary" role="status">
+          {{ 'settings.loadingEmailConfiguration' | transloco }}
+        </p>
+        } @else if (emailConfigurationError()) {
+        <p class="text-sm text-error" role="alert">
+          {{ emailConfigurationError() | transloco }}
+        </p>
+        } @else if (emailConfiguration(); as configuration) {
+        @if (configuration.missingVariables.length > 0) {
+        <div
+          class="mb-5 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary"
+          role="status"
+        >
+          <p>{{ 'settings.emailVariablesMissing' | transloco }}</p>
+          <ul class="mt-2 list-inside list-disc">
+            @for (variable of configuration.missingVariables; track variable) {
+            <li>{{ variable }} — {{ 'settings.notDefined' | transloco }}</li>
+            }
+          </ul>
+        </div>
+        }
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label
+              for="smtp-host"
+              class="mb-2 block text-sm font-semibold text-text-primary"
+              >SMTP_HOST</label
+            >
+            <input
+              hmInput
+              id="smtp-host"
+              type="text"
+              [value]="configuration.host"
+              [placeholder]="!configuration.host ? ('settings.notDefined' | transloco) : ''"
+              readonly
+            />
+          </div>
+          <div>
+            <label
+              for="smtp-port"
+              class="mb-2 block text-sm font-semibold text-text-primary"
+              >SMTP_PORT</label
+            >
+            <input
+              hmInput
+              id="smtp-port"
+              type="text"
+              [value]="configuration.port"
+              [placeholder]="!configuration.port ? ('settings.notDefined' | transloco) : ''"
+              readonly
+            />
+          </div>
+          <div>
+            <label
+              for="smtp-protocol"
+              class="mb-2 block text-sm font-semibold text-text-primary"
+              >SMTP_PROTOCOL</label
+            >
+            <input
+              hmInput
+              id="smtp-protocol"
+              type="text"
+              [value]="configuration.protocol"
+              [placeholder]="!configuration.protocol ? ('settings.notDefined' | transloco) : ''"
+              readonly
+            />
+          </div>
+          <div>
+            <label
+              for="smtp-from"
+              class="mb-2 block text-sm font-semibold text-text-primary"
+              >SMTP_FROM</label
+            >
+            <input
+              hmInput
+              id="smtp-from"
+              type="text"
+              [value]="configuration.from"
+              [placeholder]="!configuration.from ? ('settings.notDefined' | transloco) : ''"
+              readonly
+            />
+          </div>
+          <div>
+            <label
+              for="smtp-user"
+              class="mb-2 block text-sm font-semibold text-text-primary"
+              >SMTP_USER</label
+            >
+            <input
+              hmInput
+              id="smtp-user"
+              type="text"
+              [value]="configuration.user"
+              [placeholder]="!configuration.user ? ('settings.notDefined' | transloco) : ''"
+              readonly
+            />
+          </div>
+          <div>
+            <label
+              for="smtp-password"
+              class="mb-2 block text-sm font-semibold text-text-primary"
+              >SMTP_PASSWORD</label
+            >
+            <input
+              hmInput
+              id="smtp-password"
+              type="text"
+              [value]="configuration.passwordConfigured ? '••••••••' : ''"
+              [placeholder]="(configuration.passwordConfigured ? 'settings.secretConfigured' : 'settings.notDefined') | transloco"
+              readonly
+            />
+          </div>
+        </div>
+        }
+        <form class="mt-6 space-y-4" (submit)="sendTestEmail($event)">
+          <h4 class="text-base font-semibold text-text-primary">
+            {{ 'settings.testEmailTitle' | transloco }}
+          </h4>
+          <div>
+            <label
+              for="test-email-address"
+              class="mb-2 block text-sm font-semibold text-text-primary"
+            >
+              {{ 'settings.testEmailAddress' | transloco }}
+            </label>
+            <input
+              hmInput
+              id="test-email-address"
+              name="testEmailAddress"
+              type="email"
+              autocomplete="email"
+              required
+              [value]="testEmailAddress()"
+              (input)="testEmailAddress.set($any($event.target).value)"
+              [placeholder]="'settings.testEmailPlaceholder' | transloco"
+            />
+          </div>
+          <div class="flex flex-wrap items-center gap-4">
+            <button
+              hmButton="primary"
+              class="rounded-lg text-sm font-semibold"
+              type="submit"
+              [disabled]="isSendingTestEmail() || !testEmailAddress().trim() || !emailConfiguration()?.isConfigured"
+            >
+              {{ (isSendingTestEmail() ? 'settings.sendingTestEmail' :
+              'settings.sendTestEmail') | transloco }}
+            </button>
+            @if (testEmailMessage()) {
+            <p
+              class="text-sm"
+              [class.text-error]="testEmailMessage() === 'settings.testEmailError'"
+              [class.text-text-secondary]="testEmailMessage() === 'settings.testEmailSent'"
+              [attr.role]="testEmailMessage() === 'settings.testEmailError' ? 'alert' : 'status'"
+            >
+              {{ testEmailMessage() | transloco }}
+            </p>
+            }
+          </div>
+        </form>
+      </section>
+      <section
+        class="mt-8 border-t border-border pt-8"
+        aria-labelledby="app-settings-title"
+      >
         <h3
           id="app-settings-title"
           class="mb-4 text-lg font-semibold tracking-tight text-text-primary"

@@ -9,7 +9,11 @@ import {
   HabitMakerUIButton,
 } from '@habit-maker/habit-maker-ui';
 import { finalize } from 'rxjs';
-import { AdminService, AdminUser } from '../admin/admin.service';
+import {
+  AdminEmailConfiguration,
+  AdminService,
+  AdminUser,
+} from '../admin/admin.service';
 import { BrowserService } from '../browser/browser.service';
 import { AuthService } from '../auth/auth.service';
 import { AppVersionService, VersionCheckResult } from './app-version.service';
@@ -41,6 +45,13 @@ export class Settings implements OnInit {
     this.authService.getUserRole() === 'admin',
   );
   protected readonly users = signal<AdminUser[]>([]);
+  protected readonly emailConfiguration =
+    signal<AdminEmailConfiguration | null>(null);
+  protected readonly isLoadingEmailConfiguration = signal(false);
+  protected readonly emailConfigurationError = signal('');
+  protected readonly testEmailAddress = signal('');
+  protected readonly isSendingTestEmail = signal(false);
+  protected readonly testEmailMessage = signal('');
   protected readonly isLoadingUsers = signal(false);
   protected readonly usersLoadError = signal('');
   protected readonly appVersion = signal<string | null>(null);
@@ -61,6 +72,7 @@ export class Settings implements OnInit {
       this.loadAppVersion();
       this.checkForUpdates();
       this.loadUsers();
+      this.loadEmailConfiguration();
     }
   }
 
@@ -74,9 +86,7 @@ export class Settings implements OnInit {
         next: (result) => this.applyVersionCheck(result),
         error: () => {
           this.updateAvailable.set(null);
-          this.updateCheckError.set(
-            'settings.checkError',
-          );
+          this.updateCheckError.set('settings.checkError');
         },
       });
   }
@@ -112,6 +122,35 @@ export class Settings implements OnInit {
           this.users.set([]);
           this.usersLoadError.set('settings.usersError');
         },
+      });
+  }
+
+  private loadEmailConfiguration(): void {
+    this.isLoadingEmailConfiguration.set(true);
+    this.adminService
+      .getEmailConfiguration()
+      .pipe(finalize(() => this.isLoadingEmailConfiguration.set(false)))
+      .subscribe({
+        next: (configuration) => this.emailConfiguration.set(configuration),
+        error: () => {
+          this.emailConfigurationError.set('settings.emailConfigurationError');
+        },
+      });
+  }
+
+  protected sendTestEmail(event: SubmitEvent): void {
+    event.preventDefault();
+    const recipient = this.testEmailAddress().trim();
+    if (!recipient || this.isSendingTestEmail()) return;
+
+    this.isSendingTestEmail.set(true);
+    this.testEmailMessage.set('');
+    this.adminService
+      .sendTestEmail(recipient)
+      .pipe(finalize(() => this.isSendingTestEmail.set(false)))
+      .subscribe({
+        next: () => this.testEmailMessage.set('settings.testEmailSent'),
+        error: () => this.testEmailMessage.set('settings.testEmailError'),
       });
   }
 

@@ -64,6 +64,8 @@ The frontend is available at [http://localhost:4200](http://localhost:4200). Dur
 
 The API accepts `SERVER_PORT` and `CORS_ORIGIN` environment variables; by default it listens on port `3000` and allows requests from `http://localhost:4200`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD` before starting the API. The password must be at least eight characters long.
 
+To enable email delivery, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL` (`smtp` for STARTTLS or `smtps` for implicit TLS), `SMTP_FROM`, and, when authentication is required, both `SMTP_USER` and `SMTP_PASSWORD`. Administrators can view these settings and send a test email from the application settings page. SMTP passwords are never returned to the web application.
+
 To use PostgreSQL, configure `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`; `POSTGRES_PORT` is optional and defaults to `5432`. When these variables are omitted, the API uses its in-memory sql.js database. If PostgreSQL configuration is started but incomplete, the API reports the missing variables. See `.env.example` for a template.
 
 > **Development data:** Without PostgreSQL configuration, sql.js stores data in memory. Users, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
@@ -76,7 +78,7 @@ Install [Docker](https://docs.docker.com/get-docker/) with Docker Compose, then 
 cp .env.example .env
 ```
 
-Edit `.env` before starting the services. Set a unique, random `JWT_SECRET` and a strong `POSTGRES_PASSWORD`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long. The example file uses `APP_PORT=8080` and `CORS_ORIGIN=http://localhost:8080`; if you change `APP_PORT`, update `CORS_ORIGIN` to match.
+Edit `.env` before starting the services. Set a unique, random `JWT_SECRET` and a strong `POSTGRES_PASSWORD`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long. Configure the SMTP variables to enable email delivery. The example file uses `APP_PORT=8080` and `CORS_ORIGIN=http://localhost:8080`; if you change `APP_PORT`, update `CORS_ORIGIN` to match.
 
 Build and start the containers:
 

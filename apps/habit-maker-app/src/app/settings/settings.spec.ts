@@ -36,7 +36,11 @@ describe('Settings', () => {
         },
         {
           provide: AdminService,
-          useValue: { getUsers: vi.fn(() => of([])) },
+          useValue: {
+            getUsers: vi.fn(() => of([])),
+            getEmailConfiguration: vi.fn(),
+            sendTestEmail: vi.fn(),
+          },
         },
         {
           provide: AppVersionService,
@@ -72,9 +76,12 @@ describe('Settings', () => {
       .querySelector<HTMLElement>('habit-maker-ui-option[value="en"]')!
       .click();
     fixture.detectChanges();
-    expect(compiled.querySelector('h2')?.textContent).toContain('User settings');
+    expect(compiled.querySelector('h2')?.textContent).toContain(
+      'User settings',
+    );
     expect(language?.textContent).toContain('English');
     expect(compiled.querySelector('#admin-settings-title')).toBeNull();
+    expect(compiled.querySelector('#email-settings-title')).toBeNull();
     expect(compiled.querySelector('#app-settings-title')).toBeNull();
     expect(compiled.textContent).not.toContain('Versión actual');
     expect(getCurrentVersion).not.toHaveBeenCalled();
@@ -88,6 +95,19 @@ describe('Settings', () => {
         { id: 'user-1', email: 'persona@example.com', role: 'user' as const },
       ]),
     );
+    const getEmailConfiguration = vi.fn(() =>
+      of({
+        host: 'smtp.example.com',
+        port: 587,
+        protocol: 'smtp' as const,
+        user: 'mailer@example.com',
+        from: 'no-reply@example.com',
+        passwordConfigured: true,
+        missingVariables: [],
+        isConfigured: true,
+      }),
+    );
+    const sendTestEmail = vi.fn(() => of({ success: true }));
     const checkForUpdates = vi.fn(() =>
       of({
         currentVersion: '1.2.3',
@@ -110,7 +130,10 @@ describe('Settings', () => {
             getUserRole: () => 'admin',
           },
         },
-        { provide: AdminService, useValue: { getUsers } },
+        {
+          provide: AdminService,
+          useValue: { getUsers, getEmailConfiguration, sendTestEmail },
+        },
         {
           provide: AppVersionService,
           useValue: {
@@ -126,6 +149,7 @@ describe('Settings', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(getUsers).toHaveBeenCalledOnce();
+    expect(getEmailConfiguration).toHaveBeenCalledOnce();
     expect(
       compiled.querySelector('#admin-settings-title')?.textContent,
     ).toContain('Ajustes de administración');
@@ -135,6 +159,12 @@ describe('Settings', () => {
     expect(compiled.querySelectorAll('tbody tr')).toHaveLength(2);
     expect(compiled.textContent).toContain('Administrador');
     expect(compiled.textContent).toContain('Usuario');
+    expect(compiled.querySelector<HTMLInputElement>('#smtp-host')?.value).toBe(
+      'smtp.example.com',
+    );
+    expect(
+      compiled.querySelector<HTMLInputElement>('#smtp-password')?.value,
+    ).toBe('••••••••');
     expect(
       compiled.querySelector('#app-settings-title')?.textContent,
     ).toContain('Versión de la aplicación');
@@ -153,5 +183,29 @@ describe('Settings', () => {
         'a[href="https://github.com/josesaranda/HabitMaker/releases/tag/v1.3.0"]',
       )?.textContent,
     ).toContain('Ver versión 1.3.0');
+
+    const testEmail = compiled.querySelector<HTMLInputElement>(
+      '#test-email-address',
+    )!;
+    testEmail.value = 'recipient@example.com';
+    testEmail.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(
+      compiled
+        .querySelector<HTMLButtonElement>('#test-email-address')
+        ?.closest('form')
+        ?.querySelector('button')?.disabled,
+    ).toBe(false);
+    testEmail
+      .closest('form')!
+      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(sendTestEmail).toHaveBeenCalledWith('recipient@example.com');
+    expect(compiled.textContent).toContain(
+      'El correo de prueba se ha enviado correctamente.',
+    );
   });
 });
