@@ -16,7 +16,7 @@ HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an
 - **NestJS 11** for the API.
 - **Nx 24** for the monorepo and task orchestration.
 - **Tailwind CSS 4** and CSS for styling.
-- **TypeORM** with **sql.js** for the API data store.
+- **TypeORM** with **PostgreSQL** or in-memory **sql.js** for the API data store.
 - **RxJS 7** and **Vitest 4**.
 - **npm workspaces** for package management.
 
@@ -64,7 +64,9 @@ The frontend is available at [http://localhost:4200](http://localhost:4200). Dur
 
 The API accepts `SERVER_PORT` and `CORS_ORIGIN` environment variables; by default it listens on port `3000` and allows requests from `http://localhost:4200`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD` before starting the API. The password must be at least eight characters long.
 
-> **Development data:** The API currently uses an in-memory sql.js database. Users, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
+To use PostgreSQL, configure `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`; `POSTGRES_PORT` is optional and defaults to `5432`. When these variables are omitted, the API uses its in-memory sql.js database. If PostgreSQL configuration is started but incomplete, the API reports the missing variables. See `.env.example` for a template.
+
+> **Development data:** Without PostgreSQL configuration, sql.js stores data in memory. Users, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
 
 ## Nx commands
 
