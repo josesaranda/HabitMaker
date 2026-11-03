@@ -116,6 +116,58 @@
       </section>
       <section
         class="mt-8 border-t border-border pt-8"
+        aria-labelledby="admin-push-settings-title"
+      >
+        <h3
+          id="admin-push-settings-title"
+          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+        >
+          {{ 'settings.pushTitle' | transloco }}
+        </h3>
+        @if (isLoadingPushConfiguration()) {
+        <p class="text-sm text-text-secondary" role="status">
+          {{ 'settings.loadingPushConfiguration' | transloco }}
+        </p>
+        } @else if (pushConfigurationError()) {
+        <p class="text-sm text-error" role="alert">
+          {{ pushConfigurationError() | transloco }}
+        </p>
+        } @else if (pushConfiguration(); as configuration) {
+        <p
+          class="mb-4 text-sm font-medium"
+          [class.text-text-primary]="configuration.isConfigured"
+          [class.text-error]="!configuration.isConfigured"
+          role="status"
+        >
+          {{ (configuration.isConfigured ? 'settings.pushConfigured' :
+          'settings.pushNotConfigured') | transloco }}
+        </p>
+        <dl class="grid gap-3 text-sm sm:grid-cols-2">
+          <div class="rounded-xl border border-border bg-background p-4">
+            <dt class="font-semibold text-text-primary">VAPID_PUBLIC_KEY</dt>
+            <dd class="mb-0 mt-1 text-text-secondary">
+              {{ (configuration.publicKeyConfigured ? 'settings.environmentConfigured' : 'settings.environmentMissing') | transloco }}
+            </dd>
+          </div>
+          <div class="rounded-xl border border-border bg-background p-4">
+            <dt class="font-semibold text-text-primary">VAPID_PRIVATE_KEY</dt>
+            <dd class="mb-0 mt-1 text-text-secondary">
+              {{ (configuration.privateKeyConfigured ? 'settings.environmentConfigured' : 'settings.environmentMissing') | transloco }}
+            </dd>
+          </div>
+          <div class="rounded-xl border border-border bg-background p-4 sm:col-span-2">
+            <dt class="font-semibold text-text-primary">
+              {{ 'settings.pushSubject' | transloco }}
+            </dt>
+            <dd class="mb-0 mt-1 text-text-secondary">
+              {{ (configuration.subjectConfigured ? 'settings.environmentConfigured' : 'settings.pushSubjectDefault') | transloco }}
+            </dd>
+          </div>
+        </dl>
+        }
+      </section>
+      <section
+        class="mt-8 border-t border-border pt-8"
         aria-labelledby="email-settings-title"
       >
         <h3

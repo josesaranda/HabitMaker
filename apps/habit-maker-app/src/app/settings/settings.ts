@@ -11,6 +11,7 @@ import {
 import { finalize } from 'rxjs';
 import {
   AdminEmailConfiguration,
+  AdminPushConfiguration,
   AdminService,
   AdminUser,
 } from '../admin/admin.service';
@@ -49,6 +50,10 @@ export class Settings implements OnInit {
     signal<AdminEmailConfiguration | null>(null);
   protected readonly isLoadingEmailConfiguration = signal(false);
   protected readonly emailConfigurationError = signal('');
+  protected readonly pushConfiguration =
+    signal<AdminPushConfiguration | null>(null);
+  protected readonly isLoadingPushConfiguration = signal(false);
+  protected readonly pushConfigurationError = signal('');
   protected readonly testEmailAddress = signal('');
   protected readonly isSendingTestEmail = signal(false);
   protected readonly testEmailMessage = signal('');
@@ -73,6 +78,7 @@ export class Settings implements OnInit {
       this.checkForUpdates();
       this.loadUsers();
       this.loadEmailConfiguration();
+      this.loadPushConfiguration();
     }
   }
 
@@ -134,6 +140,21 @@ export class Settings implements OnInit {
         next: (configuration) => this.emailConfiguration.set(configuration),
         error: () => {
           this.emailConfigurationError.set('settings.emailConfigurationError');
+        },
+      });
+  }
+
+  private loadPushConfiguration(): void {
+    this.isLoadingPushConfiguration.set(true);
+    this.adminService
+      .getPushConfiguration()
+      .pipe(finalize(() => this.isLoadingPushConfiguration.set(false)))
+      .subscribe({
+        next: (configuration) => this.pushConfiguration.set(configuration),
+        error: () => {
+          this.pushConfigurationError.set(
+            'settings.pushConfigurationError',
+          );
         },
       });
   }

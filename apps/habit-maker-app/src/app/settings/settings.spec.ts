@@ -39,6 +39,7 @@ describe('Settings', () => {
           useValue: {
             getUsers: vi.fn(() => of([])),
             getEmailConfiguration: vi.fn(),
+            getPushConfiguration: vi.fn(),
             sendTestEmail: vi.fn(),
           },
         },
@@ -82,6 +83,7 @@ describe('Settings', () => {
     expect(language?.textContent).toContain('English');
     expect(compiled.querySelector('#admin-settings-title')).toBeNull();
     expect(compiled.querySelector('#email-settings-title')).toBeNull();
+    expect(compiled.querySelector('#admin-push-settings-title')).toBeNull();
     expect(compiled.querySelector('#app-settings-title')).toBeNull();
     expect(compiled.textContent).not.toContain('Versión actual');
     expect(getCurrentVersion).not.toHaveBeenCalled();
@@ -108,6 +110,14 @@ describe('Settings', () => {
       }),
     );
     const sendTestEmail = vi.fn(() => of({ success: true }));
+    const getPushConfiguration = vi.fn(() =>
+      of({
+        publicKeyConfigured: true,
+        privateKeyConfigured: false,
+        subjectConfigured: false,
+        isConfigured: false,
+      }),
+    );
     const checkForUpdates = vi.fn(() =>
       of({
         currentVersion: '1.2.3',
@@ -132,7 +142,12 @@ describe('Settings', () => {
         },
         {
           provide: AdminService,
-          useValue: { getUsers, getEmailConfiguration, sendTestEmail },
+          useValue: {
+            getUsers,
+            getEmailConfiguration,
+            getPushConfiguration,
+            sendTestEmail,
+          },
         },
         {
           provide: AppVersionService,
@@ -150,6 +165,7 @@ describe('Settings', () => {
 
     expect(getUsers).toHaveBeenCalledOnce();
     expect(getEmailConfiguration).toHaveBeenCalledOnce();
+    expect(getPushConfiguration).toHaveBeenCalledOnce();
     expect(
       compiled.querySelector('#admin-settings-title')?.textContent,
     ).toContain('Ajustes de administración');
@@ -157,6 +173,23 @@ describe('Settings', () => {
       'Usuarios de la aplicación',
     );
     expect(compiled.querySelectorAll('tbody tr')).toHaveLength(2);
+    expect(
+      compiled.querySelector('#admin-push-settings-title')?.textContent,
+    ).toContain('Configuración de notificaciones');
+    expect(compiled.textContent).toContain(
+      'Las notificaciones push no están configuradas.',
+    );
+    expect(
+      compiled.querySelector('#admin-push-settings-title')?.parentElement
+        ?.textContent,
+    ).toContain('VAPID_PUBLIC_KEY');
+    expect(
+      compiled.querySelector('#admin-push-settings-title')?.parentElement
+        ?.textContent,
+    ).toContain('VAPID_PRIVATE_KEY');
+    expect(compiled.textContent).toContain(
+      'No está definida; se usará el valor predeterminado.',
+    );
     expect(compiled.textContent).toContain('Administrador');
     expect(compiled.textContent).toContain('Usuario');
     expect(compiled.querySelector<HTMLInputElement>('#smtp-host')?.value).toBe(
