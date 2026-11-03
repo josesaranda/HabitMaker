@@ -19,7 +19,7 @@ describe('HabitDetail', () => {
     const habitService = {
       getCompletionsForDates: () => of([]),
       getReminder: () => of({ enabled: false, time: null, timeZone: null }),
-      getPushPublicKey: () => of({ publicKey: null }),
+      getPushPublicKey: () => of({ publicKey: 'test-public-key' }),
       getTodayCompletion: () =>
         of({ date: '2026-11-01', completed: false, completedAt: null }),
     };
@@ -101,12 +101,62 @@ describe('HabitDetail', () => {
     );
   });
 
+  it('hides the reminder settings when the server has no VAPID keys', async () => {
+    await TestBed.configureTestingModule({
+      imports: [HabitDetail],
+      providers: [
+        provideTranslocoTesting(),
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            queryParamMap: of(convertToParamMap({})),
+            snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
+          },
+        },
+        {
+          provide: HabitService,
+          useValue: {
+            getCompletionsForDates: () => of([]),
+            getReminder: () =>
+              of({ enabled: false, time: null, timeZone: null }),
+            getPushPublicKey: () => of({ publicKey: null }),
+            getTodayCompletion: () =>
+              of({ date: toLocalDate(new Date()), completed: false }),
+          },
+        },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(HabitDetail);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector(
+        '#habit-reminder-title',
+      ),
+    ).toBeNull();
+  });
+
   it('applies a changed reminder time only after saving it explicitly', async () => {
     const habitService = {
       getCompletionsForDates: () => of([]),
       getReminder: () =>
         of({ enabled: true, time: '08:00', timeZone: 'Europe/Madrid' }),
-      getPushPublicKey: () => of({ publicKey: null }),
+      getPushPublicKey: () => of({ publicKey: 'test-public-key' }),
       getTodayCompletion: () =>
         of({ date: '2026-11-01', completed: false, completedAt: null }),
       saveReminder: vi.fn(() =>

@@ -96,6 +96,7 @@
         </div>
       </div>
     </section>
+    @if (shouldShowReminderSettings()) {
     <section
       class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-border bg-surface p-6 sm:p-8"
       aria-labelledby="habit-reminder-title"
@@ -116,7 +117,7 @@
           class="size-4 accent-primary"
           type="checkbox"
           [checked]="reminderEnabled()"
-          [disabled]="isLoadingReminder() || isSavingReminder()"
+          [disabled]="isLoadingReminder() || isSavingReminder() || pushConfigurationState() !== 'available'"
           (change)="toggleReminder($any($event.target).checked)"
         />
         {{ 'habitDetail.reminderToggle' | transloco }}
@@ -133,7 +134,7 @@
           id="habit-reminder-time"
           type="time"
           [value]="reminderTime()"
-          [disabled]="!reminderEnabled() || isLoadingReminder() || isSavingReminder()"
+          [disabled]="!reminderEnabled() || isLoadingReminder() || isSavingReminder() || pushConfigurationState() !== 'available'"
           (change)="setReminderTime($any($event.target).value)"
         />
       </div>
@@ -168,6 +169,7 @@
       </p>
       }
     </section>
+    }
     <section
       class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-error/30 bg-surface p-6 sm:p-8"
       aria-labelledby="delete-habit-title"

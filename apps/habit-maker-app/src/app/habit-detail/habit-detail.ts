@@ -67,6 +67,12 @@ export class HabitDetail implements OnInit {
   protected readonly isLoadingReminder = signal(true);
   protected readonly isSavingReminder = signal(false);
   protected readonly reminderEnabled = signal(false);
+  protected readonly pushConfigurationState = signal<
+    'loading' | 'available' | 'missing' | 'error'
+  >('loading');
+  protected readonly shouldShowReminderSettings = computed(
+    () => this.pushConfigurationState() !== 'missing',
+  );
   protected readonly reminderTime = signal('08:00');
   protected readonly savedReminderTime = signal('08:00');
   protected readonly hasPendingReminderChanges = computed(
@@ -209,6 +215,8 @@ export class HabitDetail implements OnInit {
 
   private loadReminder(habitId: string): void {
     this.isLoadingReminder.set(true);
+    this.pushConfigurationState.set('loading');
+    this.reminderNotice.set('');
     this.habitService
       .getReminder(habitId)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -232,11 +240,12 @@ export class HabitDetail implements OnInit {
       .subscribe({
         next: ({ publicKey }) => {
           this.reminderPublicKey.set(publicKey);
-          if (
-            !publicKey ||
-            !this.swPush?.isEnabled ||
-            typeof Notification === 'undefined'
-          ) {
+          if (!publicKey) {
+            this.pushConfigurationState.set('missing');
+            return;
+          }
+          this.pushConfigurationState.set('available');
+          if (!this.swPush?.isEnabled || typeof Notification === 'undefined') {
             this.reminderNotice.set('habitDetail.reminderUnsupported');
           } else if (Notification.permission === 'denied') {
             this.reminderNotice.set('habitDetail.reminderBlocked');
@@ -244,7 +253,8 @@ export class HabitDetail implements OnInit {
         },
         error: () => {
           this.reminderPublicKey.set(null);
-          this.reminderNotice.set('habitDetail.reminderUnsupported');
+          this.pushConfigurationState.set('error');
+          this.reminderNotice.set('habitDetail.reminderError');
         },
       });
   }
