@@ -12,7 +12,8 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'signup',
-    loadComponent: () => import('./signup/signup').then((module) => module.Signup),
+    loadComponent: () =>
+      import('./signup/signup').then((module) => module.Signup),
     canActivate: [guestGuard],
   },
   {
@@ -24,6 +25,13 @@ export const appRoutes: Route[] = [
     canActivate: [guestGuard],
   },
   {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./reset-password/reset-password').then(
+        (module) => module.ResetPassword,
+      ),
+  },
+  {
     path: 'home',
     loadComponent: () => import('./home/home').then((module) => module.Home),
     canActivate: [authGuard],
@@ -32,7 +40,9 @@ export const appRoutes: Route[] = [
   {
     path: 'habits/:id',
     loadComponent: () =>
-      import('./habit-detail/habit-detail').then((module) => module.HabitDetail),
+      import('./habit-detail/habit-detail').then(
+        (module) => module.HabitDetail,
+      ),
     canActivate: [authGuard],
     resolve: { habitResult: habitDetailResolver },
   },

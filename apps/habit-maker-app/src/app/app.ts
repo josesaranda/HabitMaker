@@ -43,7 +43,8 @@ export class App {
     const isAuthPage =
       currentPath === '/login' ||
       currentPath === '/signup' ||
-      currentPath === '/forgot-password';
+      currentPath === '/forgot-password' ||
+      currentPath === '/reset-password';
 
     return this.authService.authenticated() && !isAuthPage;
   });

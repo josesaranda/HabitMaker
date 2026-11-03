@@ -62,6 +62,15 @@ export class AuthService {
       .pipe(map(() => undefined));
   }
 
+  resetPassword(token: string, password: string): Observable<void> {
+    return this.http
+      .post<MessageResponse>(`${API_URL}/auth/reset-password`, {
+        token,
+        password,
+      })
+      .pipe(map(() => undefined));
+  }
+
   getAuthToken(): string | null {
     return this.getStoredValue(AUTH_TOKEN_STORAGE_KEY);
   }

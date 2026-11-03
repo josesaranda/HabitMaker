@@ -35,7 +35,7 @@ HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an
 └── tsconfig.base.json        # Shared TypeScript configuration
 ```
 
-The frontend routes include `/login`, `/signup`, `/forgot-password`, `/home`, `/habits/:id`, and `/settings`. The home, habit detail, and settings pages require authentication. The root route and unknown routes redirect to `/login`.
+The frontend routes include `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/home`, `/habits/:id`, and `/settings`. The home, habit detail, and settings pages require authentication. The root route and unknown routes redirect to `/login`.
 
 ## Requirements
 
@@ -64,7 +64,7 @@ The frontend is available at [http://localhost:4200](http://localhost:4200). Dur
 
 The API accepts `SERVER_PORT` and `CORS_ORIGIN` environment variables; by default it listens on port `3000` and allows requests from `http://localhost:4200`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD` before starting the API. The password must be at least eight characters long.
 
-To enable email delivery, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL` (`smtp` for STARTTLS or `smtps` for implicit TLS), `SMTP_FROM`, and, when authentication is required, both `SMTP_USER` and `SMTP_PASSWORD`. Administrators can view these settings and send a test email from the application settings page. SMTP passwords are never returned to the web application.
+To enable email delivery, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL` (`smtp` for STARTTLS or `smtps` for implicit TLS), `SMTP_FROM`, and, when authentication is required, both `SMTP_USER` and `SMTP_PASSWORD`. Set `APP_URL` to the public address of the frontend so password reset emails link to the correct site (it defaults to `http://localhost:4200` in local API development). Reset links expire after one hour and can only be used once. Administrators can view these settings and send a test email from the application settings page. SMTP passwords are never returned to the web application.
 
 To use PostgreSQL, configure `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`; `POSTGRES_PORT` is optional and defaults to `5432`. When these variables are omitted, the API uses its in-memory sql.js database. If PostgreSQL configuration is started but incomplete, the API reports the missing variables. See `.env.example` for a template.
 

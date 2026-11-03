@@ -21,6 +21,12 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 128, select: false })
   passwordHash!: string;
 
+  @Column({ type: 'varchar', length: 64, nullable: true, select: false })
+  passwordResetTokenHash!: string | null;
+
+  @Column({ type: 'bigint', nullable: true, select: false })
+  passwordResetExpiresAt!: string | null;
+
   @OneToMany(() => HabitEntity, (habit) => habit.user)
   habits!: HabitEntity[];
 }
