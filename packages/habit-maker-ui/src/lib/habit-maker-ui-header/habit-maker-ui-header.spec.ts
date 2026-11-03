@@ -55,7 +55,9 @@ describe('HabitMakerUIHeader', () => {
 
     expect(header.querySelector('h1')?.textContent?.trim()).toBe('Tus hábitos');
     expect(backLink?.getAttribute('href')).toBe('/');
-    expect(backLink?.querySelector('hm-icon[name="arrow-left"]')).not.toBeNull();
+    expect(
+      backLink?.querySelector('habit-maker-ui-icon[name="arrow-left"]'),
+    ).not.toBeNull();
   });
 
   it('does not render a back link when no destination is provided', async () => {

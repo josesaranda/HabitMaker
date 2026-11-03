@@ -20,7 +20,7 @@
   color: var(--hm-brand-mark-color, #c0d8b9);
 }
 
-.brand-mark hm-icon {
+.brand-mark habit-maker-ui-icon {
   width: 1.45rem;
   height: 1.45rem;
 }

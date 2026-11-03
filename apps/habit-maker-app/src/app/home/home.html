@@ -9,7 +9,7 @@
       [title]="'navigation.addHabit' | transloco"
       (click)="newHabitModal.openFrom(addHabitTrigger)"
     >
-      <hm-icon name="add" />
+      <habit-maker-ui-icon name="add" />
     </button>
   </habit-maker-ui-header>
   @if (isLoading()) {
@@ -65,11 +65,11 @@
     </button>
   </section>
   }
-  <hm-modal
+  <habit-maker-ui-modal
     #newHabitModal
     [label]="'home.newHabitModal' | transloco"
     [closeLabel]="'navigation.closeDialog' | transloco"
   >
     <app-new-habit (habitCreated)="newHabitModal.close()" />
-  </hm-modal>
+  </habit-maker-ui-modal>
 </main>

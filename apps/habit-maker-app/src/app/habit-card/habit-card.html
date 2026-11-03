@@ -7,7 +7,7 @@
       class="grid size-[2.6rem] shrink-0 place-items-center rounded-xl bg-[#a8c5ad]/15 text-[#c0d8b9]"
       aria-hidden="true"
     >
-      <hm-icon class="size-[1.4rem]" name="sprout" />
+      <habit-maker-ui-icon class="size-[1.4rem]" name="sprout" />
     </div>
     <div class="grid gap-0.5 text-text-white">
       <time
@@ -32,7 +32,7 @@
         [attr.aria-label]="'habitCard.previousDays' | transloco"
         (click)="showPreviousDays()"
       >
-        <hm-icon class="size-4" name="chevron-left" />
+        <habit-maker-ui-icon class="size-4" name="chevron-left" />
       </button>
     }
     <div
@@ -102,7 +102,7 @@
         [disabled]="isAtFutureLimit()"
         (click)="showNextDays()"
       >
-        <hm-icon class="size-4" name="chevron-right" />
+        <habit-maker-ui-icon class="size-4" name="chevron-right" />
       </button>
     }
   </div>

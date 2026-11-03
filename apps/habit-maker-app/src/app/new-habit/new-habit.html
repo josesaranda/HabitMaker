@@ -4,7 +4,7 @@
       class="mb-4 grid size-[3.25rem] place-items-center rounded-[1.1rem] border border-accent/55 bg-accent/20 text-primary"
       aria-hidden="true"
     >
-      <hm-icon class="size-[1.6rem]" name="sparkle" />
+      <habit-maker-ui-icon class="size-[1.6rem]" name="sparkle" />
     </span>
     <p
       class="mb-2 mt-0 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-green-800"
@@ -58,7 +58,7 @@
       [disabled]="!canStartHabit()"
     >
       <span>{{ (isSubmitting() ? 'newHabit.saving' : 'newHabit.submit') | transloco }}</span>
-      <hm-icon class="size-[1.15rem]" name="arrow-right" />
+      <habit-maker-ui-icon class="size-[1.15rem]" name="arrow-right" />
     </button>
   </form>
 </div>

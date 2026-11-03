@@ -4,7 +4,7 @@ import { HabitMakerUIBrand } from './habit-maker-ui-brand';
 
 @Component({
   imports: [HabitMakerUIBrand],
-  template: '<hm-brand></hm-brand>',
+  template: '<habit-maker-ui-brand></habit-maker-ui-brand>',
 })
 class HostComponent {}
 
@@ -17,7 +17,8 @@ describe('HabitMakerUIBrand', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const brand: HTMLElement = fixture.nativeElement.querySelector('hm-brand');
+    const brand: HTMLElement =
+      fixture.nativeElement.querySelector('habit-maker-ui-brand');
     const mark = brand.querySelector<HTMLElement>('.brand-mark');
 
     expect(brand.textContent).toContain('HabitMaker');
