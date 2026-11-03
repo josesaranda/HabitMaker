@@ -1,3 +1,12 @@
+# [1.3.0](https://github.com/josesaranda/HabitMaker/compare/v1.2.0...v1.3.0) (2026-11-03)
+
+
+### Features
+
+* **api:** add optional PostgreSQL database ([f20e400](https://github.com/josesaranda/HabitMaker/commit/f20e40087666d6b8a639751da255e26748a7c552))
+* **docker:** containerize full application stack ([6daa3e1](https://github.com/josesaranda/HabitMaker/commit/6daa3e10900d72adfab626c32aa1ccf3be3facc5))
+* **ui:** add accessible select component ([025d04f](https://github.com/josesaranda/HabitMaker/commit/025d04facae3b3a6bf39c31beb8cfaaa592a42e8))
+
 # [1.2.0](https://github.com/josesaranda/HabitMaker/compare/v1.1.0...v1.2.0) (2026-11-02)
 
 
