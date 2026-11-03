@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { HabitMakerUIBrand } from '../habit-maker-ui-brand/habit-maker-ui-brand';
 
 @Component({
-  selector: 'hm-navbar',
+  selector: 'habit-maker-ui-navbar',
   standalone: true,
   imports: [HabitMakerUIBrand, RouterLink],
   templateUrl: './habit-maker-ui-navbar.html',

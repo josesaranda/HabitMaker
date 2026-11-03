@@ -73,7 +73,7 @@
               [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
               [attr.aria-pressed]="passwordVisible()"
             >
-              <hm-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
+              <habit-maker-ui-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
             </button>
           </div>
           <span
@@ -94,7 +94,7 @@
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
           {{ 'signup.submit' | transloco }}
-          <hm-icon name="arrow-right" />
+          <habit-maker-ui-icon name="arrow-right" />
         </button>
         <p class="form-message" aria-live="polite">{{ message() | transloco }}</p>
       </form>

@@ -1,6 +1,6 @@
 @if (shouldShowNavbar()) {
 <div class="app-navbar-shell">
-  <hm-navbar
+  <habit-maker-ui-navbar
     class="app-navbar"
     brandLink="/home"
     [brandLabel]="'navigation.brandLabel' | transloco"
@@ -21,7 +21,7 @@
         [attr.aria-label]="'navigation.settings' | transloco"
         [title]="'navigation.settings' | transloco"
       >
-        <hm-icon name="settings" />
+        <habit-maker-ui-icon name="settings" />
       </a>
       <button
         hmButtonIcon="secondary"
@@ -31,10 +31,10 @@
         [title]="'navigation.logout' | transloco"
         (click)="logout()"
       >
-        <hm-icon name="logout" />
+        <habit-maker-ui-icon name="logout" />
       </button>
     </div>
-  </hm-navbar>
+  </habit-maker-ui-navbar>
 </div>
 }
 <div class="app-content-shell">

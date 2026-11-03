@@ -189,6 +189,26 @@ describe('HabitService', () => {
     expect(completed).toBe(false);
   });
 
+  it('deletes a habit by its encoded id with the saved access token', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    let completed = false;
+
+    service.deleteHabit('habit/1').subscribe(() => {
+      completed = true;
+    });
+
+    const request = httpTestingController.expectOne(
+      `${API_URL}/habits/habit%2F1`,
+    );
+    expect(request.request.method).toBe('DELETE');
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush(null);
+
+    expect(completed).toBe(true);
+  });
+
   it('does not send a request when no access token is available', () => {
     let hasError = false;
     service.createHabit('Leer').subscribe({ error: () => (hasError = true) });

@@ -88,7 +88,7 @@ button.hm-button-icon:disabled {
   opacity: 0.5;
 }
 
-.hm-button-icon hm-icon {
+.hm-button-icon habit-maker-ui-icon {
   width: 1em;
   height: 1em;
 }

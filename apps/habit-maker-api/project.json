@@ -4,6 +4,18 @@
   "sourceRoot": "apps/habit-maker-api/src",
   "projectType": "application",
   "targets": {
+    "build": {
+      "inputs": [
+        "production",
+        "^production",
+        "{workspaceRoot}/package.json",
+        { "externalDependencies": ["webpack-cli"] },
+        {
+          "json": "{workspaceRoot}/tsconfig.json",
+          "fields": ["extends", "files", "include"]
+        }
+      ]
+    },
     "prune-lockfile": {
       "dependsOn": ["build"],
       "cache": true,

@@ -36,7 +36,7 @@ const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
 };
 
 @Component({
-  selector: 'hm-icon',
+  selector: 'habit-maker-ui-icon',
   standalone: true,
   templateUrl: './habit-maker-ui-icon.html',
   styleUrl: './habit-maker-ui-icon.css',

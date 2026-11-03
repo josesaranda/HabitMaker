@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
 
 @Component({
-  selector: 'hm-brand',
+  selector: 'habit-maker-ui-brand',
   standalone: true,
   imports: [HabitMakerUIIcon],
   templateUrl: './habit-maker-ui-brand.html',

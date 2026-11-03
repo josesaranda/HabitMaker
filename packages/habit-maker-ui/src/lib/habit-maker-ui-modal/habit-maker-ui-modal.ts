@@ -5,7 +5,7 @@ const MODAL_TRANSITION_DURATION = 240;
 const MODAL_TRANSITION_EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 
 @Component({
-  selector: 'hm-modal',
+  selector: 'habit-maker-ui-modal',
   imports: [HabitMakerUIIcon],
   templateUrl: './habit-maker-ui-modal.html',
   styleUrl: './habit-maker-ui-modal.css',

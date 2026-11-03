@@ -240,7 +240,7 @@
   outline-offset: 2px;
 }
 
-.password-toggle hm-icon {
+.password-toggle habit-maker-ui-icon {
   width: 1.2rem;
   height: 1.2rem;
 }
@@ -266,13 +266,13 @@
   font-weight: 600;
 }
 
-.auth-submit-button hm-icon {
+.auth-submit-button habit-maker-ui-icon {
   width: 1.15rem;
   height: 1.15rem;
   transition: transform 150ms ease;
 }
 
-.auth-submit-button:hover hm-icon {
+.auth-submit-button:hover habit-maker-ui-icon {
   transform: translateX(0.2rem);
 }
 

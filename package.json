@@ -6,7 +6,8 @@
     "start:app": "nx serve HabitMakerApp",
     "start:api": "nx serve HabitMakerApi",
     "test": "nx run-many -t lint test build typecheck --parallel --maxParallel=3",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "postversion": "node sync-package-lock-version.cjs"
   },
   "private": true,
   "devDependencies": {

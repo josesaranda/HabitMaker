@@ -88,6 +88,45 @@ describe('HabitsService', () => {
     );
   });
 
+  it('deletes an owned habit and cascades its completion history', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+    const habit = await dataSource
+      .getRepository(HabitEntity)
+      .findOneByOrFail({ id: created.id });
+    await dataSource.getRepository(HabitCompletionEntity).save({
+      id: 'completion-1',
+      habit,
+      date: '2026-11-01',
+      completed: true,
+      completedAt: new Date('2026-11-01T12:00:00.000Z'),
+    });
+
+    await service.remove(created.id, user.id);
+
+    await expect(
+      dataSource.getRepository(HabitEntity).findOneBy({ id: created.id }),
+    ).resolves.toBeNull();
+    await expect(
+      dataSource
+        .getRepository(HabitCompletionEntity)
+        .findOneBy({ id: 'completion-1' }),
+    ).resolves.toBeNull();
+  });
+
+  it('does not delete another user habit or a missing habit', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+
+    await expect(service.remove(created.id, 'another-user')).rejects.toThrow(
+      NotFoundException,
+    );
+    await expect(service.remove('missing-habit', user.id)).rejects.toThrow(
+      NotFoundException,
+    );
+    await expect(service.findOne(created.id, user.id)).resolves.toMatchObject({
+      id: created.id,
+    });
+  });
+
   it('rejects missing, blank, and overly long habit names', async () => {
     await expect(service.create(null, user.id)).rejects.toThrow(
       BadRequestException,

@@ -62,7 +62,7 @@ describe('App', () => {
     expect(compiled.querySelector('app-login h2')?.textContent).toContain(
       'Inicia sesión',
     );
-    expect(compiled.querySelector('hm-navbar')).toBeNull();
+    expect(compiled.querySelector('habit-maker-ui-navbar')).toBeNull();
   });
 
   it('navigates to the signup page', async () => {
@@ -120,7 +120,9 @@ describe('App', () => {
         ?.textContent,
     ).toContain('Añade tu primer hábito');
     expect(
-      fixture.nativeElement.querySelector('hm-navbar hm-brand'),
+      fixture.nativeElement.querySelector(
+        'habit-maker-ui-navbar habit-maker-ui-brand',
+      ),
     ).not.toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;
     const addHabitButton = compiled.querySelector<HTMLButtonElement>(
@@ -133,7 +135,9 @@ describe('App', () => {
     expect(mobileSettingsLink?.getAttribute('href')).toBe('/settings');
     expect(mobileSettingsLink?.getAttribute('aria-label')).toBe('Ajustes');
     expect(
-      mobileSettingsLink?.querySelector('hm-icon')?.getAttribute('name'),
+      mobileSettingsLink
+        ?.querySelector('habit-maker-ui-icon')
+        ?.getAttribute('name'),
     ).toBe('settings');
     const logoutButton = compiled.querySelector<HTMLButtonElement>(
       'button[aria-label="Cerrar sesión"]',
@@ -142,7 +146,7 @@ describe('App', () => {
     expect(logoutButton?.getAttribute('size')).toBe('normal');
 
     const dialog =
-      compiled.querySelector<HTMLDialogElement>('hm-modal dialog')!;
+      compiled.querySelector<HTMLDialogElement>('habit-maker-ui-modal dialog')!;
     Object.defineProperty(dialog, 'showModal', {
       configurable: true,
       value: () => dialog.setAttribute('open', ''),
@@ -168,7 +172,9 @@ describe('App', () => {
       fixture.nativeElement.querySelector('app-home #home-title')?.textContent,
     ).toContain('¡Bienvenido a casa!');
     expect(
-      fixture.nativeElement.querySelector('hm-navbar hm-brand'),
+      fixture.nativeElement.querySelector(
+        'habit-maker-ui-navbar habit-maker-ui-brand',
+      ),
     ).not.toBeNull();
   });
 });

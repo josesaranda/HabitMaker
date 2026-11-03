@@ -7,102 +7,156 @@
     >
       {{ 'habitDetail.title' | transloco }}
     </habit-maker-ui-header>
-
     @if (isLoading()) {
-      <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
-        {{ 'habitDetail.loading' | transloco }}
-      </p>
+    <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
+      {{ 'habitDetail.loading' | transloco }}
+    </p>
     } @else if (isNotFound()) {
-      <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
-        {{ 'habitDetail.notFound' | transloco }}
-      </p>
+    <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
+      {{ 'habitDetail.notFound' | transloco }}
+    </p>
     } @else if (habit(); as currentHabit) {
-      <app-habit-card
-        class="mx-auto mt-8 w-full max-w-3xl"
-        [id]="currentHabit.id"
-        [name]="currentHabit.name"
-        [startedAt]="currentHabit.createdAt"
-        [dayToggleEnabled]="true"
-        [showDayNavigation]="true"
-        [windowStartDate]="calendarWindowStart()"
-        [dayToggleDisabled]="isSavingDayCompletion()"
-        [completionRefresh]="completionRefresh()"
-        (dayToggled)="toggleDayCompletion($event)"
-        (windowStartDateChange)="updateCalendarWindow($event)"
-      />
-      @if (loadError()) {
-        <p class="mx-auto mt-3 w-full max-w-3xl text-error" role="alert">
-          {{ loadError() | transloco }}
-        </p>
-      }
-    } @else if (loadError()) {
-      <p class="mx-auto mt-8 w-full max-w-3xl text-error" role="alert">
-        {{ loadError() | transloco }}
-      </p>
+    <app-habit-card
+      class="mx-auto w-full mt-4 max-w-3xl"
+      [id]="currentHabit.id"
+      [name]="currentHabit.name"
+      [startedAt]="currentHabit.createdAt"
+      [dayToggleEnabled]="true"
+      [showDayNavigation]="true"
+      [windowStartDate]="calendarWindowStart()"
+      [dayToggleDisabled]="isSavingDayCompletion()"
+      [completionRefresh]="completionRefresh()"
+      (dayToggled)="toggleDayCompletion($event)"
+      (windowStartDateChange)="updateCalendarWindow($event)"
+    />
+    @if (loadError()) {
+    <p class="mx-auto mt-3 w-full max-w-3xl text-error" role="alert">
+      {{ loadError() | transloco }}
+    </p>
+    } } @else if (loadError()) {
+    <p class="mx-auto mt-8 w-full max-w-3xl text-error" role="alert">
+      {{ loadError() | transloco }}
+    </p>
     } @else {
-      <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
-        {{ 'habitDetail.notFound' | transloco }}
+    <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
+      {{ 'habitDetail.notFound' | transloco }}
+    </p>
+    } @if (habit()) {
+    <section
+      class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-border bg-surface p-6 sm:p-8"
+      [attr.aria-labelledby]="isCompletedToday() ? null : 'habit-completion-title'"
+      [attr.aria-label]="isCompletedToday() ? ('habitDetail.completedLabel' | transloco) : null"
+    >
+      @if (dayCompletionError()) {
+      <p class="mt-3 text-sm text-error" role="alert">
+        {{ dayCompletionError() | transloco }}
       </p>
-    }
-
-    @if (habit()) {
-      <section
-        class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-border bg-surface p-6 sm:p-8"
-        [attr.aria-labelledby]="isCompletedToday() ? null : 'habit-completion-title'"
-        [attr.aria-label]="isCompletedToday() ? ('habitDetail.completedLabel' | transloco) : null"
-      >
-        @if (dayCompletionError()) {
-          <p class="mt-3 text-sm text-error" role="alert">
-            {{ dayCompletionError() | transloco }}
-          </p>
-        }
-        <div class="mt-5 flex items-start gap-4">
-          <div
-            class="grid size-11 shrink-0 place-items-center rounded-full border border-[#a8c5ad]/40 bg-[#a8c5ad]/10 text-[#55785f]"
-            aria-hidden="true"
-          >
-            <hm-icon
-              class="size-5"
-              [name]="isCompletedToday() ? 'check' : 'clock'"
-            />
-          </div>
-          <div class="min-w-0 pt-0.5">
-            <span
-              class="text-[0.65rem] font-bold tracking-[0.16em] text-[#55785f]"
-            >
-              {{
-                isCompletedToday()
-                  ? ('habitDetail.completedEyebrow' | transloco)
-                  : ('habitDetail.goalEyebrow' | transloco)
-              }}
-            </span>
-            @if (isCompletedToday()) {
-              <h2
-                class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
-                role="status"
-              >
-                {{ 'habitDetail.congratulations' | transloco }}
-              </h2>
-              <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
-                {{ 'habitDetail.encouragement' | transloco }}
-              </p>
-            } @else {
-              <h2
-                id="habit-completion-title"
-                class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
-              >
-                {{ 'habitDetail.question' | transloco }}
-              </h2>
-              <p
-                id="habit-completion-help"
-                class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary"
-              >
-                {{ 'habitDetail.instructions' | transloco }}
-              </p>
-            }
-          </div>
+      }
+      <div class="mt-5 flex items-start gap-4">
+        <div
+          class="grid size-11 shrink-0 place-items-center rounded-full border border-[#a8c5ad]/40 bg-[#a8c5ad]/10 text-[#55785f]"
+          aria-hidden="true"
+        >
+          <habit-maker-ui-icon
+            class="size-5"
+            [name]="isCompletedToday() ? 'check' : 'clock'"
+          />
         </div>
-      </section>
+        <div class="min-w-0 pt-0.5">
+          <span
+            class="text-[0.65rem] font-bold tracking-[0.16em] text-[#55785f]"
+          >
+            {{ isCompletedToday() ? ('habitDetail.completedEyebrow' | transloco)
+            : ('habitDetail.goalEyebrow' | transloco) }}
+          </span>
+          @if (isCompletedToday()) {
+          <h2
+            class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
+            role="status"
+          >
+            {{ 'habitDetail.congratulations' | transloco }}
+          </h2>
+          <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+            {{ 'habitDetail.encouragement' | transloco }}
+          </p>
+          } @else {
+          <h2
+            id="habit-completion-title"
+            class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
+          >
+            {{ 'habitDetail.question' | transloco }}
+          </h2>
+          <p
+            id="habit-completion-help"
+            class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary"
+          >
+            {{ 'habitDetail.instructions' | transloco }}
+          </p>
+          }
+        </div>
+      </div>
+    </section>
+    <section
+      class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-error/30 bg-surface p-6 sm:p-8"
+      aria-labelledby="delete-habit-title"
+    >
+      <h2
+        id="delete-habit-title"
+        class="m-0 text-lg font-semibold text-text-primary"
+      >
+        {{ 'habitDetail.deleteSectionTitle' | transloco }}
+      </h2>
+      <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+        {{ 'habitDetail.deleteSectionDescription' | transloco }}
+      </p>
+      <button
+        #deleteHabitTrigger
+        hmButton="secondary"
+        class="mt-5 border border-error text-error hover:bg-error/10"
+        type="button"
+        (click)="deleteHabitModal.openFrom(deleteHabitTrigger)"
+      >
+        {{ 'habitDetail.deleteButton' | transloco }}
+      </button>
+    </section>
+    <habit-maker-ui-modal
+      #deleteHabitModal
+      [label]="'habitDetail.deleteDialogTitle' | transloco"
+      [closeLabel]="'navigation.closeDialog' | transloco"
+    >
+      <div class="grid gap-4">
+        <h2 class="m-0 text-xl font-semibold text-text-primary">
+          {{ 'habitDetail.deleteDialogTitle' | transloco }}
+        </h2>
+        <p class="m-0 leading-relaxed text-text-secondary">
+          {{ 'habitDetail.deleteConfirmation' | transloco: { name: habit()?.name ?? '' } }}
+        </p>
+        @if (deleteHabitError()) {
+        <p class="m-0 text-sm text-error" role="alert">
+          {{ deleteHabitError() | transloco }}
+        </p>
+        }
+        <div class="flex flex-col-reverse justify-end gap-3 sm:flex-row">
+          <button
+            hmButton="secondary"
+            type="button"
+            [disabled]="isDeletingHabit()"
+            (click)="deleteHabitModal.close()"
+          >
+            {{ 'habitDetail.cancelDelete' | transloco }}
+          </button>
+          <button
+            hmButton="primary"
+            class="bg-error text-white hover:bg-error/90"
+            type="button"
+            [disabled]="isDeletingHabit()"
+            (click)="deleteHabit(deleteHabitModal)"
+          >
+            {{ (isDeletingHabit() ? 'habitDetail.deleting' : 'habitDetail.confirmDelete') | transloco }}
+          </button>
+        </div>
+      </div>
+    </habit-maker-ui-modal>
     }
   </div>
 </main>

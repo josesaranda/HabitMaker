@@ -87,6 +87,12 @@ export class HabitService {
     );
   }
 
+  deleteHabit(id: string): Observable<void> {
+    return this.requireAuthentication(
+      this.http.delete<void>(`${API_URL}/habits/${encodeURIComponent(id)}`),
+    );
+  }
+
   private requireAuthentication<T>(request: Observable<T>): Observable<T> {
     return this.authService.getAuthToken()
       ? request

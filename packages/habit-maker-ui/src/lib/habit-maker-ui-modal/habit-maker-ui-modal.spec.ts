@@ -13,11 +13,11 @@ import { HabitMakerUIModal } from './habit-maker-ui-modal';
     >
       Abrir modal
     </button>
-    <hm-modal #modal label="Crear hábito">
+    <habit-maker-ui-modal #modal label="Crear hábito">
       <h2>Crear hábito</h2>
       <input autofocus />
       <p>El contenido se proyecta dentro del modal.</p>
-    </hm-modal>
+    </habit-maker-ui-modal>
   `,
 })
 class ModalHost {}
