@@ -1,3 +1,19 @@
+# [1.4.0](https://github.com/josesaranda/HabitMaker/compare/v1.3.0...v1.4.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **auth:** make copyright year dynamic ([d668d2b](https://github.com/josesaranda/HabitMaker/commit/d668d2be4c1d65d2a204b657d65a65f8ed8c0758))
+* **ui:** focus habit name on modal open ([b260def](https://github.com/josesaranda/HabitMaker/commit/b260def9ba7b4f911e072072650d3db346150806))
+
+
+### Features
+
+* **admin:** configure SMTP email delivery ([ba895ea](https://github.com/josesaranda/HabitMaker/commit/ba895eafbae2c9b984460b2d8bd178f25f190984))
+* **auth:** add password reset flow ([b1bab12](https://github.com/josesaranda/HabitMaker/commit/b1bab12214e762f50fa3a854598f494ed8dd6086))
+* **pwa:** configure HabitMaker as PWA ([3f49832](https://github.com/josesaranda/HabitMaker/commit/3f49832976f740a224b4964f18c2f4edcd3bb46b))
+* **ui:** add actions to home header ([4e1d134](https://github.com/josesaranda/HabitMaker/commit/4e1d1343981d7a87d3082d803476b66b1c3ad5d9))
+
 # [1.3.0](https://github.com/josesaranda/HabitMaker/compare/v1.2.0...v1.3.0) (2026-11-03)
 
 
