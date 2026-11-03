@@ -68,6 +68,33 @@ To use PostgreSQL, configure `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWOR
 
 > **Development data:** Without PostgreSQL configuration, sql.js stores data in memory. Users, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
 
+## Run with Docker
+
+Install [Docker](https://docs.docker.com/get-docker/) with Docker Compose, then run these commands from the repository root. The Compose setup builds the frontend and API images and starts them with PostgreSQL:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` before starting the services. Set a unique, random `JWT_SECRET` and a strong `POSTGRES_PASSWORD`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long. The example file uses `APP_PORT=8080` and `CORS_ORIGIN=http://localhost:8080`; if you change `APP_PORT`, update `CORS_ORIGIN` to match.
+
+Build and start the containers:
+
+```bash
+docker compose up --build -d
+```
+
+Open [http://localhost:8080](http://localhost:8080). The frontend serves the app and forwards `/api` requests to the API container. To use a different host port, change `APP_PORT` in `.env` and restart the stack.
+
+View service logs or stop the containers with:
+
+```bash
+docker compose logs -f app api db
+docker compose down
+```
+
+PostgreSQL data is kept in the `postgres-data` Docker volume when the containers are stopped or removed. To delete the containers and the database volume, run `docker compose down --volumes`; this permanently removes the stored data.
+
 ## Nx commands
 
 Run tests for each project:
