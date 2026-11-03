@@ -1,4 +1,4 @@
-<main class="flex h-full flex-col bg-background px-4 py-5 sm:px-[4vw] lg:px-12">
+<main class="flex h-full flex-col bg-background px-4 sm:px-[4vw] lg:px-12">
   @if (isLoading()) {
   <p class="mt-6 self-center text-text-secondary" role="status">
     {{ 'home.loading' | transloco }}
@@ -8,7 +8,7 @@
     class="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
     aria-labelledby="habits-title"
   >
-    <habit-maker-ui-header id="habits-title" class="col-span-full !mb-1">
+    <habit-maker-ui-header id="habits-title" class="col-span-full mb-1!">
       {{ 'home.title' | transloco }}
     </habit-maker-ui-header>
     @for (habit of habits(); track habit.id) {

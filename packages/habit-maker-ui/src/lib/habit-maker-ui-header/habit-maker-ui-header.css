@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  height: 3rem;
 }
 
 .habit-maker-ui-header__back {
@@ -38,8 +39,33 @@
 .habit-maker-ui-header__title {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-size: clamp(1.25rem, 2.8vw, 1.6rem);
   font-weight: 600;
   letter-spacing: -0.05em;
   view-transition-name: habit-maker-ui-header-title;
+}
+
+:host {
+  position: sticky;
+  z-index: 1000;
+  top: 4rem;
+}
+
+:host::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 auto 0 50%;
+  width: 100vw;
+  background: color-mix(in srgb, var(--color-background) 40%, transparent);
+  box-shadow: 0 0.5rem 1.5rem rgb(23 47 43 / 14%);
+  backdrop-filter: blur(16px);
+  content: '';
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 700px) {
+  :host {
+    top: 0;
+  }
 }

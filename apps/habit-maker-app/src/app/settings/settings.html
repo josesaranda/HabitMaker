@@ -1,11 +1,11 @@
-<main class="min-h-full bg-background px-4 pb-8 pt-5 sm:px-[4vw] lg:px-12">
-  <div class="mx-auto w-full max-w-6xl">
-    <habit-maker-ui-header
-      backNavigation="/"
-      [backLabel]="'navigation.back' | transloco"
-      [backTitle]="'navigation.backTitle' | transloco"
-    >{{ 'settings.title' | transloco }}</habit-maker-ui-header>
-  </div>
+<main class="min-h-full bg-background px-4 pb-8 sm:px-[4vw] lg:px-12">
+  <habit-maker-ui-header
+    class="mx-auto w-full max-w-6xl"
+    backNavigation="/"
+    [backLabel]="'navigation.back' | transloco"
+    [backTitle]="'navigation.backTitle' | transloco"
+    >{{ 'settings.title' | transloco }}</habit-maker-ui-header
+  >
   <div class="mx-auto w-full max-w-3xl">
     <section
       class="rounded-2xl border border-border bg-surface p-6 sm:p-8"
@@ -18,7 +18,10 @@
         {{ 'settings.userTitle' | transloco }}
       </h2>
       <div class="w-full">
-        <label class="mb-2 block text-sm font-semibold text-text-primary" for="user-email">
+        <label
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          for="user-email"
+        >
           {{ 'settings.email' | transloco }}
         </label>
         <input
@@ -30,7 +33,10 @@
           [value]="email()"
           readonly
         />
-        <label id="language-label" class="mb-2 mt-5 block text-sm font-semibold text-text-primary">
+        <label
+          id="language-label"
+          class="mb-2 mt-5 block text-sm font-semibold text-text-primary"
+        >
           {{ 'settings.language' | transloco }}
         </label>
         <habit-maker-ui-select
@@ -42,11 +48,13 @@
           <habit-maker-ui-option
             value="en"
             [label]="'settings.english' | transloco"
-          >{{ 'settings.english' | transloco }}</habit-maker-ui-option>
+            >{{ 'settings.english' | transloco }}</habit-maker-ui-option
+          >
           <habit-maker-ui-option
             value="es"
             [label]="'settings.spanish' | transloco"
-          >{{ 'settings.spanish' | transloco }}</habit-maker-ui-option>
+            >{{ 'settings.spanish' | transloco }}</habit-maker-ui-option
+          >
         </habit-maker-ui-select>
       </div>
     </section>
@@ -69,9 +77,13 @@
           {{ 'settings.usersTitle' | transloco }}
         </h3>
         @if (isLoadingUsers()) {
-        <p class="text-text-secondary" role="status">{{ 'settings.loadingUsers' | transloco }}</p>
+        <p class="text-text-secondary" role="status">
+          {{ 'settings.loadingUsers' | transloco }}
+        </p>
         } @else if (usersLoadError()) {
-        <p class="text-error" role="alert">{{ usersLoadError() | transloco }}</p>
+        <p class="text-error" role="alert">
+          {{ usersLoadError() | transloco }}
+        </p>
         } @else if (users().length === 0) {
         <p class="text-text-secondary">{{ 'settings.noUsers' | transloco }}</p>
         } @else {
@@ -82,7 +94,9 @@
                 <th class="px-3 py-3 font-semibold" scope="col">
                   {{ 'settings.email' | transloco }}
                 </th>
-                <th class="px-3 py-3 font-semibold" scope="col">{{ 'settings.role' | transloco }}</th>
+                <th class="px-3 py-3 font-semibold" scope="col">
+                  {{ 'settings.role' | transloco }}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -90,7 +104,8 @@
               <tr class="border-b border-border last:border-0">
                 <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
                 <td class="px-3 py-3 text-text-secondary">
-                  {{ (user.role === 'admin' ? 'settings.adminRole' : 'settings.userRole') | transloco }}
+                  {{ (user.role === 'admin' ? 'settings.adminRole' :
+                  'settings.userRole') | transloco }}
                 </td>
               </tr>
               }
@@ -132,7 +147,8 @@
             </p>
             } @else if (updateAvailable()) {
             <p class="text-sm font-medium text-text-primary" role="status">
-              {{ 'settings.updateAvailable' | transloco: { version: latestVersion() } }}
+              {{ 'settings.updateAvailable' | transloco: { version:
+              latestVersion() } }}
             </p>
             } @else if (updateAvailable() === false) {
             <p class="text-sm text-text-secondary" role="status">
@@ -149,7 +165,8 @@
               [disabled]="isCheckingUpdates()"
               (click)="checkForUpdates()"
             >
-              {{ (isCheckingUpdates() ? 'settings.checkingUpdates' : 'settings.checkUpdates') | transloco }}
+              {{ (isCheckingUpdates() ? 'settings.checkingUpdates' :
+              'settings.checkUpdates') | transloco }}
             </button>
             <a
               class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
@@ -167,7 +184,8 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ 'settings.viewVersion' | transloco: { version: latestVersion() } }}
+              {{ 'settings.viewVersion' | transloco: { version: latestVersion()
+              } }}
             </a>
             }
           </div>
