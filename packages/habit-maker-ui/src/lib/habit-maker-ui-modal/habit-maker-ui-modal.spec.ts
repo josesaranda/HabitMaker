@@ -15,6 +15,7 @@ import { HabitMakerUIModal } from './habit-maker-ui-modal';
     </button>
     <hm-modal #modal label="Crear hábito">
       <h2>Crear hábito</h2>
+      <input autofocus />
       <p>El contenido se proyecta dentro del modal.</p>
     </hm-modal>
   `,
@@ -65,6 +66,9 @@ describe('HabitMakerUIModal', () => {
 
     trigger.click();
     expect(dialog.open).toBe(true);
+    expect(document.activeElement).toBe(
+      dialog.querySelector('input[autofocus]'),
+    );
 
     fixture.nativeElement
       .querySelector<HTMLButtonElement>('[aria-label="Close dialog"]')!
