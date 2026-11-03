@@ -1,16 +1,29 @@
 <main class="flex h-full flex-col bg-background px-4 sm:px-[4vw] lg:px-12">
+  <habit-maker-ui-header
+    id="habits-title"
+    class="mx-auto mb-1! max-w-6xl"
+  >
+    {{ 'home.title' | transloco }}
+    <button
+      #addHabitTrigger
+      hmButtonIcon="primary"
+      type="button"
+      [attr.aria-label]="'navigation.addHabit' | transloco"
+      [title]="'navigation.addHabit' | transloco"
+      (click)="newHabitModal.openFrom(addHabitTrigger)"
+    >
+      <hm-icon name="add" />
+    </button>
+  </habit-maker-ui-header>
   @if (isLoading()) {
   <p class="mt-6 self-center text-text-secondary" role="status">
     {{ 'home.loading' | transloco }}
   </p>
   } @else if (hasHabits()) {
   <section
-    class="mx-auto grid w-full max-w-6xl grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
+    class="mx-auto mt-4 grid w-full max-w-6xl grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
     aria-labelledby="habits-title"
   >
-    <habit-maker-ui-header id="habits-title" class="col-span-full mb-1!">
-      {{ 'home.title' | transloco }}
-    </habit-maker-ui-header>
     @for (habit of habits(); track habit.id) {
     <a
       class="block rounded-2xl no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e6b875] hover:shadow-[0_0.5rem_1rem_rgb(0_0_0_/_55%)] hover:transform hover:scale-[1.02] transition-all duration-300 ease-in-out"

@@ -5,6 +5,7 @@
   border: 1px solid transparent;
   border-radius: 50%;
   padding: 0;
+  backdrop-filter: blur(8px);
   font: inherit;
   line-height: 1;
   text-decoration: none;
@@ -34,12 +35,20 @@
 }
 
 .hm-button-icon--primary {
-  background-color: var(--color-button-primary);
+  background-color: color-mix(
+    in srgb,
+    var(--color-button-primary) 72%,
+    transparent
+  );
   color: var(--color-button-primary-text);
 }
 
 .hm-button-icon--primary:hover:not(:disabled) {
-  background-color: var(--color-button-primary-hover);
+  background-color: color-mix(
+    in srgb,
+    var(--color-button-primary-hover) 88%,
+    transparent
+  );
 }
 
 .hm-button-icon--primary:focus-visible {
@@ -48,13 +57,25 @@
 }
 
 .hm-button-icon--secondary {
-  border-color: var(--color-button-secondary-border);
-  background-color: var(--color-button-secondary);
+  border-color: color-mix(
+    in srgb,
+    var(--color-button-secondary-border) 65%,
+    transparent
+  );
+  background-color: color-mix(
+    in srgb,
+    var(--color-button-secondary) 72%,
+    transparent
+  );
   color: var(--color-button-secondary-text);
 }
 
 .hm-button-icon--secondary:hover:not(:disabled) {
-  background-color: var(--color-button-secondary-hover);
+  background-color: color-mix(
+    in srgb,
+    var(--color-button-secondary-hover) 88%,
+    transparent
+  );
 }
 
 .hm-button-icon--secondary:focus-visible {

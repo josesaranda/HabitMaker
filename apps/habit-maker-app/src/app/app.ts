@@ -10,20 +10,16 @@ import {
 import {
   HabitMakerUIButtonIcon,
   HabitMakerUIIcon,
-  HabitMakerUIModal,
   HabitMakerUINavbar,
 } from '@habit-maker/habit-maker-ui';
 import { filter, map } from 'rxjs';
 import { AuthService } from './auth/auth.service';
-import { NewHabit } from './new-habit/new-habit';
 
 @Component({
   imports: [
     HabitMakerUIButtonIcon,
     HabitMakerUIIcon,
-    HabitMakerUIModal,
     HabitMakerUINavbar,
-    NewHabit,
     RouterLink,
     RouterOutlet,
     TranslocoPipe,

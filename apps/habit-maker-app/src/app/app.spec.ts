@@ -113,17 +113,18 @@ describe('App', () => {
     await router.navigateByUrl('/login');
     fixture.detectChanges();
     expect(
-      fixture.nativeElement.querySelector('app-home h1')?.textContent,
+      fixture.nativeElement.querySelector('app-home #home-title')?.textContent,
     ).toContain('¡Bienvenido a casa!');
     expect(
-      fixture.nativeElement.querySelector('app-home button')?.textContent,
+      fixture.nativeElement.querySelector('[data-testid="home-add-habit"]')
+        ?.textContent,
     ).toContain('Añade tu primer hábito');
     expect(
       fixture.nativeElement.querySelector('hm-navbar hm-brand'),
     ).not.toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;
     const addHabitButton = compiled.querySelector<HTMLButtonElement>(
-      'button[hmButtonIcon]',
+      'app-home habit-maker-ui-header button[hmButtonIcon]',
     );
     expect(addHabitButton?.getAttribute('aria-label')).toBe('Añadir hábito');
     const mobileSettingsLink = compiled.querySelector<HTMLAnchorElement>(
@@ -138,7 +139,7 @@ describe('App', () => {
       'button[aria-label="Cerrar sesión"]',
     );
     expect(logoutButton?.getAttribute('hmButtonIcon')).toBe('secondary');
-    expect(logoutButton?.getAttribute('size')).toBe('small');
+    expect(logoutButton?.getAttribute('size')).toBe('normal');
 
     const dialog =
       compiled.querySelector<HTMLDialogElement>('hm-modal dialog')!;
@@ -164,7 +165,7 @@ describe('App', () => {
     await router.navigateByUrl('/signup');
     fixture.detectChanges();
     expect(
-      fixture.nativeElement.querySelector('app-home h1')?.textContent,
+      fixture.nativeElement.querySelector('app-home #home-title')?.textContent,
     ).toContain('¡Bienvenido a casa!');
     expect(
       fixture.nativeElement.querySelector('hm-navbar hm-brand'),
