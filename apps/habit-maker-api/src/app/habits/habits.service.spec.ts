@@ -144,4 +144,43 @@ describe('HabitsService', () => {
       service.create({ name: 'Leer' }, 'missing-user'),
     ).rejects.toThrow(UnauthorizedException);
   });
+
+  it('stores daily reminder settings only for the habit owner', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+
+    await expect(
+      service.updateReminder(
+        created.id,
+        { enabled: true, time: '08:15', timeZone: 'Europe/Madrid' },
+        user.id,
+      ),
+    ).resolves.toEqual({
+      enabled: true,
+      time: '08:15',
+      timeZone: 'Europe/Madrid',
+    });
+    await expect(
+      service.getReminder(created.id, 'another-user'),
+    ).rejects.toThrow(NotFoundException);
+    await expect(
+      service.updateReminder(
+        created.id,
+        { enabled: true, time: '25:99', timeZone: 'Europe/Madrid' },
+        user.id,
+      ),
+    ).rejects.toThrow(BadRequestException);
+    await expect(
+      service.updateReminder(
+        created.id,
+        { enabled: true, time: '08:15', timeZone: 'Not/AZone' },
+        user.id,
+      ),
+    ).rejects.toThrow(BadRequestException);
+
+    await expect(service.getReminder(created.id, user.id)).resolves.toEqual({
+      enabled: true,
+      time: '08:15',
+      timeZone: 'Europe/Madrid',
+    });
+  });
 });

@@ -21,6 +21,13 @@ export interface AdminEmailConfiguration {
   isConfigured: boolean;
 }
 
+export interface AdminPushConfiguration {
+  publicKeyConfigured: boolean;
+  privateKeyConfigured: boolean;
+  subjectConfigured: boolean;
+  isConfigured: boolean;
+}
+
 const API_URL = environment.API_URL || '/api';
 
 @Injectable({ providedIn: 'root' })
@@ -43,6 +50,16 @@ export class AdminService {
 
     return this.http.get<AdminEmailConfiguration>(
       `${API_URL}/admin/email/configuration`,
+    );
+  }
+
+  getPushConfiguration(): Observable<AdminPushConfiguration> {
+    if (this.authService.getUserRole() !== 'admin') {
+      return throwError(() => new Error('Administrator access is required'));
+    }
+
+    return this.http.get<AdminPushConfiguration>(
+      `${API_URL}/admin/push/configuration`,
     );
   }
 

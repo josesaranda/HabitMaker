@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   DestroyRef,
   inject,
   OnInit,
@@ -8,6 +9,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { SwPush } from '@angular/service-worker';
+import { firstValueFrom } from 'rxjs';
 import confetti from '@hiseb/confetti';
 import {
   HabitMakerUIButton,
@@ -28,6 +31,7 @@ import {
   tap,
 } from 'rxjs';
 import { Habit, HabitService } from '../habits/habit.service';
+import { LanguageService } from '../i18n/language.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
@@ -47,7 +51,9 @@ export class HabitDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly habitService = inject(HabitService);
+  private readonly languageService = inject(LanguageService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly swPush = inject(SwPush, { optional: true });
 
   protected readonly habit = signal<Habit | null>(null);
   protected readonly isLoading = signal(true);
@@ -60,6 +66,24 @@ export class HabitDetail implements OnInit {
   protected readonly loadError = signal('');
   protected readonly isDeletingHabit = signal(false);
   protected readonly deleteHabitError = signal('');
+  protected readonly isLoadingReminder = signal(true);
+  protected readonly isSavingReminder = signal(false);
+  protected readonly reminderEnabled = signal(false);
+  protected readonly pushConfigurationState = signal<
+    'loading' | 'available' | 'missing' | 'error'
+  >('loading');
+  protected readonly shouldShowReminderSettings = computed(
+    () => this.pushConfigurationState() !== 'missing',
+  );
+  protected readonly reminderTime = signal('08:00');
+  protected readonly savedReminderTime = signal('08:00');
+  protected readonly hasPendingReminderChanges = computed(
+    () =>
+      this.reminderEnabled() &&
+      this.reminderTime() !== this.savedReminderTime(),
+  );
+  protected readonly reminderPublicKey = signal<string | null>(null);
+  protected readonly reminderNotice = signal('');
 
   ngOnInit(): void {
     this.browserService.setTitle('pageTitles.habitDetail');
@@ -112,6 +136,7 @@ export class HabitDetail implements OnInit {
 
           const habit = result.habit;
           this.habit.set(habit);
+          this.loadReminder(habit.id);
           this.browserService.setTitle('pageTitles.habitNamed', {
             name: habit.name,
           });
@@ -128,6 +153,160 @@ export class HabitDetail implements OnInit {
       .subscribe((completion) => {
         this.isCompletedToday.set(completion.completed);
       });
+  }
+
+  protected async toggleReminder(enabled: boolean): Promise<void> {
+    const currentHabit = this.habit();
+    if (!currentHabit || this.isSavingReminder()) return;
+
+    if (!enabled) {
+      this.reminderTime.set(this.savedReminderTime());
+      await this.persistReminder(false, this.savedReminderTime());
+      return;
+    }
+
+    if (!this.swPush?.isEnabled || typeof Notification === 'undefined') {
+      this.reminderNotice.set('habitDetail.reminderUnsupported');
+      return;
+    }
+    if (Notification.permission === 'denied') {
+      this.reminderNotice.set('habitDetail.reminderBlocked');
+      return;
+    }
+
+    const publicKey = this.reminderPublicKey();
+    if (!publicKey) {
+      this.reminderNotice.set('habitDetail.reminderUnsupported');
+      return;
+    }
+
+    this.isSavingReminder.set(true);
+    this.reminderNotice.set('');
+    try {
+      // requestSubscription is called only from this explicit user action.
+      const subscription = await this.swPush.requestSubscription({
+        serverPublicKey: publicKey,
+      });
+      await firstValueFrom(
+        this.habitService.savePushSubscription(
+          subscription.toJSON(),
+          this.languageService.language(),
+        ),
+      );
+      await this.persistReminder(true, this.savedReminderTime(), true);
+    } catch {
+      this.isSavingReminder.set(false);
+      this.reminderNotice.set(
+        this.notificationsAreBlocked()
+          ? 'habitDetail.reminderBlocked'
+          : 'habitDetail.reminderError',
+      );
+    }
+  }
+
+  protected setReminderTime(time: string): void {
+    this.reminderTime.set(time);
+  }
+
+  protected async saveReminderTime(): Promise<void> {
+    if (!this.hasPendingReminderChanges() || this.isSavingReminder()) return;
+    await this.persistReminder(
+      true,
+      this.reminderTime(),
+      false,
+      'habitDetail.reminderTimeSaved',
+    );
+  }
+
+  private loadReminder(habitId: string): void {
+    this.isLoadingReminder.set(true);
+    this.pushConfigurationState.set('loading');
+    this.reminderNotice.set('');
+    this.habitService
+      .getReminder(habitId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (reminder) => {
+          this.reminderEnabled.set(reminder.enabled);
+          if (reminder.time) {
+            this.reminderTime.set(reminder.time);
+            this.savedReminderTime.set(reminder.time);
+          }
+          this.isLoadingReminder.set(false);
+        },
+        error: () => {
+          this.isLoadingReminder.set(false);
+          this.reminderNotice.set('habitDetail.reminderError');
+        },
+      });
+    this.habitService
+      .getPushPublicKey()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ({ publicKey }) => {
+          this.reminderPublicKey.set(publicKey);
+          if (!publicKey) {
+            this.pushConfigurationState.set('missing');
+            return;
+          }
+          this.pushConfigurationState.set('available');
+          if (!this.swPush?.isEnabled || typeof Notification === 'undefined') {
+            this.reminderNotice.set('habitDetail.reminderUnsupported');
+          } else if (Notification.permission === 'denied') {
+            this.reminderNotice.set('habitDetail.reminderBlocked');
+          }
+        },
+        error: () => {
+          this.reminderPublicKey.set(null);
+          this.pushConfigurationState.set('error');
+          this.reminderNotice.set('habitDetail.reminderError');
+        },
+      });
+  }
+
+  private async persistReminder(
+    enabled: boolean,
+    time: string,
+    alreadySaving = false,
+    successMessage = enabled
+      ? 'habitDetail.reminderEnabled'
+      : 'habitDetail.reminderDisabled',
+  ): Promise<void> {
+    const currentHabit = this.habit();
+    if (!currentHabit) return;
+
+    if (!alreadySaving) this.isSavingReminder.set(true);
+    this.reminderNotice.set('');
+    try {
+      const reminder = await firstValueFrom(
+        this.habitService.saveReminder(currentHabit.id, {
+          enabled,
+          time,
+          timeZone: this.getLocalTimeZone(),
+        }),
+      );
+      this.reminderEnabled.set(reminder.enabled);
+      if (reminder.time) {
+        this.reminderTime.set(reminder.time);
+        this.savedReminderTime.set(reminder.time);
+      }
+      this.reminderNotice.set(successMessage);
+    } catch {
+      this.reminderNotice.set('habitDetail.reminderError');
+    } finally {
+      this.isSavingReminder.set(false);
+    }
+  }
+
+  private getLocalTimeZone(): string {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  }
+
+  private notificationsAreBlocked(): boolean {
+    return (
+      typeof Notification !== 'undefined' &&
+      Notification.permission === 'denied'
+    );
   }
 
   protected updateCalendarWindow(windowStartDate: string): void {

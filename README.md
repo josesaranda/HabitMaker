@@ -6,6 +6,7 @@ HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an
 
 - Create habits and view them from a personal home page.
 - Track daily completions and browse completion history in a habit calendar.
+- Schedule per-habit daily web push reminders in the device's local time zone.
 - Sign up, log in, and submit a password-recovery request.
 - Switch the interface between English and Spanish.
 - View account settings; administrators can also view registered users and check the app version for updates.
@@ -27,7 +28,7 @@ HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an
 ├── apps/
 │   ├── habit-maker-app/       # Angular web application
 │   │   └── src/app/           # Routes, screens, auth, habits, and localization
-│   └── habit-maker-api/       # NestJS API (auth, habits, completions, admin, version)
+│   └── habit-maker-api/       # NestJS API (auth, habits, push, completions, admin, version)
 ├── packages/
 │   └── habit-maker-ui/        # Shared Angular UI components
 ├── nx.json                   # Nx workspace configuration
@@ -65,6 +66,8 @@ The frontend is available at [http://localhost:4200](http://localhost:4200). Dur
 The API accepts `SERVER_PORT` and `CORS_ORIGIN` environment variables; by default it listens on port `3000` and allows requests from `http://localhost:4200`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD` before starting the API. The password must be at least eight characters long.
 
 To enable email delivery, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL` (`smtp` for STARTTLS or `smtps` for implicit TLS), `SMTP_FROM`, and, when authentication is required, both `SMTP_USER` and `SMTP_PASSWORD`. Set `APP_URL` to the public address of the frontend so password reset emails link to the correct site (it defaults to `http://localhost:4200` in local API development). Reset links expire after one hour and can only be used once. Administrators can view these settings and send a test email from the application settings page. SMTP passwords are never returned to the web application.
+
+To enable web push reminders, generate a VAPID key pair with `npx web-push generate-vapid-keys` and set `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, and (optionally) `VAPID_SUBJECT` on the API. Keep the private key secret. Push requires HTTPS in deployed environments (localhost is allowed for development), a supported browser/service worker, and notification permission granted by the user when they enable a reminder. In Docker, set these variables in `.env`; reminders and subscriptions are persisted in PostgreSQL. The API checks due reminders every 15 seconds and records each habit/device/local-day delivery to prevent duplicate notifications. Reminders are skipped for a habit already completed that day.
 
 To use PostgreSQL, configure `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`; `POSTGRES_PORT` is optional and defaults to `5432`. When these variables are omitted, the API uses its in-memory sql.js database. If PostgreSQL configuration is started but incomplete, the API reports the missing variables. See `.env.example` for a template.
 

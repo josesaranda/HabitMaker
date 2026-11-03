@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, Subject, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
+import { SupportedLanguage } from '../i18n/language.service';
 
 export interface Habit {
   id: string;
@@ -15,6 +16,12 @@ export interface HabitCompletionStatus {
   date: string;
   completed: boolean;
   completedAt: string | null;
+}
+
+export interface HabitReminder {
+  enabled: boolean;
+  time: string | null;
+  timeZone: string | null;
 }
 
 const API_URL = environment.API_URL || '/api';
@@ -50,6 +57,41 @@ export class HabitService {
   getHabit(id: string): Observable<Habit> {
     return this.requireAuthentication(
       this.http.get<Habit>(`${API_URL}/habits/${encodeURIComponent(id)}`),
+    );
+  }
+
+  getReminder(id: string): Observable<HabitReminder> {
+    return this.requireAuthentication(
+      this.http.get<HabitReminder>(
+        `${API_URL}/habits/${encodeURIComponent(id)}/reminder`,
+      ),
+    );
+  }
+
+  saveReminder(id: string, reminder: HabitReminder): Observable<HabitReminder> {
+    return this.requireAuthentication(
+      this.http.put<HabitReminder>(
+        `${API_URL}/habits/${encodeURIComponent(id)}/reminder`,
+        reminder,
+      ),
+    );
+  }
+
+  getPushPublicKey(): Observable<{ publicKey: string | null }> {
+    return this.requireAuthentication(
+      this.http.get<{ publicKey: string | null }>(`${API_URL}/push/public-key`),
+    );
+  }
+
+  savePushSubscription(
+    subscription: PushSubscriptionJSON,
+    language: SupportedLanguage,
+  ): Observable<void> {
+    return this.requireAuthentication(
+      this.http.put<void>(`${API_URL}/push/subscriptions`, {
+        ...subscription,
+        language,
+      }),
     );
   }
 

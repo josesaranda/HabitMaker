@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { SwPush } from '@angular/service-worker';
 import {
   HabitMakerUIHeader,
   HabitMakerUIInput,
@@ -8,14 +9,16 @@ import {
   HabitMakerUISelect,
   HabitMakerUIButton,
 } from '@habit-maker/habit-maker-ui';
-import { finalize } from 'rxjs';
+import { finalize, take } from 'rxjs';
 import {
   AdminEmailConfiguration,
+  AdminPushConfiguration,
   AdminService,
   AdminUser,
 } from '../admin/admin.service';
 import { BrowserService } from '../browser/browser.service';
 import { AuthService } from '../auth/auth.service';
+import { HabitService } from '../habits/habit.service';
 import { AppVersionService, VersionCheckResult } from './app-version.service';
 import { LanguageService, SupportedLanguage } from '../i18n/language.service';
 
@@ -37,6 +40,8 @@ const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
 export class Settings implements OnInit {
   private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
+  private readonly swPush = inject(SwPush, { optional: true });
+  private readonly habitService = inject(HabitService, { optional: true });
   private readonly adminService = inject(AdminService);
   private readonly appVersionService = inject(AppVersionService);
   protected readonly languageService = inject(LanguageService);
@@ -49,6 +54,10 @@ export class Settings implements OnInit {
     signal<AdminEmailConfiguration | null>(null);
   protected readonly isLoadingEmailConfiguration = signal(false);
   protected readonly emailConfigurationError = signal('');
+  protected readonly pushConfiguration =
+    signal<AdminPushConfiguration | null>(null);
+  protected readonly isLoadingPushConfiguration = signal(false);
+  protected readonly pushConfigurationError = signal('');
   protected readonly testEmailAddress = signal('');
   protected readonly isSendingTestEmail = signal(false);
   protected readonly testEmailMessage = signal('');
@@ -73,6 +82,7 @@ export class Settings implements OnInit {
       this.checkForUpdates();
       this.loadUsers();
       this.loadEmailConfiguration();
+      this.loadPushConfiguration();
     }
   }
 
@@ -138,6 +148,21 @@ export class Settings implements OnInit {
       });
   }
 
+  private loadPushConfiguration(): void {
+    this.isLoadingPushConfiguration.set(true);
+    this.adminService
+      .getPushConfiguration()
+      .pipe(finalize(() => this.isLoadingPushConfiguration.set(false)))
+      .subscribe({
+        next: (configuration) => this.pushConfiguration.set(configuration),
+        error: () => {
+          this.pushConfigurationError.set(
+            'settings.pushConfigurationError',
+          );
+        },
+      });
+  }
+
   protected sendTestEmail(event: SubmitEvent): void {
     event.preventDefault();
     const recipient = this.testEmailAddress().trim();
@@ -156,5 +181,14 @@ export class Settings implements OnInit {
 
   protected setLanguage(language: SupportedLanguage): void {
     this.languageService.setLanguage(language);
+    if (!this.swPush?.isEnabled || !this.habitService) return;
+
+    const habitService = this.habitService;
+    this.swPush.subscription.pipe(take(1)).subscribe((subscription) => {
+      if (!subscription) return;
+      habitService
+        .savePushSubscription(subscription.toJSON(), language)
+        .subscribe({ error: () => undefined });
+    });
   }
 }
