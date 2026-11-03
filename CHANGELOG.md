@@ -1,3 +1,18 @@
+# [1.6.0](https://github.com/josesaranda/HabitMaker/compare/v1.5.0...v1.6.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **ui:** hide reminders without VAPID configuration ([3d9f1ee](https://github.com/josesaranda/HabitMaker/commit/3d9f1ee6a8171c7191691075dc44a4374a24e174))
+
+
+### Features
+
+* **admin:** show push configuration status ([a13d6ac](https://github.com/josesaranda/HabitMaker/commit/a13d6ac930644312e0e73ac3915bbb0b8bd131ec))
+* **push:** add scheduled habit reminders ([#2](https://github.com/josesaranda/HabitMaker/issues/2)) ([b154222](https://github.com/josesaranda/HabitMaker/commit/b15422200331d99c89c4f3ce0c95224bfe8f339a))
+* **push:** localize notifications per device ([5d977df](https://github.com/josesaranda/HabitMaker/commit/5d977df9a3e3017922696e53696efaa3b10b5747))
+* **ui:** defer reminder time changes until save ([96eabba](https://github.com/josesaranda/HabitMaker/commit/96eabba9669ee6212fa9c5ee23289c3df34ac40d))
+
 # [1.5.0](https://github.com/josesaranda/HabitMaker/compare/v1.4.0...v1.5.0) (2026-11-03)
 
 
