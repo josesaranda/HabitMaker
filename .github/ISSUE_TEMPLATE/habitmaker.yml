@@ -1,0 +1,95 @@
+name: HabitMaker — bug report or feature request
+description: Report a problem, suggest an improvement, or share an idea for HabitMaker.
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Issue type
+      description: What would you like to report?
+      options:
+        - Bug / unexpected behavior
+        - New feature or improvement
+        - Documentation
+        - Other question or suggestion
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Choose the closest area, or select “I'm not sure” if you don't know.
+      options:
+        - Home and habits
+        - Habit details, calendar, and completions
+        - Reminders and web push notifications
+        - Sign-up, login, and password recovery
+        - Settings, administration, and app version
+        - Languages (English / Spanish)
+        - Shared UI (HabitMakerUI)
+        - API or data
+        - Docker, CI, or development tooling
+        - Documentation
+        - I'm not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Explain what happened or what you'd like to be able to do, and why it would be useful.
+      placeholder: Describe the situation and provide as much relevant context as possible.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to reproduce
+      description: If you're reporting a bug, provide the steps needed to reproduce it.
+      placeholder: |
+        1. Open…
+        2. Select…
+        3. Observe…
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected-and-actual
+    attributes:
+      label: Expected and actual behavior
+      description: For bugs, explain what you expected and what happened. For suggestions, describe the desired outcome.
+      placeholder: |
+        I expected…
+        Instead…
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add details that may help, such as the app route, how often it occurs, or its impact.
+      placeholder: Add screenshots or recordings if they help explain the issue.
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment (optional)
+      description: Browser and operating system; mention whether you're running HabitMaker locally or with Docker if relevant.
+      placeholder: “Chrome on macOS”, “Firefox on Windows”, etc.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked that an issue about this topic doesn't already exist.
+          required: true
+        - label: I removed any passwords, tokens, private keys, or other sensitive information from this report.
+          required: true
