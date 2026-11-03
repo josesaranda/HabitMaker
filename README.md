@@ -118,4 +118,4 @@ The frontend build output is written to `dist/apps/habit-maker-app` and the API 
 
 ## Releases
 
-Releases are managed by `semantic-release` on the `main` branch. Use [Conventional Commits](https://www.conventionalcommits.org/): `fix:` creates a patch release, `feat:` a minor release, and breaking changes (for example, `feat!:` or a `BREAKING CHANGE:` footer) a major release. A release updates the root `package.json` and `CHANGELOG.md` and creates a GitHub Release; the package is not published to npm.
+Releases are managed by `semantic-release` on the `main` branch. Use [Conventional Commits](https://www.conventionalcommits.org/): `fix:` creates a patch release, `feat:` a minor release, and breaking changes (for example, `feat!:` or a `BREAKING CHANGE:` footer) a major release. A release updates the root `package.json`, `package-lock.json`, and `CHANGELOG.md` and creates a GitHub Release; the package is not published to npm.
