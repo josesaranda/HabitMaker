@@ -1,0 +1,43 @@
+<button
+  class="hm-ui-select__trigger"
+  type="button"
+  role="combobox"
+  aria-autocomplete="none"
+  aria-haspopup="listbox"
+  [id]="triggerId"
+  [disabled]="isDisabled()"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-labelledby]="ariaLabelledBy()"
+  [attr.aria-describedby]="ariaDescribedBy()"
+  [attr.aria-invalid]="ariaInvalid()"
+  [attr.aria-required]="required()"
+  [attr.aria-expanded]="isOpen()"
+  [attr.aria-controls]="listboxId()"
+  [attr.aria-activedescendant]="isOpen() ? activeOptionId() : null"
+  (click)="onTriggerClick()"
+  (keydown)="onKeydown($event)"
+  (blur)="onBlur()"
+>
+  <span class="hm-ui-select__value" [class.hm-ui-select__value--placeholder]="!selectedValue()">
+    {{ displayValue() }}
+  </span>
+  <svg
+    aria-hidden="true"
+    class="hm-ui-select__chevron"
+    [class.hm-ui-select__chevron--open]="isOpen()"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <path d="m5 7.5 5 5 5-5" stroke="currentColor" stroke-width="1.75" />
+  </svg>
+</button>
+
+<div
+  class="hm-ui-select__listbox"
+  role="listbox"
+  [id]="listboxId()"
+  [attr.aria-labelledby]="ariaLabelledBy() || triggerId"
+  [hidden]="!isOpen()"
+>
+  <ng-content />
+</div>

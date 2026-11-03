@@ -30,18 +30,24 @@
           [value]="email()"
           readonly
         />
-        <label class="mb-2 mt-5 block text-sm font-semibold text-text-primary" for="language">
+        <label id="language-label" class="mb-2 mt-5 block text-sm font-semibold text-text-primary">
           {{ 'settings.language' | transloco }}
         </label>
-        <select
-          id="language"
-          class="w-full rounded-lg border border-border bg-background px-3 py-2 text-text-primary"
-          [value]="languageService.language()"
-          (change)="setLanguage($event)"
+        <habit-maker-ui-select
+          name="language"
+          [aria-labelledby]="'language-label'"
+          [ngModel]="languageService.language()"
+          (ngModelChange)="setLanguage($event)"
         >
-          <option value="en">{{ 'settings.english' | transloco }}</option>
-          <option value="es">{{ 'settings.spanish' | transloco }}</option>
-        </select>
+          <habit-maker-ui-option
+            value="en"
+            [label]="'settings.english' | transloco"
+          >{{ 'settings.english' | transloco }}</habit-maker-ui-option>
+          <habit-maker-ui-option
+            value="es"
+            [label]="'settings.spanish' | transloco"
+          >{{ 'settings.spanish' | transloco }}</habit-maker-ui-option>
+        </habit-maker-ui-select>
       </div>
     </section>
     @if (isAdmin()) {

@@ -1,8 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIHeader,
   HabitMakerUIInput,
+  HabitMakerUIOption,
+  HabitMakerUISelect,
   HabitMakerUIButton,
 } from '@habit-maker/habit-maker-ui';
 import { finalize } from 'rxjs';
@@ -19,6 +22,9 @@ const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
     HabitMakerUIHeader,
     HabitMakerUIInput,
     HabitMakerUIButton,
+    HabitMakerUISelect,
+    HabitMakerUIOption,
+    FormsModule,
     TranslocoPipe,
   ],
   selector: 'app-settings',
@@ -109,9 +115,7 @@ export class Settings implements OnInit {
       });
   }
 
-  protected setLanguage(event: Event): void {
-    const language = (event.target as HTMLSelectElement)
-      .value as SupportedLanguage;
+  protected setLanguage(language: SupportedLanguage): void {
     this.languageService.setLanguage(language);
   }
 }

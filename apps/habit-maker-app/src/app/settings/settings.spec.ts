@@ -50,9 +50,13 @@ describe('Settings', () => {
 
     const fixture = TestBed.createComponent(Settings);
     fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const email = compiled.querySelector<HTMLInputElement>('#user-email');
-    const language = compiled.querySelector<HTMLSelectElement>('#language');
+    const language = compiled.querySelector<HTMLButtonElement>(
+      'habit-maker-ui-select .hm-ui-select__trigger',
+    );
 
     expect(compiled.querySelector('h1')?.textContent).toContain('Ajustes');
     expect(compiled.querySelector('h2')?.textContent).toContain(
@@ -60,12 +64,16 @@ describe('Settings', () => {
     );
     expect(email?.value).toBe('persona@example.com');
     expect(email?.readOnly).toBe(true);
-    expect(language?.value).toBe('es');
-    language!.value = 'en';
-    language!.dispatchEvent(new Event('change'));
+    expect(language?.getAttribute('role')).toBe('combobox');
+    expect(language?.textContent).toContain('Español');
+    language!.click();
+    fixture.detectChanges();
+    compiled
+      .querySelector<HTMLElement>('habit-maker-ui-option[value="en"]')!
+      .click();
     fixture.detectChanges();
     expect(compiled.querySelector('h2')?.textContent).toContain('User settings');
-    expect(language?.value).toBe('en');
+    expect(language?.textContent).toContain('English');
     expect(compiled.querySelector('#admin-settings-title')).toBeNull();
     expect(compiled.querySelector('#app-settings-title')).toBeNull();
     expect(compiled.textContent).not.toContain('Versión actual');

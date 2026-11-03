@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+:host(:hover),
+:host(.hm-ui-option--active) {
+  background-color: var(--color-surface-secondary);
+}
+
+:host(.hm-ui-option--selected) {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+:host(.hm-ui-option--disabled) {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
