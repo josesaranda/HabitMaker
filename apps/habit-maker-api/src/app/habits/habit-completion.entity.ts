@@ -10,6 +10,12 @@ import {
 } from 'typeorm';
 import { HabitEntity } from './habit.entity';
 
+const completedAtTransformer = {
+  to: (value: Date | null): string | null => value?.toISOString() ?? null,
+  from: (value: string | null): Date | null =>
+    value === null ? null : new Date(value),
+};
+
 @Entity({ name: 'habit_completions' })
 @Unique(['habit', 'date'])
 export class HabitCompletionEntity {
@@ -24,13 +30,17 @@ export class HabitCompletionEntity {
   @Column({ type: 'boolean', default: false })
   completed!: boolean;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: completedAtTransformer,
+  })
   completedAt!: Date | null;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn()
   updatedAt!: Date;
 
   @ManyToOne(() => HabitEntity, (habit) => habit.completions, {

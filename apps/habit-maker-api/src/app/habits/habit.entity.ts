@@ -19,10 +19,10 @@ export class HabitEntity {
   @Column({ type: 'varchar', length: 100 })
   name!: string;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn()
   createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn()
   updatedAt!: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.habits, { onDelete: 'CASCADE' })
