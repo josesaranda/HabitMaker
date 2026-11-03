@@ -9,6 +9,8 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../auth/user.entity';
 
+export type PushLanguage = 'en' | 'es';
+
 @Entity({ name: 'push_subscriptions' })
 @Unique(['endpoint'])
 export class PushSubscriptionEntity {
@@ -23,6 +25,9 @@ export class PushSubscriptionEntity {
 
   @Column({ type: 'text' })
   auth!: string;
+
+  @Column({ type: 'varchar', length: 2, default: 'en' })
+  language!: PushLanguage;
 
   @CreateDateColumn()
   createdAt!: Date;

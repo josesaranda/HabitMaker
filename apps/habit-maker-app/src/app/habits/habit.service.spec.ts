@@ -242,13 +242,15 @@ describe('HabitService', () => {
     } as PushSubscriptionJSON;
     let saved = false;
 
-    service.savePushSubscription(subscription).subscribe(() => (saved = true));
+    service
+      .savePushSubscription(subscription, 'es')
+      .subscribe(() => (saved = true));
 
     const request = httpTestingController.expectOne(
       `${API_URL}/push/subscriptions`,
     );
     expect(request.request.method).toBe('PUT');
-    expect(request.request.body).toEqual(subscription);
+    expect(request.request.body).toEqual({ ...subscription, language: 'es' });
     expect(request.request.headers.get('Authorization')).toBe(
       'Bearer access-token',
     );

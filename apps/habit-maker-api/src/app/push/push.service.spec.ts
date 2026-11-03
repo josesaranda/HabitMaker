@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import * as webpush from 'web-push';
 import { DataSource } from 'typeorm';
 import { UserEntity } from '../auth/user.entity';
@@ -96,6 +96,31 @@ describe('PushService', () => {
     expect(sendNotification).toHaveBeenCalledTimes(2);
   });
 
+  it('localizes each device notification using its saved app language', async () => {
+    const user = await dataSource
+      .getRepository(UserEntity)
+      .findOneByOrFail({ id: 'user-1' });
+    await dataSource.getRepository(PushSubscriptionEntity).save({
+      id: 'subscription-es',
+      endpoint: 'https://push.example.com/subscription/es',
+      p256dh: 'p256dh-key-es',
+      auth: 'auth-key-es',
+      language: 'es',
+      user,
+    });
+    vi.mocked(webpush.sendNotification).mockResolvedValue({} as never);
+
+    await service.dispatchDueReminders(new Date('2026-03-08T12:00:00.000Z'));
+
+    const bodies = vi
+      .mocked(webpush.sendNotification)
+      .mock.calls.map(([, message]) =>
+        JSON.parse(message as string).notification.body,
+      );
+    expect(bodies).toContain('Time for: Walk');
+    expect(bodies).toContain('Es hora de: Walk');
+  });
+
   it('skips an occurrence after the habit has been completed that day', async () => {
     const habit = await dataSource
       .getRepository(HabitEntity)
@@ -143,11 +168,17 @@ describe('PushService', () => {
     const payload = {
       endpoint: subscription.endpoint,
       keys: { p256dh: 'updated-key', auth: 'updated-auth' },
+      language: 'es',
     };
 
     await expect(
       service.saveSubscription(payload, 'user-1'),
     ).resolves.toBeUndefined();
+    await expect(
+      dataSource.getRepository(PushSubscriptionEntity).findOneByOrFail({
+        id: subscription.id,
+      }),
+    ).resolves.toMatchObject({ language: 'es' });
     await expect(
       service.saveSubscription(payload, otherUser.id),
     ).rejects.toThrow(ForbiddenException);
@@ -155,9 +186,20 @@ describe('PushService', () => {
       {
         endpoint: 'https://push.example.com/subscription/2',
         keys: { p256dh: 'second-key', auth: 'second-auth' },
+        language: 'en',
       },
       otherUser.id,
     );
+    await expect(
+      service.saveSubscription(
+        {
+          endpoint: 'https://push.example.com/invalid-language',
+          keys: { p256dh: 'key', auth: 'auth' },
+          language: 'fr',
+        },
+        'user-1',
+      ),
+    ).rejects.toThrow(BadRequestException);
 
     expect(await dataSource.getRepository(PushSubscriptionEntity).count()).toBe(
       2,

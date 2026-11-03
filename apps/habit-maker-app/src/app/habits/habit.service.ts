@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, Subject, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
+import { SupportedLanguage } from '../i18n/language.service';
 
 export interface Habit {
   id: string;
@@ -82,9 +83,15 @@ export class HabitService {
     );
   }
 
-  savePushSubscription(subscription: PushSubscriptionJSON): Observable<void> {
+  savePushSubscription(
+    subscription: PushSubscriptionJSON,
+    language: SupportedLanguage,
+  ): Observable<void> {
     return this.requireAuthentication(
-      this.http.put<void>(`${API_URL}/push/subscriptions`, subscription),
+      this.http.put<void>(`${API_URL}/push/subscriptions`, {
+        ...subscription,
+        language,
+      }),
     );
   }
 

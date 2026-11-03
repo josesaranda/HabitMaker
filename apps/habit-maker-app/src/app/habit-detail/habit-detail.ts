@@ -31,6 +31,7 @@ import {
   tap,
 } from 'rxjs';
 import { Habit, HabitService } from '../habits/habit.service';
+import { LanguageService } from '../i18n/language.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
@@ -50,6 +51,7 @@ export class HabitDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly habitService = inject(HabitService);
+  private readonly languageService = inject(LanguageService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly swPush = inject(SwPush, { optional: true });
 
@@ -186,7 +188,10 @@ export class HabitDetail implements OnInit {
         serverPublicKey: publicKey,
       });
       await firstValueFrom(
-        this.habitService.savePushSubscription(subscription.toJSON()),
+        this.habitService.savePushSubscription(
+          subscription.toJSON(),
+          this.languageService.language(),
+        ),
       );
       await this.persistReminder(true, this.savedReminderTime(), true);
     } catch {

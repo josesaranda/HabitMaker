@@ -15,11 +15,15 @@ import { UserEntity } from '../auth/user.entity';
 import { HabitEntity } from '../habits/habit.entity';
 import { HabitCompletionEntity } from '../habits/habit-completion.entity';
 import { PushDeliveryEntity } from './push-delivery.entity';
-import { PushSubscriptionEntity } from './push-subscription.entity';
+import {
+  PushLanguage,
+  PushSubscriptionEntity,
+} from './push-subscription.entity';
 
 interface WebPushSubscriptionInput {
   endpoint: string;
   keys: { p256dh: string; auth: string };
+  language: PushLanguage;
 }
 
 interface LocalDateTime {
@@ -94,6 +98,7 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
         endpoint: subscription.endpoint,
         p256dh: subscription.keys.p256dh,
         auth: subscription.keys.auth,
+        language: subscription.language,
         user,
       }),
     );
@@ -192,7 +197,10 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
     const payload = JSON.stringify({
       notification: {
         title: 'HabitMaker',
-        body: `Time for ${habit.name}`,
+        body:
+          subscription.language === 'es'
+            ? `Es hora de: ${habit.name}`
+            : `Time for: ${habit.name}`,
         icon: '/icons/icon-192.png',
         badge: '/icons/icon-192.png',
         data: {
@@ -260,9 +268,11 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
     }
     const value = input as Record<string, unknown>;
     const keys = value['keys'];
+    const language = value['language'] ?? 'en';
     if (
       typeof value['endpoint'] !== 'string' ||
       !this.isHttpsUrl(value['endpoint']) ||
+      (language !== 'en' && language !== 'es') ||
       !keys ||
       typeof keys !== 'object' ||
       typeof (keys as Record<string, unknown>)['p256dh'] !== 'string' ||
@@ -274,6 +284,7 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
     }
     return {
       endpoint: value['endpoint'],
+      language,
       keys: {
         p256dh: (keys as Record<string, string>)['p256dh'],
         auth: (keys as Record<string, string>)['auth'],

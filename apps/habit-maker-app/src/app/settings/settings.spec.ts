@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { SwPush } from '@angular/service-worker';
 import { of } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { AdminService } from '../admin/admin.service';
 import { AuthService } from '../auth/auth.service';
+import { HabitService } from '../habits/habit.service';
 import { AppVersionService } from './app-version.service';
 import { Settings } from './settings';
 
@@ -12,6 +14,7 @@ describe('Settings', () => {
 
   it('shows the user settings with the signed-in email in a readonly input', async () => {
     const getCurrentVersion = vi.fn(() => of({ version: '1.2.3' }));
+    const savePushSubscription = vi.fn(() => of(void 0));
     const checkForUpdates = vi.fn(() =>
       of({
         currentVersion: '1.2.3',
@@ -42,6 +45,22 @@ describe('Settings', () => {
             getPushConfiguration: vi.fn(),
             sendTestEmail: vi.fn(),
           },
+        },
+        {
+          provide: SwPush,
+          useValue: {
+            isEnabled: true,
+            subscription: of({
+              toJSON: () => ({
+                endpoint: 'https://push.example.com/device',
+                keys: { p256dh: 'p256dh', auth: 'auth' },
+              }),
+            }),
+          },
+        },
+        {
+          provide: HabitService,
+          useValue: { savePushSubscription },
         },
         {
           provide: AppVersionService,
@@ -81,6 +100,13 @@ describe('Settings', () => {
       'User settings',
     );
     expect(language?.textContent).toContain('English');
+    expect(savePushSubscription).toHaveBeenCalledWith(
+      {
+        endpoint: 'https://push.example.com/device',
+        keys: { p256dh: 'p256dh', auth: 'auth' },
+      },
+      'en',
+    );
     expect(compiled.querySelector('#admin-settings-title')).toBeNull();
     expect(compiled.querySelector('#email-settings-title')).toBeNull();
     expect(compiled.querySelector('#admin-push-settings-title')).toBeNull();
