@@ -121,7 +121,6 @@
         />
         {{ 'habitDetail.reminderToggle' | transloco }}
       </label>
-      @if (reminderEnabled()) {
       <div class="mt-4 max-w-xs">
         <label
           class="mb-2 block text-sm font-semibold text-text-primary"
@@ -134,10 +133,25 @@
           id="habit-reminder-time"
           type="time"
           [value]="reminderTime()"
-          [disabled]="isSavingReminder()"
+          [disabled]="!reminderEnabled() || isLoadingReminder() || isSavingReminder()"
           (change)="setReminderTime($any($event.target).value)"
         />
       </div>
+      @if (reminderEnabled()) {
+      @if (hasPendingReminderChanges()) {
+      <p class="mt-3 text-sm text-text-secondary" role="status">
+        {{ 'habitDetail.reminderTimePending' | transloco }}
+      </p>
+      }
+      <button
+        hmButton="primary"
+        class="mt-4 rounded-lg text-sm font-semibold"
+        type="button"
+        [disabled]="!hasPendingReminderChanges() || isSavingReminder()"
+        (click)="saveReminderTime()"
+      >
+        {{ 'habitDetail.saveReminderChanges' | transloco }}
+      </button>
       } @if (isLoadingReminder() || isSavingReminder()) {
       <p class="mt-3 text-sm text-text-secondary" role="status">
         {{ (isSavingReminder() ? 'habitDetail.reminderSaving' :

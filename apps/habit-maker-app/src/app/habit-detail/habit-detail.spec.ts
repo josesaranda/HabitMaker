@@ -84,6 +84,9 @@ describe('HabitDetail', () => {
     expect(habitArticle?.getAttribute('style')).toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
+      compiled.querySelector<HTMLInputElement>('#habit-reminder-time')?.disabled,
+    ).toBe(true);
+    expect(
       compiled.querySelector(
         'section[aria-labelledby="habit-completion-title"] button',
       ),
@@ -96,6 +99,77 @@ describe('HabitDetail', () => {
     ).toBe(
       'Pulsa el día de hoy en la tarjeta del hábito para marcarlo como completado.',
     );
+  });
+
+  it('applies a changed reminder time only after saving it explicitly', async () => {
+    const habitService = {
+      getCompletionsForDates: () => of([]),
+      getReminder: () =>
+        of({ enabled: true, time: '08:00', timeZone: 'Europe/Madrid' }),
+      getPushPublicKey: () => of({ publicKey: null }),
+      getTodayCompletion: () =>
+        of({ date: '2026-11-01', completed: false, completedAt: null }),
+      saveReminder: vi.fn(() =>
+        of({ enabled: true, time: '09:30', timeZone: 'Europe/Madrid' }),
+      ),
+    };
+    await TestBed.configureTestingModule({
+      imports: [HabitDetail],
+      providers: [
+        provideTranslocoTesting(),
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            queryParamMap: of(convertToParamMap({})),
+            snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
+          },
+        },
+        { provide: HabitService, useValue: habitService },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(HabitDetail);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const timeInput = compiled.querySelector<HTMLInputElement>(
+      '#habit-reminder-time',
+    )!;
+    expect(timeInput.disabled).toBe(false);
+    timeInput.value = '09:30';
+    timeInput.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(habitService.saveReminder).not.toHaveBeenCalled();
+    const saveButton = compiled.querySelector<HTMLButtonElement>(
+      'section[aria-labelledby="habit-reminder-title"] button',
+    )!;
+    expect(saveButton.disabled).toBe(false);
+    saveButton.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(habitService.saveReminder).toHaveBeenCalledWith('habit-1', {
+      enabled: true,
+      time: '09:30',
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+    });
+    expect(saveButton.disabled).toBe(true);
   });
 
   it('asks for confirmation before deleting and returns to home on success', async () => {

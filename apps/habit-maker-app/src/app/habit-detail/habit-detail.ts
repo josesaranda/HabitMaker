@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   DestroyRef,
   inject,
   OnInit,
@@ -67,6 +68,12 @@ export class HabitDetail implements OnInit {
   protected readonly isSavingReminder = signal(false);
   protected readonly reminderEnabled = signal(false);
   protected readonly reminderTime = signal('08:00');
+  protected readonly savedReminderTime = signal('08:00');
+  protected readonly hasPendingReminderChanges = computed(
+    () =>
+      this.reminderEnabled() &&
+      this.reminderTime() !== this.savedReminderTime(),
+  );
   protected readonly reminderPublicKey = signal<string | null>(null);
   protected readonly reminderNotice = signal('');
 
@@ -145,7 +152,8 @@ export class HabitDetail implements OnInit {
     if (!currentHabit || this.isSavingReminder()) return;
 
     if (!enabled) {
-      await this.persistReminder(false, this.reminderTime());
+      this.reminderTime.set(this.savedReminderTime());
+      await this.persistReminder(false, this.savedReminderTime());
       return;
     }
 
@@ -174,7 +182,7 @@ export class HabitDetail implements OnInit {
       await firstValueFrom(
         this.habitService.savePushSubscription(subscription.toJSON()),
       );
-      await this.persistReminder(true, this.reminderTime(), true);
+      await this.persistReminder(true, this.savedReminderTime(), true);
     } catch {
       this.isSavingReminder.set(false);
       this.reminderNotice.set(
@@ -185,9 +193,18 @@ export class HabitDetail implements OnInit {
     }
   }
 
-  protected async setReminderTime(time: string): Promise<void> {
+  protected setReminderTime(time: string): void {
     this.reminderTime.set(time);
-    if (this.reminderEnabled()) await this.persistReminder(true, time);
+  }
+
+  protected async saveReminderTime(): Promise<void> {
+    if (!this.hasPendingReminderChanges() || this.isSavingReminder()) return;
+    await this.persistReminder(
+      true,
+      this.reminderTime(),
+      false,
+      'habitDetail.reminderTimeSaved',
+    );
   }
 
   private loadReminder(habitId: string): void {
@@ -198,7 +215,10 @@ export class HabitDetail implements OnInit {
       .subscribe({
         next: (reminder) => {
           this.reminderEnabled.set(reminder.enabled);
-          if (reminder.time) this.reminderTime.set(reminder.time);
+          if (reminder.time) {
+            this.reminderTime.set(reminder.time);
+            this.savedReminderTime.set(reminder.time);
+          }
           this.isLoadingReminder.set(false);
         },
         error: () => {
@@ -233,6 +253,9 @@ export class HabitDetail implements OnInit {
     enabled: boolean,
     time: string,
     alreadySaving = false,
+    successMessage = enabled
+      ? 'habitDetail.reminderEnabled'
+      : 'habitDetail.reminderDisabled',
   ): Promise<void> {
     const currentHabit = this.habit();
     if (!currentHabit) return;
@@ -248,12 +271,11 @@ export class HabitDetail implements OnInit {
         }),
       );
       this.reminderEnabled.set(reminder.enabled);
-      if (reminder.time) this.reminderTime.set(reminder.time);
-      this.reminderNotice.set(
-        enabled
-          ? 'habitDetail.reminderEnabled'
-          : 'habitDetail.reminderDisabled',
-      );
+      if (reminder.time) {
+        this.reminderTime.set(reminder.time);
+        this.savedReminderTime.set(reminder.time);
+      }
+      this.reminderNotice.set(successMessage);
     } catch {
       this.reminderNotice.set('habitDetail.reminderError');
     } finally {
