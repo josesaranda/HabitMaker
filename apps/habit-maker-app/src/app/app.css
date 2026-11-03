@@ -45,7 +45,7 @@
   .app-navbar-shell {
     position: sticky;
     inset: auto;
-    bottom: 8px;
+    bottom: 1rem;
     order: 1;
     padding-inline: 1rem;
     background: transparent;

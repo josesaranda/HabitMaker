@@ -1,8 +1,5 @@
 <main class="flex h-full flex-col bg-background px-4 sm:px-[4vw] lg:px-12">
-  <habit-maker-ui-header
-    id="habits-title"
-    class="mx-auto mb-1! max-w-6xl"
-  >
+  <habit-maker-ui-header id="habits-title" class="mx-auto max-w-6xl">
     {{ 'home.title' | transloco }}
     <button
       #addHabitTrigger
@@ -40,7 +37,7 @@
   </section>
   } @else {
   <section
-    class="mx-auto my-auto w-full max-w-xl rounded-2xl border border-border bg-surface p-8 text-center sm:p-12 lg:p-16"
+    class="mx-auto mt-3 my-auto w-full max-w-xl rounded-2xl border border-border bg-surface p-8 text-center sm:p-12 lg:p-16"
     aria-labelledby="home-title"
     data-testid="home-welcome"
   >
