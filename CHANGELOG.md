@@ -1,3 +1,19 @@
+# [1.5.0](https://github.com/josesaranda/HabitMaker/compare/v1.4.0...v1.5.0) (2026-11-03)
+
+
+### Bug Fixes
+
+* **api:** include root package in build cache inputs ([71acfea](https://github.com/josesaranda/HabitMaker/commit/71acfea07d0a184cf57f076eda75bbd48303d2f1))
+* **docker:** pin node image to nvmrc version ([9cba39d](https://github.com/josesaranda/HabitMaker/commit/9cba39d222d9e948872268cb3f5b29b4b3d65281))
+* **habit:** replace history when navigating days ([6f657df](https://github.com/josesaranda/HabitMaker/commit/6f657df66e27edc56c0d58ca167084b726143551))
+* **release:** sync package lock version ([0eeccc9](https://github.com/josesaranda/HabitMaker/commit/0eeccc9f1b663dffd6982071e03b60298e25c61a))
+* **ui:** adjust spacing and layout in various components ([20a0703](https://github.com/josesaranda/HabitMaker/commit/20a0703fde6b6d27127ecfa3235862b6ff3be06a))
+
+
+### Features
+
+* **habits:** add habit deletion ([4334b03](https://github.com/josesaranda/HabitMaker/commit/4334b036fbed20ab41b2a13ff940f0a94a80f70c))
+
 # [1.4.0](https://github.com/josesaranda/HabitMaker/compare/v1.3.0...v1.4.0) (2026-11-03)
 
 
