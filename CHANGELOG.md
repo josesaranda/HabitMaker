@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/josesaranda/HabitMaker/compare/v1.1.0...v1.2.0) (2026-11-02)
+
+
+### Features
+
+* **i18n:** add English and Spanish translations ([c2c347c](https://github.com/josesaranda/HabitMaker/commit/c2c347c91483e3cffe4b29915ad495d5ad2adee9))
+* **settings:** add admin version update checks ([eba0151](https://github.com/josesaranda/HabitMaker/commit/eba0151acff4585fa720628008e62cc6f8586941))
+
 # [1.1.0](https://github.com/josesaranda/HabitMaker/compare/v1.0.0...v1.1.0) (2026-11-02)
 
 
