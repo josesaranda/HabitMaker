@@ -67,6 +67,7 @@
     "@angular/forms": "~22.2.0",
     "@angular/platform-browser": "~22.2.0",
     "@angular/router": "~22.2.0",
+    "@angular/service-worker": "~22.2.0",
     "@hiseb/confetti": "^2.2.0",
     "@jsverse/transloco": "^8.4.0",
     "@nestjs/common": "^11.0.0",

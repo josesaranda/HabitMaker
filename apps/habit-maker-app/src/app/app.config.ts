@@ -6,6 +6,7 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideServiceWorker } from '@angular/service-worker';
 import {
   ActivatedRouteSnapshot,
   provideRouter,
@@ -24,6 +25,10 @@ export const appConfig: ApplicationConfig = {
       inject(LanguageService);
     }),
     provideHttpClient(withInterceptors([authTokenInterceptor])),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
     provideTransloco({
       config: {
         availableLangs: ['en', 'es'],
