@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { AuthService } from './auth.service';
+import { EmailService } from '../email/email.service';
 import { HabitEntity } from '../habits/habit.entity';
 import { HabitCompletionEntity } from '../habits/habit-completion.entity';
 import { UserEntity } from './user.entity';
@@ -18,6 +19,7 @@ describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
   let dataSource: DataSource;
+  let emailService: { sendPasswordResetEmail: ReturnType<typeof vi.fn> };
   let previousAdminEmail: string | undefined;
   let previousAdminPassword: string | undefined;
 
@@ -32,7 +34,14 @@ describe('AuthService', () => {
       synchronize: true,
     });
     await dataSource.initialize();
-    service = new AuthService(jwtService, dataSource.getRepository(UserEntity));
+    emailService = {
+      sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
+    };
+    service = new AuthService(
+      jwtService,
+      dataSource.getRepository(UserEntity),
+      emailService as unknown as EmailService,
+    );
     await service.onModuleInit();
   });
 
@@ -158,15 +167,76 @@ describe('AuthService', () => {
   });
 
   describe('forgotPassword', () => {
-    it('returns the same response for registered and unknown emails', () => {
-      const knownEmailResponse = service.forgotPassword({
+    it('returns the same response for registered and unknown emails', async () => {
+      await service.signup({
+        email: 'known@example.com',
+        password: ADMIN_PASSWORD,
+      });
+      const knownEmailResponse = await service.forgotPassword({
         email: 'known@example.com',
       });
-      const unknownEmailResponse = service.forgotPassword({
+      const unknownEmailResponse = await service.forgotPassword({
         email: 'unknown@example.com',
       });
 
       expect(knownEmailResponse).toEqual(unknownEmailResponse);
+      expect(emailService.sendPasswordResetEmail).toHaveBeenCalledOnce();
+    });
+
+    it('sends a single-use reset token and updates the password', async () => {
+      await service.signup({
+        email: 'person@example.com',
+        password: 'old-password',
+      });
+      await service.forgotPassword({ email: 'person@example.com' });
+      const [, token] = emailService.sendPasswordResetEmail.mock.calls[0] as [
+        string,
+        string,
+      ];
+
+      await expect(
+        service.resetPassword({ token, password: 'new-password' }),
+      ).resolves.toEqual({ message: 'Password updated successfully' });
+      await expect(
+        service.login({
+          email: 'person@example.com',
+          password: 'old-password',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.login({
+          email: 'person@example.com',
+          password: 'new-password',
+        }),
+      ).resolves.toHaveProperty('accessToken');
+      await expect(
+        service.resetPassword({ token, password: 'another-password' }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('rejects expired reset tokens and short passwords', async () => {
+      await service.signup({
+        email: 'person@example.com',
+        password: 'old-password',
+      });
+      await service.forgotPassword({ email: 'person@example.com' });
+      const [, token] = emailService.sendPasswordResetEmail.mock.calls[0] as [
+        string,
+        string,
+      ];
+      await dataSource
+        .getRepository(UserEntity)
+        .update(
+          { email: 'person@example.com' },
+          { passwordResetExpiresAt: String(Date.now() - 1000) },
+        );
+
+      await expect(
+        service.resetPassword({ token, password: 'new-password' }),
+      ).rejects.toThrow('The password reset link is invalid or expired');
+      await expect(
+        service.resetPassword({ token, password: 'short' }),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 });

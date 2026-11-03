@@ -58,6 +58,14 @@ describe('authTokenInterceptor', () => {
     );
     expect(request.request.headers.has('Authorization')).toBe(false);
     request.flush({ message: 'OK' });
+
+    http.post(`${API_URL}/auth/reset-password`, {}).subscribe();
+
+    const resetRequest = httpTestingController.expectOne(
+      `${API_URL}/auth/reset-password`,
+    );
+    expect(resetRequest.request.headers.has('Authorization')).toBe(false);
+    resetRequest.flush({ message: 'OK' });
   });
 
   it('does not attach the token to requests outside the configured API', () => {

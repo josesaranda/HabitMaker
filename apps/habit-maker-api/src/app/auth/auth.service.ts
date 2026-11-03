@@ -2,19 +2,22 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  createHash,
   randomBytes,
   randomUUID,
   scryptSync,
   timingSafeEqual,
 } from 'node:crypto';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { EmailService } from '../email/email.service';
 
 interface Credentials {
   email: string;
@@ -23,10 +26,13 @@ interface Credentials {
 
 @Injectable()
 export class AuthService implements OnModuleInit {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly jwtService: JwtService,
     @InjectRepository(UserEntity)
     private readonly users: Repository<UserEntity>,
+    private readonly emailService: EmailService,
   ) {}
 
   async onModuleInit(): Promise<void> {
@@ -85,13 +91,72 @@ export class AuthService implements OnModuleInit {
     return this.createAccessToken(user);
   }
 
-  forgotPassword(input: unknown): { message: string } {
-    this.parseEmail(input);
+  async forgotPassword(input: unknown): Promise<{ message: string }> {
+    const email = this.parseEmail(input);
+    const user = await this.users.findOneBy({ email });
+
+    if (user) {
+      const resetToken = randomBytes(32).toString('base64url');
+      const passwordResetTokenHash = this.hashResetToken(resetToken);
+      const passwordResetExpiresAt = String(Date.now() + 60 * 60 * 1000);
+
+      await this.users.update(user.id, {
+        passwordResetTokenHash,
+        passwordResetExpiresAt,
+      });
+
+      try {
+        await this.emailService.sendPasswordResetEmail(email, resetToken);
+      } catch {
+        // Keep the public response identical for known and unknown addresses.
+        this.logger.error('Password reset email delivery failed');
+      }
+    }
 
     return {
       message:
         'If an account exists for this email, password reset instructions will be sent.',
     };
+  }
+
+  async resetPassword(input: unknown): Promise<{ message: string }> {
+    if (!input || typeof input !== 'object') {
+      throw new BadRequestException('A request body is required');
+    }
+
+    const body = input as Record<string, unknown>;
+    const token = body['token'];
+    const password = body['password'];
+    if (typeof token !== 'string' || token.length === 0) {
+      throw new BadRequestException('A password reset token is required');
+    }
+    if (typeof password !== 'string' || password.length < 8) {
+      throw new BadRequestException(
+        'Password must be at least 8 characters long',
+      );
+    }
+
+    const salt = randomBytes(16).toString('hex');
+    const result = await this.users.update(
+      {
+        passwordResetTokenHash: this.hashResetToken(token),
+        passwordResetExpiresAt: MoreThan(String(Date.now())),
+      },
+      {
+        passwordSalt: salt,
+        passwordHash: this.hashPassword(password, salt),
+        passwordResetTokenHash: null,
+        passwordResetExpiresAt: null,
+      },
+    );
+
+    if (!result.affected) {
+      throw new BadRequestException(
+        'The password reset link is invalid or expired',
+      );
+    }
+
+    return { message: 'Password updated successfully' };
   }
 
   private parseCredentials(input: unknown): Credentials {
@@ -131,6 +196,10 @@ export class AuthService implements OnModuleInit {
 
   private hashPassword(password: string, salt: string): string {
     return scryptSync(password, salt, 64).toString('hex');
+  }
+
+  private hashResetToken(token: string): string {
+    return createHash('sha256').update(token).digest('hex');
   }
 
   private passwordMatches(password: string, user: UserEntity): boolean {

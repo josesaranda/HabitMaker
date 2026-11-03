@@ -29,8 +29,10 @@ export class RecoverPassword {
   private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
   protected readonly requestSent = signal(false);
+  protected readonly submitting = signal(false);
   protected readonly email = signal('');
   protected readonly errorMessage = signal('');
+  protected readonly currentYear = signal(new Date().getFullYear());
 
   constructor() {
     this.browserService.setTitle('pageTitles.recover');
@@ -41,15 +43,17 @@ export class RecoverPassword {
     const formData = new FormData(event.currentTarget as HTMLFormElement);
     const email = String(formData.get('email') ?? '');
     this.errorMessage.set('');
+    this.submitting.set(true);
     this.authService.forgotPassword(email).subscribe({
       next: () => {
+        this.submitting.set(false);
         this.email.set(email);
         this.requestSent.set(true);
       },
-      error: () =>
-        this.errorMessage.set(
-          'recover.error',
-        ),
+      error: () => {
+        this.submitting.set(false);
+        this.errorMessage.set('recover.error');
+      },
     });
   }
 }

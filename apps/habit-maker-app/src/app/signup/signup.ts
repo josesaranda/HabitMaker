@@ -32,6 +32,7 @@ export class Signup {
   private readonly router = inject(Router);
   protected passwordVisible = signal(false);
   protected message = signal('');
+  protected readonly currentYear = signal(new Date().getFullYear());
   protected emailValue = signal('');
   protected emailTouched = signal(false);
   protected emailFormatValid = signal(true);

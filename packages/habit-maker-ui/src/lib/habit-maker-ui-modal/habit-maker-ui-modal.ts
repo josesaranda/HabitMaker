@@ -31,6 +31,7 @@ export class HabitMakerUIModal {
     } else {
       dialog.setAttribute('open', '');
     }
+    dialog.querySelector<HTMLElement>('[autofocus]')?.focus();
 
     const dialogRect = dialog.getBoundingClientRect();
     const triggerRect = trigger.getBoundingClientRect();

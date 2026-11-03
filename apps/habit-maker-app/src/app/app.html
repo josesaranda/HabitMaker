@@ -9,23 +9,14 @@
     <a class="app-navbar__link" routerLink="/home" aria-current="page">
       {{ 'navigation.home' | transloco }}
     </a>
-    <a class="app-navbar__link" routerLink="/settings">{{ 'navigation.settings' | transloco }}</a>
+    <a class="app-navbar__link" routerLink="/settings"
+      >{{ 'navigation.settings' | transloco }}</a
+    >
     <div class="app-navbar__icon-actions flex flex-row gap-3">
-      <button
-        #addHabitTrigger
-        hmButtonIcon="primary"
-        size="small"
-        type="button"
-        [attr.aria-label]="'navigation.addHabit' | transloco"
-        [title]="'navigation.addHabit' | transloco"
-        (click)="newHabitModal.openFrom(addHabitTrigger)"
-      >
-        <hm-icon name="add" />
-      </button>
       <a
         class="app-navbar__mobile-settings"
         hmButtonIcon="secondary"
-        size="small"
+        size="normal"
         routerLink="/settings"
         [attr.aria-label]="'navigation.settings' | transloco"
         [title]="'navigation.settings' | transloco"
@@ -34,7 +25,7 @@
       </a>
       <button
         hmButtonIcon="secondary"
-        size="small"
+        size="normal"
         type="button"
         [attr.aria-label]="'navigation.logout' | transloco"
         [title]="'navigation.logout' | transloco"
@@ -45,13 +36,6 @@
     </div>
   </hm-navbar>
 </div>
-<hm-modal
-  #newHabitModal
-  [label]="'home.newHabitModal' | transloco"
-  [closeLabel]="'navigation.closeDialog' | transloco"
->
-  <app-new-habit (habitCreated)="newHabitModal.close()" />
-</hm-modal>
 }
 <div class="app-content-shell">
   <router-outlet />

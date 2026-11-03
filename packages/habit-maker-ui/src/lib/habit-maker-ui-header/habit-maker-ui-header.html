@@ -10,4 +10,12 @@
     </a>
   }
   <h1 class="habit-maker-ui-header__title"><ng-content /></h1>
+  <div
+    class="habit-maker-ui-header__actions"
+    [class.habit-maker-ui-header__actions--visible]="hasActions()"
+  >
+    <ng-content
+      select="button[hmButton], a[hmButton], button[hmButtonIcon], a[hmButtonIcon]"
+    />
+  </div>
 </header>

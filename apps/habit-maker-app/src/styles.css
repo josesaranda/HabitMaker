@@ -36,6 +36,14 @@ body {
   animation: header-back-in 220ms ease-out both;
 }
 
+::view-transition-old(habit-maker-ui-header-actions) {
+  animation: header-actions-out 140ms ease-in both;
+}
+
+::view-transition-new(habit-maker-ui-header-actions) {
+  animation: header-actions-in 220ms ease-out both;
+}
+
 @keyframes page-fade-out {
   to {
     opacity: 0;
@@ -67,6 +75,18 @@ body {
   from {
     opacity: 0;
     transform: translateX(-0.25rem) scale(0.9);
+  }
+}
+
+@keyframes header-actions-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes header-actions-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -117,7 +137,9 @@ body {
   ::view-transition-old(habit-maker-ui-header-title),
   ::view-transition-new(habit-maker-ui-header-title),
   ::view-transition-old(habit-maker-ui-header-back),
-  ::view-transition-new(habit-maker-ui-header-back) {
+  ::view-transition-new(habit-maker-ui-header-back),
+  ::view-transition-old(habit-maker-ui-header-actions),
+  ::view-transition-new(habit-maker-ui-header-actions) {
     animation-duration: 1ms;
   }
 

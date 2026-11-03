@@ -4,7 +4,12 @@ import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 const API_URL = (environment.API_URL || '/api').replace(/\/$/, '');
-const PUBLIC_AUTH_ENDPOINTS = ['login', 'signup', 'forgot-password'];
+const PUBLIC_AUTH_ENDPOINTS = [
+  'login',
+  'signup',
+  'forgot-password',
+  'reset-password',
+];
 
 function isApiRequest(url: string): boolean {
   return url === API_URL || url.startsWith(`${API_URL}/`);

@@ -11,7 +11,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
+  HabitMakerUIButtonIcon,
   HabitMakerUIHeader,
+  HabitMakerUIIcon,
   HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
 import { finalize } from 'rxjs';
@@ -24,7 +26,9 @@ import { HomeHabitsResolveResult } from './home.resolver';
 @Component({
   imports: [
     HabitMakerUIButton,
+    HabitMakerUIButtonIcon,
     HabitMakerUIHeader,
+    HabitMakerUIIcon,
     HabitMakerUIModal,
     HabitCard,
     NewHabit,

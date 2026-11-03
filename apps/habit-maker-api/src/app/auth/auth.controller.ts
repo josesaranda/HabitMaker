@@ -21,4 +21,10 @@ export class AuthController {
   forgotPassword(@Body() body: unknown) {
     return this.authService.forgotPassword(body);
   }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  resetPassword(@Body() body: unknown) {
+    return this.authService.resetPassword(body);
+  }
 }
