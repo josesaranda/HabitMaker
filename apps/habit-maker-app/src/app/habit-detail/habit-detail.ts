@@ -128,6 +128,7 @@ export class HabitDetail implements OnInit {
       relativeTo: this.route,
       queryParams: { from: normalizedStartDate },
       queryParamsHandling: 'merge',
+      replaceUrl: true,
     });
   }
 

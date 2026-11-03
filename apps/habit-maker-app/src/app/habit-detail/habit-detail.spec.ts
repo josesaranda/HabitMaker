@@ -169,6 +169,7 @@ describe('HabitDetail', () => {
       expect.objectContaining({
         queryParams: { from: nextStartDate },
         queryParamsHandling: 'merge',
+        replaceUrl: true,
       }),
     );
     expect(
