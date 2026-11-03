@@ -78,6 +78,18 @@ export class HabitsService {
     };
   }
 
+  async remove(id: string, userId: string): Promise<void> {
+    const habit = await this.habits.findOne({
+      where: { id, user: { id: userId } },
+    });
+
+    if (!habit) {
+      throw new NotFoundException('Habit not found');
+    }
+
+    await this.habits.remove(habit);
+  }
+
   private parseName(input: unknown): string {
     if (!input || typeof input !== 'object') {
       throw new BadRequestException('A request body is required');

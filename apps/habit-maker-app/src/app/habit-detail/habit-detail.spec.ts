@@ -87,13 +87,81 @@ describe('HabitDetail', () => {
       ),
     ).toBeNull();
     expect(
-      compiled.querySelector('button[hmButton="primary"]'),
-    ).toBeNull();
+      compiled.querySelector('habit-maker-ui-modal button[hmButton="primary"]'),
+    ).not.toBeNull();
     expect(
       compiled.querySelector('#habit-completion-help')?.textContent?.trim(),
     ).toBe(
       'Pulsa el día de hoy en la tarjeta del hábito para marcarlo como completado.',
     );
+  });
+
+  it('asks for confirmation before deleting and returns to home on success', async () => {
+    const habitService = {
+      getCompletionsForDates: () => of([]),
+      getTodayCompletion: () =>
+        of({ date: '2026-11-01', completed: false, completedAt: null }),
+      deleteHabit: vi.fn(() => of(void 0)),
+    };
+    await TestBed.configureTestingModule({
+      imports: [HabitDetail],
+      providers: [
+        provideTranslocoTesting(),
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            queryParamMap: of(convertToParamMap({})),
+            snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
+          },
+        },
+        { provide: HabitService, useValue: habitService },
+      ],
+    }).compileComponents();
+
+    const navigate = vi
+      .spyOn(TestBed.inject(Router), 'navigate')
+      .mockResolvedValue(true);
+    const fixture = TestBed.createComponent(HabitDetail);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const deleteButton = compiled.querySelector<HTMLButtonElement>(
+      'section[aria-labelledby="delete-habit-title"] button',
+    )!;
+    deleteButton.click();
+    fixture.detectChanges();
+
+    const dialog = compiled.querySelector<HTMLDialogElement>(
+      'habit-maker-ui-modal dialog',
+    )!;
+    expect(dialog.open).toBe(true);
+    expect(dialog.textContent).toContain(
+      '¿Seguro que quieres eliminar «Leer 10 minutos»? Esta acción no se puede deshacer.',
+    );
+    expect(habitService.deleteHabit).not.toHaveBeenCalled();
+
+    dialog.querySelector<HTMLButtonElement>(
+      'button[hmButton="primary"]',
+    )!.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(habitService.deleteHabit).toHaveBeenCalledWith('habit-1');
+    expect(navigate).toHaveBeenCalledWith(['/home']);
   });
 
   it('restores the calendar window from the URL and updates it on navigation', async () => {

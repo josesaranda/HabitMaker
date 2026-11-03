@@ -96,6 +96,67 @@
         </div>
       </div>
     </section>
+    <section
+      class="mx-auto mt-4 w-full max-w-3xl rounded-2xl border border-error/30 bg-surface p-6 sm:p-8"
+      aria-labelledby="delete-habit-title"
+    >
+      <h2
+        id="delete-habit-title"
+        class="m-0 text-lg font-semibold text-text-primary"
+      >
+        {{ 'habitDetail.deleteSectionTitle' | transloco }}
+      </h2>
+      <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+        {{ 'habitDetail.deleteSectionDescription' | transloco }}
+      </p>
+      <button
+        #deleteHabitTrigger
+        hmButton="secondary"
+        class="mt-5 border border-error text-error hover:bg-error/10"
+        type="button"
+        (click)="deleteHabitModal.openFrom(deleteHabitTrigger)"
+      >
+        {{ 'habitDetail.deleteButton' | transloco }}
+      </button>
+    </section>
+    <habit-maker-ui-modal
+      #deleteHabitModal
+      [label]="'habitDetail.deleteDialogTitle' | transloco"
+      [closeLabel]="'navigation.closeDialog' | transloco"
+    >
+      <div class="grid gap-4">
+        <h2 class="m-0 text-xl font-semibold text-text-primary">
+          {{ 'habitDetail.deleteDialogTitle' | transloco }}
+        </h2>
+        <p class="m-0 leading-relaxed text-text-secondary">
+          {{ 'habitDetail.deleteConfirmation' | transloco: { name: habit()?.name ?? '' } }}
+        </p>
+        @if (deleteHabitError()) {
+        <p class="m-0 text-sm text-error" role="alert">
+          {{ deleteHabitError() | transloco }}
+        </p>
+        }
+        <div class="flex flex-col-reverse justify-end gap-3 sm:flex-row">
+          <button
+            hmButton="secondary"
+            type="button"
+            [disabled]="isDeletingHabit()"
+            (click)="deleteHabitModal.close()"
+          >
+            {{ 'habitDetail.cancelDelete' | transloco }}
+          </button>
+          <button
+            hmButton="primary"
+            class="bg-error text-white hover:bg-error/90"
+            type="button"
+            [disabled]="isDeletingHabit()"
+            (click)="deleteHabit(deleteHabitModal)"
+          >
+            {{ (isDeletingHabit() ? 'habitDetail.deleting' : 'habitDetail.confirmDelete') | transloco }}
+          </button>
+        </div>
+      </div>
+    </habit-maker-ui-modal>
     }
   </div>
 </main>

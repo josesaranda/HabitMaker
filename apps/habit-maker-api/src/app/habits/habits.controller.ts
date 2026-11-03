@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Req,
@@ -27,6 +30,15 @@ export class HabitsController {
     @Req() request: AuthenticatedUserRequest,
   ) {
     return this.habitsService.findOne(id, request.user.id);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(
+    @Param('id') id: string,
+    @Req() request: AuthenticatedUserRequest,
+  ): Promise<void> {
+    return this.habitsService.remove(id, request.user.id);
   }
 
   @Post()

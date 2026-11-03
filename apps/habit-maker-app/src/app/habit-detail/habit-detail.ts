@@ -10,8 +10,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import confetti from '@hiseb/confetti';
 import {
+  HabitMakerUIButton,
   HabitMakerUIHeader,
   HabitMakerUIIcon,
+  HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card/habit-card';
@@ -29,7 +31,14 @@ import { Habit, HabitService } from '../habits/habit.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 @Component({
-  imports: [HabitCard, HabitMakerUIHeader, HabitMakerUIIcon, TranslocoPipe],
+  imports: [
+    HabitCard,
+    HabitMakerUIButton,
+    HabitMakerUIHeader,
+    HabitMakerUIIcon,
+    HabitMakerUIModal,
+    TranslocoPipe,
+  ],
   selector: 'app-habit-detail',
   templateUrl: './habit-detail.html',
 })
@@ -49,6 +58,8 @@ export class HabitDetail implements OnInit {
   protected readonly calendarWindowStart = signal<string | null>(null);
   protected readonly dayCompletionError = signal('');
   protected readonly loadError = signal('');
+  protected readonly isDeletingHabit = signal(false);
+  protected readonly deleteHabitError = signal('');
 
   ngOnInit(): void {
     this.browserService.setTitle('pageTitles.habitDetail');
@@ -188,6 +199,28 @@ export class HabitDetail implements OnInit {
           this.dayCompletionError.set(
             'habitDetail.activityError',
           );
+        },
+      });
+  }
+
+  protected deleteHabit(modal: HabitMakerUIModal): void {
+    const currentHabit = this.habit();
+    if (!currentHabit || this.isDeletingHabit()) return;
+
+    this.isDeletingHabit.set(true);
+    this.deleteHabitError.set('');
+    this.habitService
+      .deleteHabit(currentHabit.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isDeletingHabit.set(false);
+          modal.close();
+          void this.router.navigate(['/home']);
+        },
+        error: () => {
+          this.isDeletingHabit.set(false);
+          this.deleteHabitError.set('habitDetail.deleteError');
         },
       });
   }
