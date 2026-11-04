@@ -2,23 +2,29 @@
 import '../styles/global.css';
 
 interface Props {
+  lang: 'en' | 'es';
   title?: string;
   description?: string;
 }
 
-const {
-  title = 'HabitMaker — Small habits, meaningful change',
-  description = 'An open-source habit tracker to help you build healthy habits, one day at a time.',
-} = Astro.props;
+const { lang, title, description } = Astro.props;
+const siteUrl = Astro.site ?? Astro.url;
+const englishUrl = new URL('/', siteUrl).href;
+const spanishUrl = new URL('/es/', siteUrl).href;
+const canonicalUrl = lang === 'es' ? spanishUrl : englishUrl;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f3f1e9" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={englishUrl} />
+    <link rel="alternate" hreflang="es" href={spanishUrl} />
+    <link rel="alternate" hreflang="x-default" href={englishUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link

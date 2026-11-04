@@ -1,0 +1,8 @@
+---
+import LandingPage from '../../components/LandingPage.astro';
+import { getLangFromUrl } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+---
+
+<LandingPage lang={lang} />

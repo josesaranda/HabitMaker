@@ -41,13 +41,13 @@ The frontend routes include `/login`, `/signup`, `/forgot-password`, `/reset-pas
 
 ## Project landing page
 
-The public project landing page is built with Astro and Tailwind CSS. Start its development server with:
+The public project landing page is built with Astro and Tailwind CSS, and is available in [English and Spanish](https://habitmaker.josesaranda.es). Start its development server with:
 
 ```bash
 npm exec nx serve HabitMakerLanding
 ```
 
-The page is available at [http://localhost:4321](http://localhost:4321). Build it with `npm exec nx build HabitMakerLanding`.
+The English page is available at [http://localhost:4321](http://localhost:4321), and the Spanish page at [http://localhost:4321/es/](http://localhost:4321/es/). Build it with `npm exec nx build HabitMakerLanding`.
 
 ## Requirements
 
