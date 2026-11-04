@@ -1,0 +1,265 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" fill="none">
+  <title>HabitMaker home screen preview</title>
+  <defs>
+    <linearGradient
+      id="bg"
+      x1="68"
+      y1="18"
+      x2="876"
+      y2="610"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stop-color="#f8f7f1" />
+      <stop offset="1" stop-color="#e7ece3" />
+    </linearGradient>
+    <filter
+      id="shadow"
+      x="65"
+      y="112"
+      width="830"
+      height="470"
+      color-interpolation-filters="sRGB"
+      filterUnits="userSpaceOnUse"
+    >
+      <feGaussianBlur stdDeviation="16" />
+    </filter>
+  </defs>
+  <rect width="960" height="620" rx="32" fill="url(#bg)" />
+  <circle cx="803" cy="104" r="125" fill="#d7e5d8" opacity=".65" />
+  <g opacity=".13" filter="url(#shadow)">
+    <rect x="100" y="140" width="760" height="398" rx="24" fill="#172f2b" />
+  </g>
+  <rect
+    x="82"
+    y="52"
+    width="796"
+    height="516"
+    rx="20"
+    fill="#f3f1e9"
+    stroke="#dedfd5"
+  />
+  <path
+    d="M82 72a20 20 0 0 1 20-20h756a20 20 0 0 1 20 20v34H82V72Z"
+    fill="#fff"
+  />
+  <circle cx="108" cy="79" r="5" fill="#e58b7b" />
+  <circle cx="126" cy="79" r="5" fill="#e6b875" />
+  <circle cx="144" cy="79" r="5" fill="#a8c5ad" />
+  <rect x="376" y="67" width="208" height="24" rx="12" fill="#f3f1e9" />
+  <text
+    x="480"
+    y="83"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="11"
+    text-anchor="middle"
+  >
+    habitmaker.local/home
+  </text>
+  <text
+    x="128"
+    y="153"
+    fill="#172f2b"
+    font-family="Georgia,serif"
+    font-size="29"
+  >
+    Your habits
+  </text>
+  <text
+    x="128"
+    y="177"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="13"
+  >
+    A fresh day to show up for yourself.
+  </text>
+  <rect x="707" y="132" width="130" height="38" rx="19" fill="#172f2b" />
+  <text
+    x="772"
+    y="156"
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="12"
+    font-weight="700"
+    text-anchor="middle"
+  >
+    + New habit
+  </text>
+  <rect x="128" y="209" width="704" height="141" rx="17" fill="#2b3f3c" />
+  <rect x="151" y="231" width="39" height="39" rx="12" fill="#3b5750" />
+  <path
+    d="M170 261v-13m0 7c-5 0-8-3-8-7 5 0 8 3 8 7Zm0-4c0-5 3-8 8-8 0 4-3 7-8 8Z"
+    stroke="#c0d8b9"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.5"
+  />
+  <rect
+    x="204"
+    y="232"
+    width="112"
+    height="23"
+    rx="11.5"
+    fill="#e6b875"
+    fill-opacity=".1"
+    stroke="#e6b875"
+    stroke-opacity=".3"
+  />
+  <text
+    x="260"
+    y="247"
+    fill="#f0c98d"
+    font-family="Arial,sans-serif"
+    font-size="10"
+    text-anchor="middle"
+  >
+    ✦ SINCE MAY 12
+  </text>
+  <text
+    x="204"
+    y="275"
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="15"
+    font-weight="700"
+  >
+    Read for 15 minutes
+  </text>
+  <g
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="10"
+    text-anchor="middle"
+  >
+    <text x="177" y="303">M</text>
+    <text x="227" y="303">T</text>
+    <text x="277" y="303">W</text>
+    <text x="327" y="303">T</text>
+    <text x="377" y="303">F</text>
+    <text x="427" y="303">S</text>
+    <text x="477" y="303">S</text>
+  </g>
+  <g>
+    <circle cx="177" cy="324" r="12" fill="#a8c5ad" />
+    <path
+      d="m172 324 3 3 6-7"
+      stroke="#172f2b"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+    />
+    <circle cx="227" cy="324" r="12" fill="#a8c5ad" />
+    <path
+      d="m222 324 3 3 6-7"
+      stroke="#172f2b"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+    />
+    <circle cx="277" cy="324" r="12" fill="#a8c5ad" />
+    <path
+      d="m272 324 3 3 6-7"
+      stroke="#172f2b"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+    />
+    <circle cx="327" cy="324" r="12" fill="#a8c5ad" />
+    <path
+      d="m322 324 3 3 6-7"
+      stroke="#172f2b"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.6"
+    />
+    <circle cx="377" cy="324" r="12" fill="#e6b875" />
+    <circle cx="427" cy="324" r="12" stroke="#fff" stroke-opacity=".3" />
+    <circle cx="477" cy="324" r="12" stroke="#fff" stroke-opacity=".3" />
+  </g>
+  <rect
+    x="128"
+    y="371"
+    width="341"
+    height="151"
+    rx="17"
+    fill="#fff"
+    stroke="#e5e3db"
+  />
+  <text
+    x="153"
+    y="404"
+    fill="#172f2b"
+    font-family="Arial,sans-serif"
+    font-size="14"
+    font-weight="700"
+  >
+    Morning stretch
+  </text>
+  <text
+    x="153"
+    y="424"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="11"
+  >
+    Your body will thank you.
+  </text>
+  <g fill="#a8c5ad">
+    <circle cx="166" cy="470" r="10" />
+    <circle cx="207" cy="470" r="10" />
+    <circle cx="248" cy="470" r="10" />
+    <circle cx="289" cy="470" r="10" />
+  </g>
+  <g stroke="#668f7a" stroke-width="2">
+    <path d="m162 470 3 3 5-6" />
+    <path d="m203 470 3 3 5-6" />
+    <path d="m244 470 3 3 5-6" />
+    <path d="m285 470 3 3 5-6" />
+  </g>
+  <circle cx="330" cy="470" r="10" fill="#f3f1e9" stroke="#e5e3db" />
+  <circle cx="371" cy="470" r="10" fill="#f3f1e9" stroke="#e5e3db" />
+  <circle cx="412" cy="470" r="10" fill="#f3f1e9" stroke="#e5e3db" />
+  <rect
+    x="491"
+    y="371"
+    width="341"
+    height="151"
+    rx="17"
+    fill="#fff"
+    stroke="#e5e3db"
+  />
+  <text
+    x="516"
+    y="404"
+    fill="#172f2b"
+    font-family="Arial,sans-serif"
+    font-size="14"
+    font-weight="700"
+  >
+    Drink a glass of water
+  </text>
+  <text
+    x="516"
+    y="424"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="11"
+  >
+    A small reset, any time today.
+  </text>
+  <g fill="#a8c5ad">
+    <circle cx="529" cy="470" r="10" />
+    <circle cx="570" cy="470" r="10" />
+    <circle cx="611" cy="470" r="10" />
+  </g>
+  <g stroke="#668f7a" stroke-width="2">
+    <path d="m525 470 3 3 5-6" />
+    <path d="m566 470 3 3 5-6" />
+    <path d="m607 470 3 3 5-6" />
+  </g>
+  <circle cx="652" cy="470" r="10" fill="#e6b875" />
+  <circle cx="693" cy="470" r="10" fill="#f3f1e9" stroke="#e5e3db" />
+  <circle cx="734" cy="470" r="10" fill="#f3f1e9" stroke="#e5e3db" />
+  <circle cx="775" cy="470" r="10" fill="#f3f1e9" stroke="#e5e3db" />
+</svg>
