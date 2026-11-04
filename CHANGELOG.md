@@ -1,3 +1,11 @@
+# [1.7.0](https://github.com/josesaranda/HabitMaker/compare/v1.6.0...v1.7.0) (2026-11-04)
+
+
+### Features
+
+* **landing:** add landing page and language picker components with internationalization support ([5184ac6](https://github.com/josesaranda/HabitMaker/commit/5184ac6273b6a3008d3e604f183e176cec526406))
+* **landing:** add landing page support and update dependencies ([d94c525](https://github.com/josesaranda/HabitMaker/commit/d94c525598c9b355e43ebe5fe1e231c4badff655))
+
 # [1.6.0](https://github.com/josesaranda/HabitMaker/compare/v1.5.0...v1.6.0) (2026-11-03)
 
 
