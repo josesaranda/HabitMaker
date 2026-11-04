@@ -1,5 +1,7 @@
 # HabitMaker
 
+> **Project website:** [habitmaker.josesaranda.es](https://habitmaker.josesaranda.es) — explore the project, screenshots, Docker setup, and contribution guide.
+
 HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an Angular frontend, a NestJS API, and a shared UI component library.
 
 ## Features
