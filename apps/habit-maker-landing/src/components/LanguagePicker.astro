@@ -27,23 +27,32 @@ const switchLabels: Record<Lang, string> = {
 <div
   role="group"
   aria-label={label}
-  class:list={[className, 'flex items-center gap-1 text-xs font-bold']}
+  class:list={[className, 'flex items-center gap-1.5 text-xs']}
 >
-  {(Object.entries(languages) as [Lang, string][]).map(([language, name]) => (
-    <a
-      href={translatePath('/', language)}
-      lang={language}
-      aria-label={switchLabels[language]}
-      aria-current={lang === language ? 'page' : undefined}
-      class:list={[
-        'grid min-h-10 min-w-10 place-items-center rounded-full no-underline transition',
-        lang === language
-          ? 'bg-forest text-white'
-          : 'text-forest/65 hover:bg-forest/10 hover:text-forest',
-      ]}
-      title={name}
-    >
-      {language.toUpperCase()}
-    </a>
-  ))}
+  {(Object.entries(languages) as [Lang, string][]).map(
+    ([language, name], index) => (
+      <>
+        {index > 0 && (
+          <span class="text-forest/30" aria-hidden="true">
+            /
+          </span>
+        )}
+        <a
+          href={translatePath('/', language)}
+          lang={language}
+          aria-label={switchLabels[language]}
+          aria-current={lang === language ? 'page' : undefined}
+          class:list={[
+            'rounded-sm px-1 py-2 font-bold tracking-wide no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6b875]',
+            lang === language
+              ? 'text-forest underline decoration-amber underline-offset-4'
+              : 'text-forest/55 hover:text-forest',
+          ]}
+          title={name}
+        >
+          {language.toUpperCase()}
+        </a>
+      </>
+    ),
+  )}
 </div>

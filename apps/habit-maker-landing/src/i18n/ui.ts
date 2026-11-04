@@ -19,7 +19,6 @@ export interface LandingCopy {
   switchToEnglish: string;
   switchToSpanish: string;
   viewGithub: string;
-  githubShort: string;
   heroTag: string;
   heroHeadingFirst: string;
   heroHeadingSecond: string;
@@ -84,7 +83,6 @@ export const ui: Record<Lang, LandingCopy> = {
     switchToEnglish: 'Switch language to English',
     switchToSpanish: 'Switch language to Spanish',
     viewGithub: 'View on GitHub',
-    githubShort: 'GitHub',
     heroTag: 'Your open-source habit companion',
     heroHeadingFirst: 'Small habits.',
     heroHeadingSecond: 'Meaningful',
@@ -209,7 +207,6 @@ export const ui: Record<Lang, LandingCopy> = {
     switchToEnglish: 'Cambiar idioma a inglés',
     switchToSpanish: 'Cambiar idioma a español',
     viewGithub: 'Ver en GitHub',
-    githubShort: 'GitHub',
     heroTag: 'Tu compañero de hábitos de código abierto',
     heroHeadingFirst: 'Pequeños hábitos.',
     heroHeadingSecond: 'Cambios que',
