@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="background" x1="94" y1="25" x2="1110" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8f7f1" />
+      <stop offset="1" stop-color="#e7ece3" />
+    </linearGradient>
+    <linearGradient id="panel" x1="663" y1="116" x2="1080" y2="550" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" />
+      <stop offset="1" stop-color="#f5f4ed" />
+    </linearGradient>
+    <filter id="shadow" x="610" y="72" width="573" height="555" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#background)" />
+  <circle cx="1090" cy="42" r="260" fill="#d6e3d6" opacity=".75" />
+  <circle cx="1127" cy="573" r="169" fill="#e6b875" opacity=".18" />
+  <circle cx="53" cy="593" r="120" fill="#e58b7b" opacity=".08" />
+
+  <g transform="translate(68 62)">
+    <rect width="48" height="48" rx="24" fill="#172f2b" />
+    <path d="M24 37V21m0 8C24 19 18 13 10 13c0 8 4 14 14 16Zm0-6c0-10 6-16 14-16 0 8-4 14-14 16Z" stroke="#f3f1e9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" />
+    <text x="62" y="33" fill="#172f2b" font-family="Arial,sans-serif" font-size="27" font-weight="700" letter-spacing="-1.1">habit<tspan font-weight="400">maker</tspan></text>
+  </g>
+
+  <rect x="70" y="150" width="252" height="34" rx="17" fill="#fff" fill-opacity=".7" stroke="#172f2b" stroke-opacity=".1" />
+  <circle cx="90" cy="167" r="4" fill="#668f7a" />
+  <text x="104" y="172" fill="#3f5f53" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1.35">YOUR OPEN-SOURCE HABIT COMPANION</text>
+
+  <text x="68" y="267" fill="#172f2b" font-family="Georgia,serif" font-size="67" letter-spacing="-3.8">Small habits.</text>
+  <text x="68" y="340" fill="#172f2b" font-family="Georgia,serif" font-size="67" letter-spacing="-3.8">Meaningful</text>
+  <text x="68" y="413" fill="#172f2b" font-family="Georgia,serif" font-size="67" letter-spacing="-3.8">change<tspan fill="#bd8540">.</tspan></text>
+  <path d="M70 423c93 12 193 10 286-3" stroke="#e6b875" stroke-linecap="round" stroke-width="8" opacity=".72" />
+  <text x="72" y="478" fill="#3f5f53" font-family="Arial,sans-serif" font-size="19">Make space for the habits that help you grow.</text>
+  <g transform="translate(72 527)">
+    <circle cx="8" cy="8" r="8" fill="#d6e3d6" />
+    <path d="m4.5 8 2.3 2.3 4.8-5" stroke="#3f5f53" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" />
+    <text x="25" y="13" fill="#3f5f53" font-family="Arial,sans-serif" font-size="14" font-weight="700">GENTLE PROGRESS, ONE DAY AT A TIME</text>
+  </g>
+
+  <g opacity=".13" filter="url(#shadow)">
+    <rect x="650" y="106" width="500" height="455" rx="30" fill="#172f2b" />
+  </g>
+  <rect x="638" y="91" width="500" height="455" rx="29" fill="url(#panel)" stroke="#fff" stroke-width="2" />
+  <path d="M667 91h442a29 29 0 0 1 29 29v39H638v-39a29 29 0 0 1 29-29Z" fill="#fff" />
+  <circle cx="666" cy="120" r="5" fill="#e58b7b" />
+  <circle cx="685" cy="120" r="5" fill="#e6b875" />
+  <circle cx="704" cy="120" r="5" fill="#a8c5ad" />
+  <rect x="823" y="108" width="130" height="23" rx="11.5" fill="#f3f1e9" />
+  <text x="888" y="123" fill="#85877f" font-family="Arial,sans-serif" font-size="10" text-anchor="middle">your calm corner</text>
+
+  <text x="672" y="191" fill="#172f2b" font-family="Georgia,serif" font-size="29">Your habits</text>
+  <text x="673" y="216" fill="#85877f" font-family="Arial,sans-serif" font-size="12">A fresh day to show up for yourself.</text>
+  <rect x="1014" y="169" width="91" height="31" rx="15.5" fill="#172f2b" />
+  <text x="1059" y="189" fill="#fff" font-family="Arial,sans-serif" font-size="11" font-weight="700" text-anchor="middle">+ New habit</text>
+
+  <rect x="672" y="245" width="432" height="128" rx="18" fill="#253e38" />
+  <rect x="692" y="263" width="39" height="39" rx="12" fill="#3b5750" />
+  <path d="M711.5 293v-13m0 7c-5 0-8-3-8-7 5 0 8 3 8 7Zm0-4c0-5 3-8 8-8 0 4-3 7-8 8Z" stroke="#c0d8b9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+  <text x="746" y="276" fill="#fff" font-family="Arial,sans-serif" font-size="14" font-weight="700">Read for 15 minutes</text>
+  <rect x="746" y="286" width="106" height="18" rx="9" fill="#e6b875" fill-opacity=".15" />
+  <text x="799" y="299" fill="#f0c98d" font-family="Arial,sans-serif" font-size="8" font-weight="700" letter-spacing=".7" text-anchor="middle">✦ 7 DAY RHYTHM</text>
+  <g fill="#fff" fill-opacity=".58" font-family="Arial,sans-serif" font-size="9" text-anchor="middle">
+    <text x="711" y="328">M</text><text x="765" y="328">T</text><text x="819" y="328">W</text><text x="873" y="328">T</text><text x="927" y="328">F</text><text x="981" y="328">S</text><text x="1035" y="328">S</text>
+  </g>
+  <g>
+    <circle cx="711" cy="348" r="12" fill="#a8c5ad"/><path d="m706 348 3 3 6-7" stroke="#172f2b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <circle cx="765" cy="348" r="12" fill="#a8c5ad"/><path d="m760 348 3 3 6-7" stroke="#172f2b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <circle cx="819" cy="348" r="12" fill="#a8c5ad"/><path d="m814 348 3 3 6-7" stroke="#172f2b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <circle cx="873" cy="348" r="12" fill="#a8c5ad"/><path d="m868 348 3 3 6-7" stroke="#172f2b" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <circle cx="927" cy="348" r="12" fill="#e6b875"/><circle cx="981" cy="348" r="12" stroke="#fff" stroke-opacity=".35"/><circle cx="1035" cy="348" r="12" stroke="#fff" stroke-opacity=".35"/>
+  </g>
+
+  <rect x="672" y="391" width="205" height="124" rx="16" fill="#fff" stroke="#e5e3db" />
+  <text x="691" y="419" fill="#172f2b" font-family="Arial,sans-serif" font-size="12" font-weight="700">Morning stretch</text>
+  <text x="691" y="438" fill="#85877f" font-family="Arial,sans-serif" font-size="10">A little room to reset.</text>
+  <g fill="#a8c5ad"><circle cx="699" cy="474" r="9"/><circle cx="733" cy="474" r="9"/><circle cx="767" cy="474" r="9"/><circle cx="801" cy="474" r="9"/></g>
+  <g stroke="#668f7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m695 474 3 3 5-6"/><path d="m729 474 3 3 5-6"/><path d="m763 474 3 3 5-6"/><path d="m797 474 3 3 5-6"/></g>
+  <circle cx="835" cy="474" r="9" fill="#f3f1e9" stroke="#e5e3db" />
+
+  <rect x="892" y="391" width="212" height="124" rx="16" fill="#fff" stroke="#e5e3db" />
+  <text x="911" y="419" fill="#172f2b" font-family="Arial,sans-serif" font-size="12" font-weight="700">Drink some water</text>
+  <text x="911" y="438" fill="#85877f" font-family="Arial,sans-serif" font-size="10">Small wins count, too.</text>
+  <g fill="#a8c5ad"><circle cx="919" cy="474" r="9"/><circle cx="953" cy="474" r="9"/><circle cx="987" cy="474" r="9"/></g>
+  <g stroke="#668f7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m915 474 3 3 5-6"/><path d="m949 474 3 3 5-6"/><path d="m983 474 3 3 5-6"/></g>
+  <circle cx="1021" cy="474" r="9" fill="#e6b875"/><circle cx="1055" cy="474" r="9" fill="#f3f1e9" stroke="#e5e3db" />
+
+  <g transform="translate(949 507) rotate(-3)">
+    <rect x="0" y="0" width="206" height="67" rx="18" fill="#fff" stroke="#fff" />
+    <circle cx="34" cy="33" r="20" fill="#e7eee4" />
+    <path d="M34 45V32m0 5c0-6-4-9-9-9 0 5 3 8 9 9Zm0-4c0-6 4-9 9-9 0 5-3 8-9 9Z" stroke="#668f7a" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+    <text x="67" y="29" fill="#85877f" font-family="Arial,sans-serif" font-size="10">ONE DAY AT A TIME</text>
+    <text x="67" y="47" fill="#172f2b" font-family="Arial,sans-serif" font-size="13" font-weight="700">Your pace. Your progress.</text>
+  </g>
+</svg>
