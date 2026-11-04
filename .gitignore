@@ -54,6 +54,7 @@ Thumbs.db
 .nx/self-healing
 .nx/migrate-runs
 .angular
+apps/habit-maker-landing/.astro/
 habitmaker.sqljs
 
 __screenshots__/

@@ -26,6 +26,7 @@ HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an
 ```text
 .
 ├── apps/
+│   ├── habit-maker-landing/    # Astro project landing page
 │   ├── habit-maker-app/       # Angular web application
 │   │   └── src/app/           # Routes, screens, auth, habits, and localization
 │   └── habit-maker-api/       # NestJS API (auth, habits, push, completions, admin, version)
@@ -37,6 +38,16 @@ HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an
 ```
 
 The frontend routes include `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/home`, `/habits/:id`, and `/settings`. The home, habit detail, and settings pages require authentication. The root route and unknown routes redirect to `/login`.
+
+## Project landing page
+
+The public project landing page is built with Astro and Tailwind CSS, and is available in [English and Spanish](https://habitmaker.josesaranda.es). Start its development server with:
+
+```bash
+npm exec nx serve HabitMakerLanding
+```
+
+The English page is available at [http://localhost:4321](http://localhost:4321), and the Spanish page at [http://localhost:4321/es/](http://localhost:4321/es/). Build it with `npm exec nx build HabitMakerLanding`.
 
 ## Requirements
 

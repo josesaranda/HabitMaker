@@ -1,0 +1,49 @@
+---
+import { languages, type Lang } from '../i18n/ui';
+import { useTranslatedPath } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  label: string;
+  switchToEnglish: string;
+  switchToSpanish: string;
+  class?: string;
+}
+
+const {
+  lang,
+  label,
+  switchToEnglish,
+  switchToSpanish,
+  class: className,
+} = Astro.props;
+const translatePath = useTranslatedPath(lang);
+const switchLabels: Record<Lang, string> = {
+  en: switchToEnglish,
+  es: switchToSpanish,
+};
+---
+
+<div
+  role="group"
+  aria-label={label}
+  class:list={[className, 'flex items-center gap-1 text-xs font-bold']}
+>
+  {(Object.entries(languages) as [Lang, string][]).map(([language, name]) => (
+    <a
+      href={translatePath('/', language)}
+      lang={language}
+      aria-label={switchLabels[language]}
+      aria-current={lang === language ? 'page' : undefined}
+      class:list={[
+        'grid min-h-10 min-w-10 place-items-center rounded-full no-underline transition',
+        lang === language
+          ? 'bg-forest text-white'
+          : 'text-forest/65 hover:bg-forest/10 hover:text-forest',
+      ]}
+      title={name}
+    >
+      {language.toUpperCase()}
+    </a>
+  ))}
+</div>
