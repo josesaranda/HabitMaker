@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { inject } from '@vercel/analytics';
 
 interface Props {
   lang: 'en' | 'es';
@@ -20,6 +21,8 @@ const socialImageAlt =
   lang === 'es'
     ? 'HabitMaker: pequeños hábitos, cambios que importan.'
     : 'HabitMaker: small habits, meaningful change.';
+
+inject();
 ---
 
 <!doctype html>
