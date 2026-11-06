@@ -17,6 +17,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { MoreThan, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { SessionService } from './session.service';
 import { EmailService } from '../email/email.service';
 
 interface Credentials {
@@ -33,13 +34,17 @@ export class AuthService implements OnModuleInit {
     @InjectRepository(UserEntity)
     private readonly users: Repository<UserEntity>,
     private readonly emailService: EmailService,
+    private readonly sessionService: SessionService,
   ) {}
 
   async onModuleInit(): Promise<void> {
     await this.seedAdminFromEnvironment();
   }
 
-  async signup(input: unknown): Promise<{ accessToken: string }> {
+  async signup(
+    input: unknown,
+    userAgent?: string,
+  ): Promise<{ accessToken: string }> {
     const { email, password } = this.parseCredentials(input);
 
     if (password.length < 8) {
@@ -73,10 +78,13 @@ export class AuthService implements OnModuleInit {
       throw error;
     }
 
-    return this.createAccessToken(user);
+    return this.createAccessToken(user, userAgent, false);
   }
 
-  async login(input: unknown): Promise<{ accessToken: string }> {
+  async login(
+    input: unknown,
+    userAgent?: string,
+  ): Promise<{ accessToken: string }> {
     const { email, password } = this.parseCredentials(input);
     const user = await this.users
       .createQueryBuilder('user')
@@ -88,7 +96,11 @@ export class AuthService implements OnModuleInit {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    return this.createAccessToken(user);
+    const remembered =
+      !!input &&
+      typeof input === 'object' &&
+      (input as Record<string, unknown>)['rememberSession'] === true;
+    return this.createAccessToken(user, userAgent, remembered);
   }
 
   async forgotPassword(input: unknown): Promise<{ message: string }> {
@@ -137,24 +149,35 @@ export class AuthService implements OnModuleInit {
     }
 
     const salt = randomBytes(16).toString('hex');
-    const result = await this.users.update(
-      {
-        passwordResetTokenHash: this.hashResetToken(token),
-        passwordResetExpiresAt: MoreThan(String(Date.now())),
-      },
-      {
+    const resetTokenHash = this.hashResetToken(token);
+    const resetTokenExpiresAt = MoreThan(String(Date.now()));
+    await this.users.manager.transaction(async (manager) => {
+      const users = manager.getRepository(UserEntity);
+      const resetCriteria = {
+        passwordResetTokenHash: resetTokenHash,
+        passwordResetExpiresAt: resetTokenExpiresAt,
+      };
+      const user = await users.findOneBy(resetCriteria);
+      if (!user) {
+        throw new BadRequestException(
+          'The password reset link is invalid or expired',
+        );
+      }
+
+      const result = await users.update(resetCriteria, {
         passwordSalt: salt,
         passwordHash: this.hashPassword(password, salt),
         passwordResetTokenHash: null,
         passwordResetExpiresAt: null,
-      },
-    );
+      });
+      if (!result.affected) {
+        throw new BadRequestException(
+          'The password reset link is invalid or expired',
+        );
+      }
 
-    if (!result.affected) {
-      throw new BadRequestException(
-        'The password reset link is invalid or expired',
-      );
-    }
+      await this.sessionService.revokeAllForUser(user.id, manager);
+    });
 
     return { message: 'Password updated successfully' };
   }
@@ -252,12 +275,31 @@ export class AuthService implements OnModuleInit {
 
   private async createAccessToken(
     user: UserEntity,
+    userAgent: string | undefined,
+    remembered: boolean,
   ): Promise<{ accessToken: string }> {
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    });
+    const session = await this.sessionService.create(
+      user.id,
+      userAgent,
+      remembered,
+    );
+    let accessToken: string;
+    try {
+      accessToken = await this.jwtService.signAsync(
+        {
+          sub: user.id,
+          email: user.email,
+          role: user.role,
+        },
+        {
+          jwtid: session.id,
+          expiresIn: remembered ? '30d' : '24h',
+        },
+      );
+    } catch (error) {
+      await this.sessionService.revoke(user.id, session.id);
+      throw error;
+    }
 
     return { accessToken };
   }

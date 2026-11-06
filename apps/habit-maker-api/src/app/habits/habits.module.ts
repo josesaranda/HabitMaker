@@ -8,7 +8,6 @@ import { HabitsController } from './habits.controller';
 import { HabitsService } from './habits.service';
 import { HabitCompletionsController } from './habit-completions.controller';
 import { HabitCompletionsService } from './habit-completions.service';
-import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Module({
   imports: [
@@ -16,6 +15,6 @@ import { JwtAuthGuard } from './jwt-auth.guard';
     AuthModule,
   ],
   controllers: [HabitsController, HabitCompletionsController],
-  providers: [HabitsService, HabitCompletionsService, JwtAuthGuard],
+  providers: [HabitsService, HabitCompletionsService],
 })
 export class HabitsModule {}

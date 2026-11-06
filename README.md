@@ -12,6 +12,7 @@ HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an
 - Track daily completions and browse completion history in a habit calendar.
 - Schedule per-habit daily web push reminders in the device's local time zone.
 - Sign up, log in, and submit a password-recovery request.
+- Review active device sessions and revoke sessions from account settings.
 - Switch the interface between English and Spanish.
 - View account settings; administrators can also view registered users and check the app version for updates.
 
@@ -82,33 +83,32 @@ The frontend is available at [http://localhost:4200](http://localhost:4200). Dur
 
 The following table lists the variables used by the Docker setup. Values are examples or defaults; configure secrets for your deployment. `JWT_SECRET` must be set to a unique, random value in deployed environments. PostgreSQL settings can be omitted when running the API directly to use in-memory sql.js; if PostgreSQL is configured, set the database variables together and use a strong `POSTGRES_PASSWORD`.
 
-| Variable | Example or possible value | Optional? |
-| --- | --- | --- |
-| `APP_PORT` | `8080` | Yes; defaults to `8080` |
-| `SERVER_PORT` | `3000` | Yes; defaults to `3000` |
-| `CORS_ORIGIN` | `http://localhost:8080` | Yes; defaults to the app URL |
-| `APP_URL` | `http://localhost:8080` | Yes; defaults to the app URL |
-| `JWT_SECRET` | A unique, long random secret | No in deployed environments; local development has a fallback |
-| `JWT_EXPIRES_IN` | `1h`, `7d`, `30d` (about a month), or `1y`; empty means no expiration | Yes |
-| `VAPID_PUBLIC_KEY` | Generated with `npx web-push generate-vapid-keys` | Yes; required to enable push, together with the private key |
-| `VAPID_PRIVATE_KEY` | Generated VAPID private key | Yes; required to enable push, together with the public key |
-| `VAPID_SUBJECT` | `mailto:admin@habitmaker.local` | Yes; defaults to this example subject |
-| `POSTGRES_HOST` | `db` in Docker | Yes; configure the PostgreSQL variables together to use PostgreSQL |
-| `POSTGRES_PORT` | `5432` | Yes; defaults to `5432` |
-| `POSTGRES_USER` | `habitmaker` | Yes; defaults to `habitmaker` |
-| `POSTGRES_PASSWORD` | A strong, unique password | Yes for local/in-memory use; set a strong value when using PostgreSQL in production |
-| `POSTGRES_DB` | `habitmaker` | Yes; defaults to `habitmaker` |
-| `ADMIN_EMAIL` | `admin@habitmaker.local` | Yes; set together with `ADMIN_PASSWORD` to seed an admin account |
-| `ADMIN_PASSWORD` | A unique password of at least 8 characters | Yes; set together with `ADMIN_EMAIL` to seed an admin account |
-| `GITHUB_TOKEN` | A GitHub personal access token | Yes; needed only when accessing a private GitHub repository |
-| `SMTP_HOST` | `smtp.example.com` | Yes; required to enable email delivery |
-| `SMTP_PORT` | `587` (STARTTLS) or `465` (implicit TLS) | Yes; defaults to `587` |
-| `SMTP_PROTOCOL` | `smtp` or `smtps` | Yes; defaults to `smtp` |
-| `SMTP_USER` | SMTP username | Yes; set with `SMTP_PASSWORD` when the server requires authentication |
-| `SMTP_PASSWORD` | SMTP password | Yes; set with `SMTP_USER` when the server requires authentication |
-| `SMTP_FROM` | `no-reply@example.com` | Yes; required to enable email delivery |
+| Variable            | Example or possible value                         | Optional?                                                                           |
+| ------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `APP_PORT`          | `8080`                                            | Yes; defaults to `8080`                                                             |
+| `SERVER_PORT`       | `3000`                                            | Yes; defaults to `3000`                                                             |
+| `CORS_ORIGIN`       | `http://localhost:8080`                           | Yes; defaults to the app URL                                                        |
+| `APP_URL`           | `http://localhost:8080`                           | Yes; defaults to the app URL                                                        |
+| `JWT_SECRET`        | A unique, long random secret                      | No in deployed environments; local development has a fallback                       |
+| `VAPID_PUBLIC_KEY`  | Generated with `npx web-push generate-vapid-keys` | Yes; required to enable push, together with the private key                         |
+| `VAPID_PRIVATE_KEY` | Generated VAPID private key                       | Yes; required to enable push, together with the public key                          |
+| `VAPID_SUBJECT`     | `mailto:admin@habitmaker.local`                   | Yes; defaults to this example subject                                               |
+| `POSTGRES_HOST`     | `db` in Docker                                    | Yes; configure the PostgreSQL variables together to use PostgreSQL                  |
+| `POSTGRES_PORT`     | `5432`                                            | Yes; defaults to `5432`                                                             |
+| `POSTGRES_USER`     | `habitmaker`                                      | Yes; defaults to `habitmaker`                                                       |
+| `POSTGRES_PASSWORD` | A strong, unique password                         | Yes for local/in-memory use; set a strong value when using PostgreSQL in production |
+| `POSTGRES_DB`       | `habitmaker`                                      | Yes; defaults to `habitmaker`                                                       |
+| `ADMIN_EMAIL`       | `admin@habitmaker.local`                          | Yes; set together with `ADMIN_PASSWORD` to seed an admin account                    |
+| `ADMIN_PASSWORD`    | A unique password of at least 8 characters        | Yes; set together with `ADMIN_EMAIL` to seed an admin account                       |
+| `GITHUB_TOKEN`      | A GitHub personal access token                    | Yes; needed only when accessing a private GitHub repository                         |
+| `SMTP_HOST`         | `smtp.example.com`                                | Yes; required to enable email delivery                                              |
+| `SMTP_PORT`         | `587` (STARTTLS) or `465` (implicit TLS)          | Yes; defaults to `587`                                                              |
+| `SMTP_PROTOCOL`     | `smtp` or `smtps`                                 | Yes; defaults to `smtp`                                                             |
+| `SMTP_USER`         | SMTP username                                     | Yes; set with `SMTP_PASSWORD` when the server requires authentication               |
+| `SMTP_PASSWORD`     | SMTP password                                     | Yes; set with `SMTP_USER` when the server requires authentication                   |
+| `SMTP_FROM`         | `no-reply@example.com`                            | Yes; required to enable email delivery                                              |
 
-`JWT_EXPIRES_IN` accepts duration values such as `2h`, `7d`, `30d` (approximately one month), or `1y`. Months use a fixed 30-day duration. If the variable is omitted or empty, access tokens do not expire. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long.
+Access tokens always expire: sessions last 24 hours by default, or 30 days when the user chooses “Remember me”. Signed-in users can review and revoke device sessions from Settings. Session records contain a device/browser label and activity timestamps; access tokens are not stored in the API database. Expired and revoked records are pruned when a new session is created. Existing tokens issued before session tracking is enabled will require users to sign in again. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long.
 
 To enable email delivery, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL` (`smtp` for STARTTLS or `smtps` for implicit TLS), `SMTP_FROM`, and, when authentication is required, both `SMTP_USER` and `SMTP_PASSWORD`. Set `APP_URL` to the public address of the frontend so password reset emails link to the correct site (it defaults to `http://localhost:4200` in local API development). Reset links expire after one hour and can only be used once. Administrators can view these settings and send a test email from the application settings page. SMTP passwords are never returned to the web application.
 
@@ -116,7 +116,7 @@ To enable web push reminders, generate a VAPID key pair with `npx web-push gener
 
 To use PostgreSQL, configure `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`; `POSTGRES_PORT` is optional and defaults to `5432`. When these variables are omitted, the API uses its in-memory sql.js database. If PostgreSQL configuration is started but incomplete, the API reports the missing variables. See `.env.example` for a template.
 
-> **Development data:** Without PostgreSQL configuration, sql.js stores data in memory. Users, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
+> **Development data:** Without PostgreSQL configuration, sql.js stores data in memory. Users, sessions, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
 
 ## Run with Docker
 

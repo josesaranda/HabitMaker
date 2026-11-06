@@ -1,5 +1,7 @@
+import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { SwPush } from '@angular/service-worker';
 import {
@@ -16,8 +18,8 @@ import {
   AdminService,
   AdminUser,
 } from '../admin/admin.service';
+import { AuthService, type AuthSession } from '../auth/auth.service';
 import { BrowserService } from '../browser/browser.service';
-import { AuthService } from '../auth/auth.service';
 import { HabitService } from '../habits/habit.service';
 import { AppVersionService, VersionCheckResult } from './app-version.service';
 import { LanguageService, SupportedLanguage } from '../i18n/language.service';
@@ -33,6 +35,7 @@ const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
     HabitMakerUIOption,
     FormsModule,
     TranslocoPipe,
+    DatePipe,
   ],
   selector: 'app-settings',
   templateUrl: './settings.html',
@@ -40,12 +43,19 @@ const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
 export class Settings implements OnInit {
   private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly swPush = inject(SwPush, { optional: true });
   private readonly habitService = inject(HabitService, { optional: true });
   private readonly adminService = inject(AdminService);
   private readonly appVersionService = inject(AppVersionService);
   protected readonly languageService = inject(LanguageService);
   protected readonly email = signal(this.authService.getUserEmail());
+  protected readonly sessions = signal<AuthSession[]>([]);
+  protected readonly isLoadingSessions = signal(true);
+  protected readonly sessionsLoadError = signal('');
+  protected readonly sessionActionError = signal('');
+  protected readonly revokingSessionId = signal<string | null>(null);
+  protected readonly isRevokingOtherSessions = signal(false);
   protected readonly isAdmin = signal(
     this.authService.getUserRole() === 'admin',
   );
@@ -54,8 +64,9 @@ export class Settings implements OnInit {
     signal<AdminEmailConfiguration | null>(null);
   protected readonly isLoadingEmailConfiguration = signal(false);
   protected readonly emailConfigurationError = signal('');
-  protected readonly pushConfiguration =
-    signal<AdminPushConfiguration | null>(null);
+  protected readonly pushConfiguration = signal<AdminPushConfiguration | null>(
+    null,
+  );
   protected readonly isLoadingPushConfiguration = signal(false);
   protected readonly pushConfigurationError = signal('');
   protected readonly testEmailAddress = signal('');
@@ -77,6 +88,7 @@ export class Settings implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadSessions();
     if (this.isAdmin()) {
       this.loadAppVersion();
       this.checkForUpdates();
@@ -84,6 +96,56 @@ export class Settings implements OnInit {
       this.loadEmailConfiguration();
       this.loadPushConfiguration();
     }
+  }
+
+  protected loadSessions(): void {
+    this.isLoadingSessions.set(true);
+    this.sessionsLoadError.set('');
+    this.authService
+      .getSessions()
+      .pipe(finalize(() => this.isLoadingSessions.set(false)))
+      .subscribe({
+        next: (sessions) => this.sessions.set(sessions),
+        error: () => {
+          this.sessions.set([]);
+          this.sessionsLoadError.set('settings.sessionsError');
+        },
+      });
+  }
+
+  protected revokeSession(session: AuthSession): void {
+    if (this.revokingSessionId() || this.isRevokingOtherSessions()) return;
+
+    this.revokingSessionId.set(session.id);
+    this.sessionActionError.set('');
+    this.authService
+      .revokeSession(session.id)
+      .pipe(finalize(() => this.revokingSessionId.set(null)))
+      .subscribe({
+        next: () => {
+          if (session.isCurrent) {
+            this.authService.clearLocalSession();
+            void this.router.navigateByUrl('/login');
+            return;
+          }
+          this.loadSessions();
+        },
+        error: () => this.sessionActionError.set('settings.revokeSessionError'),
+      });
+  }
+
+  protected revokeOtherSessions(): void {
+    if (this.isRevokingOtherSessions() || this.revokingSessionId()) return;
+
+    this.isRevokingOtherSessions.set(true);
+    this.sessionActionError.set('');
+    this.authService
+      .revokeOtherSessions()
+      .pipe(finalize(() => this.isRevokingOtherSessions.set(false)))
+      .subscribe({
+        next: () => this.loadSessions(),
+        error: () => this.sessionActionError.set('settings.revokeSessionError'),
+      });
   }
 
   protected checkForUpdates(): void {
@@ -156,9 +218,7 @@ export class Settings implements OnInit {
       .subscribe({
         next: (configuration) => this.pushConfiguration.set(configuration),
         error: () => {
-          this.pushConfigurationError.set(
-            'settings.pushConfigurationError',
-          );
+          this.pushConfigurationError.set('settings.pushConfigurationError');
         },
       });
   }

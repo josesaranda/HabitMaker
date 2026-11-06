@@ -2,11 +2,13 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { HabitEntity } from './habits/habit.entity';
 import { HabitCompletionEntity } from './habits/habit-completion.entity';
 import { UserEntity } from './auth/user.entity';
+import { SessionEntity } from './auth/session.entity';
 import { PushSubscriptionEntity } from './push/push-subscription.entity';
 import { PushDeliveryEntity } from './push/push-delivery.entity';
 
 const entities = [
   UserEntity,
+  SessionEntity,
   HabitEntity,
   HabitCompletionEntity,
   PushSubscriptionEntity,
@@ -25,8 +27,8 @@ type DatabaseEnvironment = Record<string, string | undefined>;
 export function getDatabaseConfig(
   environment: DatabaseEnvironment = process.env,
 ): TypeOrmModuleOptions {
-  const hasPostgresConfiguration = postgresVariables.some(
-    (variable) => environment[variable]?.trim(),
+  const hasPostgresConfiguration = postgresVariables.some((variable) =>
+    environment[variable]?.trim(),
   );
 
   if (!hasPostgresConfiguration) {

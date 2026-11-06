@@ -11,6 +11,15 @@ interface MessageResponse {
   message: string;
 }
 
+export interface AuthSession {
+  id: string;
+  deviceName: string;
+  createdAt: string;
+  lastUsedAt: string;
+  expiresAt: string;
+  isCurrent: boolean;
+}
+
 export interface LogoutOptions {
   deferStateUpdate?: boolean;
 }
@@ -34,6 +43,7 @@ export class AuthService {
       .post<AccessTokenResponse>(`${API_URL}/auth/login`, {
         email,
         password,
+        rememberSession,
       })
       .pipe(
         tap(({ accessToken }) => this.saveToken(accessToken, rememberSession)),
@@ -117,10 +127,34 @@ export class AuthService {
   }
 
   logout({ deferStateUpdate = false }: LogoutOptions = {}): void {
+    this.revokeCurrentSession().subscribe({ error: () => undefined });
     this.clearToken();
     if (!deferStateUpdate) {
       this.authenticatedState.set(false);
     }
+  }
+
+  getSessions(): Observable<AuthSession[]> {
+    return this.http.get<AuthSession[]>(`${API_URL}/auth/sessions`);
+  }
+
+  revokeSession(sessionId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${API_URL}/auth/sessions/${encodeURIComponent(sessionId)}`,
+    );
+  }
+
+  revokeOtherSessions(): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/auth/sessions/others`);
+  }
+
+  revokeCurrentSession(): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/auth/sessions/current`);
+  }
+
+  clearLocalSession(): void {
+    this.clearToken();
+    this.authenticatedState.set(false);
   }
 
   syncAuthenticatedState(): void {

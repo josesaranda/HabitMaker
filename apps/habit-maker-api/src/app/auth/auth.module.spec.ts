@@ -1,14 +1,11 @@
-import { getJwtSignOptions } from './auth.module';
+import {
+  REMEMBERED_SESSION_DURATION_MS,
+  SHORT_SESSION_DURATION_MS,
+} from './session.service';
 
-describe('getJwtSignOptions', () => {
-  it('configures the token lifetime from JWT_EXPIRES_IN', () => {
-    expect(getJwtSignOptions({ JWT_EXPIRES_IN: '1h' })).toEqual({
-      expiresIn: '1h',
-    });
-  });
-
-  it('leaves tokens without an expiration when JWT_EXPIRES_IN is unset or blank', () => {
-    expect(getJwtSignOptions({})).toEqual({});
-    expect(getJwtSignOptions({ JWT_EXPIRES_IN: '  ' })).toEqual({});
+describe('session lifetimes', () => {
+  it('uses finite lifetimes for both regular and remembered sessions', () => {
+    expect(SHORT_SESSION_DURATION_MS).toBe(24 * 60 * 60 * 1000);
+    expect(REMEMBERED_SESSION_DURATION_MS).toBe(30 * 24 * 60 * 60 * 1000);
   });
 });

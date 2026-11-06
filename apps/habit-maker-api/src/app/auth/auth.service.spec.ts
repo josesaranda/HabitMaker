@@ -11,6 +11,8 @@ import { EmailService } from '../email/email.service';
 import { HabitEntity } from '../habits/habit.entity';
 import { HabitCompletionEntity } from '../habits/habit-completion.entity';
 import { UserEntity } from './user.entity';
+import { SessionEntity } from './session.entity';
+import { SessionService } from './session.service';
 
 const ADMIN_EMAIL = 'configured-admin@example.com';
 const ADMIN_PASSWORD = 'admin-password-123';
@@ -19,6 +21,7 @@ describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
   let dataSource: DataSource;
+  let sessionService: SessionService;
   let emailService: { sendPasswordResetEmail: ReturnType<typeof vi.fn> };
   let previousAdminEmail: string | undefined;
   let previousAdminPassword: string | undefined;
@@ -30,17 +33,21 @@ describe('AuthService', () => {
     dataSource = new DataSource({
       type: 'sqljs',
       autoSave: false,
-      entities: [UserEntity, HabitEntity, HabitCompletionEntity],
+      entities: [UserEntity, SessionEntity, HabitEntity, HabitCompletionEntity],
       synchronize: true,
     });
     await dataSource.initialize();
     emailService = {
       sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
     };
+    sessionService = new SessionService(
+      dataSource.getRepository(SessionEntity),
+    );
     service = new AuthService(
       jwtService,
       dataSource.getRepository(UserEntity),
       emailService as unknown as EmailService,
+      sessionService,
     );
     await service.onModuleInit();
   });
@@ -100,8 +107,97 @@ describe('AuthService', () => {
         role: 'user',
       });
       expect(payload.sub).toBeDefined();
+      expect(payload.jti).toBeDefined();
+      expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
       expect(result).not.toHaveProperty('user');
       expect(result).not.toHaveProperty('password');
+    });
+
+    it('creates device sessions with short and remembered expirations', async () => {
+      const user = await service.signup({
+        email: 'sessions@example.com',
+        password: 'correct-horse',
+      });
+      const userId = (await jwtService.verifyAsync(user.accessToken)).sub;
+      const shortLogin = await service.login(
+        {
+          email: 'sessions@example.com',
+          password: 'correct-horse',
+        },
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X) Chrome/124.0 Safari/537.36',
+      );
+      const rememberedLogin = await service.login(
+        {
+          email: 'sessions@example.com',
+          password: 'correct-horse',
+          rememberSession: true,
+        },
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) Safari/605.1',
+      );
+      const shortClaims = await jwtService.verifyAsync(shortLogin.accessToken);
+      const rememberedClaims = await jwtService.verifyAsync(
+        rememberedLogin.accessToken,
+      );
+      const sessions = await dataSource
+        .getRepository(SessionEntity)
+        .findBy({ userId: userId as string });
+
+      expect(shortClaims.exp - shortClaims.iat).toBe(24 * 60 * 60);
+      expect(rememberedClaims.exp - rememberedClaims.iat).toBe(
+        30 * 24 * 60 * 60,
+      );
+      expect(sessions.map(({ deviceName }) => deviceName)).toContain(
+        'Chrome on macOS',
+      );
+      expect(sessions.map(({ deviceName }) => deviceName)).toContain(
+        'Safari on iOS',
+      );
+    });
+
+    it('lists only the account sessions and revokes the selected sessions', async () => {
+      const firstUser = await service.signup({
+        email: 'first@example.com',
+        password: 'correct-horse',
+      });
+      const firstUserId = (await jwtService.verifyAsync(firstUser.accessToken))
+        .sub as string;
+      const current = await service.login({
+        email: 'first@example.com',
+        password: 'correct-horse',
+      });
+      const otherSession = await service.login({
+        email: 'first@example.com',
+        password: 'correct-horse',
+      });
+      const secondUser = await service.signup({
+        email: 'second@example.com',
+        password: 'correct-horse',
+      });
+      const currentClaims = await jwtService.verifyAsync(current.accessToken);
+      const otherClaims = await jwtService.verifyAsync(
+        otherSession.accessToken,
+      );
+      const secondClaims = await jwtService.verifyAsync(secondUser.accessToken);
+
+      const sessions = await sessionService.listForUser(
+        firstUserId,
+        currentClaims.jti,
+      );
+      expect(sessions).toHaveLength(3);
+      expect(sessions.filter(({ isCurrent }) => isCurrent)).toHaveLength(1);
+
+      await sessionService.revoke(firstUserId, otherClaims.jti);
+      await expect(
+        sessionService.findActiveSession(otherClaims.jti, firstUserId),
+      ).resolves.toBeNull();
+      await expect(
+        sessionService.findActiveSession(secondClaims.jti, secondClaims.sub),
+      ).resolves.not.toBeNull();
+
+      await sessionService.revokeOthers(firstUserId, currentClaims.jti);
+      await expect(
+        sessionService.listForUser(firstUserId, currentClaims.jti),
+      ).resolves.toHaveLength(1);
     });
 
     it('rejects duplicate emails', async () => {
@@ -212,6 +308,28 @@ describe('AuthService', () => {
       await expect(
         service.resetPassword({ token, password: 'another-password' }),
       ).rejects.toThrow(BadRequestException);
+    });
+
+    it('revokes active sessions after a successful password reset', async () => {
+      await service.signup({
+        email: 'revoke@example.com',
+        password: 'old-password',
+      });
+      const login = await service.login({
+        email: 'revoke@example.com',
+        password: 'old-password',
+      });
+      await service.forgotPassword({ email: 'revoke@example.com' });
+      const [, token] = emailService.sendPasswordResetEmail.mock.calls.at(
+        -1,
+      ) as [string, string];
+
+      await service.resetPassword({ token, password: 'new-password' });
+
+      const claims = await jwtService.verifyAsync(login.accessToken);
+      await expect(
+        sessionService.findActiveSession(claims.jti, claims.sub),
+      ).resolves.toBeNull();
     });
 
     it('rejects expired reset tokens and short passwords', async () => {

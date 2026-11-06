@@ -40,6 +40,7 @@ describe('AuthService', () => {
     expect(request.request.body).toEqual({
       email: 'person@example.com',
       password: 'password123',
+      rememberSession: false,
     });
     request.flush({ accessToken: token });
 
@@ -138,6 +139,9 @@ describe('AuthService', () => {
       .flush({ accessToken: token });
 
     authService.logout();
+    httpTestingController
+      .expectOne(`${API_URL}/auth/sessions/current`)
+      .flush(null, { status: 204, statusText: 'No Content' });
 
     expect(authService.getAuthToken()).toBeNull();
     expect(authService.isAuthenticated()).toBe(false);
@@ -151,6 +155,9 @@ describe('AuthService', () => {
       .flush({ accessToken: token });
 
     authService.logout({ deferStateUpdate: true });
+    httpTestingController
+      .expectOne(`${API_URL}/auth/sessions/current`)
+      .flush(null, { status: 204, statusText: 'No Content' });
 
     expect(authService.isAuthenticated()).toBe(false);
     expect(authService.authenticated()).toBe(true);

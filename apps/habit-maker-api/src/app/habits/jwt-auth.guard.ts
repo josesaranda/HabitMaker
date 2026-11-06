@@ -5,19 +5,25 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { SessionService } from '../auth/session.service';
 
 interface JwtClaims {
   sub?: unknown;
+  jti?: unknown;
+  exp?: unknown;
 }
 
 interface AuthenticatedRequest {
   headers: { authorization?: string | string[] };
-  user?: { id: string };
+  user?: { id: string; sessionId: string };
 }
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly sessions: SessionService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
@@ -31,10 +37,24 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       const claims = await this.jwtService.verifyAsync<JwtClaims>(token);
-      if (typeof claims.sub !== 'string' || claims.sub.length === 0) {
+      if (
+        typeof claims.sub !== 'string' ||
+        claims.sub.length === 0 ||
+        typeof claims.jti !== 'string' ||
+        claims.jti.length === 0 ||
+        typeof claims.exp !== 'number'
+      ) {
         throw new UnauthorizedException('A valid bearer token is required');
       }
-      request.user = { id: claims.sub };
+      const session = await this.sessions.findActiveSession(
+        claims.jti,
+        claims.sub,
+      );
+      if (!session) {
+        throw new UnauthorizedException('A valid bearer token is required');
+      }
+      await this.sessions.touch(session);
+      request.user = { id: claims.sub, sessionId: claims.jti };
       return true;
     } catch {
       throw new UnauthorizedException('A valid bearer token is required');

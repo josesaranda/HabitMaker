@@ -4,7 +4,6 @@ import { AuthModule } from '../auth/auth.module';
 import { UserEntity } from '../auth/user.entity';
 import { HabitEntity } from '../habits/habit.entity';
 import { HabitCompletionEntity } from '../habits/habit-completion.entity';
-import { JwtAuthGuard } from '../habits/jwt-auth.guard';
 import { PushController } from './push.controller';
 import { PushDeliveryEntity } from './push-delivery.entity';
 import { PushSubscriptionEntity } from './push-subscription.entity';
@@ -22,6 +21,6 @@ import { PushService } from './push.service';
     AuthModule,
   ],
   controllers: [PushController],
-  providers: [PushService, JwtAuthGuard],
+  providers: [PushService],
 })
 export class PushModule {}

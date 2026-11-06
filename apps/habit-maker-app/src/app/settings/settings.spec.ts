@@ -15,6 +15,28 @@ describe('Settings', () => {
   it('shows the user settings with the signed-in email in a readonly input', async () => {
     const getCurrentVersion = vi.fn(() => of({ version: '1.2.3' }));
     const savePushSubscription = vi.fn(() => of(void 0));
+    const getSessions = vi.fn(() =>
+      of([
+        {
+          id: 'current-session',
+          deviceName: 'Chrome on macOS',
+          createdAt: '2026-10-01T12:00:00.000Z',
+          lastUsedAt: '2026-10-02T12:00:00.000Z',
+          expiresAt: '2026-11-01T12:00:00.000Z',
+          isCurrent: true,
+        },
+        {
+          id: 'other-session',
+          deviceName: 'Safari on iOS',
+          createdAt: '2026-10-01T12:00:00.000Z',
+          lastUsedAt: '2026-10-02T12:00:00.000Z',
+          expiresAt: '2026-11-01T12:00:00.000Z',
+          isCurrent: false,
+        },
+      ]),
+    );
+    const revokeSession = vi.fn(() => of(void 0));
+    const revokeOtherSessions = vi.fn(() => of(void 0));
     const checkForUpdates = vi.fn(() =>
       of({
         currentVersion: '1.2.3',
@@ -35,6 +57,9 @@ describe('Settings', () => {
           useValue: {
             getUserEmail: () => 'persona@example.com',
             getUserRole: () => 'user',
+            getSessions,
+            revokeSession,
+            revokeOtherSessions,
           },
         },
         {
@@ -86,6 +111,13 @@ describe('Settings', () => {
     expect(compiled.querySelector('h2')?.textContent).toContain(
       'Ajustes de usuario',
     );
+    expect(compiled.querySelector('#sessions-title')?.textContent).toContain(
+      'Sesiones abiertas',
+    );
+    expect(getSessions).toHaveBeenCalledOnce();
+    expect(compiled.textContent).toContain('Chrome on macOS');
+    expect(compiled.textContent).toContain('Safari on iOS');
+    expect(compiled.textContent).toContain('Este dispositivo');
     expect(email?.value).toBe('persona@example.com');
     expect(email?.readOnly).toBe(true);
     expect(language?.getAttribute('role')).toBe('combobox');
@@ -112,6 +144,20 @@ describe('Settings', () => {
     expect(compiled.querySelector('#admin-push-settings-title')).toBeNull();
     expect(compiled.querySelector('#app-settings-title')).toBeNull();
     expect(compiled.textContent).not.toContain('Versión actual');
+    const sessionsSection = compiled
+      .querySelector('#sessions-title')
+      ?.closest('section');
+    const sessionCloseButton =
+      sessionsSection?.querySelectorAll<HTMLButtonElement>('li button')[1];
+    expect(sessionCloseButton).toBeDefined();
+    sessionCloseButton?.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(revokeSession).toHaveBeenCalledWith('other-session');
+    sessionsSection
+      ?.querySelector<HTMLButtonElement>(':scope > div > button')
+      ?.click();
+    expect(revokeOtherSessions).toHaveBeenCalledOnce();
     expect(getCurrentVersion).not.toHaveBeenCalled();
     expect(checkForUpdates).not.toHaveBeenCalled();
   });
@@ -164,6 +210,7 @@ describe('Settings', () => {
           useValue: {
             getUserEmail: () => 'admin@example.com',
             getUserRole: () => 'admin',
+            getSessions: vi.fn(() => of([])),
           },
         },
         {

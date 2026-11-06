@@ -8,6 +8,7 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { authTokenInterceptor } from './auth-token.interceptor';
 
@@ -22,6 +23,7 @@ describe('authTokenInterceptor', () => {
     sessionStorage.clear();
     TestBed.configureTestingModule({
       providers: [
+        provideRouter([{ path: 'login', children: [] }]),
         provideHttpClient(withInterceptors([authTokenInterceptor])),
         provideHttpClientTesting(),
       ],
@@ -76,5 +78,16 @@ describe('authTokenInterceptor', () => {
     const request = httpTestingController.expectOne('https://example.com/data');
     expect(request.request.headers.has('Authorization')).toBe(false);
     request.flush({});
+  });
+
+  it('clears a revoked session after the API rejects it', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'revoked-token');
+
+    http.get(`${API_URL}/habits`).subscribe({ error: () => undefined });
+
+    const request = httpTestingController.expectOne(`${API_URL}/habits`);
+    request.flush({}, { status: 401, statusText: 'Unauthorized' });
+
+    expect(sessionStorage.getItem('habitmaker.authToken')).toBeNull();
   });
 });

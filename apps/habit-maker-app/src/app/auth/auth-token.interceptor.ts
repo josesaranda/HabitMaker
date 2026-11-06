@@ -1,5 +1,7 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -24,7 +26,9 @@ function isPublicAuthRequest(url: string): boolean {
 }
 
 export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
-  const token = inject(AuthService).getAuthToken();
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  const token = authService.getAuthToken();
 
   if (!isApiRequest(request.url) || isPublicAuthRequest(request.url)) {
     return next(request);
@@ -36,5 +40,13 @@ export const authTokenInterceptor: HttpInterceptorFn = (request, next) => {
           setHeaders: { Authorization: `Bearer ${token}` },
         })
       : request,
+  ).pipe(
+    catchError((error: unknown) => {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        authService.clearLocalSession();
+        void router.navigateByUrl('/login');
+      }
+      return throwError(() => error);
+    }),
   );
 };

@@ -1,3 +1,3 @@
 export interface AuthenticatedUserRequest {
-  user: { id: string };
+  user: { id: string; sessionId: string };
 }
