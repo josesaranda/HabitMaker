@@ -28,6 +28,9 @@ describe('Login', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const email = compiled.querySelector('input[hmInput][type="email"]');
     const password = compiled.querySelector('input[hmInput][type="password"]');
+    const remember = compiled.querySelector<HTMLInputElement>(
+      'input[hmCheckbox][name="remember"]',
+    );
 
     expect(compiled.querySelector('h2')?.textContent).toContain(
       'Inicia sesión',
@@ -35,6 +38,7 @@ describe('Login', () => {
     expect(email).not.toBeNull();
     expect(email?.classList).toContain('hm-input');
     expect(password).not.toBeNull();
+    expect(remember?.checked).toBe(true);
     expect(compiled.querySelector('button[hmButton="primary"]')).not.toBeNull();
   });
 

@@ -343,7 +343,7 @@ export class HabitDetail implements OnInit {
 
     const latestStartDate = new Date();
     latestStartDate.setHours(0, 0, 0, 0);
-    latestStartDate.setDate(latestStartDate.getDate() - 3);
+    latestStartDate.setDate(latestStartDate.getDate() - 6);
     if (date > latestStartDate) {
       return this.toLocalDate(latestStartDate);
     }

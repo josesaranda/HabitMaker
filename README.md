@@ -78,7 +78,37 @@ npm run start:app
 
 The frontend is available at [http://localhost:4200](http://localhost:4200). During local development, it connects to the API at `http://localhost:3000/api`.
 
-The API accepts `SERVER_PORT` and `CORS_ORIGIN` environment variables; by default it listens on port `3000` and allows requests from `http://localhost:4200`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD` before starting the API. The password must be at least eight characters long.
+## Environment variables
+
+The following table lists the variables used by the Docker setup. Values are examples or defaults; configure secrets for your deployment. `JWT_SECRET` must be set to a unique, random value in deployed environments. PostgreSQL settings can be omitted when running the API directly to use in-memory sql.js; if PostgreSQL is configured, set the database variables together and use a strong `POSTGRES_PASSWORD`.
+
+| Variable | Example or possible value | Optional? |
+| --- | --- | --- |
+| `APP_PORT` | `8080` | Yes; defaults to `8080` |
+| `SERVER_PORT` | `3000` | Yes; defaults to `3000` |
+| `CORS_ORIGIN` | `http://localhost:8080` | Yes; defaults to the app URL |
+| `APP_URL` | `http://localhost:8080` | Yes; defaults to the app URL |
+| `JWT_SECRET` | A unique, long random secret | No in deployed environments; local development has a fallback |
+| `JWT_EXPIRES_IN` | `1h`, `7d`, `30d` (about a month), or `1y`; empty means no expiration | Yes |
+| `VAPID_PUBLIC_KEY` | Generated with `npx web-push generate-vapid-keys` | Yes; required to enable push, together with the private key |
+| `VAPID_PRIVATE_KEY` | Generated VAPID private key | Yes; required to enable push, together with the public key |
+| `VAPID_SUBJECT` | `mailto:admin@habitmaker.local` | Yes; defaults to this example subject |
+| `POSTGRES_HOST` | `db` in Docker | Yes; configure the PostgreSQL variables together to use PostgreSQL |
+| `POSTGRES_PORT` | `5432` | Yes; defaults to `5432` |
+| `POSTGRES_USER` | `habitmaker` | Yes; defaults to `habitmaker` |
+| `POSTGRES_PASSWORD` | A strong, unique password | Yes for local/in-memory use; set a strong value when using PostgreSQL in production |
+| `POSTGRES_DB` | `habitmaker` | Yes; defaults to `habitmaker` |
+| `ADMIN_EMAIL` | `admin@habitmaker.local` | Yes; set together with `ADMIN_PASSWORD` to seed an admin account |
+| `ADMIN_PASSWORD` | A unique password of at least 8 characters | Yes; set together with `ADMIN_EMAIL` to seed an admin account |
+| `GITHUB_TOKEN` | A GitHub personal access token | Yes; needed only when accessing a private GitHub repository |
+| `SMTP_HOST` | `smtp.example.com` | Yes; required to enable email delivery |
+| `SMTP_PORT` | `587` (STARTTLS) or `465` (implicit TLS) | Yes; defaults to `587` |
+| `SMTP_PROTOCOL` | `smtp` or `smtps` | Yes; defaults to `smtp` |
+| `SMTP_USER` | SMTP username | Yes; set with `SMTP_PASSWORD` when the server requires authentication |
+| `SMTP_PASSWORD` | SMTP password | Yes; set with `SMTP_USER` when the server requires authentication |
+| `SMTP_FROM` | `no-reply@example.com` | Yes; required to enable email delivery |
+
+`JWT_EXPIRES_IN` accepts duration values such as `2h`, `7d`, `30d` (approximately one month), or `1y`. Months use a fixed 30-day duration. If the variable is omitted or empty, access tokens do not expire. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long.
 
 To enable email delivery, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL` (`smtp` for STARTTLS or `smtps` for implicit TLS), `SMTP_FROM`, and, when authentication is required, both `SMTP_USER` and `SMTP_PASSWORD`. Set `APP_URL` to the public address of the frontend so password reset emails link to the correct site (it defaults to `http://localhost:4200` in local API development). Reset links expire after one hour and can only be used once. Administrators can view these settings and send a test email from the application settings page. SMTP passwords are never returned to the web application.
 

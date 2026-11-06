@@ -20,6 +20,7 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:${APP_PORT:-8080}}
       APP_URL: ${APP_URL:-http://localhost:${APP_PORT:-8080}}
       JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-before-deploy}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-}
       VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:admin@habitmaker.local}

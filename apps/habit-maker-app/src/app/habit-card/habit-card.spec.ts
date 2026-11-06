@@ -88,19 +88,22 @@ describe('HabitCard', () => {
     ).toEqual(
       Array.from(
         { length: 7 },
-        (_, index) => weekdayLabels[(today + index - 3 + 7) % 7],
+        (_, index) => weekdayLabels[(today + index - 6 + 7) % 7],
       ),
     );
     expect(requestedDates).toHaveLength(1);
     expect(requestedDates[0]).toHaveLength(13);
     expect(requestedDates[0]).toContain(toLocalDate(new Date()));
-    expect(dayItems[3].querySelector('b')?.textContent).toBe('✓');
-    expect(dayItems[4].querySelector('b')?.textContent).toBe('');
     expect(dayItems[6].querySelector('b')?.textContent).toBe('✓');
+    expect(dayItems[7].querySelector('b')?.textContent).toBe('');
+    expect(dayItems[9].querySelector('b')?.textContent).toBe('✓');
     expect(dayItems[6].querySelector('b')?.classList.contains('border-accent')).toBe(
+      false,
+    );
+    expect(dayItems[9].querySelector('b')?.classList.contains('border-accent')).toBe(
       true,
     );
-    expect(dayItems[6].querySelectorAll('span')[1]?.textContent).toBe(
+    expect(dayItems[9].querySelectorAll('span')[1]?.textContent).toBe(
       String(new Date().getDate()),
     );
   });
@@ -129,10 +132,10 @@ describe('HabitCard', () => {
       '.habit-card__days-track > *',
     );
     expect(initialDays).toHaveLength(13);
-    expect(initialDays[6].querySelectorAll('span')[1]?.textContent).toBe(
+    expect(initialDays[9].querySelectorAll('span')[1]?.textContent).toBe(
       String(today.getDate()),
     );
-    expect(requestedDates.at(-1)?.[9]).toBe(toLocalDate(maximumFutureDate));
+    expect(requestedDates.at(-1)?.[12]).toBe(toLocalDate(maximumFutureDate));
     expect(nextButton.disabled).toBe(true);
 
     const datesAtFutureLimit = requestedDates.length;
@@ -168,13 +171,13 @@ describe('HabitCard', () => {
     expect(daysAfterPreviousMove).toHaveLength(13);
     expect(requestedDates.at(-1)).toHaveLength(13);
     const previousWindowStart = new Date(today);
-    previousWindowStart.setDate(previousWindowStart.getDate() - 4);
+    previousWindowStart.setDate(previousWindowStart.getDate() - 7);
     expect(emittedStarts[0]).toBe(toLocalDate(previousWindowStart));
-    const twoDaysFuture = new Date(today);
-    twoDaysFuture.setDate(twoDaysFuture.getDate() + 2);
-    expect(requestedDates.at(-1)?.[9]).toBe(toLocalDate(twoDaysFuture));
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    expect(requestedDates.at(-1)?.[9]).toBe(toLocalDate(yesterday));
     expect(emittedStarts).toHaveLength(1);
-    expect(nextButton.disabled).toBe(true);
+    expect(nextButton.disabled).toBe(false);
 
     swipeable.startDaySwipe(pointerEvent(160, daysGrid));
     swipeable.moveDaySwipe(pointerEvent(135, daysGrid));
@@ -187,11 +190,11 @@ describe('HabitCard', () => {
     fixture.detectChanges();
     expect(nextButton.disabled).toBe(true);
     expect(requestedDates).toHaveLength(datesAtFutureLimit + 2);
-    expect(requestedDates.at(-1)?.[9]).toBe(toLocalDate(maximumFutureDate));
+    expect(requestedDates.at(-1)?.[12]).toBe(toLocalDate(maximumFutureDate));
     expect(emittedStarts).toHaveLength(2);
-    const centeredWindowStart = new Date(today);
-    centeredWindowStart.setDate(centeredWindowStart.getDate() - 3);
-    expect(emittedStarts[1]).toBe(toLocalDate(centeredWindowStart));
+    const latestWindowStart = new Date(today);
+    latestWindowStart.setDate(latestWindowStart.getDate() - 6);
+    expect(emittedStarts[1]).toBe(toLocalDate(latestWindowStart));
     expect(
       compiled.querySelectorAll('.habit-card__days-track > *'),
     ).toHaveLength(13);

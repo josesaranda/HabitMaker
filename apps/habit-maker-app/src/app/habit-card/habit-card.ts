@@ -97,7 +97,7 @@ export class HabitCard {
   );
 
   protected readonly isAtFutureLimit = computed(
-    () => this.firstDayOffset() + 9 > 3,
+    () => this.firstDayOffset() + 6 >= 0,
   );
 
   protected readonly startedAtLabel = computed(() => {
@@ -203,7 +203,7 @@ export class HabitCard {
 
     const maximumFutureDays = Math.min(
       3,
-      Math.max(0, -3 - this.firstDayOffset()),
+      Math.max(0, -6 - this.firstDayOffset()),
     );
     this.dragOffset.set(
       Math.min(
@@ -227,14 +227,14 @@ export class HabitCard {
       offset >= threshold
         ? 'past'
         : offset <= -threshold &&
-            this.firstDayOffset() < -3
+            this.firstDayOffset() < -6
           ? 'future'
           : null;
     const availableDays =
       direction === 'past'
         ? 3
         : direction === 'future'
-          ? Math.min(3, -3 - this.firstDayOffset())
+          ? Math.min(3, -6 - this.firstDayOffset())
           : 0;
     const dayCount = Math.min(
       availableDays,
@@ -311,7 +311,7 @@ export class HabitCard {
 
   private moveDays(amount: number): void {
     const nextFirstDayOffset = this.firstDayOffset() + amount;
-    if (nextFirstDayOffset + 6 > 3) return;
+    if (nextFirstDayOffset + 6 > 0) return;
 
     const enteringOffsets =
       amount > 0
@@ -341,10 +341,10 @@ export class HabitCard {
   }
 
   private getFirstDayOffset(windowStartDate: string | null): number {
-    if (!windowStartDate) return -3;
+    if (!windowStartDate) return -6;
 
     const dateParts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(windowStartDate);
-    if (!dateParts) return -3;
+    if (!dateParts) return -6;
 
     const [, yearValue, monthValue, dayValue] = dateParts;
     const year = Number(yearValue);
@@ -356,7 +356,7 @@ export class HabitCard {
       date.getMonth() !== month ||
       date.getDate() !== day
     ) {
-      return -3;
+      return -6;
     }
 
     const today = this.today();
@@ -366,7 +366,7 @@ export class HabitCard {
       today.getMonth(),
       today.getDate(),
     );
-    return Math.min(Math.round((startUtc - todayUtc) / 86_400_000), -3);
+    return Math.min(Math.round((startUtc - todayUtc) / 86_400_000), -6);
   }
 
   protected toggleDay(
