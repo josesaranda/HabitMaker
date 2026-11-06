@@ -1,3 +1,18 @@
+# [1.8.0](https://github.com/josesaranda/HabitMaker/compare/v1.7.0...v1.8.0) (2026-11-06)
+
+
+### Bug Fixes
+
+* **ci:** gate releases on affected apps ([817d5b1](https://github.com/josesaranda/HabitMaker/commit/817d5b1e8b13c7a13f3819aef5c109ff2bfb3739))
+* **landing:** improve responsive navigation ([19a0107](https://github.com/josesaranda/HabitMaker/commit/19a01071879fa05b83327c02fce522c1d3d76b28))
+
+
+### Features
+
+* **auth:** implement session management for user authentication ([2bcb77a](https://github.com/josesaranda/HabitMaker/commit/2bcb77abf480d96c6a70259b3aeddd23d0436252))
+* **landing:** add social sharing cards [skip ci] ([06bb23f](https://github.com/josesaranda/HabitMaker/commit/06bb23ff099ac0aaa2c3355f35eae6831482e0a7))
+* update environment variables and JWT handling; add tests for JWT expiration ([125c5c1](https://github.com/josesaranda/HabitMaker/commit/125c5c15edae857df41bed570b872a6ddff1c79d))
+
 # [1.7.0](https://github.com/josesaranda/HabitMaker/compare/v1.6.0...v1.7.0) (2026-11-04)
 
 
