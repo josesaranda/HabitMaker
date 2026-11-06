@@ -60,3 +60,4 @@ habitmaker.sqljs
 __screenshots__/
 vitest.config.*.timestamp*
 .vitest
+storybook-static

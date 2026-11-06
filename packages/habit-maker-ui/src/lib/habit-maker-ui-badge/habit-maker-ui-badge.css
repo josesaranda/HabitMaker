@@ -1,0 +1,45 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+  white-space: nowrap;
+}
+
+:host(.hm-badge--default) {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+:host(.hm-badge--secondary) {
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+:host(.hm-badge--destructive) {
+  background-color: var(--color-error);
+  color: var(--color-text-inverse);
+}
+
+:host(.hm-badge--outline) {
+  border-color: var(--color-border-strong);
+  background-color: transparent;
+  color: var(--color-text-primary);
+}
+
+:host(.hm-badge--ghost) {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+
+:host(.hm-badge--link) {
+  background-color: transparent;
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}

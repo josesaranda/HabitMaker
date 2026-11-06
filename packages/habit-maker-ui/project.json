@@ -3,8 +3,66 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/habit-maker-ui/src",
   "prefix": "hm",
-  "tags": [],
   "projectType": "library",
-  "// targets": "to see all targets run: nx show project HabitMakerUI --web",
-  "targets": {}
+  "tags": [],
+  "targets": {
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "continuous": true,
+      "readyWhen": {
+        "port": "{env.SBCONFIG_PORT ?? options.port ?? 9009}",
+        "host": "{env.SBCONFIG_HOSTNAME ?? options.host ?? localhost}"
+      },
+      "options": {
+        "port": 4400,
+        "configDir": "packages/habit-maker-ui/.storybook",
+        "browserTarget": "HabitMakerUI:build-storybook",
+        "compodoc": false,
+        "styles": ["packages/habit-maker-ui/.storybook/styles.css"]
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "inputs": [
+        "default",
+        "^production",
+        { "externalDependencies": ["storybook", "@storybook/angular"] }
+      ],
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/HabitMakerUI",
+        "configDir": "packages/habit-maker-ui/.storybook",
+        "browserTarget": "HabitMakerUI:build-storybook",
+        "compodoc": false,
+        "styles": ["packages/habit-maker-ui/.storybook/styles.css"]
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "dependsOn": ["build-storybook"],
+      "readyWhen": {
+        "signal": true
+      },
+      "options": {
+        "buildTarget": "HabitMakerUI:build-storybook",
+        "staticFilePath": "dist/storybook/HabitMakerUI",
+        "spa": true
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "HabitMakerUI:build-storybook:ci"
+        }
+      }
+    }
+  }
 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { SwPush } from '@angular/service-worker';
 import {
+  HabitMakerUIBadge,
   HabitMakerUIHeader,
   HabitMakerUIInput,
   HabitMakerUIOption,
@@ -28,6 +29,7 @@ const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
 
 @Component({
   imports: [
+    HabitMakerUIBadge,
     HabitMakerUIHeader,
     HabitMakerUIInput,
     HabitMakerUIButton,

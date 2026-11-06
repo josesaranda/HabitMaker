@@ -11,3 +11,5 @@ export * from './lib/habit-maker-ui-navbar/habit-maker-ui-navbar';
 export * from './lib/habit-maker-ui-header/habit-maker-ui-header';
 
 export * from './lib/habit-maker-ui-modal/habit-maker-ui-modal';
+
+export * from './lib/habit-maker-ui-badge/habit-maker-ui-badge';
