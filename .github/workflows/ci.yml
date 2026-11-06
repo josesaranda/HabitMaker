@@ -40,6 +40,8 @@ jobs:
           filter: tree:0
           fetch-depth: 0
 
+      - uses: nrwl/nx-set-shas@v5
+
       - uses: actions/setup-node@v5
         with:
           node-version: 24
@@ -50,8 +52,8 @@ jobs:
           name: node-modules
       - run: tar -xzf node_modules.tar.gz && rm node_modules.tar.gz
 
-      - run: npx nx format:check --base="remotes/origin/main"
-      - run: npx nx run-many -t lint build typecheck
+      - run: npx nx format:check --base="$NX_BASE" --head="$NX_HEAD"
+      - run: npx nx affected -t lint build typecheck --base="$NX_BASE" --head="$NX_HEAD"
 
   test:
     needs: dependencies
@@ -62,6 +64,8 @@ jobs:
           filter: tree:0
           fetch-depth: 0
 
+      - uses: nrwl/nx-set-shas@v5
+
       - uses: actions/setup-node@v5
         with:
           node-version: 24
@@ -72,4 +76,4 @@ jobs:
           name: node-modules
       - run: tar -xzf node_modules.tar.gz && rm node_modules.tar.gz
 
-      - run: npx nx run-many -t test e2e
+      - run: npx nx affected -t test e2e --base="$NX_BASE" --head="$NX_HEAD"
