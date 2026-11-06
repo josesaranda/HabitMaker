@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { inject } from '@vercel/analytics';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   lang: 'en' | 'es';
@@ -21,8 +21,6 @@ const socialImageAlt =
   lang === 'es'
     ? 'HabitMaker: pequeños hábitos, cambios que importan.'
     : 'HabitMaker: small habits, meaningful change.';
-
-inject();
 ---
 
 <!doctype html>
@@ -67,6 +65,7 @@ inject();
       rel="stylesheet"
     />
     <title>{title}</title>
+    <Analytics />
   </head>
   <body>
     <slot />
