@@ -24,6 +24,7 @@
     "@angular/compiler-cli": "~22.2.0",
     "@angular/language-service": "~22.2.0",
     "@angular/platform-browser-dynamic": "~22.2.0",
+    "@astrojs/vercel": "^11.0.20",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
     "@nx/angular": "^24.0.0",

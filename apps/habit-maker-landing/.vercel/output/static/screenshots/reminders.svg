@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" fill="none">
+  <title>HabitMaker reminder settings preview</title>
+  <rect width="800" height="520" rx="24" fill="#edf0e9" />
+  <rect
+    x="42"
+    y="34"
+    width="716"
+    height="452"
+    rx="18"
+    fill="#fff"
+    stroke="#e5e3db"
+  />
+  <rect x="42" y="34" width="716" height="62" rx="18" fill="#fff" />
+  <path d="M42 96h716" stroke="#e5e3db" />
+  <circle cx="76" cy="65" r="16" fill="#eaf0e8" />
+  <path
+    d="M80 65h-9m0 0 4-4m-4 4 4 4"
+    stroke="#3f5f53"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.5"
+  />
+  <text
+    x="105"
+    y="62"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="10"
+    font-weight="700"
+    letter-spacing="1"
+  >
+    SETTINGS
+  </text>
+  <text
+    x="105"
+    y="80"
+    fill="#172f2b"
+    font-family="Arial,sans-serif"
+    font-size="14"
+    font-weight="700"
+  >
+    Reminders
+  </text>
+  <text
+    x="82"
+    y="140"
+    fill="#172f2b"
+    font-family="Georgia,serif"
+    font-size="25"
+  >
+    A gentle nudge, on your schedule.
+  </text>
+  <text
+    x="82"
+    y="163"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="11"
+  >
+    Choose when you'd like a reminder for this habit.
+  </text>
+  <rect
+    x="82"
+    y="190"
+    width="636"
+    height="92"
+    rx="14"
+    fill="#fbfbf8"
+    stroke="#e5e3db"
+  />
+  <circle cx="116" cy="235" r="20" fill="#eaf0e8" />
+  <path
+    d="M116 222v13l9 5"
+    stroke="#3f5f53"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.6"
+  />
+  <text
+    x="151"
+    y="230"
+    fill="#172f2b"
+    font-family="Arial,sans-serif"
+    font-size="13"
+    font-weight="700"
+  >
+    Daily reminder
+  </text>
+  <text
+    x="151"
+    y="250"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="10"
+  >
+    A notification in your local time
+  </text>
+  <rect x="650" y="219" width="44" height="25" rx="12.5" fill="#3f5f53" />
+  <circle cx="681" cy="231.5" r="9.5" fill="#fff" />
+  <text
+    x="82"
+    y="319"
+    fill="#172f2b"
+    font-family="Arial,sans-serif"
+    font-size="12"
+    font-weight="700"
+  >
+    REMIND ME AT
+  </text>
+  <rect
+    x="82"
+    y="334"
+    width="300"
+    height="56"
+    rx="11"
+    fill="#fff"
+    stroke="#dfe3da"
+  />
+  <text
+    x="106"
+    y="369"
+    fill="#172f2b"
+    font-family="Arial,sans-serif"
+    font-size="17"
+    font-weight="700"
+  >
+    8:30 AM
+  </text>
+  <path
+    d="m350 357 7 7 7-7"
+    stroke="#668f7a"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.6"
+  />
+  <rect x="400" y="334" width="318" height="56" rx="11" fill="#eef3ed" />
+  <circle cx="427" cy="362" r="10" fill="#a8c5ad" />
+  <path
+    d="m423 362 3 3 5-6"
+    stroke="#172f2b"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="1.4"
+  />
+  <text
+    x="447"
+    y="359"
+    fill="#3f5f53"
+    font-family="Arial,sans-serif"
+    font-size="10"
+    font-weight="700"
+  >
+    ALL SET
+  </text>
+  <text
+    x="447"
+    y="375"
+    fill="#668f7a"
+    font-family="Arial,sans-serif"
+    font-size="9"
+  >
+    Reminder enabled for every day
+  </text>
+  <rect x="82" y="415" width="130" height="39" rx="19.5" fill="#172f2b" />
+  <text
+    x="147"
+    y="439"
+    fill="#fff"
+    font-family="Arial,sans-serif"
+    font-size="11"
+    font-weight="700"
+    text-anchor="middle"
+  >
+    Save reminder
+  </text>
+  <text
+    x="231"
+    y="439"
+    fill="#85877f"
+    font-family="Arial,sans-serif"
+    font-size="10"
+  >
+    You can change this any time.
+  </text>
+</svg>
