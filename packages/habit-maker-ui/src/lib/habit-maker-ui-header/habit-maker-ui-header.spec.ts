@@ -112,11 +112,13 @@ describe('HabitMakerUIHeader', () => {
     expect(actions?.classList).toContain(
       'habit-maker-ui-header__actions--visible',
     );
-    expect(actions?.querySelector('button[hmButton]')?.textContent?.trim()).toBe(
-      'Crear hábito',
-    );
     expect(
-      actions?.querySelector('button[hmButtonIcon]')?.getAttribute('aria-label'),
+      actions?.querySelector('button[hmButton]')?.textContent?.trim(),
+    ).toBe('Crear hábito');
+    expect(
+      actions
+        ?.querySelector('button[hmButtonIcon]')
+        ?.getAttribute('aria-label'),
     ).toBe('Añadir hábito');
   });
 });

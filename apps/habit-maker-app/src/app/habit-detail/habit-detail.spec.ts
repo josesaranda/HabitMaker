@@ -72,7 +72,9 @@ describe('HabitDetail', () => {
     ).not.toBeNull();
     expect(habitCard?.querySelector('a')).toBeNull();
     expect(
-      habitCard?.querySelectorAll('button[aria-label^="Mostrar los tres días"]'),
+      habitCard?.querySelectorAll(
+        'button[aria-label^="Mostrar los tres días"]',
+      ),
     ).toHaveLength(2);
     expect(habitCard?.classList.contains('max-w-3xl')).toBe(true);
     const habitArticle = habitCard?.querySelector('article');
@@ -81,7 +83,8 @@ describe('HabitDetail', () => {
     expect(habitArticle?.getAttribute('style')).toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
-      compiled.querySelector<HTMLInputElement>('#habit-reminder-time')?.disabled,
+      compiled.querySelector<HTMLInputElement>('#habit-reminder-time')
+        ?.disabled,
     ).toBe(true);
     expect(
       compiled.querySelector(
@@ -279,9 +282,9 @@ describe('HabitDetail', () => {
     );
     expect(habitService.deleteHabit).not.toHaveBeenCalled();
 
-    dialog.querySelector<HTMLButtonElement>(
-      'button[hmButton="primary"]',
-    )!.click();
+    dialog
+      .querySelector<HTMLButtonElement>('button[hmButton="primary"]')!
+      .click();
     await fixture.whenStable();
     fixture.detectChanges();
 
@@ -316,9 +319,7 @@ describe('HabitDetail', () => {
                 error: null,
               },
             }),
-            queryParamMap: of(
-              convertToParamMap({ from: initialStartDate }),
-            ),
+            queryParamMap: of(convertToParamMap({ from: initialStartDate })),
             snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
           },
         },

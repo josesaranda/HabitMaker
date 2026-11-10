@@ -156,8 +156,7 @@
           </li>
           }
         </ul>
-        }
-        @if (sessionActionError()) {
+        } @if (sessionActionError()) {
         <p class="mt-4 text-sm text-error" role="alert">
           {{ sessionActionError() | transloco }}
         </p>
@@ -252,21 +251,29 @@
           <div class="rounded-xl border border-border bg-background p-4">
             <dt class="font-semibold text-text-primary">VAPID_PUBLIC_KEY</dt>
             <dd class="mb-0 mt-1 text-text-secondary">
-              {{ (configuration.publicKeyConfigured ? 'settings.environmentConfigured' : 'settings.environmentMissing') | transloco }}
+              {{ (configuration.publicKeyConfigured ?
+              'settings.environmentConfigured' : 'settings.environmentMissing')
+              | transloco }}
             </dd>
           </div>
           <div class="rounded-xl border border-border bg-background p-4">
             <dt class="font-semibold text-text-primary">VAPID_PRIVATE_KEY</dt>
             <dd class="mb-0 mt-1 text-text-secondary">
-              {{ (configuration.privateKeyConfigured ? 'settings.environmentConfigured' : 'settings.environmentMissing') | transloco }}
+              {{ (configuration.privateKeyConfigured ?
+              'settings.environmentConfigured' : 'settings.environmentMissing')
+              | transloco }}
             </dd>
           </div>
-          <div class="rounded-xl border border-border bg-background p-4 sm:col-span-2">
+          <div
+            class="rounded-xl border border-border bg-background p-4 sm:col-span-2"
+          >
             <dt class="font-semibold text-text-primary">
               {{ 'settings.pushSubject' | transloco }}
             </dt>
             <dd class="mb-0 mt-1 text-text-secondary">
-              {{ (configuration.subjectConfigured ? 'settings.environmentConfigured' : 'settings.pushSubjectDefault') | transloco }}
+              {{ (configuration.subjectConfigured ?
+              'settings.environmentConfigured' : 'settings.pushSubjectDefault')
+              | transloco }}
             </dd>
           </div>
         </dl>

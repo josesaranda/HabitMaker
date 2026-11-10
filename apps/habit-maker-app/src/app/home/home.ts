@@ -55,14 +55,11 @@ export class Home implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         const result = data['habitsResult'] as
-          | HomeHabitsResolveResult
-          | undefined;
+          HomeHabitsResolveResult | undefined;
         if (!result) return;
 
         this.habits.set(result.habits);
-        this.loadError.set(
-          result.hasError ? 'home.loadError' : '',
-        );
+        this.loadError.set(result.hasError ? 'home.loadError' : '');
         this.isLoading.set(false);
       });
     this.habitService.habitCreated$
