@@ -75,9 +75,7 @@ describe('HabitCard', () => {
       '2023-10-01',
     );
     expect(compiled.querySelector('time')?.textContent).toContain('1 oct 2023');
-    const dayItems = compiled.querySelectorAll(
-      '.habit-card__days-track > *',
-    );
+    const dayItems = compiled.querySelectorAll('.habit-card__days-track > *');
     expect(dayItems).toHaveLength(13);
     const visibleDays = Array.from(dayItems).slice(3, 10);
 
@@ -97,12 +95,12 @@ describe('HabitCard', () => {
     expect(dayItems[6].querySelector('b')?.textContent).toBe('✓');
     expect(dayItems[7].querySelector('b')?.textContent).toBe('');
     expect(dayItems[9].querySelector('b')?.textContent).toBe('✓');
-    expect(dayItems[6].querySelector('b')?.classList.contains('border-accent')).toBe(
-      false,
-    );
-    expect(dayItems[9].querySelector('b')?.classList.contains('border-accent')).toBe(
-      true,
-    );
+    expect(
+      dayItems[6].querySelector('b')?.classList.contains('border-accent'),
+    ).toBe(false);
+    expect(
+      dayItems[9].querySelector('b')?.classList.contains('border-accent'),
+    ).toBe(true);
     expect(dayItems[9].querySelectorAll('span')[1]?.textContent).toBe(
       String(new Date().getDate()),
     );
@@ -170,7 +168,9 @@ describe('HabitCard', () => {
     );
     const swipeable = component as unknown as SwipeableHabitCard;
     const emittedStarts: string[] = [];
-    component.windowStartDateChange.subscribe((date) => emittedStarts.push(date));
+    component.windowStartDateChange.subscribe((date) =>
+      emittedStarts.push(date),
+    );
 
     swipeable.startDaySwipe(pointerEvent(80, daysGrid));
     swipeable.moveDaySwipe(pointerEvent(105, daysGrid));

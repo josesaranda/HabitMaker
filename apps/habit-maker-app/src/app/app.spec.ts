@@ -149,7 +149,9 @@ describe('App', () => {
     const addHabitButton = compiled.querySelector<HTMLButtonElement>(
       'habit-maker-ui-header-outlet button[hmButtonIcon]',
     );
-    expect(compiled.querySelector('app-home habit-maker-ui-header h1')).toBeNull();
+    expect(
+      compiled.querySelector('app-home habit-maker-ui-header h1'),
+    ).toBeNull();
     expect(addHabitButton?.getAttribute('aria-label')).toBe('Añadir hábito');
     const mobileSettingsLink = compiled.querySelector<HTMLAnchorElement>(
       'a.app-navbar__mobile-settings',

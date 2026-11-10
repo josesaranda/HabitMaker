@@ -45,16 +45,14 @@ export class HabitCard {
     this.getFirstDayOffset(this.windowStartDate()),
   );
   private readonly enteringDates = signal<Set<string>>(new Set());
-  private readonly pointerStart = signal<
-    {
-      x: number;
-      y: number;
-      cellWidth: number;
-      pointerId: number;
-      target: HTMLElement;
-      captured: boolean;
-    } | null
-  >(null);
+  private readonly pointerStart = signal<{
+    x: number;
+    y: number;
+    cellWidth: number;
+    pointerId: number;
+    target: HTMLElement;
+    captured: boolean;
+  } | null>(null);
   protected readonly dragOffset = signal(0);
   protected readonly isDragging = signal(false);
   private readonly snapDirection = signal<'past' | 'future' | null>(null);
@@ -225,10 +223,7 @@ export class HabitCard {
     this.dragOffset.set(
       Math.min(
         3 * start.cellWidth,
-        Math.max(
-          -maximumFutureDays * start.cellWidth,
-          distance,
-        ),
+        Math.max(-maximumFutureDays * start.cellWidth, distance),
       ),
     );
   }
@@ -243,8 +238,7 @@ export class HabitCard {
     const direction =
       offset >= threshold
         ? 'past'
-        : offset <= -threshold &&
-            this.firstDayOffset() < -6
+        : offset <= -threshold && this.firstDayOffset() < -6
           ? 'future'
           : null;
     const availableDays =
