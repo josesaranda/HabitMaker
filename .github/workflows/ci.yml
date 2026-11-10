@@ -31,7 +31,7 @@ jobs:
           path: node_modules.tar.gz
           retention-days: 1
 
-  build:
+  quality:
     needs: dependencies
     runs-on: ubuntu-latest
     steps:
@@ -53,10 +53,33 @@ jobs:
       - run: tar -xzf node_modules.tar.gz && rm node_modules.tar.gz
 
       - run: npx nx format:check --base="$NX_BASE" --head="$NX_HEAD"
-      - run: npx nx affected -t lint build typecheck --base="$NX_BASE" --head="$NX_HEAD"
+      - run: npx nx affected -t lint typecheck --base="$NX_BASE" --head="$NX_HEAD"
+
+  build:
+    needs: [dependencies, quality]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          filter: tree:0
+          fetch-depth: 0
+
+      - uses: nrwl/nx-set-shas@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: node-modules
+      - run: tar -xzf node_modules.tar.gz && rm node_modules.tar.gz
+
+      - run: npx nx affected -t build --base="$NX_BASE" --head="$NX_HEAD"
 
   test:
-    needs: dependencies
+    needs: [dependencies, quality]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
