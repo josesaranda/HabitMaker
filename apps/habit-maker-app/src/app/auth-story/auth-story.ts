@@ -9,4 +9,6 @@ import { HabitCard } from '../habit-card/habit-card';
   imports: [HabitMakerUIBrand, HabitCard, RouterLink, TranslocoPipe],
   templateUrl: './auth-story.html',
 })
-export class AuthStory {}
+export class AuthStory {
+  protected readonly previewCompletedDayOffsets = [-5, -3, -2, -1];
+}

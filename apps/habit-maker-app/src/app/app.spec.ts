@@ -66,6 +66,11 @@ describe('App', () => {
       'Inicia sesión',
     );
     expect(compiled.querySelector('habit-maker-ui-navbar')).toBeNull();
+    expect(
+      compiled
+        .querySelector('.app-content-shell')
+        ?.classList.contains('app-content-shell--with-mobile-navbar'),
+    ).toBe(false);
   });
 
   it('navigates to the signup page', async () => {
@@ -132,6 +137,11 @@ describe('App', () => {
       ),
     ).not.toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;
+    expect(
+      compiled
+        .querySelector('.app-content-shell')
+        ?.classList.contains('app-content-shell--with-mobile-navbar'),
+    ).toBe(true);
     expect(
       compiled.querySelector('habit-maker-ui-header-outlet h1#habits-title')
         ?.textContent,

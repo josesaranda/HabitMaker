@@ -42,6 +42,10 @@
 }
 
 @media (max-width: 700px) {
+  .app-content-shell--with-mobile-navbar {
+    padding-block-end: calc(2rem + env(safe-area-inset-bottom));
+  }
+
   .app-navbar-shell {
     position: sticky;
     inset: auto;

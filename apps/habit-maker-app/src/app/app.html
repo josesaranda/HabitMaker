@@ -38,6 +38,9 @@
 </div>
 }
 <habit-maker-ui-header-outlet class="sticky top-16 max-[700px]:top-0" />
-<div class="app-content-shell">
+<div
+  class="app-content-shell"
+  [class.app-content-shell--with-mobile-navbar]="shouldShowNavbar()"
+>
   <router-outlet />
 </div>

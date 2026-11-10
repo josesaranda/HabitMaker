@@ -37,6 +37,7 @@ export class HabitCard {
   showDayNavigation = input(false);
   windowStartDate = input<string | null>(null);
   completionRefresh = input(0);
+  previewCompletedDayOffsets = input<readonly number[] | null>(null);
   dayToggled = output<HabitCardDayToggleEvent>();
   windowStartDateChange = output<string>();
   private readonly today = signal(new Date());
@@ -117,9 +118,25 @@ export class HabitCard {
     effect((onCleanup) => {
       const habitId = this.id();
       this.completionRefresh();
-      const dates = this.calendarDays().map(({ date }) => date);
+      const calendarDays = this.calendarDays();
+      const previewCompletedDayOffsets = this.previewCompletedDayOffsets();
       this.completions.set({});
       this.completionError.set(false);
+
+      if (previewCompletedDayOffsets !== null) {
+        const completedOffsets = new Set(previewCompletedDayOffsets);
+        this.completions.set(
+          Object.fromEntries(
+            calendarDays.map(({ date, offset }) => [
+              date,
+              completedOffsets.has(offset),
+            ]),
+          ),
+        );
+        return;
+      }
+
+      const dates = calendarDays.map(({ date }) => date);
 
       const subscription = this.habitService
         .getCompletionsForDates(habitId, dates)

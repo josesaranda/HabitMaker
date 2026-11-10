@@ -108,6 +108,25 @@ describe('HabitCard', () => {
     );
   });
 
+  it('renders preview completion offsets without loading persisted data', async () => {
+    fixture.componentRef.setInput('name', 'Example habit');
+    fixture.componentRef.setInput('startedAt', '2023-10-01');
+    fixture.componentRef.setInput('previewCompletedDayOffsets', [-5, -3, -1]);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const dayItems = fixture.nativeElement.querySelectorAll(
+      '.habit-card__days-track > *',
+    );
+
+    expect(dayItems[4].querySelector('b')?.textContent).toBe('✓');
+    expect(dayItems[6].querySelector('b')?.textContent).toBe('✓');
+    expect(dayItems[8].querySelector('b')?.textContent).toBe('✓');
+    expect(dayItems[9].querySelector('b')?.textContent).toBe('');
+    expect(requestedDates).toHaveLength(0);
+  });
+
   it('snaps gestures to individual days and limits future navigation', async () => {
     fixture.componentRef.setInput('name', 'Un poco de lectura');
     fixture.componentRef.setInput('startedAt', '2023-10-01');
