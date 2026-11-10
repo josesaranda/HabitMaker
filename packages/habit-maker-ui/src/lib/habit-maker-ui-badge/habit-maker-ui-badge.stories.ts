@@ -4,6 +4,21 @@ import { HabitMakerUIBadge } from './habit-maker-ui-badge';
 const meta: Meta<HabitMakerUIBadge> = {
   title: 'Data Display/Badge',
   component: HabitMakerUIBadge,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Use a badge for a short, non-interactive status or category label.',
+          '',
+          'Pass one of `default`, `secondary`, `destructive`, `outline`, `ghost`, or `link` to `variant`. It defaults to `default`; the label is projected as content.',
+          '',
+          '```html',
+          '<habit-maker-ui-badge variant="secondary">Current</habit-maker-ui-badge>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
 };
 export default meta;
 

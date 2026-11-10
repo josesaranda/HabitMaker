@@ -5,6 +5,24 @@ import { HabitMakerUIInput } from './habit-maker-ui-input';
 const meta: Meta<HabitMakerUIInput> = {
   title: 'Forms/Input',
   component: HabitMakerUIInput,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Apply `hmInput` to a native `<input>` to use the shared field styling. Native input types, values, validation, and form behavior remain available.',
+          '',
+          'Choose the `default` variant (the default) or `error`. Pair every input with a visible label, and set `aria-invalid="true"` when its value is invalid.',
+          '',
+          '```html',
+          '<label for="habit-name">Habit name</label>',
+          '<input hmInput id="habit-name" name="habitName" type="text" />',
+          '',
+          '<input hmInput="error" aria-label="Habit name" aria-invalid="true" />',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [moduleMetadata({ imports: [HabitMakerUIInput] })],
 };
 

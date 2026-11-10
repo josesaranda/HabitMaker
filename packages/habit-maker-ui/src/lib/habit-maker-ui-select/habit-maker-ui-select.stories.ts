@@ -7,6 +7,29 @@ import { HabitMakerUISelect } from './habit-maker-ui-select';
 const meta: Meta<HabitMakerUISelect> = {
   title: 'Forms/Select',
   component: HabitMakerUISelect,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Use `habit-maker-ui-select` with one or more nested `habit-maker-ui-option` elements. Give the select an accessible name with `aria-label` or `aria-labelledby`.',
+          '',
+          'The control implements Angular `ControlValueAccessor`, so it works with `[(ngModel)]` or reactive forms. Import `FormsModule` for `ngModel`. `placeholder`, `required`, and `disabled` configure the control.',
+          '',
+          '```html',
+          '<habit-maker-ui-select',
+          '  name="habit"',
+          '  aria-label="Choose a habit"',
+          '  placeholder="Select a habit"',
+          '  [(ngModel)]="selectedHabit"',
+          '>',
+          '  <habit-maker-ui-option value="read">Reading</habit-maker-ui-option>',
+          '  <habit-maker-ui-option value="walk">Walking</habit-maker-ui-option>',
+          '</habit-maker-ui-select>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [moduleMetadata({ imports: [FormsModule, HabitMakerUIOption] })],
 };
 export default meta;

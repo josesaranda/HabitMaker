@@ -7,6 +7,28 @@ import { HabitMakerUINavbar } from './habit-maker-ui-navbar';
 const meta: Meta<HabitMakerUINavbar> = {
   title: 'Navigation/Navbar',
   component: HabitMakerUINavbar,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Use `habit-maker-ui-navbar` as a navigation landmark. It renders the brand link and an accessible `<nav>` containing the projected links and actions.',
+          '',
+          '`brandLink` sets the destination for the brand; `brandLabel` and `navigationLabel` provide accessible names. Import `RouterLink` for in-app destinations and the shared link/button directives for projected actions.',
+          '',
+          '```html',
+          '<habit-maker-ui-navbar',
+          '  brandLink="/home"',
+          '  brandLabel="HabitMaker home"',
+          '  navigationLabel="Main navigation"',
+          '>',
+          '  <a hmLink routerLink="/habits">My habits</a>',
+          '  <button hmButton="primary" type="button">Sign in</button>',
+          '</habit-maker-ui-navbar>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [
     moduleMetadata({ imports: [HabitMakerUIButton, HabitMakerUILink] }),
   ],

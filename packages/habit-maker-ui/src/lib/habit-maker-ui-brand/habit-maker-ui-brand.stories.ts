@@ -4,6 +4,25 @@ import { HabitMakerUIBrand } from './habit-maker-ui-brand';
 const meta: Meta<HabitMakerUIBrand> = {
   title: 'Brand/Brand',
   component: HabitMakerUIBrand,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Render the HabitMaker mark and wordmark in a brand area such as a sign-in panel or application header.',
+          '',
+          'The component has no inputs. Its mark is decorative, so provide an accessible name on the surrounding link when the brand is clickable.',
+          '',
+          '```html',
+          '<a routerLink="/home" aria-label="HabitMaker home">',
+          '  <habit-maker-ui-brand />',
+          '</a>',
+          '```',
+          '',
+          'The brand can be placed on light or dark surfaces; the Storybook variants demonstrate the available color contexts.',
+        ].join('\n'),
+      },
+    },
+  },
 };
 export default meta;
 

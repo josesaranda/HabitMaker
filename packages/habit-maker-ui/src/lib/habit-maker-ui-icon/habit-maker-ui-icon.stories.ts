@@ -22,6 +22,27 @@ const iconNames = [
 const meta: Meta<HabitMakerUIIcon> = {
   title: 'Visuals/Icon',
   component: HabitMakerUIIcon,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Render a registered HabitMaker icon with the required `name` input. Use this shared component for app and UI iconography instead of adding inline SVGs.',
+          '',
+          'Icons are marked `aria-hidden` because they are decorative. Put an icon-only control inside a button with an `aria-label`, or pair the icon with visible text.',
+          '',
+          '```html',
+          '<habit-maker-ui-icon name="sprout" />',
+          '',
+          '<button type="button" aria-label="Add habit">',
+          '  <habit-maker-ui-icon name="add" />',
+          '</button>',
+          '```',
+          '',
+          'Use the Playground control to browse the supported names.',
+        ].join('\n'),
+      },
+    },
+  },
 };
 export default meta;
 

@@ -50,6 +50,32 @@ class HeaderStoryVariant {
 const meta: Meta<HabitMakerUIHeader> = {
   title: 'Navigation/Header',
   component: HabitMakerUIHeader,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Declare the page title and optional back link or actions directly inside `habit-maker-ui-header`. Its content is projected into the shared root header outlet when the route becomes active.',
+          '',
+          'Add one `HabitMakerUIHeaderOutlet` to the application root, outside the router outlet. See the **Header Outlet** documentation for the root setup.',
+          '',
+          '`backNavigation` configures the back link. Use `backLabel` and `backTitle` to provide accessible text; `titleId` assigns an ID to the rendered heading for relationships such as `aria-labelledby`.',
+          '',
+          'Actions are projected from buttons or links using `hmButton` or `hmButtonIcon`:',
+          '',
+          '```html',
+          '<habit-maker-ui-header',
+          '  backNavigation="/home"',
+          '  backLabel="Back to habits"',
+          '  titleId="settings-title"',
+          '>',
+          '  Account settings',
+          '  <button hmButton="primary" type="button">Save changes</button>',
+          '</habit-maker-ui-header>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [
     moduleMetadata({
       imports: [

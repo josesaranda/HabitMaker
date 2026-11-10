@@ -5,6 +5,22 @@ import { HabitMakerUILink } from './habit-maker-ui-link';
 const meta: Meta<HabitMakerUILink> = {
   title: 'Navigation/Link',
   component: HabitMakerUILink,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Apply `hmLink` to a native anchor to use the shared link styling while keeping normal anchor behavior.',
+          '',
+          'Use `href` for an external or document URL. For in-app navigation, combine it with Angular `RouterLink`; the link directive does not replace routing.',
+          '',
+          '```html',
+          '<a hmLink href="https://example.com">Learn more</a>',
+          '<a hmLink routerLink="/habits">View habits</a>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [moduleMetadata({ imports: [HabitMakerUILink] })],
 };
 

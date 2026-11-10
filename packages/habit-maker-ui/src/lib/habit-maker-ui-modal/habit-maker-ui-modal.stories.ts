@@ -4,6 +4,27 @@ import { HabitMakerUIModal } from './habit-maker-ui-modal';
 const meta: Meta<HabitMakerUIModal> = {
   title: 'Overlays/Modal',
   component: HabitMakerUIModal,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Place `habit-maker-ui-modal` in the view that owns the dialog content. Supply the required accessible `label`, optionally set `closeLabel`, and project the dialog body inside it.',
+          '',
+          'Open it from a user action with `openFrom(triggerElement)`. Call `close()` from dialog controls; the component animates the dialog and restores focus to its trigger.',
+          '',
+          '```html',
+          '<habit-maker-ui-modal #details label="Habit details" closeLabel="Close details">',
+          '  <h2>Habit details</h2>',
+          '  <button type="button" (click)="details.close()">Done</button>',
+          '</habit-maker-ui-modal>',
+          '<button #trigger type="button" (click)="details.openFrom(trigger)">',
+          '  Open details',
+          '</button>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
 };
 export default meta;
 

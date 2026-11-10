@@ -5,6 +5,24 @@ import { HabitMakerUICheckbox } from './habit-maker-ui-checkbox';
 const meta: Meta<HabitMakerUICheckbox> = {
   title: 'Forms/Checkbox',
   component: HabitMakerUICheckbox,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Apply `hmCheckbox` to a native checkbox input. It retains native checked, disabled, keyboard, and form behavior.',
+          '',
+          'Associate it with a visible `<label>` so users can identify the setting and toggle it by clicking the label.',
+          '',
+          '```html',
+          '<label>',
+          '  <input hmCheckbox type="checkbox" name="reminderEnabled" />',
+          '  Enable daily reminders',
+          '</label>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [moduleMetadata({ imports: [HabitMakerUICheckbox] })],
 };
 

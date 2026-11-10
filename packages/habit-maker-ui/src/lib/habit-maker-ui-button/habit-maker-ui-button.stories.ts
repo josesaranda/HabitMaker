@@ -5,6 +5,22 @@ import { HabitMakerUIButton } from './habit-maker-ui-button';
 const meta: Meta<HabitMakerUIButton> = {
   title: 'Actions/Button',
   component: HabitMakerUIButton,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Apply `hmButton` to a native `<button>` or `<a>` to style a primary or secondary action. The directive preserves the native element behavior.',
+          '',
+          'Use `type="button"` for buttons that should not submit a form, and use the native `disabled` attribute when an action is unavailable.',
+          '',
+          '```html',
+          '<button hmButton="primary" type="button">Save changes</button>',
+          '<a hmButton="secondary" routerLink="/settings">Cancel</a>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [moduleMetadata({ imports: [HabitMakerUIButton] })],
 };
 

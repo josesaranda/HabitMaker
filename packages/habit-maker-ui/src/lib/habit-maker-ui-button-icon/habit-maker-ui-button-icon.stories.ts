@@ -6,6 +6,23 @@ import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
 const meta: Meta<HabitMakerUIButtonIcon> = {
   title: 'Actions/Icon Button',
   component: HabitMakerUIButtonIcon,
+  parameters: {
+    docs: {
+      description: {
+        component: [
+          'Apply `hmButtonIcon` to a native `<button>` or `<a>` when the action is represented by an icon rather than visible text.',
+          '',
+          'Always provide an accessible name with `aria-label`. Choose `primary` or `secondary`, and one of the `small`, `normal`, or `big` sizes. Render icon artwork through `HabitMakerUIIcon`.',
+          '',
+          '```html',
+          '<button hmButtonIcon="primary" size="normal" type="button" aria-label="Add habit">',
+          '  <habit-maker-ui-icon name="add" />',
+          '</button>',
+          '```',
+        ].join('\n'),
+      },
+    },
+  },
   decorators: [
     moduleMetadata({ imports: [HabitMakerUIButtonIcon, HabitMakerUIIcon] }),
   ],
