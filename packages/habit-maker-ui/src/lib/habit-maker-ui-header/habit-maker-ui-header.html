@@ -1,21 +1,27 @@
-<header class="habit-maker-ui-header">
-  @if (backNavigation(); as backUrl) {
-    <a
-      class="habit-maker-ui-header__back"
-      [routerLink]="backUrl"
-      [attr.aria-label]="backLabel()"
-      [title]="backTitle()"
-    >
-      <habit-maker-ui-icon class="size-5" name="arrow-left" />
-    </a>
-  }
-  <h1 class="habit-maker-ui-header__title"><ng-content /></h1>
-  <div
-    class="habit-maker-ui-header__actions"
-    [class.habit-maker-ui-header__actions--visible]="hasActions()"
-  >
-    <ng-content
-      select="button[hmButton], a[hmButton], button[hmButtonIcon], a[hmButtonIcon]"
-    />
+<ng-template #headerContent>
+  <div class="habit-maker-ui-header__shell">
+    <header class="habit-maker-ui-header">
+      @if (backNavigation(); as backUrl) {
+        <a
+          class="habit-maker-ui-header__back"
+          [routerLink]="backUrl"
+          [attr.aria-label]="backLabel()"
+          [title]="backTitle()"
+        >
+          <habit-maker-ui-icon class="size-5" name="arrow-left" />
+        </a>
+      }
+      <h1 class="habit-maker-ui-header__title" [attr.id]="titleId()">
+        <ng-content />
+      </h1>
+      <div
+        class="habit-maker-ui-header__actions"
+        [class.habit-maker-ui-header__actions--visible]="hasActions()"
+      >
+        <ng-content
+          select="button[hmButton], a[hmButton], button[hmButtonIcon], a[hmButtonIcon]"
+        />
+      </div>
+    </header>
   </div>
-</header>
+</ng-template>

@@ -9,6 +9,7 @@ import {
 } from '@angular/router';
 import {
   HabitMakerUIButtonIcon,
+  HabitMakerUIHeaderOutlet,
   HabitMakerUIIcon,
   HabitMakerUINavbar,
 } from '@habit-maker/habit-maker-ui';
@@ -18,6 +19,7 @@ import { AuthService } from './auth/auth.service';
 @Component({
   imports: [
     HabitMakerUIButtonIcon,
+    HabitMakerUIHeaderOutlet,
     HabitMakerUIIcon,
     HabitMakerUINavbar,
     RouterLink,

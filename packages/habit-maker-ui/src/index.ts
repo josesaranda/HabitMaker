@@ -9,6 +9,8 @@ export * from './lib/habit-maker-ui-icon/habit-maker-ui-icon';
 export * from './lib/habit-maker-ui-link/habit-maker-ui-link';
 export * from './lib/habit-maker-ui-navbar/habit-maker-ui-navbar';
 export * from './lib/habit-maker-ui-header/habit-maker-ui-header';
+export * from './lib/habit-maker-ui-header/habit-maker-ui-header-outlet';
+export * from './lib/habit-maker-ui-header/habit-maker-ui-header-portal.service';
 
 export * from './lib/habit-maker-ui-modal/habit-maker-ui-modal';
 

@@ -107,7 +107,7 @@ describe('Settings', () => {
       'habit-maker-ui-select .hm-ui-select__trigger',
     );
 
-    expect(compiled.querySelector('h1')?.textContent).toContain('Ajustes');
+    expect(compiled.querySelector('habit-maker-ui-header')).not.toBeNull();
     expect(compiled.querySelector('h2')?.textContent).toContain(
       'Ajustes de usuario',
     );

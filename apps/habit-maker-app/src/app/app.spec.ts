@@ -97,6 +97,10 @@ describe('App', () => {
       fixture.nativeElement.querySelector('app-habit-detail'),
     ).not.toBeNull();
     expect(
+      fixture.nativeElement.querySelector('habit-maker-ui-header-outlet h1')
+        ?.textContent,
+    ).toContain('Detalle del hábito');
+    expect(
       fixture.nativeElement.querySelector(
         'app-habit-detail app-habit-card article strong',
       )?.textContent,
@@ -128,9 +132,14 @@ describe('App', () => {
       ),
     ).not.toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;
+    expect(
+      compiled.querySelector('habit-maker-ui-header-outlet h1#habits-title')
+        ?.textContent,
+    ).toContain('Tus hábitos');
     const addHabitButton = compiled.querySelector<HTMLButtonElement>(
-      'app-home habit-maker-ui-header button[hmButtonIcon]',
+      'habit-maker-ui-header-outlet button[hmButtonIcon]',
     );
+    expect(compiled.querySelector('app-home habit-maker-ui-header h1')).toBeNull();
     expect(addHabitButton?.getAttribute('aria-label')).toBe('Añadir hábito');
     const mobileSettingsLink = compiled.querySelector<HTMLAnchorElement>(
       'a.app-navbar__mobile-settings',
@@ -148,8 +157,9 @@ describe('App', () => {
     expect(logoutButton?.getAttribute('hmButtonIcon')).toBe('secondary');
     expect(logoutButton?.getAttribute('size')).toBe('normal');
 
-    const dialog =
-      compiled.querySelector<HTMLDialogElement>('habit-maker-ui-modal dialog')!;
+    const dialog = compiled.querySelector<HTMLDialogElement>(
+      'habit-maker-ui-modal dialog',
+    )!;
     Object.defineProperty(dialog, 'showModal', {
       configurable: true,
       value: () => dialog.setAttribute('open', ''),
@@ -174,6 +184,18 @@ describe('App', () => {
     expect(
       fixture.nativeElement.querySelector('app-home #home-title')?.textContent,
     ).toContain('¡Bienvenido a casa!');
+
+    await router.navigateByUrl('/settings');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('habit-maker-ui-header-outlet h1')
+        ?.textContent,
+    ).toContain('Ajustes');
+    expect(
+      fixture.nativeElement.querySelector('app-home habit-maker-ui-header h1'),
+    ).toBeNull();
+
     expect(
       fixture.nativeElement.querySelector(
         'habit-maker-ui-navbar habit-maker-ui-brand',

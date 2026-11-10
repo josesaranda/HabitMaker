@@ -17,8 +17,8 @@ import {
   HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
 import { finalize } from 'rxjs';
-import { HabitCard } from '../habit-card/habit-card';
 import { BrowserService } from '../browser/browser.service';
+import { HabitCard } from '../habit-card/habit-card';
 import { Habit, HabitService } from '../habits/habit.service';
 import { NewHabit } from '../new-habit/new-habit';
 import { HomeHabitsResolveResult } from './home.resolver';

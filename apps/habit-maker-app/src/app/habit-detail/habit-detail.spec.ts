@@ -67,12 +67,9 @@ describe('HabitDetail', () => {
     );
     const pageContent = fixture.nativeElement.querySelector('main > div');
     expect(pageContent?.classList.contains('max-w-6xl')).toBe(true);
-    const header = pageContent?.querySelector(':scope > habit-maker-ui-header');
-    expect(header?.querySelector('h1')?.textContent?.trim()).toBe(
-      'Detalle del hábito',
-    );
-    expect(header?.querySelector('a')?.getAttribute('href')).toBe('/home');
-    expect(header?.nextElementSibling).toBe(habitCard);
+    expect(
+      pageContent?.querySelector(':scope > habit-maker-ui-header'),
+    ).not.toBeNull();
     expect(habitCard?.querySelector('a')).toBeNull();
     expect(
       habitCard?.querySelectorAll('button[aria-label^="Mostrar los tres días"]'),

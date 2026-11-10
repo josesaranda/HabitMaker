@@ -1,16 +1,64 @@
+import { Component, input } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { moduleMetadata } from '@storybook/angular';
 import { HabitMakerUIButton } from '../habit-maker-ui-button/habit-maker-ui-button';
 import { HabitMakerUIButtonIcon } from '../habit-maker-ui-button-icon/habit-maker-ui-button-icon';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIHeaderOutlet } from './habit-maker-ui-header-outlet';
+import { HabitMakerUIHeaderPortalService } from './habit-maker-ui-header-portal.service';
 import { HabitMakerUIHeader } from './habit-maker-ui-header';
+
+@Component({
+  selector: 'habit-maker-ui-header-story-variant',
+  standalone: true,
+  imports: [
+    HabitMakerUIButton,
+    HabitMakerUIButtonIcon,
+    HabitMakerUIHeader,
+    HabitMakerUIHeaderOutlet,
+    HabitMakerUIIcon,
+  ],
+  providers: [HabitMakerUIHeaderPortalService],
+  template: `
+    <habit-maker-ui-header [backNavigation]="backNavigation()">
+      {{ title() }}
+      <button
+        hmButton
+        type="button"
+        [style.display]="showActions() ? null : 'none'"
+      >
+        Create habit
+      </button>
+      <button
+        hmButtonIcon="secondary"
+        aria-label="Settings"
+        type="button"
+        [style.display]="showActions() ? null : 'none'"
+      >
+        <habit-maker-ui-icon name="settings" />
+      </button>
+    </habit-maker-ui-header>
+    <habit-maker-ui-header-outlet />
+  `,
+})
+class HeaderStoryVariant {
+  readonly title = input.required<string>();
+  readonly backNavigation = input<string | undefined>();
+  readonly showActions = input(false);
+}
 
 const meta: Meta<HabitMakerUIHeader> = {
   title: 'Navigation/Header',
   component: HabitMakerUIHeader,
   decorators: [
     moduleMetadata({
-      imports: [HabitMakerUIButton, HabitMakerUIButtonIcon, HabitMakerUIIcon],
+      imports: [
+        HabitMakerUIButton,
+        HabitMakerUIButtonIcon,
+        HabitMakerUIHeaderOutlet,
+        HabitMakerUIIcon,
+        HeaderStoryVariant,
+      ],
     }),
   ],
 };
@@ -23,6 +71,7 @@ export const Playground: Story = {
     backNavigation: '/habits',
     backLabel: 'Back to habits',
     backTitle: 'Back',
+    titleId: 'header-title',
   },
   render: (args) => ({
     props: args,
@@ -31,10 +80,12 @@ export const Playground: Story = {
         [backNavigation]="backNavigation"
         [backLabel]="backLabel"
         [backTitle]="backTitle"
+        [titleId]="titleId"
       >
         Weekly overview
         <button hmButton type="button">New habit</button>
       </habit-maker-ui-header>
+      <habit-maker-ui-header-outlet />
     `,
   }),
 };
@@ -44,16 +95,10 @@ export const AllVariants: Story = {
   render: () => ({
     template: `
       <div style="display: grid; gap: 1.5rem;">
-        <habit-maker-ui-header>Overview</habit-maker-ui-header>
-        <habit-maker-ui-header backNavigation="/habits">Habit details</habit-maker-ui-header>
-        <habit-maker-ui-header>
-          With actions
-          <button hmButton type="button">Create</button>
-        </habit-maker-ui-header>
-        <habit-maker-ui-header backNavigation="/habits">
-          Back and actions
-          <button hmButtonIcon="secondary" aria-label="Settings" type="button"><habit-maker-ui-icon name="settings" /></button>
-        </habit-maker-ui-header>
+        <habit-maker-ui-header-story-variant title="Overview" />
+        <habit-maker-ui-header-story-variant title="Habit details" backNavigation="/habits" />
+        <habit-maker-ui-header-story-variant title="With actions" [showActions]="true" />
+        <habit-maker-ui-header-story-variant title="Back and actions" backNavigation="/habits" [showActions]="true" />
       </div>
     `,
   }),
