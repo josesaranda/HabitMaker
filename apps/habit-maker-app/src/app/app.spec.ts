@@ -62,9 +62,9 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector('router-outlet')).not.toBeNull();
-    expect(compiled.querySelector('app-login #login-title')?.textContent).toContain(
-      'Inicia sesión',
-    );
+    expect(
+      compiled.querySelector('app-login #login-title')?.textContent,
+    ).toContain('Inicia sesión');
     expect(compiled.querySelector('habit-maker-ui-navbar')).toBeNull();
     expect(
       compiled
@@ -80,9 +80,9 @@ describe('App', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-signup #signup-title')?.textContent).toContain(
-      'Crea tu cuenta',
-    );
+    expect(
+      compiled.querySelector('app-signup #signup-title')?.textContent,
+    ).toContain('Crea tu cuenta');
   });
 
   it('opens the detail page for a habit route', async () => {

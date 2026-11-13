@@ -69,9 +69,7 @@ describe('ResetPassword', () => {
 
     expect(
       fixture.nativeElement.querySelector('#reset-password-title')?.textContent,
-    ).toContain(
-      'Ya puedes iniciar sesión',
-    );
+    ).toContain('Ya puedes iniciar sesión');
     expect(
       fixture.nativeElement.querySelector('a[routerLink="/login"]'),
     ).not.toBeNull();

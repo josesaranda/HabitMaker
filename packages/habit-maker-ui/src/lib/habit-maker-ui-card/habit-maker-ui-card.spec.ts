@@ -70,11 +70,10 @@ describe('HabitMakerUICard', () => {
     const link = card.querySelector<HTMLAnchorElement>('.hm-card__link');
 
     expect(link?.getAttribute('href')).toBe('/habits/habit-1');
-    expect(link?.getAttribute('aria-label')).toBe(
-      'View Build a reading habit',
-    );
-    expect(link?.querySelector('habit-maker-ui-icon[name="arrow-right"]'))
-      .not.toBeNull();
+    expect(link?.getAttribute('aria-label')).toBe('View Build a reading habit');
+    expect(
+      link?.querySelector('habit-maker-ui-icon[name="arrow-right"]'),
+    ).not.toBeNull();
     expect(card.querySelector('article')?.closest('a')).toBeNull();
   });
 });

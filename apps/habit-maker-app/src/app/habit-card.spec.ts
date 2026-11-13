@@ -159,7 +159,9 @@ describe('HabitCard', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(dayItems()[3].querySelector('.hm-button-day--selected')).not.toBeNull();
+    expect(
+      dayItems()[3].querySelector('.hm-button-day--selected'),
+    ).not.toBeNull();
     expect(requestedDates).toHaveLength(0);
     expect(confetti).toHaveBeenCalledWith({
       position: { x: 25, y: 40 },
@@ -346,9 +348,7 @@ describe('HabitCard', () => {
 
     dayButton?.click();
 
-    expect(emitted).toEqual([
-      { date, completed: false },
-    ]);
+    expect(emitted).toEqual([{ date, completed: false }]);
     const futureDayButton = (
       fixture.nativeElement as HTMLElement
     ).querySelector<HTMLButtonElement>(
@@ -356,9 +356,7 @@ describe('HabitCard', () => {
     );
     expect(futureDayButton?.disabled).toBe(true);
     futureDayButton?.click();
-    expect(emitted).toEqual([
-      { date, completed: false },
-    ]);
+    expect(emitted).toEqual([{ date, completed: false }]);
   });
 
   it('shows the provided date if it is not valid', async () => {

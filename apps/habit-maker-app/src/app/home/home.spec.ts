@@ -26,11 +26,10 @@ describe('Home', () => {
           useValue: {
             getHabits: () => of(habits),
             getCompletionsForDates: vi.fn(() => of([])),
-            setCompletion: vi.fn((
-              _id: string,
-              date: string,
-              completed: boolean,
-            ) => of({ date, completed, completedAt: null })),
+            setCompletion: vi.fn(
+              (_id: string, date: string, completed: boolean) =>
+                of({ date, completed, completedAt: null }),
+            ),
             habitCreated$: EMPTY,
           },
         },
@@ -91,16 +90,16 @@ describe('Home', () => {
     expect(compiled.querySelector('#home-title')).toBeNull();
     expect(compiled.querySelector('habit-maker-ui-header')).not.toBeNull();
     expect(compiled.querySelectorAll('app-habit-card')).toHaveLength(2);
-    expect(
-      compiled.querySelector('app-habit-card')?.closest('a'),
-    ).toBeNull();
+    expect(compiled.querySelector('app-habit-card')?.closest('a')).toBeNull();
     expect(
       compiled
         .querySelector('app-habit-card .hm-card__link')
         ?.getAttribute('href'),
     ).toBe('/habits/habit-1');
     expect(
-      compiled.querySelector('app-habit-card [aria-label^="Marcar como completado"]'),
+      compiled.querySelector(
+        'app-habit-card [aria-label^="Marcar como completado"]',
+      ),
     ).not.toBeNull();
     expect(
       compiled

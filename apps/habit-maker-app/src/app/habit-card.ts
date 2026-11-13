@@ -39,7 +39,9 @@ export class HabitCard {
   readonly dayToggleDisabled = input(false);
   readonly showDayNavigation = input(false);
   readonly windowStartDate = input<string | null>(null);
-  readonly completionUpdate = input<HabitMakerUICardDayToggleEvent | null>(null);
+  readonly completionUpdate = input<HabitMakerUICardDayToggleEvent | null>(
+    null,
+  );
   readonly previewCompletedDayOffsets = input<readonly number[] | null>(null);
   readonly dayToggled = output<HabitMakerUICardDayToggleEvent>();
   readonly windowStartDateChange = output<string>();

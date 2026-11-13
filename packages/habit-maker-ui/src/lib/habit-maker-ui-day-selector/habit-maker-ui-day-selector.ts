@@ -235,9 +235,7 @@ export class HabitMakerUIDaySelector {
     requestAnimationFrame(() => this.isDragging.set(false));
   }
 
-  protected toggleDay(
-    day: HabitMakerUIDaySelectorDay,
-  ): void {
+  protected toggleDay(day: HabitMakerUIDaySelectorDay): void {
     if (
       !this.dayToggleEnabled() ||
       this.dayToggleDisabled() ||
