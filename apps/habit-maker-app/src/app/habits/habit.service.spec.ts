@@ -1,7 +1,4 @@
-import {
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -172,9 +169,11 @@ describe('HabitService', () => {
     sessionStorage.setItem('habitmaker.authToken', 'access-token');
     let completed = true;
 
-    service.setCompletion('habit-1', '2026-10-30', false).subscribe((status) => {
-      completed = status.completed;
-    });
+    service
+      .setCompletion('habit-1', '2026-10-30', false)
+      .subscribe((status) => {
+        completed = status.completed;
+      });
 
     const request = httpTestingController.expectOne(
       `${API_URL}/habits/habit-1/completions/2026-10-30`,
@@ -187,6 +186,32 @@ describe('HabitService', () => {
     request.flush({ date: '2026-10-30', completed: false, completedAt: null });
 
     expect(completed).toBe(false);
+  });
+
+  it('renames a habit with its encoded id and the saved access token', () => {
+    sessionStorage.setItem('habitmaker.authToken', 'access-token');
+    let receivedName = '';
+
+    service.updateHabit('habit/1', '  Leer 10 minutos  ').subscribe((habit) => {
+      receivedName = habit.name;
+    });
+
+    const request = httpTestingController.expectOne(
+      `${API_URL}/habits/habit%2F1`,
+    );
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual({ name: 'Leer 10 minutos' });
+    expect(request.request.headers.get('Authorization')).toBe(
+      'Bearer access-token',
+    );
+    request.flush({
+      id: 'habit/1',
+      name: 'Leer 10 minutos',
+      createdAt: '2026-11-01T00:00:00.000Z',
+      updatedAt: '2026-11-02T00:00:00.000Z',
+    });
+
+    expect(receivedName).toBe('Leer 10 minutos');
   });
 
   it('loads and updates authenticated per-habit reminder preferences', () => {

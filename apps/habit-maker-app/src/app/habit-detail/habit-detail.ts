@@ -13,8 +13,10 @@ import { SwPush } from '@angular/service-worker';
 import { firstValueFrom } from 'rxjs';
 import {
   HabitMakerUIButton,
+  HabitMakerUIButtonIcon,
   HabitMakerUIHeader,
   HabitMakerUIIcon,
+  HabitMakerUIInput,
   HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
@@ -37,8 +39,10 @@ import { HabitDetailResolveResult } from './habit-detail.resolver';
   imports: [
     HabitCard,
     HabitMakerUIButton,
+    HabitMakerUIButtonIcon,
     HabitMakerUIHeader,
     HabitMakerUIIcon,
+    HabitMakerUIInput,
     HabitMakerUIModal,
     TranslocoPipe,
   ],
@@ -59,12 +63,20 @@ export class HabitDetail implements OnInit {
   protected readonly isNotFound = signal(false);
   protected readonly isCompletedToday = signal(false);
   protected readonly isSavingDayCompletion = signal(false);
-  protected readonly completionUpdate = signal<HabitMakerUICardDayToggleEvent | null>(null);
+  protected readonly completionUpdate =
+    signal<HabitMakerUICardDayToggleEvent | null>(null);
   protected readonly calendarWindowStart = signal<string | null>(null);
   protected readonly dayCompletionError = signal('');
   protected readonly loadError = signal('');
   protected readonly isDeletingHabit = signal(false);
   protected readonly deleteHabitError = signal('');
+  protected readonly isSavingHabitName = signal(false);
+  protected readonly editHabitName = signal('');
+  protected readonly editHabitNameError = signal('');
+  protected readonly editHabitError = signal('');
+  protected readonly canSaveHabitName = computed(
+    () => this.editHabitName().trim().length > 0 && !this.isSavingHabitName(),
+  );
   protected readonly isLoadingReminder = signal(true);
   protected readonly isSavingReminder = signal(false);
   protected readonly reminderEnabled = signal(false);
@@ -370,9 +382,58 @@ export class HabitDetail implements OnInit {
         },
         error: () => {
           this.isSavingDayCompletion.set(false);
-          this.dayCompletionError.set(
-            'habitDetail.activityError',
-          );
+          this.dayCompletionError.set('habitDetail.activityError');
+        },
+      });
+  }
+
+  protected openEditHabitModal(
+    modal: HabitMakerUIModal,
+    trigger: HTMLElement,
+  ): void {
+    const currentHabit = this.habit();
+    if (!currentHabit) return;
+
+    this.editHabitName.set(currentHabit.name);
+    this.editHabitNameError.set('');
+    this.editHabitError.set('');
+    modal.openFrom(trigger);
+  }
+
+  protected setEditHabitName(name: string): void {
+    this.editHabitName.set(name);
+    if (name.trim().length > 0) {
+      this.editHabitNameError.set('');
+    }
+  }
+
+  protected saveHabitName(modal: HabitMakerUIModal): void {
+    const currentHabit = this.habit();
+    if (!currentHabit || this.isSavingHabitName()) return;
+
+    const name = this.editHabitName().trim();
+    if (name.length === 0) {
+      this.editHabitNameError.set('habitDetail.editInvalidName');
+      return;
+    }
+
+    this.isSavingHabitName.set(true);
+    this.editHabitError.set('');
+    this.habitService
+      .updateHabit(currentHabit.id, name)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (habit) => {
+          this.isSavingHabitName.set(false);
+          this.habit.set(habit);
+          this.browserService.setTitle('pageTitles.habitNamed', {
+            name: habit.name,
+          });
+          modal.close();
+        },
+        error: () => {
+          this.isSavingHabitName.set(false);
+          this.editHabitError.set('habitDetail.editError');
         },
       });
   }

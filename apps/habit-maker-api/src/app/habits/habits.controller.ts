@@ -26,10 +26,7 @@ export class HabitsController {
   }
 
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @Req() request: AuthenticatedUserRequest,
-  ) {
+  findOne(@Param('id') id: string, @Req() request: AuthenticatedUserRequest) {
     return this.habitsService.findOne(id, request.user.id);
   }
 
@@ -40,6 +37,15 @@ export class HabitsController {
     @Req() request: AuthenticatedUserRequest,
   ): Promise<void> {
     return this.habitsService.remove(id, request.user.id);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Req() request: AuthenticatedUserRequest,
+  ) {
+    return this.habitsService.update(id, body, request.user.id);
   }
 
   @Post()

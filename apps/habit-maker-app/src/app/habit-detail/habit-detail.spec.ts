@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRoute,
@@ -5,13 +6,23 @@ import {
   convertToParamMap,
   provideRouter,
 } from '@angular/router';
+import { HabitMakerUIHeaderOutlet } from '@habit-maker/habit-maker-ui';
 import confetti from '@hiseb/confetti';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { HabitService } from '../habits/habit.service';
 import { HabitDetail } from './habit-detail';
 
 vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));
+
+@Component({
+  imports: [HabitDetail, HabitMakerUIHeaderOutlet],
+  template: `
+    <habit-maker-ui-header-outlet />
+    <app-habit-detail />
+  `,
+})
+class HabitDetailWithHeaderOutletComponent {}
 
 describe('HabitDetail', () => {
   it('shows the habit matching the route id', async () => {
@@ -290,6 +301,163 @@ describe('HabitDetail', () => {
 
     expect(habitService.deleteHabit).toHaveBeenCalledWith('habit-1');
     expect(navigate).toHaveBeenCalledWith(['/home']);
+  });
+
+  it('renames the habit from the header edit dialog', async () => {
+    const habitService = {
+      getCompletionsForDates: () => of([]),
+      getReminder: () => of({ enabled: false, time: null, timeZone: null }),
+      getPushPublicKey: () => of({ publicKey: null }),
+      getTodayCompletion: () =>
+        of({ date: '2026-11-01', completed: false, completedAt: null }),
+      updateHabit: vi.fn(() =>
+        of({
+          id: 'habit-1',
+          name: 'Leer 20 minutos',
+          createdAt: '2026-11-01T00:00:00.000Z',
+          updatedAt: '2026-11-02T00:00:00.000Z',
+        }),
+      ),
+    };
+    await TestBed.configureTestingModule({
+      imports: [HabitDetailWithHeaderOutletComponent],
+      providers: [
+        provideTranslocoTesting(),
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            queryParamMap: of(convertToParamMap({})),
+            snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
+          },
+        },
+        { provide: HabitService, useValue: habitService },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(
+      HabitDetailWithHeaderOutletComponent,
+    );
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const editButton = compiled.querySelector<HTMLButtonElement>(
+      'habit-maker-ui-header-outlet button[hmButtonIcon]',
+    )!;
+    expect(editButton.getAttribute('aria-label')).toBe('Editar hábito');
+    editButton.click();
+    fixture.detectChanges();
+
+    const nameInput =
+      compiled.querySelector<HTMLInputElement>('#edit-habit-name')!;
+    const editDialog = nameInput.closest<HTMLDialogElement>('dialog')!;
+    expect(editDialog.open).toBe(true);
+    expect(nameInput.value).toBe('Leer 10 minutos');
+
+    nameInput.value = 'Leer 20 minutos';
+    nameInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    editDialog
+      .querySelector<HTMLButtonElement>('button[hmButton="primary"]')!
+      .click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(habitService.updateHabit).toHaveBeenCalledWith(
+      'habit-1',
+      'Leer 20 minutos',
+    );
+    expect(editDialog.open).toBe(false);
+    expect(
+      compiled.querySelector('app-habit-card article h2')?.textContent?.trim(),
+    ).toBe('Leer 20 minutos');
+  });
+
+  it('keeps the edit dialog open and reports the error when the rename fails', async () => {
+    const habitService = {
+      getCompletionsForDates: () => of([]),
+      getReminder: () => of({ enabled: false, time: null, timeZone: null }),
+      getPushPublicKey: () => of({ publicKey: null }),
+      getTodayCompletion: () =>
+        of({ date: '2026-11-01', completed: false, completedAt: null }),
+      updateHabit: vi.fn(() => throwError(() => new Error('boom'))),
+    };
+    await TestBed.configureTestingModule({
+      imports: [HabitDetailWithHeaderOutletComponent],
+      providers: [
+        provideTranslocoTesting(),
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              habitResult: {
+                habit: {
+                  id: 'habit-1',
+                  name: 'Leer 10 minutos',
+                  createdAt: '2026-11-01T00:00:00.000Z',
+                  updatedAt: '2026-11-01T00:00:00.000Z',
+                },
+                error: null,
+              },
+            }),
+            queryParamMap: of(convertToParamMap({})),
+            snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
+          },
+        },
+        { provide: HabitService, useValue: habitService },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(
+      HabitDetailWithHeaderOutletComponent,
+    );
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    compiled
+      .querySelector<HTMLButtonElement>(
+        'habit-maker-ui-header-outlet button[hmButtonIcon]',
+      )!
+      .click();
+    fixture.detectChanges();
+
+    const nameInput =
+      compiled.querySelector<HTMLInputElement>('#edit-habit-name')!;
+    const editDialog = nameInput.closest<HTMLDialogElement>('dialog')!;
+    nameInput.value = 'Leer 20 minutos';
+    nameInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    editDialog
+      .querySelector<HTMLButtonElement>('button[hmButton="primary"]')!
+      .click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(editDialog.open).toBe(true);
+    expect(editDialog.textContent).toContain(
+      'No se pudo actualizar el hábito. Inténtalo de nuevo.',
+    );
+    expect(
+      compiled.querySelector('app-habit-card article h2')?.textContent?.trim(),
+    ).toBe('Leer 10 minutos');
   });
 
   it('restores the calendar window from the URL and updates it on navigation', async () => {

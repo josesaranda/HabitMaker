@@ -84,6 +84,25 @@ export class HabitsService {
     };
   }
 
+  async update(
+    id: string,
+    input: unknown,
+    userId: string,
+  ): Promise<CreatedHabit> {
+    const name = this.parseName(input);
+    const habit = await this.findOwnedHabit(id, userId);
+
+    habit.name = name;
+    await this.habits.save(habit);
+
+    return {
+      id: habit.id,
+      name: habit.name,
+      createdAt: habit.createdAt,
+      updatedAt: habit.updatedAt,
+    };
+  }
+
   async remove(id: string, userId: string): Promise<void> {
     const habit = await this.habits.findOne({
       where: { id, user: { id: userId } },

@@ -11,6 +11,7 @@ const iconNames = [
   'chevron-right',
   'clock',
   'close',
+  'edit',
   'eye',
   'eye-off',
   'logout',

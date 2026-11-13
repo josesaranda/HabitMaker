@@ -51,12 +51,22 @@ export class HabitService {
   }
 
   getHabits(): Observable<Habit[]> {
-    return this.requireAuthentication(this.http.get<Habit[]>(`${API_URL}/habits`));
+    return this.requireAuthentication(
+      this.http.get<Habit[]>(`${API_URL}/habits`),
+    );
   }
 
   getHabit(id: string): Observable<Habit> {
     return this.requireAuthentication(
       this.http.get<Habit>(`${API_URL}/habits/${encodeURIComponent(id)}`),
+    );
+  }
+
+  updateHabit(id: string, name: string): Observable<Habit> {
+    return this.requireAuthentication(
+      this.http.put<Habit>(`${API_URL}/habits/${encodeURIComponent(id)}`, {
+        name: name.trim(),
+      }),
     );
   }
 

@@ -5,7 +5,18 @@
       [backLabel]="'navigation.back' | transloco"
       [backTitle]="'navigation.backTitle' | transloco"
     >
-      {{ 'habitDetail.title' | transloco }}
+      {{ 'habitDetail.title' | transloco }} @if (habit()) {
+      <button
+        #editHabitTrigger
+        hmButtonIcon="secondary"
+        type="button"
+        [attr.aria-label]="'habitDetail.editButton' | transloco"
+        [title]="'habitDetail.editButton' | transloco"
+        (click)="openEditHabitModal(editHabitModal, editHabitTrigger)"
+      >
+        <habit-maker-ui-icon name="edit" />
+      </button>
+      }
     </habit-maker-ui-header>
     @if (isLoading()) {
     <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
@@ -138,8 +149,7 @@
           (change)="setReminderTime($any($event.target).value)"
         />
       </div>
-      @if (reminderEnabled()) {
-      @if (hasPendingReminderChanges()) {
+      @if (reminderEnabled()) { @if (hasPendingReminderChanges()) {
       <p class="mt-3 text-sm text-text-secondary" role="status">
         {{ 'habitDetail.reminderTimePending' | transloco }}
       </p>
@@ -203,7 +213,8 @@
           {{ 'habitDetail.deleteDialogTitle' | transloco }}
         </h2>
         <p class="m-0 leading-relaxed text-text-secondary">
-          {{ 'habitDetail.deleteConfirmation' | transloco: { name: habit()?.name ?? '' } }}
+          {{ 'habitDetail.deleteConfirmation' | transloco: { name: habit()?.name
+          ?? '' } }}
         </p>
         @if (deleteHabitError()) {
         <p class="m-0 text-sm text-error" role="alert">
@@ -226,11 +237,75 @@
             [disabled]="isDeletingHabit()"
             (click)="deleteHabit(deleteHabitModal)"
           >
-            {{ (isDeletingHabit() ? 'habitDetail.deleting' : 'habitDetail.confirmDelete') | transloco }}
+            {{ (isDeletingHabit() ? 'habitDetail.deleting' :
+            'habitDetail.confirmDelete') | transloco }}
           </button>
         </div>
       </div>
     </habit-maker-ui-modal>
     }
+    <habit-maker-ui-modal
+      #editHabitModal
+      [label]="'habitDetail.editDialogTitle' | transloco"
+      [closeLabel]="'navigation.closeDialog' | transloco"
+    >
+      <form
+        class="grid gap-4"
+        (submit)="saveHabitName(editHabitModal); $event.preventDefault()"
+      >
+        <h2 class="m-0 text-xl font-semibold text-text-primary">
+          {{ 'habitDetail.editDialogTitle' | transloco }}
+        </h2>
+        <div>
+          <label
+            class="mb-2 block text-sm font-semibold text-text-primary"
+            for="edit-habit-name"
+          >
+            {{ 'habitDetail.editLabel' | transloco }}
+          </label>
+          <input
+            hmInput
+            id="edit-habit-name"
+            type="text"
+            maxlength="100"
+            autocomplete="off"
+            autofocus
+            class="rounded-[0.85rem]"
+            [value]="editHabitName()"
+            [attr.aria-invalid]="editHabitNameError() ? 'true' : null"
+            [placeholder]="'habitDetail.editPlaceholder' | transloco"
+            (input)="setEditHabitName($any($event.target).value)"
+          />
+          @if (editHabitNameError()) {
+          <p class="mt-2 mb-0 text-sm text-error" role="alert">
+            {{ editHabitNameError() | transloco }}
+          </p>
+          }
+        </div>
+        @if (editHabitError()) {
+        <p class="m-0 text-sm text-error" role="alert">
+          {{ editHabitError() | transloco }}
+        </p>
+        }
+        <div class="flex flex-col-reverse justify-end gap-3 sm:flex-row">
+          <button
+            hmButton="secondary"
+            type="button"
+            [disabled]="isSavingHabitName()"
+            (click)="editHabitModal.close()"
+          >
+            {{ 'habitDetail.cancelEdit' | transloco }}
+          </button>
+          <button
+            hmButton="primary"
+            type="submit"
+            [disabled]="!canSaveHabitName()"
+          >
+            {{ (isSavingHabitName() ? 'habitDetail.savingEdit' :
+            'habitDetail.confirmEdit' ) | transloco }}
+          </button>
+        </div>
+      </form>
+    </habit-maker-ui-modal>
   </div>
 </main>

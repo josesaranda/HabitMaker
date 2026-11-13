@@ -10,6 +10,7 @@ export type HabitMakerUIIconName =
   | 'chevron-right'
   | 'clock'
   | 'close'
+  | 'edit'
   | 'eye'
   | 'eye-off'
   | 'logout'
@@ -27,6 +28,7 @@ const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   'chevron-right': 'assets/icons/chevron-right.svg#chevron-right',
   clock: 'assets/icons/clock.svg#clock',
   close: 'assets/icons/close.svg#close',
+  edit: 'assets/icons/edit.svg#edit',
   eye: 'assets/icons/eye.svg#eye',
   'eye-off': 'assets/icons/eye-off.svg#eye-off',
   logout: 'assets/icons/logout.svg#logout',

@@ -88,6 +88,50 @@ describe('HabitsService', () => {
     );
   });
 
+  it('renames an owned habit and keeps its identity', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+
+    await expect(
+      service.update(created.id, { name: '  Leer 10 minutos  ' }, user.id),
+    ).resolves.toMatchObject({
+      id: created.id,
+      name: 'Leer 10 minutos',
+    });
+
+    await expect(service.findOne(created.id, user.id)).resolves.toMatchObject({
+      id: created.id,
+      name: 'Leer 10 minutos',
+    });
+  });
+
+  it('does not rename a habit owned by another user', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+
+    await expect(
+      service.update(created.id, { name: 'Correr' }, 'another-user'),
+    ).rejects.toThrow(NotFoundException);
+    await expect(
+      service.update('missing-habit', { name: 'Correr' }, user.id),
+    ).rejects.toThrow(NotFoundException);
+    await expect(service.findOne(created.id, user.id)).resolves.toMatchObject({
+      name: 'Leer',
+    });
+  });
+
+  it('rejects blank and overly long names when renaming a habit', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+
+    await expect(
+      service.update(created.id, { name: '   ' }, user.id),
+    ).rejects.toThrow(BadRequestException);
+    await expect(
+      service.update(created.id, { name: 'h'.repeat(101) }, user.id),
+    ).rejects.toThrow(BadRequestException);
+    await expect(service.update(created.id, null, user.id)).rejects.toThrow(
+      BadRequestException,
+    );
+  });
+
   it('deletes an owned habit and cascades its completion history', async () => {
     const created = await service.create({ name: 'Leer' }, user.id);
     const habit = await dataSource

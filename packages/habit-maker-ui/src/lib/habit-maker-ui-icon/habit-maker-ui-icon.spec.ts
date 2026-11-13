@@ -16,7 +16,8 @@ class AddIconHostComponent {}
 
 @Component({
   imports: [HabitMakerUIIcon],
-  template: '<habit-maker-ui-icon name="check" /><habit-maker-ui-icon name="clock" />',
+  template:
+    '<habit-maker-ui-icon name="check" /><habit-maker-ui-icon name="clock" />',
 })
 class CompletionIconsHostComponent {}
 
@@ -34,6 +35,7 @@ class ArrowLeftIconHostComponent {}
     <habit-maker-ui-icon name="chevron-left" />
     <habit-maker-ui-icon name="chevron-right" />
     <habit-maker-ui-icon name="close" />
+    <habit-maker-ui-icon name="edit" />
     <habit-maker-ui-icon name="eye" />
     <habit-maker-ui-icon name="eye-off" />
     <habit-maker-ui-icon name="sparkle" />
@@ -118,6 +120,7 @@ describe('HabitMakerUIIcon', () => {
       'assets/icons/chevron-left.svg#chevron-left',
       'assets/icons/chevron-right.svg#chevron-right',
       'assets/icons/close.svg#close',
+      'assets/icons/edit.svg#edit',
       'assets/icons/eye.svg#eye',
       'assets/icons/eye-off.svg#eye-off',
       'assets/icons/sparkle.svg#sparkle',
