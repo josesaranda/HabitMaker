@@ -6,6 +6,8 @@ import { Habit } from '../habits/habit.service';
 import { HabitService } from '../habits/habit.service';
 import { Home } from './home';
 
+vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));
+
 describe('Home', () => {
   const renderHome = async (habits: Habit[] = []) => {
     await TestBed.configureTestingModule({
@@ -23,7 +25,12 @@ describe('Home', () => {
           provide: HabitService,
           useValue: {
             getHabits: () => of(habits),
-            getCompletionsForDates: () => of([]),
+            getCompletionsForDates: vi.fn(() => of([])),
+            setCompletion: vi.fn((
+              _id: string,
+              date: string,
+              completed: boolean,
+            ) => of({ date, completed, completedAt: null })),
             habitCreated$: EMPTY,
           },
         },
@@ -85,18 +92,54 @@ describe('Home', () => {
     expect(compiled.querySelector('habit-maker-ui-header')).not.toBeNull();
     expect(compiled.querySelectorAll('app-habit-card')).toHaveLength(2);
     expect(
+      compiled.querySelector('app-habit-card')?.closest('a'),
+    ).toBeNull();
+    expect(
       compiled
-        .querySelector('app-habit-card')
-        ?.closest('a')
+        .querySelector('app-habit-card .hm-card__link')
         ?.getAttribute('href'),
     ).toBe('/habits/habit-1');
     expect(
+      compiled.querySelector('app-habit-card [aria-label^="Marcar como completado"]'),
+    ).not.toBeNull();
+    expect(
       compiled
         .querySelector('app-habit-card article')
-        ?.classList.contains('mx-auto'),
+        ?.classList.contains('hm-card'),
     ).toBe(true);
     expect(compiled.textContent).toContain('Leer 10 minutos');
     expect(compiled.textContent).toContain('Caminar');
+  });
+
+  it('saves a completed day from the home card', async () => {
+    const fixture = await renderHome([
+      {
+        id: 'habit-1',
+        name: 'Leer 10 minutos',
+        createdAt: '2026-11-01T00:00:00.000Z',
+        updatedAt: '2026-11-01T00:00:00.000Z',
+      },
+    ]);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const toggle = Array.from(
+      compiled.querySelectorAll<HTMLButtonElement>(
+        'app-habit-card button[aria-label^="Marcar como completado"]',
+      ),
+    ).find((button) => !button.disabled);
+
+    expect(toggle).toBeDefined();
+    toggle?.click();
+    fixture.detectChanges();
+
+    expect(TestBed.inject(HabitService).setCompletion).toHaveBeenCalledWith(
+      'habit-1',
+      expect.any(String),
+      true,
+    );
+    expect(
+      TestBed.inject(HabitService).getCompletionsForDates,
+    ).toHaveBeenCalledTimes(1);
+    expect(compiled.querySelector('.hm-button-day--selected')).not.toBeNull();
   });
 
   it('reloads the list when a habit is created from the global modal', async () => {

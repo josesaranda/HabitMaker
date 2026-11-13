@@ -1,5 +1,7 @@
 export * from './lib/habit-maker-ui-brand/habit-maker-ui-brand';
 export * from './lib/habit-maker-ui-button/habit-maker-ui-button';
+export * from './lib/habit-maker-ui-button-day/habit-maker-ui-button-day';
+export * from './lib/habit-maker-ui-day-selector/habit-maker-ui-day-selector';
 export * from './lib/habit-maker-ui-button-icon/habit-maker-ui-button-icon';
 export * from './lib/habit-maker-ui-checkbox/habit-maker-ui-checkbox';
 export * from './lib/habit-maker-ui-input/habit-maker-ui-input';
@@ -15,3 +17,5 @@ export * from './lib/habit-maker-ui-header/habit-maker-ui-header-portal.service'
 export * from './lib/habit-maker-ui-modal/habit-maker-ui-modal';
 
 export * from './lib/habit-maker-ui-badge/habit-maker-ui-badge';
+
+export * from './lib/habit-maker-ui-card/habit-maker-ui-card';

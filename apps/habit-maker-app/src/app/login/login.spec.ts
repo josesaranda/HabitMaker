@@ -32,7 +32,7 @@ describe('Login', () => {
       'input[hmCheckbox][name="remember"]',
     );
 
-    expect(compiled.querySelector('h2')?.textContent).toContain(
+    expect(compiled.querySelector('#login-title')?.textContent).toContain(
       'Inicia sesión',
     );
     expect(email).not.toBeNull();

@@ -105,6 +105,7 @@
     "loading": "Cargando tus hábitos…",
     "title": "Tus hábitos",
     "habitLink": "Ver hábito {{name}}",
+    "activityError": "No se pudo actualizar tu actividad. Inténtalo de nuevo.",
     "welcome": "¡Bienvenido a casa!",
     "intro": "Tu espacio para crear hábitos que te hacen bien empieza aquí.",
     "addFirst": "Añade tu primer hábito",

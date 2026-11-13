@@ -11,7 +11,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { SwPush } from '@angular/service-worker';
 import { firstValueFrom } from 'rxjs';
-import confetti from '@hiseb/confetti';
 import {
   HabitMakerUIButton,
   HabitMakerUIHeader,
@@ -19,8 +18,8 @@ import {
   HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
-import { HabitCard } from '../habit-card/habit-card';
-import type { HabitCardDayToggleEvent } from '../habit-card/habit-card';
+import { HabitCard } from '../habit-card';
+import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
 import {
   EMPTY,
   catchError,
@@ -60,7 +59,7 @@ export class HabitDetail implements OnInit {
   protected readonly isNotFound = signal(false);
   protected readonly isCompletedToday = signal(false);
   protected readonly isSavingDayCompletion = signal(false);
-  protected readonly completionRefresh = signal(0);
+  protected readonly completionUpdate = signal<HabitMakerUICardDayToggleEvent | null>(null);
   protected readonly calendarWindowStart = signal<string | null>(null);
   protected readonly dayCompletionError = signal('');
   protected readonly loadError = signal('');
@@ -84,7 +83,6 @@ export class HabitDetail implements OnInit {
   );
   protected readonly reminderPublicKey = signal<string | null>(null);
   protected readonly reminderNotice = signal('');
-
   ngOnInit(): void {
     this.browserService.setTitle('pageTitles.habitDetail');
     this.route.queryParamMap
@@ -350,7 +348,7 @@ export class HabitDetail implements OnInit {
     return value;
   }
 
-  protected toggleDayCompletion(event: HabitCardDayToggleEvent): void {
+  protected toggleDayCompletion(event: HabitMakerUICardDayToggleEvent): void {
     const currentHabit = this.habit();
     if (!currentHabit || this.isSavingDayCompletion()) return;
 
@@ -362,13 +360,10 @@ export class HabitDetail implements OnInit {
       .subscribe({
         next: (completion) => {
           this.isSavingDayCompletion.set(false);
-          this.completionRefresh.update((version) => version + 1);
-          if (completion.completed) {
-            confetti({
-              position: event.position,
-              color: ['#a8c5ad', '#e6b875', '#ffffff'],
-            });
-          }
+          this.completionUpdate.set({
+            date: completion.date,
+            completed: completion.completed,
+          });
           if (completion.date === this.getLocalDate()) {
             this.isCompletedToday.set(completion.completed);
           }

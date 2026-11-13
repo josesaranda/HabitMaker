@@ -1,0 +1,114 @@
+:host(.hm-button-day__host) {
+  display: block;
+  width: fit-content;
+}
+
+.hm-button-day {
+  display: grid;
+  width: fit-content;
+  justify-items: center;
+  gap: 0.5rem;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: rgb(255 255 255 / 55%);
+  font: inherit;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.hm-button-day__weekday,
+.hm-button-day__date {
+  user-select: none;
+}
+
+.hm-button-day__marker {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 9999px;
+  color: rgb(255 255 255 / 45%);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.hm-button-day__check {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.hm-button-day__date {
+  color: rgb(255 255 255 / 55%);
+  font-size: 0.6rem;
+}
+
+.hm-button-day:hover,
+.hm-button-day--hover {
+  color: white;
+  transform: scale(1.05);
+}
+
+.hm-button-day:hover .hm-button-day__marker,
+.hm-button-day--hover .hm-button-day__marker {
+  border-color: rgb(255 255 255 / 55%);
+}
+
+.hm-button-day:focus-visible,
+.hm-button-day--focus {
+  border-radius: 0.25rem;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.hm-button-day:active,
+.hm-button-day--active {
+  transform: scale(0.95);
+}
+
+.hm-button-day--selected .hm-button-day__marker {
+  border-color: transparent;
+  background: var(--color-green-300);
+  color: var(--color-green-950);
+}
+
+.hm-button-day--today .hm-button-day__marker {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.hm-button-day--selected.hm-button-day--today .hm-button-day__marker {
+  border-color: var(--color-accent);
+  background: var(--color-green-300);
+  color: var(--color-green-950);
+}
+
+.hm-button-day:disabled,
+.hm-button-day--disabled {
+  color: rgb(255 255 255 / 30%);
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.hm-button-day--static {
+  cursor: default;
+}
+
+.hm-button-day--static.hm-button-day--selected .hm-button-day__marker {
+  border-color: transparent;
+}
+
+.hm-button-day--static.hm-button-day--today .hm-button-day__marker {
+  border-color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-button-day {
+    transition-duration: 1ms;
+  }
+}

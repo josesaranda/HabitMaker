@@ -59,11 +59,11 @@ describe('HabitDetail', () => {
     fixture.detectChanges();
 
     const habitCard = fixture.nativeElement.querySelector('app-habit-card');
-    expect(
-      habitCard?.querySelector('article strong')?.textContent?.trim(),
-    ).toBe('Leer 10 minutos');
+    expect(habitCard?.querySelector('article h2')?.textContent?.trim()).toBe(
+      'Leer 10 minutos',
+    );
     expect(habitCard?.querySelector('time')?.textContent).toContain(
-      'Desde 1 nov 2026',
+      '1 nov 2026',
     );
     const pageContent = fixture.nativeElement.querySelector('main > div');
     expect(pageContent?.classList.contains('max-w-6xl')).toBe(true);
@@ -78,7 +78,7 @@ describe('HabitDetail', () => {
     ).toHaveLength(2);
     expect(habitCard?.classList.contains('max-w-3xl')).toBe(true);
     const habitArticle = habitCard?.querySelector('article');
-    expect(habitArticle?.classList.contains('w-full')).toBe(true);
+    expect(habitArticle?.classList.contains('hm-card')).toBe(true);
     expect(habitArticle?.classList.contains('max-w-md')).toBe(false);
     expect(habitArticle?.getAttribute('style')).toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;

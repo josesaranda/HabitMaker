@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
@@ -18,7 +18,8 @@ import {
 } from '@habit-maker/habit-maker-ui';
 import { finalize } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
-import { HabitCard } from '../habit-card/habit-card';
+import { HabitCard } from '../habit-card';
+import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
 import { Habit, HabitService } from '../habits/habit.service';
 import { NewHabit } from '../new-habit/new-habit';
 import { HomeHabitsResolveResult } from './home.resolver';
@@ -32,7 +33,6 @@ import { HomeHabitsResolveResult } from './home.resolver';
     HabitMakerUIModal,
     HabitCard,
     NewHabit,
-    RouterLink,
     TranslocoPipe,
   ],
   selector: 'app-home',
@@ -43,10 +43,14 @@ export class Home implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly habitService = inject(HabitService);
   private readonly destroyRef = inject(DestroyRef);
-
   protected readonly habits = signal<Habit[]>([]);
   protected readonly isLoading = signal(true);
   protected readonly loadError = signal('');
+  protected readonly isSavingDayCompletion = signal(false);
+  protected readonly dayCompletionError = signal('');
+  protected readonly completionUpdates = signal<
+    Record<string, HabitMakerUICardDayToggleEvent>
+  >({});
   protected readonly hasHabits = computed(() => this.habits().length > 0);
 
   ngOnInit(): void {
@@ -78,6 +82,35 @@ export class Home implements OnInit {
         error: () => {
           this.habits.set([]);
           this.loadError.set('home.loadError');
+        },
+      });
+  }
+
+  protected toggleDayCompletion(
+    habitId: string,
+    event: HabitMakerUICardDayToggleEvent,
+  ): void {
+    if (this.isSavingDayCompletion()) return;
+
+    this.isSavingDayCompletion.set(true);
+    this.dayCompletionError.set('');
+    this.habitService
+      .setCompletion(habitId, event.date, event.completed)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (completion) => {
+          this.isSavingDayCompletion.set(false);
+          this.completionUpdates.update((updates) => ({
+            ...updates,
+            [habitId]: {
+              date: completion.date,
+              completed: completion.completed,
+            },
+          }));
+        },
+        error: () => {
+          this.isSavingDayCompletion.set(false);
+          this.dayCompletionError.set('home.activityError');
         },
       });
   }

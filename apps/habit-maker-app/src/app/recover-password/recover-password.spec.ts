@@ -36,7 +36,7 @@ describe('RecoverPassword', () => {
   it('renders the email form and a link back to login', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('h2')?.textContent).toContain(
+    expect(compiled.querySelector('#recover-title')?.textContent).toContain(
       'Recupera tu contraseña',
     );
     expect(
@@ -62,7 +62,7 @@ describe('RecoverPassword', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h2')?.textContent).toContain(
+    expect(compiled.querySelector('#recover-title')?.textContent).toContain(
       'Solicitud recibida',
     );
     expect(compiled.querySelector('[role="status"]')?.textContent).toContain(

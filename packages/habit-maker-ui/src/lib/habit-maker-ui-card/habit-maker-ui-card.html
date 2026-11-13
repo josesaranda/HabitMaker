@@ -1,0 +1,30 @@
+<article class="hm-card">
+  <header class="hm-card__header">
+    <div class="hm-card__icon" aria-hidden="true">
+      <habit-maker-ui-icon class="hm-card__brand-icon" name="sprout" />
+    </div>
+    <div class="hm-card__heading">
+      <div class="hm-card__heading-content">
+        <time class="hm-card__since" [attr.datetime]="dateTime()">
+          <habit-maker-ui-icon class="hm-card__since-icon" name="clock" />
+          {{ formattedSinceDate() }}
+        </time>
+        <div class="hm-card__title">
+          <ng-content select="[hmCardTitle]"></ng-content>
+        </div>
+      </div>
+      @if (link(); as linkUrl) {
+      <a
+        class="hm-card__link"
+        [routerLink]="linkUrl"
+        [attr.aria-label]="linkLabel()"
+      >
+        <habit-maker-ui-icon class="hm-card__link-icon" name="arrow-right" />
+      </a>
+      }
+    </div>
+  </header>
+  <div class="hm-card__content">
+    <ng-content></ng-content>
+  </div>
+</article>

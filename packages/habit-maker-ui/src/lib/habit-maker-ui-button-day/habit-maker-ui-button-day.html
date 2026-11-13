@@ -1,0 +1,37 @@
+@if (interactive()) {
+<button
+  class="hm-button-day"
+  [class.hm-button-day--hover]="forcedState('hover')"
+  [class.hm-button-day--focus]="forcedState('focus')"
+  [class.hm-button-day--active]="forcedState('active')"
+  [class.hm-button-day--selected]="isSelected()"
+  [class.hm-button-day--today]="isToday()"
+  [class.hm-button-day--disabled]="isDisabled()"
+  type="button"
+  [attr.aria-label]="ariaLabel() || null"
+  [attr.aria-pressed]="isSelected()"
+  [disabled]="isDisabled()"
+  (click)="emitPressed($event)"
+>
+  <ng-container [ngTemplateOutlet]="dayContent" />
+</button>
+} @else {
+<div
+  class="hm-button-day hm-button-day--static"
+  [class.hm-button-day--selected]="isSelected()"
+  [class.hm-button-day--today]="isToday()"
+  aria-hidden="true"
+>
+  <ng-container [ngTemplateOutlet]="dayContent" />
+</div>
+}
+
+<ng-template #dayContent>
+  <span class="hm-button-day__weekday">{{ weekday() }}</span>
+  <span class="hm-button-day__marker" aria-hidden="true">
+    @if (isSelected()) {
+    <habit-maker-ui-icon class="hm-button-day__check" name="check" />
+    }
+  </span>
+  <span class="hm-button-day__date">{{ dayOfMonth() }}</span>
+</ng-template>

@@ -90,46 +90,6 @@ body {
   }
 }
 
-.habit-card__day--enter-from-right {
-  animation: habit-day-enter-from-right 220ms ease-out both;
-}
-
-.habit-card__day--enter-from-left {
-  animation: habit-day-enter-from-left 220ms ease-out both;
-}
-
-.habit-card__days-track {
-  width: 185.7142857%;
-  transform: translate3d(
-    calc(-23.076923% + var(--habit-card-drag-offset, 0px)),
-    0,
-    0
-  );
-  transition: transform 220ms ease-out;
-}
-
-.habit-card__days-viewport {
-  touch-action: pan-y;
-}
-
-.habit-card__days-track--dragging {
-  transition: none;
-}
-
-@keyframes habit-day-enter-from-right {
-  from {
-    opacity: 0;
-    transform: translateX(0.75rem);
-  }
-}
-
-@keyframes habit-day-enter-from-left {
-  from {
-    opacity: 0;
-    transform: translateX(-0.75rem);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(root),
@@ -141,14 +101,5 @@ body {
   ::view-transition-old(habit-maker-ui-header-actions),
   ::view-transition-new(habit-maker-ui-header-actions) {
     animation-duration: 1ms;
-  }
-
-  .habit-card__day--enter-from-right,
-  .habit-card__day--enter-from-left {
-    animation-duration: 1ms;
-  }
-
-  .habit-card__days-track {
-    transition-duration: 1ms;
   }
 }

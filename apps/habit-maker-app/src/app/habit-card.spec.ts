@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { HabitMakerUIDaySelector } from '@habit-maker/habit-maker-ui';
 import { of } from 'rxjs';
-import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { HabitService } from '../habits/habit.service';
+import { provideTranslocoTesting } from '../../test-support/transloco-testing';
+import { HabitService } from './habits/habit.service';
 import { HabitCard } from './habit-card';
 
 describe('HabitCard', () => {
@@ -56,7 +58,7 @@ describe('HabitCard', () => {
 
     expect(component).toBeTruthy();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('strong')?.textContent).toBe(
+    expect(compiled.querySelector('h2')?.textContent?.trim()).toBe(
       'Un poco de lectura',
     );
     expect(compiled.querySelector('a')).toBeNull();
@@ -69,13 +71,13 @@ describe('HabitCard', () => {
     expect(
       compiled.querySelector('[aria-label="Mostrar los tres días siguientes"]'),
     ).toBeNull();
-    expect(compiled.querySelector('strong')?.getAttribute('style')).toBeNull();
+    expect(compiled.querySelector('h2')?.getAttribute('style')).toBeNull();
     expect(compiled.querySelector('article')?.getAttribute('style')).toBeNull();
     expect(compiled.querySelector('time')?.getAttribute('datetime')).toBe(
       '2023-10-01',
     );
     expect(compiled.querySelector('time')?.textContent).toContain('1 oct 2023');
-    const dayItems = compiled.querySelectorAll('.habit-card__days-track > *');
+    const dayItems = compiled.querySelectorAll('.hm-day-selector__track > *');
     expect(dayItems).toHaveLength(13);
     const visibleDays = Array.from(dayItems).slice(3, 10);
 
@@ -92,16 +94,16 @@ describe('HabitCard', () => {
     expect(requestedDates).toHaveLength(1);
     expect(requestedDates[0]).toHaveLength(13);
     expect(requestedDates[0]).toContain(toLocalDate(new Date()));
-    expect(dayItems[6].querySelector('b')?.textContent).toBe('✓');
-    expect(dayItems[7].querySelector('b')?.textContent).toBe('');
-    expect(dayItems[9].querySelector('b')?.textContent).toBe('✓');
     expect(
-      dayItems[6].querySelector('b')?.classList.contains('border-accent'),
-    ).toBe(false);
+      dayItems[6].querySelector('.hm-button-day--selected'),
+    ).not.toBeNull();
+    expect(dayItems[7].querySelector('.hm-button-day--selected')).toBeNull();
     expect(
-      dayItems[9].querySelector('b')?.classList.contains('border-accent'),
-    ).toBe(true);
-    expect(dayItems[9].querySelectorAll('span')[1]?.textContent).toBe(
+      dayItems[9].querySelector('.hm-button-day--selected'),
+    ).not.toBeNull();
+    expect(dayItems[6].querySelector('.hm-button-day--today')).toBeNull();
+    expect(dayItems[9].querySelector('.hm-button-day--today')).not.toBeNull();
+    expect(dayItems[9].querySelectorAll('span')[2]?.textContent).toBe(
       String(new Date().getDate()),
     );
   });
@@ -115,14 +117,43 @@ describe('HabitCard', () => {
     fixture.detectChanges();
 
     const dayItems = fixture.nativeElement.querySelectorAll(
-      '.habit-card__days-track > *',
+      '.hm-day-selector__track > *',
     );
 
-    expect(dayItems[4].querySelector('b')?.textContent).toBe('✓');
-    expect(dayItems[6].querySelector('b')?.textContent).toBe('✓');
-    expect(dayItems[8].querySelector('b')?.textContent).toBe('✓');
-    expect(dayItems[9].querySelector('b')?.textContent).toBe('');
+    expect(
+      dayItems[4].querySelector('.hm-button-day--selected'),
+    ).not.toBeNull();
+    expect(
+      dayItems[6].querySelector('.hm-button-day--selected'),
+    ).not.toBeNull();
+    expect(
+      dayItems[8].querySelector('.hm-button-day--selected'),
+    ).not.toBeNull();
+    expect(dayItems[9].querySelector('.hm-button-day--selected')).toBeNull();
     expect(requestedDates).toHaveLength(0);
+  });
+
+  it('applies a saved completion locally without reloading the calendar', async () => {
+    fixture.componentRef.setInput('name', 'Un poco de lectura');
+    fixture.componentRef.setInput('startedAt', '2023-10-01');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(requestedDates).toHaveLength(1);
+    const completedDate = new Date();
+    completedDate.setHours(0, 0, 0, 0);
+    completedDate.setDate(completedDate.getDate() - 1);
+    fixture.componentRef.setInput('completionUpdate', {
+      date: toLocalDate(completedDate),
+      completed: true,
+    });
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('.hm-button-day--selected'),
+    ).not.toBeNull();
+    expect(requestedDates).toHaveLength(1);
   });
 
   it('snaps gestures to individual days and limits future navigation', async () => {
@@ -146,10 +177,10 @@ describe('HabitCard', () => {
     maximumFutureDate.setDate(maximumFutureDate.getDate() + 3);
 
     const initialDays = compiled.querySelectorAll(
-      '.habit-card__days-track > *',
+      '.hm-day-selector__track > *',
     );
     expect(initialDays).toHaveLength(13);
-    expect(initialDays[9].querySelectorAll('span')[1]?.textContent).toBe(
+    expect(initialDays[9].querySelectorAll('span')[2]?.textContent).toBe(
       String(today.getDate()),
     );
     expect(requestedDates.at(-1)?.[12]).toBe(toLocalDate(maximumFutureDate));
@@ -161,12 +192,12 @@ describe('HabitCard', () => {
     expect(requestedDates).toHaveLength(datesAtFutureLimit);
 
     const daysGrid = compiled.querySelector<HTMLElement>(
-      'article [aria-hidden="true"]',
+      '.hm-day-selector__viewport',
     )!;
     vi.spyOn(daysGrid, 'getBoundingClientRect').mockReturnValue(
       new DOMRect(0, 0, 280, 40),
     );
-    const swipeable = component as unknown as SwipeableHabitCard;
+    const swipeable = getSwipeableSelector(fixture);
     const emittedStarts: string[] = [];
     component.windowStartDateChange.subscribe((date) =>
       emittedStarts.push(date),
@@ -185,7 +216,7 @@ describe('HabitCard', () => {
     fixture.detectChanges();
 
     const daysAfterPreviousMove = compiled.querySelectorAll(
-      '.habit-card__days-track > *',
+      '.hm-day-selector__track > *',
     );
     expect(daysAfterPreviousMove).toHaveLength(13);
     expect(requestedDates.at(-1)).toHaveLength(13);
@@ -215,7 +246,7 @@ describe('HabitCard', () => {
     latestWindowStart.setDate(latestWindowStart.getDate() - 6);
     expect(emittedStarts[1]).toBe(toLocalDate(latestWindowStart));
     expect(
-      compiled.querySelectorAll('.habit-card__days-track > *'),
+      compiled.querySelectorAll('.hm-day-selector__track > *'),
     ).toHaveLength(13);
   });
 
@@ -236,7 +267,6 @@ describe('HabitCard', () => {
     const emitted: {
       date: string;
       completed: boolean;
-      position: { x: number; y: number };
     }[] = [];
     component.dayToggled.subscribe((event) => emitted.push(event));
 
@@ -252,12 +282,12 @@ describe('HabitCard', () => {
     expect(dayButton?.getAttribute('aria-pressed')).toBe('true');
     const daysViewport = (
       fixture.nativeElement as HTMLElement
-    ).querySelector<HTMLElement>('.habit-card__days-viewport')!;
+    ).querySelector<HTMLElement>('.hm-day-selector__viewport')!;
     vi.spyOn(daysViewport, 'getBoundingClientRect').mockReturnValue(
       new DOMRect(0, 0, 280, 40),
     );
     const tapEvent = pointerEvent(100, daysViewport);
-    const swipeable = component as unknown as SwipeableHabitCard;
+    const swipeable = getSwipeableSelector(fixture);
     swipeable.startDaySwipe(tapEvent);
     swipeable.finishDaySwipe(tapEvent);
     expect(tapEvent.preventDefault).not.toHaveBeenCalled();
@@ -271,13 +301,10 @@ describe('HabitCard', () => {
     expect(swipeable.isDragging()).toBe(false);
     expect(emittedWindowStarts).toHaveLength(0);
 
-    vi.spyOn(dayButton!, 'getBoundingClientRect').mockReturnValue(
-      new DOMRect(10, 20, 30, 40),
-    );
     dayButton?.click();
 
     expect(emitted).toEqual([
-      { date, completed: false, position: { x: 25, y: 40 } },
+      { date, completed: false },
     ]);
     const futureDayButton = (
       fixture.nativeElement as HTMLElement
@@ -287,7 +314,7 @@ describe('HabitCard', () => {
     expect(futureDayButton?.disabled).toBe(true);
     futureDayButton?.click();
     expect(emitted).toEqual([
-      { date, completed: false, position: { x: 25, y: 40 } },
+      { date, completed: false },
     ]);
   });
 
@@ -324,6 +351,13 @@ interface SwipeableHabitCard {
   moveDaySwipe(event: PointerEvent): void;
   finishDaySwipe(event: PointerEvent): void;
   completeDaySnap(event: TransitionEvent): void;
+}
+
+function getSwipeableSelector(
+  fixture: ComponentFixture<HabitCard>,
+): SwipeableHabitCard {
+  return fixture.debugElement.query(By.directive(HabitMakerUIDaySelector))
+    .componentInstance as unknown as SwipeableHabitCard;
 }
 
 function pointerEvent(

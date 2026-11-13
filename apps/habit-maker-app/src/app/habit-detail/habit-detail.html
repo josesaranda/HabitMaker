@@ -25,7 +25,7 @@
       [showDayNavigation]="true"
       [windowStartDate]="calendarWindowStart()"
       [dayToggleDisabled]="isSavingDayCompletion()"
-      [completionRefresh]="completionRefresh()"
+      [completionUpdate]="completionUpdate()"
       (dayToggled)="toggleDayCompletion($event)"
       (windowStartDateChange)="updateCalendarWindow($event)"
     />

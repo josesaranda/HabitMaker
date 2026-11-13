@@ -30,7 +30,7 @@ describe('Signup', () => {
     const email = compiled.querySelector('input#email');
     const password = compiled.querySelector('input#password');
 
-    expect(compiled.querySelector('h2')?.textContent).toContain(
+    expect(compiled.querySelector('#signup-title')?.textContent).toContain(
       'Crea tu cuenta',
     );
     expect(name).not.toBeNull();

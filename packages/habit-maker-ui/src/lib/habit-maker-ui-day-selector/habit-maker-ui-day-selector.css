@@ -1,0 +1,117 @@
+:host(.hm-day-selector__host) {
+  display: block;
+  width: 100%;
+}
+
+.hm-day-selector {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hm-day-selector__navigation-button {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 15%);
+  border-radius: 9999px;
+  background: transparent;
+  color: rgb(255 255 255 / 70%);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.hm-day-selector__navigation-button:hover:not(:disabled) {
+  background: rgb(255 255 255 / 10%);
+  color: var(--color-text-white);
+}
+
+.hm-day-selector__navigation-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.hm-day-selector__navigation-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.hm-day-selector__navigation-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.hm-day-selector__viewport {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.hm-day-selector__track {
+  display: grid;
+  width: 100%;
+  transform: translate3d(var(--hm-day-selector-drag-offset, 0px), 0, 0);
+  transition: transform 220ms ease-out;
+}
+
+.hm-day-selector__track--extended {
+  width: 185.7142857%;
+  transform: translate3d(
+    calc(-23.076923% + var(--hm-day-selector-drag-offset, 0px)),
+    0,
+    0
+  );
+}
+
+.hm-day-selector__track--dragging {
+  transition: none;
+  user-select: none;
+}
+
+.hm-day-selector__day {
+  display: grid;
+  justify-items: center;
+}
+
+.hm-day-selector__day--enter-from-right {
+  animation: hm-day-enter-from-right 220ms ease-out both;
+}
+
+.hm-day-selector__day--enter-from-left {
+  animation: hm-day-enter-from-left 220ms ease-out both;
+}
+
+@keyframes hm-day-enter-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(0.75rem);
+  }
+}
+
+@keyframes hm-day-enter-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-0.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-day-selector__track {
+    transition-duration: 1ms;
+  }
+
+  .hm-day-selector__navigation-button {
+    transition-duration: 1ms;
+  }
+
+  .hm-day-selector__day--enter-from-right,
+  .hm-day-selector__day--enter-from-left {
+    animation-duration: 1ms;
+  }
+}

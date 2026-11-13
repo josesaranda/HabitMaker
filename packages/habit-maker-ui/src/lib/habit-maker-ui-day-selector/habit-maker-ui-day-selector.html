@@ -1,0 +1,68 @@
+<div class="hm-day-selector">
+  @if (showNavigation()) {
+  <button
+    class="hm-day-selector__navigation-button hm-day-selector__navigation-button--previous"
+    type="button"
+    [attr.aria-label]="previousLabel()"
+    (click)="showPreviousDays()"
+  >
+    <habit-maker-ui-icon
+      class="hm-day-selector__navigation-icon"
+      name="chevron-left"
+    />
+  </button>
+  }
+  <div
+    class="hm-day-selector__viewport"
+    [attr.aria-hidden]="dayToggleEnabled() ? null : 'true'"
+    (pointerdown)="startDaySwipe($event)"
+    (pointermove)="moveDaySwipe($event)"
+    (pointerup)="finishDaySwipe($event)"
+    (pointercancel)="cancelDaySwipe()"
+    (lostpointercapture)="cancelDaySwipe()"
+  >
+    <div
+      class="hm-day-selector__track"
+      [class.hm-day-selector__track--extended]="days().length > 7"
+      [class.hm-day-selector__track--dragging]="isDragging()"
+      [style.grid-template-columns]="'repeat(' + days().length + ', minmax(0, 1fr))'"
+      [style.--hm-day-selector-drag-offset.px]="dragOffset()"
+      (transitionend)="completeDaySnap($event)"
+    >
+      @for (day of visibleDays(); track day.date) {
+      <div
+        class="hm-day-selector__day"
+        [class.hm-day-selector__day--enter-from-right]="day.entering && navigationDirection() === 'next'"
+        [class.hm-day-selector__day--enter-from-left]="day.entering && navigationDirection() === 'previous'"
+        [attr.aria-hidden]="day.buffer ? 'true' : null"
+      >
+        <habit-maker-ui-button-day
+          [weekday]="day.weekday"
+          [dayOfMonth]="day.dayOfMonth"
+          [selected]="day.completed"
+          [today]="day.offset === 0"
+          [state]="day.completed ? 'selected' : day.offset === 0 ? 'today' : 'default'"
+          [interactive]="dayToggleEnabled()"
+          [disabled]="dayToggleDisabled() || day.disabled || day.offset > 0 || day.buffer"
+          [ariaLabel]="day.ariaLabel"
+          (pressed)="toggleDay(day)"
+        />
+      </div>
+      }
+    </div>
+  </div>
+  @if (showNavigation()) {
+  <button
+    class="hm-day-selector__navigation-button hm-day-selector__navigation-button--next"
+    type="button"
+    [attr.aria-label]="nextLabel()"
+    [disabled]="isAtFutureLimit() || !canNavigateNext()"
+    (click)="showNextDays()"
+  >
+    <habit-maker-ui-icon
+      class="hm-day-selector__navigation-icon"
+      name="chevron-right"
+    />
+  </button>
+  }
+</div>

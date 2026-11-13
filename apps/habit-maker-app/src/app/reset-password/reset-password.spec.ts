@@ -67,7 +67,9 @@ describe('ResetPassword', () => {
       .flush({ message: 'Password updated successfully' });
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('h2')?.textContent).toContain(
+    expect(
+      fixture.nativeElement.querySelector('#reset-password-title')?.textContent,
+    ).toContain(
       'Ya puedes iniciar sesión',
     );
     expect(

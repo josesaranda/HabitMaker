@@ -62,7 +62,7 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector('router-outlet')).not.toBeNull();
-    expect(compiled.querySelector('app-login h2')?.textContent).toContain(
+    expect(compiled.querySelector('app-login #login-title')?.textContent).toContain(
       'Inicia sesión',
     );
     expect(compiled.querySelector('habit-maker-ui-navbar')).toBeNull();
@@ -80,7 +80,7 @@ describe('App', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('app-signup h2')?.textContent).toContain(
+    expect(compiled.querySelector('app-signup #signup-title')?.textContent).toContain(
       'Crea tu cuenta',
     );
   });
@@ -107,7 +107,7 @@ describe('App', () => {
     ).toContain('Detalle del hábito');
     expect(
       fixture.nativeElement.querySelector(
-        'app-habit-detail app-habit-card article strong',
+        'app-habit-detail app-habit-card habit-maker-ui-card article h2',
       )?.textContent,
     ).toContain('Leer 10 minutos');
   });
