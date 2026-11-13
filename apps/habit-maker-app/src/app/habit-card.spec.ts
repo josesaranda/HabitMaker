@@ -1,11 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import confetti from '@hiseb/confetti';
 import { HabitMakerUIDaySelector } from '@habit-maker/habit-maker-ui';
 import { of } from 'rxjs';
 import { provideTranslocoTesting } from '../../test-support/transloco-testing';
 import { HabitService } from './habits/habit.service';
 import { HabitCard } from './habit-card';
+
+vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));
 
 describe('HabitCard', () => {
   let component: HabitCard;
@@ -131,6 +134,46 @@ describe('HabitCard', () => {
     ).not.toBeNull();
     expect(dayItems[9].querySelector('.hm-button-day--selected')).toBeNull();
     expect(requestedDates).toHaveLength(0);
+  });
+
+  it('toggles preview days locally without loading persisted data', async () => {
+    fixture.componentRef.setInput('name', 'Example habit');
+    fixture.componentRef.setInput('startedAt', '2023-10-01');
+    fixture.componentRef.setInput('previewCompletedDayOffsets', [-5, -3, -1]);
+    fixture.componentRef.setInput('dayToggleEnabled', true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const dayItems = () =>
+      compiled.querySelectorAll<HTMLElement>('.hm-day-selector__track > *');
+    const uncompletedDay = dayItems()[3].querySelector<HTMLButtonElement>(
+      'button.hm-button-day',
+    )!;
+    vi.spyOn(uncompletedDay, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(10, 20, 30, 40),
+    );
+    uncompletedDay.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(dayItems()[3].querySelector('.hm-button-day--selected')).not.toBeNull();
+    expect(requestedDates).toHaveLength(0);
+    expect(confetti).toHaveBeenCalledWith({
+      position: { x: 25, y: 40 },
+      color: ['#a8c5ad', '#e6b875', '#ffffff'],
+    });
+
+    dayItems()[4]
+      .querySelector<HTMLButtonElement>('button.hm-button-day')!
+      .click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(dayItems()[4].querySelector('.hm-button-day--selected')).toBeNull();
   });
 
   it('applies a saved completion locally without reloading the calendar', async () => {

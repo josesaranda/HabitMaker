@@ -147,14 +147,7 @@ export class HabitCard {
       const completionUpdate = this.completionUpdate();
       if (!completionUpdate) return;
 
-      this.completionOverrides.update((overrides) => ({
-        ...overrides,
-        [completionUpdate.date]: completionUpdate.completed,
-      }));
-      this.completions.update((completions) => ({
-        ...completions,
-        [completionUpdate.date]: completionUpdate.completed,
-      }));
+      this.applyCompletion(completionUpdate);
     });
   }
 
@@ -167,7 +160,21 @@ export class HabitCard {
 
   protected toggleDay(event: HabitMakerUICardDayToggleEvent): void {
     if (!this.dayToggleEnabled() || this.dayToggleDisabled()) return;
+    if (this.previewCompletedDayOffsets() !== null) {
+      this.applyCompletion(event);
+    }
     this.dayToggled.emit(event);
+  }
+
+  private applyCompletion(event: HabitMakerUICardDayToggleEvent): void {
+    this.completionOverrides.update((overrides) => ({
+      ...overrides,
+      [event.date]: event.completed,
+    }));
+    this.completions.update((completions) => ({
+      ...completions,
+      [event.date]: event.completed,
+    }));
   }
 
   private setCompletions(completions: HabitCompletionStatus[]): void {
