@@ -37,12 +37,13 @@ Use this skill for work specific to the HabitMaker codebase. Follow the reposito
 
 - **Branch naming:** create issue branches as `{{type}}/{{issue_id}}_{{description}}`. Use a concise, lowercase, hyphen-separated description (for example, `feature/2_daily-web-push-reminders`); choose a type that matches the work, such as `feature`, `fix`, or `chore`.
 - Inspect neighboring components, templates, styles, and tests before making changes. Prefer established Angular patterns over introducing a new architecture or dependency without a clear need.
+- **Formatting is mandatory:** before writing code, inspect the workspace's formatting rules and Nx formatting setup (including `.prettierrc`, `.prettierignore`, and the CI `nx format:check` command); consult current Nx documentation when the command behavior or options are unclear. Follow those rules while authoring code.
 - **Zoneless/template reactivity is mandatory:** every dynamic value consumed by a component template (interpolation, conditionals, and property/class/style bindings) must be a signal or a `computed` signal, and templates must read it by calling it (for example, `state()` or `isInvalid()`). Update signals with `set` or `update`.
 - Do not bind plain mutable fields, getters, or recalculating methods as template state. Derive values with `computed`; convert router state or RxJS streams with `toSignal`. Use signal inputs for reactive component inputs. Plain constants are fine only when they are truly static and do not represent template state.
 - Keep reusable presentation components in `HabitMakerUI`; keep screen-specific composition and behavior in `HabitMakerApp`.
 - Preserve accessibility, responsive behavior, and existing styling conventions when changing UI.
 - Use Nx targets for workspace tasks and check the project's resolved configuration if a target is unclear. The repository instructions require prefixing Nx commands with the package manager.
-- Verify changes with the narrowest relevant tests, and run a build when appropriate. Do not claim checks passed unless they were run.
+- Before considering code correct or complete, run `npx nx format:check --all` from the workspace root, in addition to the narrowest relevant tests; run a build when appropriate. Do not claim checks passed unless they were run.
 
 ## Common commands
 
@@ -61,6 +62,9 @@ npm exec nx test HabitMakerUI
 
 # Build the application
 npm exec nx build HabitMakerApp
+
+# Check formatting across the entire workspace before considering changes complete
+npx nx format:check --all
 ```
 
 The development server is normally available at `http://localhost:4200`. Confirm the target configuration if server behavior or options are relevant.
