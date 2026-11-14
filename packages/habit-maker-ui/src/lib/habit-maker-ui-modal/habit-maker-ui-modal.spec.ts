@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { HabitMakerUIModal } from './habit-maker-ui-modal';
 import { HabitMakerUIModalTitle } from './habit-maker-ui-modal-title';
+import { HabitMakerUIModalContent } from './habit-maker-ui-modal-content';
 
 @Component({
   imports: [HabitMakerUIModal],
@@ -24,11 +25,13 @@ import { HabitMakerUIModalTitle } from './habit-maker-ui-modal-title';
 class ModalHost {}
 
 @Component({
-  imports: [HabitMakerUIModal, HabitMakerUIModalTitle],
+  imports: [HabitMakerUIModal, HabitMakerUIModalTitle, HabitMakerUIModalContent],
   template: `
     <habit-maker-ui-modal #modal label="Detalles del hábito">
       <h2 hmModalTitle>Detalles del hábito</h2>
-      <p>El contenido se proyecta dentro del modal.</p>
+      <div hmModalContent>
+        <p>El contenido se proyecta dentro del modal.</p>
+      </div>
     </habit-maker-ui-modal>
   `,
 })
@@ -77,6 +80,10 @@ describe('HabitMakerUIModal', () => {
     // The title is placed in the header row, not duplicated in the content.
     expect(dialog.querySelector('.hm-modal__content h2')).toBeNull();
     expect(header.querySelector('.hm-modal__close-button')).not.toBeNull();
+    // Content marked with hmModalContent stays in the content area.
+    expect(
+      dialog.querySelector('.hm-modal__content [hmModalContent] p'),
+    ).not.toBeNull();
   });
 
   it('opens from the invoking element and restores focus when closed', () => {

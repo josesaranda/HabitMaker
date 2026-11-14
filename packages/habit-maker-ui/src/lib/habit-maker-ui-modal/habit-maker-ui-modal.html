@@ -26,7 +26,11 @@
         <habit-maker-ui-icon name="close" />
       </button>
     </header>
-    <div class="hm-modal__content">
+    <div
+      class="hm-modal__content"
+      [class.hm-modal__content--titled]="hasTitle()"
+    >
+      <ng-content select="[hmModalContent]" />
       <ng-content />
     </div>
   </section>

@@ -19,6 +19,7 @@ import {
   HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUIModal,
+  HabitMakerUIModalContent,
   HabitMakerUIModalTitle,
   HabitMakerUIToggle,
 } from '@habit-maker/habit-maker-ui';
@@ -47,6 +48,7 @@ import { HabitDetailResolveResult } from './habit-detail.resolver';
     HabitMakerUIIcon,
     HabitMakerUIInput,
     HabitMakerUIModal,
+    HabitMakerUIModalContent,
     HabitMakerUIModalTitle,
     HabitMakerUIToggle,
     HabitMakerUIEmojiPicker,

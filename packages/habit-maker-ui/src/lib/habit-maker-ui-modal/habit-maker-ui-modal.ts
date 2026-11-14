@@ -22,6 +22,8 @@ export class HabitMakerUIModal {
   label = input.required<string>();
   closeLabel = input('Close dialog');
 
+  // Matches direct children only, consistent with what the template's
+  // `ng-content select="[hmModalTitle]"` can capture.
   private readonly modalTitle = contentChild(HabitMakerUIModalTitle);
   protected readonly hasTitle = computed(() => this.modalTitle() !== undefined);
 

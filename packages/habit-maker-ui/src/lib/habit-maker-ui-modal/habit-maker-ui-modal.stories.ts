@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { HabitMakerUIModal } from './habit-maker-ui-modal';
 import { HabitMakerUIModalTitle } from './habit-maker-ui-modal-title';
+import { HabitMakerUIModalContent } from './habit-maker-ui-modal-content';
 
 const meta: Meta<HabitMakerUIModal> = {
   title: 'Overlays/Modal',
@@ -13,12 +14,14 @@ const meta: Meta<HabitMakerUIModal> = {
           '',
           'Open it from a user action with `openFrom(triggerElement)`. Call `close()` from dialog controls; the component animates the dialog and restores focus to its trigger.',
           '',
-          'Optionally mark a heading with the `hmModalTitle` directive to lift it into the dialog header row, aligned with the close button.',
+          'Structure the dialog with the `hmModalTitle` and `hmModalContent` directives: the title is lifted into the dialog header row, aligned with the close button, and the marked block is projected as the dialog body.',
           '',
           '```html',
           '<habit-maker-ui-modal #details label="Habit details" closeLabel="Close details">',
           '  <h2 hmModalTitle>Habit details</h2>',
-          '  <button type="button" (click)="details.close()">Done</button>',
+          '  <div hmModalContent>',
+          '    <button type="button" (click)="details.close()">Done</button>',
+          '  </div>',
           '</habit-maker-ui-modal>',
           '<button #trigger type="button" (click)="details.openFrom(trigger)">',
           '  Open details',
@@ -37,11 +40,13 @@ export const Playground: Story = {
   args: { label: 'Habit details', closeLabel: 'Close habit details' },
   render: (args) => ({
     props: args,
-    moduleMetadata: { imports: [HabitMakerUIModalTitle] },
+    moduleMetadata: { imports: [HabitMakerUIModalTitle, HabitMakerUIModalContent] },
     template: `
       <habit-maker-ui-modal #modal [label]="label" [closeLabel]="closeLabel">
         <h2 hmModalTitle>Take a moment to check in</h2>
-        <p>Review your progress and decide what comes next.</p>
+        <div hmModalContent>
+          <p>Review your progress and decide what comes next.</p>
+        </div>
       </habit-maker-ui-modal>
       <button type="button" (click)="modal.openFrom(trigger)" #trigger>Open modal</button>
     `,
@@ -51,19 +56,23 @@ export const Playground: Story = {
 export const AllVariants: Story = {
   parameters: { controls: { disable: true } },
   render: () => ({
-    moduleMetadata: { imports: [HabitMakerUIModalTitle] },
+    moduleMetadata: { imports: [HabitMakerUIModalTitle, HabitMakerUIModalContent] },
     template: `
       <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
         <habit-maker-ui-modal #details label="Habit details">
           <h2 hmModalTitle>Habit details</h2>
-          <p>Review the details of your daily reading habit.</p>
+          <div hmModalContent>
+            <p>Review the details of your daily reading habit.</p>
+          </div>
         </habit-maker-ui-modal>
         <button type="button" (click)="details.openFrom(detailsTrigger)" #detailsTrigger>With title</button>
 
         <habit-maker-ui-modal #deleteDialog label="Delete habit confirmation">
-          <h2 style="margin-top: 0;">Delete this habit?</h2>
-          <p>This action cannot be undone.</p>
-          <button type="button" (click)="deleteDialog.close()">Keep habit</button>
+          <div hmModalContent>
+            <h2 style="margin-top: 0;">Delete this habit?</h2>
+            <p>This action cannot be undone.</p>
+            <button type="button" (click)="deleteDialog.close()">Keep habit</button>
+          </div>
         </habit-maker-ui-modal>
         <button type="button" (click)="deleteDialog.openFrom(deleteTrigger)" #deleteTrigger>Without title</button>
       </div>

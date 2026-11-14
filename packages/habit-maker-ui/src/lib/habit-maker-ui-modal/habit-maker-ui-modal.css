@@ -60,6 +60,10 @@
   padding: 3.75rem clamp(1.25rem, 5vw, 2rem) clamp(1.5rem, 5vw, 2rem);
 }
 
+.hm-modal__content--titled {
+  padding-top: 1rem;
+}
+
 .hm-modal__close-button {
   position: absolute;
   top: 0.875rem;
