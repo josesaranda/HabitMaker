@@ -1,3 +1,12 @@
+# [1.10.0](https://github.com/josesaranda/HabitMaker/compare/v1.9.0...v1.10.0) (2026-11-14)
+
+
+### Features
+
+* add emoji picker to habit creation and detail views ([7247877](https://github.com/josesaranda/HabitMaker/commit/72478773520fe29f4420013504d0f363f5b1d934))
+* add new agents for architect, backend, explore, frontend, and reviewer functionalities ([f917d62](https://github.com/josesaranda/HabitMaker/commit/f917d6255e74be0178feb6c42119bb94bb0d6a2f))
+* implement user settings component with session management and PWA update functionality ([48e7fe9](https://github.com/josesaranda/HabitMaker/commit/48e7fe987d8f9fdd6cefa098fbf82f39312c1637))
+
 # [1.9.0](https://github.com/josesaranda/HabitMaker/compare/v1.8.0...v1.9.0) (2026-11-13)
 
 ### Bug Fixes
