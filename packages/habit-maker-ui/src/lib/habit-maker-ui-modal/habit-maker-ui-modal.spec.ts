@@ -25,7 +25,11 @@ import { HabitMakerUIModalContent } from './habit-maker-ui-modal-content';
 class ModalHost {}
 
 @Component({
-  imports: [HabitMakerUIModal, HabitMakerUIModalTitle, HabitMakerUIModalContent],
+  imports: [
+    HabitMakerUIModal,
+    HabitMakerUIModalTitle,
+    HabitMakerUIModalContent,
+  ],
   template: `
     <habit-maker-ui-modal #modal label="Detalles del hábito">
       <h2 hmModalTitle>Detalles del hábito</h2>

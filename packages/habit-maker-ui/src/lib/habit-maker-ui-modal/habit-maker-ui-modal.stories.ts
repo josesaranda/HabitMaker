@@ -40,7 +40,9 @@ export const Playground: Story = {
   args: { label: 'Habit details', closeLabel: 'Close habit details' },
   render: (args) => ({
     props: args,
-    moduleMetadata: { imports: [HabitMakerUIModalTitle, HabitMakerUIModalContent] },
+    moduleMetadata: {
+      imports: [HabitMakerUIModalTitle, HabitMakerUIModalContent],
+    },
     template: `
       <habit-maker-ui-modal #modal [label]="label" [closeLabel]="closeLabel">
         <h2 hmModalTitle>Take a moment to check in</h2>
@@ -56,7 +58,9 @@ export const Playground: Story = {
 export const AllVariants: Story = {
   parameters: { controls: { disable: true } },
   render: () => ({
-    moduleMetadata: { imports: [HabitMakerUIModalTitle, HabitMakerUIModalContent] },
+    moduleMetadata: {
+      imports: [HabitMakerUIModalTitle, HabitMakerUIModalContent],
+    },
     template: `
       <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
         <habit-maker-ui-modal #details label="Habit details">
