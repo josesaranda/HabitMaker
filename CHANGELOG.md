@@ -1,3 +1,26 @@
+# [1.9.0](https://github.com/josesaranda/HabitMaker/compare/v1.8.0...v1.9.0) (2026-11-13)
+
+
+### Bug Fixes
+
+* **analytics:** replace inject with Analytics component in BaseLayout ([79dfdc4](https://github.com/josesaranda/HabitMaker/commit/79dfdc497e70112aa7ae33ac5583fec23e977f9b))
+* **ci:** update CI workflow to use nx affected commands for linting and testing ([2b595d0](https://github.com/josesaranda/HabitMaker/commit/2b595d07d54c4b5ae12e0e4eedf0cc8edcba9d6a))
+* **deps:** remove unused dependencies from package-lock.json ([30de650](https://github.com/josesaranda/HabitMaker/commit/30de6505467e0c116483a18fbf9d5f7abd2a033d))
+* **layout:** move Analytics component to body in BaseLayout ([e642b00](https://github.com/josesaranda/HabitMaker/commit/e642b0011e81ae0c2676a459428da8e6caea35b5))
+* **svg:** update settings icon structure and remove unused paths ([091a671](https://github.com/josesaranda/HabitMaker/commit/091a6719c6795574d73da812bddc684ef509161e))
+
+
+### Features
+
+* add habit maker UI components including button day, card, and day selector ([36aeccd](https://github.com/josesaranda/HabitMaker/commit/36aeccd1cf116873a8fb9900536c98988c2f5798))
+* add habit-maker-ui-header-outlet component for improved header management ([825020f](https://github.com/josesaranda/HabitMaker/commit/825020fec46f5686e43c9d9e3a391cb1a5fb7601))
+* add mobile navbar padding and preview completion offsets to HabitCard ([43b502b](https://github.com/josesaranda/HabitMaker/commit/43b502bd720d649b41f455f6ee2b2510d29c649f))
+* **docs:** add detailed documentation for HabitMakerUIHeaderOutlet component ([5afd09d](https://github.com/josesaranda/HabitMaker/commit/5afd09dccac0e953a89e332360a41d15a317c62b))
+* **docs:** enhance documentation for various HabitMaker UI components ([081cef5](https://github.com/josesaranda/HabitMaker/commit/081cef57269f935021934fe53373a12365353ea1))
+* enable day toggle functionality in HabitCard and update related tests ([be570fb](https://github.com/josesaranda/HabitMaker/commit/be570fb4ff0053cf0b5e7126183818f007932153))
+* implement habit editing functionality with UI updates and tests ([600b95b](https://github.com/josesaranda/HabitMaker/commit/600b95b197b36a3449f71d763c6efae28afac438))
+* **ui:** add Storybook and badge component ([7c09a40](https://github.com/josesaranda/HabitMaker/commit/7c09a40e7d4940740cecff726771b7a45095e9e4))
+
 # [1.8.0](https://github.com/josesaranda/HabitMaker/compare/v1.7.0...v1.8.0) (2026-11-06)
 
 
