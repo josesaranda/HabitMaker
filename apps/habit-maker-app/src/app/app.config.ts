@@ -10,6 +10,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import {
   ActivatedRouteSnapshot,
   provideRouter,
+  withPreloading,
   withViewTransitions,
 } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
@@ -17,6 +18,7 @@ import { appRoutes } from './app.routes';
 import { authTokenInterceptor } from './auth/auth-token.interceptor';
 import { TranslocoHttpLoader } from './i18n/transloco-loader';
 import { LanguageService } from './i18n/language.service';
+import { PwaPreloadStrategy } from './pwa-preload.strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,6 +43,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideRouter(
       appRoutes,
+      withPreloading(PwaPreloadStrategy),
       withViewTransitions({
         onViewTransitionCreated: ({ transition, from, to }) => {
           if (isQueryParamOnlyNavigation(from, to)) transition.skipTransition();
