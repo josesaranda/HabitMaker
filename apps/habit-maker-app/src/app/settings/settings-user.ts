@@ -112,9 +112,7 @@ export class SettingsUser implements OnInit {
     if (this.pwaUpdateStatus() === 'checking') return;
 
     this.pwaUpdateStatus.set('checking');
-    this.pwaUpdateStatus.set(
-      await this.appUpdateService.checkForUpdates(),
-    );
+    this.pwaUpdateStatus.set(await this.appUpdateService.checkForUpdates());
   }
 
   protected setLanguage(language: SupportedLanguage): void {

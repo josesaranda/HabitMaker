@@ -1,10 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  ApplicationRef,
-  DestroyRef,
-  inject,
-  Injectable,
-} from '@angular/core';
+import { ApplicationRef, DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter, first, interval } from 'rxjs';
@@ -12,10 +7,7 @@ import { filter, first, interval } from 'rxjs';
 const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
 export type AppUpdateCheckResult =
-  | 'update-available'
-  | 'up-to-date'
-  | 'unavailable'
-  | 'error';
+  'update-available' | 'up-to-date' | 'unavailable' | 'error';
 
 @Injectable({ providedIn: 'root' })
 export class AppUpdateService {
@@ -31,8 +23,7 @@ export class AppUpdateService {
     this.swUpdate.versionUpdates
       .pipe(
         filter(
-          (event): event is VersionReadyEvent =>
-            event.type === 'VERSION_READY',
+          (event): event is VersionReadyEvent => event.type === 'VERSION_READY',
         ),
         takeUntilDestroyed(this.destroyRef),
       )

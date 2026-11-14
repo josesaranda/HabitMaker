@@ -11,10 +11,7 @@ import {
   AdminService,
   AdminUser,
 } from '../admin/admin.service';
-import {
-  AppVersionService,
-  VersionCheckResult,
-} from './app-version.service';
+import { AppVersionService, VersionCheckResult } from './app-version.service';
 
 const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
 

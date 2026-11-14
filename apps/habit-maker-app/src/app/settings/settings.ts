@@ -7,12 +7,7 @@ import { SettingsAdmin } from './settings-admin';
 import { SettingsUser } from './settings-user';
 
 @Component({
-  imports: [
-    HabitMakerUIHeader,
-    SettingsAdmin,
-    SettingsUser,
-    TranslocoPipe,
-  ],
+  imports: [HabitMakerUIHeader, SettingsAdmin, SettingsUser, TranslocoPipe],
   selector: 'app-settings',
   templateUrl: './settings.html',
 })

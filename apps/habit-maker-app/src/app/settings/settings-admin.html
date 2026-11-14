@@ -1,367 +1,363 @@
-    <section
-      class="rounded-2xl border border-border bg-surface p-6 sm:p-8"
-      aria-labelledby="admin-settings-title"
+<section
+  class="rounded-2xl border border-border bg-surface p-6 sm:p-8"
+  aria-labelledby="admin-settings-title"
+>
+  <h2
+    id="admin-settings-title"
+    class="mb-6 text-xl font-semibold tracking-tight text-text-primary"
+  >
+    {{ 'settings.adminTitle' | transloco }}
+  </h2>
+  <section aria-labelledby="admin-users-title">
+    <h3
+      id="admin-users-title"
+      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
     >
-      <h2
-        id="admin-settings-title"
-        class="mb-6 text-xl font-semibold tracking-tight text-text-primary"
+      {{ 'settings.usersTitle' | transloco }}
+    </h3>
+    @if (isLoadingUsers()) {
+    <p class="text-text-secondary" role="status">
+      {{ 'settings.loadingUsers' | transloco }}
+    </p>
+    } @else if (usersLoadError()) {
+    <p class="text-error" role="alert">{{ usersLoadError() | transloco }}</p>
+    } @else if (users().length === 0) {
+    <p class="text-text-secondary">{{ 'settings.noUsers' | transloco }}</p>
+    } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[24rem] text-left text-sm">
+        <thead class="border-b border-border text-text-secondary">
+          <tr>
+            <th class="px-3 py-3 font-semibold" scope="col">
+              {{ 'settings.email' | transloco }}
+            </th>
+            <th class="px-3 py-3 font-semibold" scope="col">
+              {{ 'settings.role' | transloco }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users(); track user.id) {
+          <tr class="border-b border-border last:border-0">
+            <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
+            <td class="px-3 py-3 text-text-secondary">
+              {{ (user.role === 'admin' ? 'settings.adminRole' :
+              'settings.userRole') | transloco }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }
+  </section>
+  <section
+    class="mt-8 border-t border-border pt-8"
+    aria-labelledby="admin-push-settings-title"
+  >
+    <h3
+      id="admin-push-settings-title"
+      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+    >
+      {{ 'settings.pushTitle' | transloco }}
+    </h3>
+    @if (isLoadingPushConfiguration()) {
+    <p class="text-sm text-text-secondary" role="status">
+      {{ 'settings.loadingPushConfiguration' | transloco }}
+    </p>
+    } @else if (pushConfigurationError()) {
+    <p class="text-sm text-error" role="alert">
+      {{ pushConfigurationError() | transloco }}
+    </p>
+    } @else if (pushConfiguration(); as configuration) {
+    <p
+      class="mb-4 text-sm font-medium"
+      [class.text-text-primary]="configuration.isConfigured"
+      [class.text-error]="!configuration.isConfigured"
+      role="status"
+    >
+      {{ (configuration.isConfigured ? 'settings.pushConfigured' :
+      'settings.pushNotConfigured') | transloco }}
+    </p>
+    <dl class="grid gap-3 text-sm sm:grid-cols-2">
+      <div class="rounded-xl border border-border bg-background p-4">
+        <dt class="font-semibold text-text-primary">VAPID_PUBLIC_KEY</dt>
+        <dd class="mb-0 mt-1 text-text-secondary">
+          {{ (configuration.publicKeyConfigured ?
+          'settings.environmentConfigured' : 'settings.environmentMissing') |
+          transloco }}
+        </dd>
+      </div>
+      <div class="rounded-xl border border-border bg-background p-4">
+        <dt class="font-semibold text-text-primary">VAPID_PRIVATE_KEY</dt>
+        <dd class="mb-0 mt-1 text-text-secondary">
+          {{ (configuration.privateKeyConfigured ?
+          'settings.environmentConfigured' : 'settings.environmentMissing') |
+          transloco }}
+        </dd>
+      </div>
+      <div
+        class="rounded-xl border border-border bg-background p-4 sm:col-span-2"
       >
-        {{ 'settings.adminTitle' | transloco }}
-      </h2>
-      <section aria-labelledby="admin-users-title">
-        <h3
-          id="admin-users-title"
-          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
-        >
-          {{ 'settings.usersTitle' | transloco }}
-        </h3>
-        @if (isLoadingUsers()) {
-        <p class="text-text-secondary" role="status">
-          {{ 'settings.loadingUsers' | transloco }}
-        </p>
-        } @else if (usersLoadError()) {
-        <p class="text-error" role="alert">
-          {{ usersLoadError() | transloco }}
-        </p>
-        } @else if (users().length === 0) {
-        <p class="text-text-secondary">{{ 'settings.noUsers' | transloco }}</p>
-        } @else {
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[24rem] text-left text-sm">
-            <thead class="border-b border-border text-text-secondary">
-              <tr>
-                <th class="px-3 py-3 font-semibold" scope="col">
-                  {{ 'settings.email' | transloco }}
-                </th>
-                <th class="px-3 py-3 font-semibold" scope="col">
-                  {{ 'settings.role' | transloco }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (user of users(); track user.id) {
-              <tr class="border-b border-border last:border-0">
-                <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
-                <td class="px-3 py-3 text-text-secondary">
-                  {{ (user.role === 'admin' ? 'settings.adminRole' :
-                  'settings.userRole') | transloco }}
-                </td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+        <dt class="font-semibold text-text-primary">
+          {{ 'settings.pushSubject' | transloco }}
+        </dt>
+        <dd class="mb-0 mt-1 text-text-secondary">
+          {{ (configuration.subjectConfigured ? 'settings.environmentConfigured'
+          : 'settings.pushSubjectDefault') | transloco }}
+        </dd>
+      </div>
+    </dl>
+    }
+  </section>
+  <section
+    class="mt-8 border-t border-border pt-8"
+    aria-labelledby="email-settings-title"
+  >
+    <h3
+      id="email-settings-title"
+      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+    >
+      {{ 'settings.emailTitle' | transloco }}
+    </h3>
+    @if (isLoadingEmailConfiguration()) {
+    <p class="text-sm text-text-secondary" role="status">
+      {{ 'settings.loadingEmailConfiguration' | transloco }}
+    </p>
+    } @else if (emailConfigurationError()) {
+    <p class="text-sm text-error" role="alert">
+      {{ emailConfigurationError() | transloco }}
+    </p>
+    } @else if (emailConfiguration(); as configuration) { @if
+    (configuration.missingVariables.length > 0) {
+    <div
+      class="mb-5 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary"
+      role="status"
+    >
+      <p>{{ 'settings.emailVariablesMissing' | transloco }}</p>
+      <ul class="mt-2 list-inside list-disc">
+        @for (variable of configuration.missingVariables; track variable) {
+        <li>{{ variable }} — {{ 'settings.notDefined' | transloco }}</li>
         }
-      </section>
-      <section
-        class="mt-8 border-t border-border pt-8"
-        aria-labelledby="admin-push-settings-title"
-      >
-        <h3
-          id="admin-push-settings-title"
-          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+      </ul>
+    </div>
+    }
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label
+          for="smtp-host"
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          >SMTP_HOST</label
         >
-          {{ 'settings.pushTitle' | transloco }}
-        </h3>
-        @if (isLoadingPushConfiguration()) {
-        <p class="text-sm text-text-secondary" role="status">
-          {{ 'settings.loadingPushConfiguration' | transloco }}
-        </p>
-        } @else if (pushConfigurationError()) {
-        <p class="text-sm text-error" role="alert">
-          {{ pushConfigurationError() | transloco }}
-        </p>
-        } @else if (pushConfiguration(); as configuration) {
+        <input
+          hmInput
+          id="smtp-host"
+          type="text"
+          [value]="configuration.host"
+          [placeholder]="!configuration.host ? ('settings.notDefined' | transloco) : ''"
+          readonly
+        />
+      </div>
+      <div>
+        <label
+          for="smtp-port"
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          >SMTP_PORT</label
+        >
+        <input
+          hmInput
+          id="smtp-port"
+          type="text"
+          [value]="configuration.port"
+          [placeholder]="!configuration.port ? ('settings.notDefined' | transloco) : ''"
+          readonly
+        />
+      </div>
+      <div>
+        <label
+          for="smtp-protocol"
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          >SMTP_PROTOCOL</label
+        >
+        <input
+          hmInput
+          id="smtp-protocol"
+          type="text"
+          [value]="configuration.protocol"
+          [placeholder]="!configuration.protocol ? ('settings.notDefined' | transloco) : ''"
+          readonly
+        />
+      </div>
+      <div>
+        <label
+          for="smtp-from"
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          >SMTP_FROM</label
+        >
+        <input
+          hmInput
+          id="smtp-from"
+          type="text"
+          [value]="configuration.from"
+          [placeholder]="!configuration.from ? ('settings.notDefined' | transloco) : ''"
+          readonly
+        />
+      </div>
+      <div>
+        <label
+          for="smtp-user"
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          >SMTP_USER</label
+        >
+        <input
+          hmInput
+          id="smtp-user"
+          type="text"
+          [value]="configuration.user"
+          [placeholder]="!configuration.user ? ('settings.notDefined' | transloco) : ''"
+          readonly
+        />
+      </div>
+      <div>
+        <label
+          for="smtp-password"
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          >SMTP_PASSWORD</label
+        >
+        <input
+          hmInput
+          id="smtp-password"
+          type="text"
+          [value]="configuration.passwordConfigured ? '••••••••' : ''"
+          [placeholder]="(configuration.passwordConfigured ? 'settings.secretConfigured' : 'settings.notDefined') | transloco"
+          readonly
+        />
+      </div>
+    </div>
+    }
+    <form class="mt-6 space-y-4" (submit)="sendTestEmail($event)">
+      <h4 class="text-base font-semibold text-text-primary">
+        {{ 'settings.testEmailTitle' | transloco }}
+      </h4>
+      <div>
+        <label
+          for="test-email-address"
+          class="mb-2 block text-sm font-semibold text-text-primary"
+        >
+          {{ 'settings.testEmailAddress' | transloco }}
+        </label>
+        <input
+          hmInput
+          id="test-email-address"
+          name="testEmailAddress"
+          type="email"
+          autocomplete="email"
+          required
+          [value]="testEmailAddress()"
+          (input)="testEmailAddress.set($any($event.target).value)"
+          [placeholder]="'settings.testEmailPlaceholder' | transloco"
+        />
+      </div>
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          hmButton="primary"
+          class="rounded-lg text-sm font-semibold"
+          type="submit"
+          [disabled]="isSendingTestEmail() || !testEmailAddress().trim() || !emailConfiguration()?.isConfigured"
+        >
+          {{ (isSendingTestEmail() ? 'settings.sendingTestEmail' :
+          'settings.sendTestEmail') | transloco }}
+        </button>
+        @if (testEmailMessage()) {
         <p
-          class="mb-4 text-sm font-medium"
-          [class.text-text-primary]="configuration.isConfigured"
-          [class.text-error]="!configuration.isConfigured"
-          role="status"
+          class="text-sm"
+          [class.text-error]="testEmailMessage() === 'settings.testEmailError'"
+          [class.text-text-secondary]="testEmailMessage() === 'settings.testEmailSent'"
+          [attr.role]="testEmailMessage() === 'settings.testEmailError' ? 'alert' : 'status'"
         >
-          {{ (configuration.isConfigured ? 'settings.pushConfigured' :
-          'settings.pushNotConfigured') | transloco }}
+          {{ testEmailMessage() | transloco }}
         </p>
-        <dl class="grid gap-3 text-sm sm:grid-cols-2">
-          <div class="rounded-xl border border-border bg-background p-4">
-            <dt class="font-semibold text-text-primary">VAPID_PUBLIC_KEY</dt>
-            <dd class="mb-0 mt-1 text-text-secondary">
-              {{ (configuration.publicKeyConfigured ?
-              'settings.environmentConfigured' : 'settings.environmentMissing')
-              | transloco }}
-            </dd>
-          </div>
-          <div class="rounded-xl border border-border bg-background p-4">
-            <dt class="font-semibold text-text-primary">VAPID_PRIVATE_KEY</dt>
-            <dd class="mb-0 mt-1 text-text-secondary">
-              {{ (configuration.privateKeyConfigured ?
-              'settings.environmentConfigured' : 'settings.environmentMissing')
-              | transloco }}
-            </dd>
-          </div>
-          <div
-            class="rounded-xl border border-border bg-background p-4 sm:col-span-2"
-          >
-            <dt class="font-semibold text-text-primary">
-              {{ 'settings.pushSubject' | transloco }}
-            </dt>
-            <dd class="mb-0 mt-1 text-text-secondary">
-              {{ (configuration.subjectConfigured ?
-              'settings.environmentConfigured' : 'settings.pushSubjectDefault')
-              | transloco }}
-            </dd>
-          </div>
-        </dl>
         }
-      </section>
-      <section
-        class="mt-8 border-t border-border pt-8"
-        aria-labelledby="email-settings-title"
-      >
-        <h3
-          id="email-settings-title"
-          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
-        >
-          {{ 'settings.emailTitle' | transloco }}
-        </h3>
-        @if (isLoadingEmailConfiguration()) {
+      </div>
+    </form>
+  </section>
+  <section
+    class="mt-8 border-t border-border pt-8"
+    aria-labelledby="app-settings-title"
+  >
+    <h3
+      id="app-settings-title"
+      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+    >
+      {{ 'settings.appVersion' | transloco }}
+    </h3>
+    <div class="space-y-5">
+      <div>
+        @if (isLoadingAppVersion()) {
         <p class="text-sm text-text-secondary" role="status">
-          {{ 'settings.loadingEmailConfiguration' | transloco }}
+          {{ 'settings.loadingVersion' | transloco }}
         </p>
-        } @else if (emailConfigurationError()) {
+        } @else if (appVersionLoadError()) {
         <p class="text-sm text-error" role="alert">
-          {{ emailConfigurationError() | transloco }}
+          {{ appVersionLoadError() | transloco }}
         </p>
-        } @else if (emailConfiguration(); as configuration) { @if
-        (configuration.missingVariables.length > 0) {
-        <div
-          class="mb-5 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary"
-          role="status"
-        >
-          <p>{{ 'settings.emailVariablesMissing' | transloco }}</p>
-          <ul class="mt-2 list-inside list-disc">
-            @for (variable of configuration.missingVariables; track variable) {
-            <li>{{ variable }} — {{ 'settings.notDefined' | transloco }}</li>
-            }
-          </ul>
-        </div>
+        } @else {
+        <p class="text-sm text-text-secondary">{{ appVersion() }}</p>
         }
-        <div class="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label
-              for="smtp-host"
-              class="mb-2 block text-sm font-semibold text-text-primary"
-              >SMTP_HOST</label
-            >
-            <input
-              hmInput
-              id="smtp-host"
-              type="text"
-              [value]="configuration.host"
-              [placeholder]="!configuration.host ? ('settings.notDefined' | transloco) : ''"
-              readonly
-            />
-          </div>
-          <div>
-            <label
-              for="smtp-port"
-              class="mb-2 block text-sm font-semibold text-text-primary"
-              >SMTP_PORT</label
-            >
-            <input
-              hmInput
-              id="smtp-port"
-              type="text"
-              [value]="configuration.port"
-              [placeholder]="!configuration.port ? ('settings.notDefined' | transloco) : ''"
-              readonly
-            />
-          </div>
-          <div>
-            <label
-              for="smtp-protocol"
-              class="mb-2 block text-sm font-semibold text-text-primary"
-              >SMTP_PROTOCOL</label
-            >
-            <input
-              hmInput
-              id="smtp-protocol"
-              type="text"
-              [value]="configuration.protocol"
-              [placeholder]="!configuration.protocol ? ('settings.notDefined' | transloco) : ''"
-              readonly
-            />
-          </div>
-          <div>
-            <label
-              for="smtp-from"
-              class="mb-2 block text-sm font-semibold text-text-primary"
-              >SMTP_FROM</label
-            >
-            <input
-              hmInput
-              id="smtp-from"
-              type="text"
-              [value]="configuration.from"
-              [placeholder]="!configuration.from ? ('settings.notDefined' | transloco) : ''"
-              readonly
-            />
-          </div>
-          <div>
-            <label
-              for="smtp-user"
-              class="mb-2 block text-sm font-semibold text-text-primary"
-              >SMTP_USER</label
-            >
-            <input
-              hmInput
-              id="smtp-user"
-              type="text"
-              [value]="configuration.user"
-              [placeholder]="!configuration.user ? ('settings.notDefined' | transloco) : ''"
-              readonly
-            />
-          </div>
-          <div>
-            <label
-              for="smtp-password"
-              class="mb-2 block text-sm font-semibold text-text-primary"
-              >SMTP_PASSWORD</label
-            >
-            <input
-              hmInput
-              id="smtp-password"
-              type="text"
-              [value]="configuration.passwordConfigured ? '••••••••' : ''"
-              [placeholder]="(configuration.passwordConfigured ? 'settings.secretConfigured' : 'settings.notDefined') | transloco"
-              readonly
-            />
-          </div>
-        </div>
+      </div>
+
+      <div aria-live="polite">
+        @if (isCheckingUpdates()) {
+        <p class="text-sm text-text-secondary" role="status">
+          {{ 'settings.checkingUpdates' | transloco }}
+        </p>
+        } @else if (updateCheckError()) {
+        <p class="text-sm text-error" role="alert">
+          {{ updateCheckError() | transloco }}
+        </p>
+        } @else if (updateAvailable()) {
+        <p class="text-sm font-medium text-text-primary" role="status">
+          {{ 'settings.updateAvailable' | transloco: { version: latestVersion()
+          } }}
+        </p>
+        } @else if (updateAvailable() === false) {
+        <p class="text-sm text-text-secondary" role="status">
+          {{ 'settings.upToDate' | transloco }}
+        </p>
         }
-        <form class="mt-6 space-y-4" (submit)="sendTestEmail($event)">
-          <h4 class="text-base font-semibold text-text-primary">
-            {{ 'settings.testEmailTitle' | transloco }}
-          </h4>
-          <div>
-            <label
-              for="test-email-address"
-              class="mb-2 block text-sm font-semibold text-text-primary"
-            >
-              {{ 'settings.testEmailAddress' | transloco }}
-            </label>
-            <input
-              hmInput
-              id="test-email-address"
-              name="testEmailAddress"
-              type="email"
-              autocomplete="email"
-              required
-              [value]="testEmailAddress()"
-              (input)="testEmailAddress.set($any($event.target).value)"
-              [placeholder]="'settings.testEmailPlaceholder' | transloco"
-            />
-          </div>
-          <div class="flex flex-wrap items-center gap-4">
-            <button
-              hmButton="primary"
-              class="rounded-lg text-sm font-semibold"
-              type="submit"
-              [disabled]="isSendingTestEmail() || !testEmailAddress().trim() || !emailConfiguration()?.isConfigured"
-            >
-              {{ (isSendingTestEmail() ? 'settings.sendingTestEmail' :
-              'settings.sendTestEmail') | transloco }}
-            </button>
-            @if (testEmailMessage()) {
-            <p
-              class="text-sm"
-              [class.text-error]="testEmailMessage() === 'settings.testEmailError'"
-              [class.text-text-secondary]="testEmailMessage() === 'settings.testEmailSent'"
-              [attr.role]="testEmailMessage() === 'settings.testEmailError' ? 'alert' : 'status'"
-            >
-              {{ testEmailMessage() | transloco }}
-            </p>
-            }
-          </div>
-        </form>
-      </section>
-      <section
-        class="mt-8 border-t border-border pt-8"
-        aria-labelledby="app-settings-title"
-      >
-        <h3
-          id="app-settings-title"
-          class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          hmButton="primary"
+          class="rounded-lg text-sm font-semibold"
+          type="button"
+          [disabled]="isCheckingUpdates()"
+          (click)="checkForUpdates()"
         >
-          {{ 'settings.appVersion' | transloco }}
-        </h3>
-        <div class="space-y-5">
-          <div>
-            @if (isLoadingAppVersion()) {
-            <p class="text-sm text-text-secondary" role="status">
-              {{ 'settings.loadingVersion' | transloco }}
-            </p>
-            } @else if (appVersionLoadError()) {
-            <p class="text-sm text-error" role="alert">
-              {{ appVersionLoadError() | transloco }}
-            </p>
-            } @else {
-            <p class="text-sm text-text-secondary">{{ appVersion() }}</p>
-            }
-          </div>
-
-          <div aria-live="polite">
-            @if (isCheckingUpdates()) {
-            <p class="text-sm text-text-secondary" role="status">
-              {{ 'settings.checkingUpdates' | transloco }}
-            </p>
-            } @else if (updateCheckError()) {
-            <p class="text-sm text-error" role="alert">
-              {{ updateCheckError() | transloco }}
-            </p>
-            } @else if (updateAvailable()) {
-            <p class="text-sm font-medium text-text-primary" role="status">
-              {{ 'settings.updateAvailable' | transloco: { version:
-              latestVersion() } }}
-            </p>
-            } @else if (updateAvailable() === false) {
-            <p class="text-sm text-text-secondary" role="status">
-              {{ 'settings.upToDate' | transloco }}
-            </p>
-            }
-          </div>
-
-          <div class="flex flex-wrap items-center gap-4">
-            <button
-              hmButton="primary"
-              class="rounded-lg text-sm font-semibold"
-              type="button"
-              [disabled]="isCheckingUpdates()"
-              (click)="checkForUpdates()"
-            >
-              {{ (isCheckingUpdates() ? 'settings.checkingUpdates' :
-              'settings.checkUpdates') | transloco }}
-            </button>
-            <a
-              class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
-              href="https://github.com/josesaranda/HabitMaker/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ 'settings.viewReleases' | transloco }}
-            </a>
-            @if (updateAvailable() && releasesUrl() !==
-            'https://github.com/josesaranda/HabitMaker/releases') {
-            <a
-              class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
-              [href]="releasesUrl()"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ 'settings.viewVersion' | transloco: { version: latestVersion()
-              } }}
-            </a>
-            }
-          </div>
-        </div>
-      </section>
-    </section>
+          {{ (isCheckingUpdates() ? 'settings.checkingUpdates' :
+          'settings.checkUpdates') | transloco }}
+        </button>
+        <a
+          class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
+          href="https://github.com/josesaranda/HabitMaker/releases"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ 'settings.viewReleases' | transloco }}
+        </a>
+        @if (updateAvailable() && releasesUrl() !==
+        'https://github.com/josesaranda/HabitMaker/releases') {
+        <a
+          class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
+          [href]="releasesUrl()"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {{ 'settings.viewVersion' | transloco: { version: latestVersion() } }}
+        </a>
+        }
+      </div>
+    </div>
+  </section>
+</section>

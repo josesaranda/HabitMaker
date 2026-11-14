@@ -120,9 +120,8 @@ describe('Settings', () => {
     expect(compiled.querySelector('#pwa-update-title')?.textContent).toContain(
       'Actualización de la aplicación',
     );
-    const pwaUpdateButton = compiled.querySelector<HTMLButtonElement>(
-      '#check-pwa-update',
-    );
+    const pwaUpdateButton =
+      compiled.querySelector<HTMLButtonElement>('#check-pwa-update');
     expect(compiled.querySelector('#sessions-title')?.textContent).toContain(
       'Sesiones abiertas',
     );
