@@ -6,6 +6,7 @@ import { provideTranslocoTesting } from '../../../test-support/transloco-testing
 import { AdminService } from '../admin/admin.service';
 import { AuthService } from '../auth/auth.service';
 import { HabitService } from '../habits/habit.service';
+import { AppUpdateService } from '../app-update.service';
 import { AppVersionService } from './app-version.service';
 import { Settings } from './settings';
 
@@ -47,6 +48,7 @@ describe('Settings', () => {
         publishedAt: '2026-10-01T12:00:00Z',
       }),
     );
+    const checkForPwaUpdates = vi.fn().mockResolvedValue('up-to-date');
     await TestBed.configureTestingModule({
       imports: [Settings],
       providers: [
@@ -94,6 +96,10 @@ describe('Settings', () => {
             checkForUpdates,
           },
         },
+        {
+          provide: AppUpdateService,
+          useValue: { checkForUpdates: checkForPwaUpdates },
+        },
       ],
     }).compileComponents();
 
@@ -110,6 +116,12 @@ describe('Settings', () => {
     expect(compiled.querySelector('habit-maker-ui-header')).not.toBeNull();
     expect(compiled.querySelector('h2')?.textContent).toContain(
       'Ajustes de usuario',
+    );
+    expect(compiled.querySelector('#pwa-update-title')?.textContent).toContain(
+      'Actualización de la aplicación',
+    );
+    const pwaUpdateButton = compiled.querySelector<HTMLButtonElement>(
+      '#check-pwa-update',
     );
     expect(compiled.querySelector('#sessions-title')?.textContent).toContain(
       'Sesiones abiertas',
@@ -139,6 +151,11 @@ describe('Settings', () => {
       },
       'en',
     );
+    pwaUpdateButton?.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(checkForPwaUpdates).toHaveBeenCalledOnce();
+    expect(compiled.textContent).toContain('The app is up to date.');
     expect(compiled.querySelector('#admin-settings-title')).toBeNull();
     expect(compiled.querySelector('#email-settings-title')).toBeNull();
     expect(compiled.querySelector('#admin-push-settings-title')).toBeNull();

@@ -1,0 +1,204 @@
+    <section
+      class="rounded-2xl border border-border bg-surface p-6 sm:p-8"
+      aria-labelledby="user-settings-title"
+    >
+      <h2
+        id="user-settings-title"
+        class="mb-6 text-xl font-semibold tracking-tight text-text-primary"
+      >
+        {{ 'settings.userTitle' | transloco }}
+      </h2>
+      <div class="w-full">
+        <label
+          class="mb-2 block text-sm font-semibold text-text-primary"
+          for="user-email"
+        >
+          {{ 'settings.email' | transloco }}
+        </label>
+        <input
+          hmInput
+          id="user-email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          [value]="email()"
+          readonly
+        />
+        <label
+          id="language-label"
+          class="mb-2 mt-5 block text-sm font-semibold text-text-primary"
+        >
+          {{ 'settings.language' | transloco }}
+        </label>
+        <habit-maker-ui-select
+          name="language"
+          [aria-labelledby]="'language-label'"
+          [ngModel]="languageService.language()"
+          (ngModelChange)="setLanguage($event)"
+        >
+          <habit-maker-ui-option
+            value="en"
+            [label]="'settings.english' | transloco"
+            >{{ 'settings.english' | transloco }}</habit-maker-ui-option
+          >
+          <habit-maker-ui-option
+            value="es"
+            [label]="'settings.spanish' | transloco"
+            >{{ 'settings.spanish' | transloco }}</habit-maker-ui-option
+          >
+        </habit-maker-ui-select>
+      </div>
+      <section
+        class="mt-8 border-t border-border pt-8"
+        aria-labelledby="sessions-title"
+      >
+        <div class="mb-4 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h3
+              id="sessions-title"
+              class="text-lg font-semibold tracking-tight text-text-primary"
+            >
+              {{ 'settings.sessionsTitle' | transloco }}
+            </h3>
+            <p class="mt-1 text-sm text-text-secondary">
+              {{ 'settings.sessionsDescription' | transloco }}
+            </p>
+          </div>
+          @if (sessions().length > 1) {
+          <button
+            hmButton="primary"
+            class="rounded-lg text-sm font-semibold"
+            type="button"
+            [disabled]="isRevokingOtherSessions() || !!revokingSessionId()"
+            (click)="revokeOtherSessions()"
+          >
+            {{ (isRevokingOtherSessions() ? 'settings.closingOtherSessions' :
+            'settings.closeOtherSessions') | transloco }}
+          </button>
+          }
+        </div>
+        @if (isLoadingSessions()) {
+        <p class="text-sm text-text-secondary" role="status">
+          {{ 'settings.loadingSessions' | transloco }}
+        </p>
+        } @else if (sessionsLoadError()) {
+        <p class="text-sm text-error" role="alert">
+          {{ sessionsLoadError() | transloco }}
+        </p>
+        } @else if (sessions().length === 0) {
+        <p class="text-sm text-text-secondary">
+          {{ 'settings.noSessions' | transloco }}
+        </p>
+        } @else {
+        <ul class="space-y-3">
+          @for (session of sessions(); track session.id) {
+          <li
+            class="flex flex-col gap-4 rounded-xl border border-border bg-background p-4 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <p class="font-semibold text-text-primary">
+                  {{ session.deviceName }}
+                </p>
+                @if (session.isCurrent) {
+                <habit-maker-ui-badge variant="secondary">
+                  {{ 'settings.currentSession' | transloco }}
+                </habit-maker-ui-badge>
+                }
+              </div>
+              <dl
+                class="mt-2 grid gap-x-5 gap-y-1 text-sm text-text-secondary sm:grid-cols-2"
+              >
+                <div>
+                  <dt class="inline font-medium">
+                    {{ 'settings.sessionCreated' | transloco }}:
+                  </dt>
+                  <dd class="ml-1 inline">
+                    {{ session.createdAt | date:'medium' }}
+                  </dd>
+                </div>
+                <div>
+                  <dt class="inline font-medium">
+                    {{ 'settings.sessionLastUsed' | transloco }}:
+                  </dt>
+                  <dd class="ml-1 inline">
+                    {{ session.lastUsedAt | date:'medium' }}
+                  </dd>
+                </div>
+                <div>
+                  <dt class="inline font-medium">
+                    {{ 'settings.sessionExpires' | transloco }}:
+                  </dt>
+                  <dd class="ml-1 inline">
+                    {{ session.expiresAt | date:'medium' }}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <button
+              hmButton="primary"
+              class="shrink-0 rounded-lg text-sm font-semibold"
+              type="button"
+              [disabled]="isRevokingOtherSessions() || !!revokingSessionId()"
+              (click)="revokeSession(session)"
+            >
+              {{ (revokingSessionId() === session.id ? 'settings.closingSession'
+              : 'settings.closeSession') | transloco }}
+            </button>
+          </li>
+          }
+        </ul>
+        } @if (sessionActionError()) {
+        <p class="mt-4 text-sm text-error" role="alert">
+          {{ sessionActionError() | transloco }}
+        </p>
+        }
+      </section>
+      <section
+        class="mt-8 border-t border-border pt-8"
+        aria-labelledby="pwa-update-title"
+      >
+        <div class="mb-4">
+          <h3
+            id="pwa-update-title"
+            class="text-lg font-semibold tracking-tight text-text-primary"
+          >
+            {{ 'settings.pwaUpdateTitle' | transloco }}
+          </h3>
+          <p class="mt-1 text-sm text-text-secondary">
+            {{ 'settings.pwaUpdateDescription' | transloco }}
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-4">
+          <button
+            id="check-pwa-update"
+            hmButton="primary"
+            class="rounded-lg text-sm font-semibold"
+            type="button"
+            [disabled]="pwaUpdateStatus() === 'checking'"
+            (click)="checkForPwaUpdates()"
+          >
+            {{ (pwaUpdateStatus() === 'checking' ? 'settings.pwaCheckingUpdate' :
+            'settings.checkPwaUpdate') | transloco }}
+          </button>
+          @if (pwaUpdateStatus() !== 'idle' && pwaUpdateStatus() !== 'checking') {
+          <p
+            class="text-sm"
+            [class.text-error]="pwaUpdateStatus() === 'error' || pwaUpdateStatus() === 'unavailable'"
+            [class.text-text-secondary]="pwaUpdateStatus() === 'update-available' || pwaUpdateStatus() === 'up-to-date'"
+            [attr.role]="pwaUpdateStatus() === 'error' || pwaUpdateStatus() === 'unavailable' ? 'alert' : 'status'"
+          >
+            {{
+              (pwaUpdateStatus() === 'update-available'
+                ? 'settings.pwaUpdateAvailable'
+                : pwaUpdateStatus() === 'up-to-date'
+                  ? 'settings.pwaUpToDate'
+                  : pwaUpdateStatus() === 'unavailable'
+                    ? 'settings.pwaUpdateUnavailable'
+                    : 'settings.pwaUpdateError') | transloco
+            }}
+          </p>
+          }
+        </div>
+      </section>
+    </section>
