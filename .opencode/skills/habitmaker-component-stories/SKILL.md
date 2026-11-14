@@ -7,6 +7,8 @@ description: Use whenever creating or changing an Angular component or directive
 
 Every Angular component or directive created in `packages/habit-maker-ui/src/lib/` must be accompanied by a Storybook story file in the same directory. Use this skill for new components and when a component's inputs, variants, or behavior change.
 
+Reusable controls such as selectors, pickers, and choice grids belong in `HabitMakerUI`, even if they currently have only one app consumer. Do not keep a reusable control in an app folder to avoid creating library stories; export it from the UI package and follow this story workflow.
+
 ## Required stories
 
 For a component file named `<component>.ts`, create or update `<component>.stories.ts` beside it. The file must export exactly these two stories:

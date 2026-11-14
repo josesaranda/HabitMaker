@@ -39,20 +39,24 @@ describe('HabitService', () => {
     let createEventEmitted = false;
     service.habitCreated$.subscribe(() => (createEventEmitted = true));
 
-    service.createHabit('  Leer 10 minutos  ').subscribe((habit) => {
+    service.createHabit('  Leer 10 minutos  ', '📚').subscribe((habit) => {
       responseName = habit.name;
     });
     expect(createEventEmitted).toBe(false);
 
     const request = httpTestingController.expectOne(`${API_URL}/habits`);
     expect(request.request.method).toBe('POST');
-    expect(request.request.body).toEqual({ name: 'Leer 10 minutos' });
+    expect(request.request.body).toEqual({
+      name: 'Leer 10 minutos',
+      emoji: '📚',
+    });
     expect(request.request.headers.get('Authorization')).toBe(
       'Bearer access-token',
     );
     request.flush({
       id: 'habit-1',
       name: 'Leer 10 minutos',
+      emoji: '📚',
       createdAt: '2026-11-01T00:00:00.000Z',
       updatedAt: '2026-11-01T00:00:00.000Z',
     });
@@ -192,15 +196,20 @@ describe('HabitService', () => {
     sessionStorage.setItem('habitmaker.authToken', 'access-token');
     let receivedName = '';
 
-    service.updateHabit('habit/1', '  Leer 10 minutos  ').subscribe((habit) => {
+    service
+      .updateHabit('habit/1', '  Leer 10 minutos  ', '📚')
+      .subscribe((habit) => {
       receivedName = habit.name;
-    });
+      });
 
     const request = httpTestingController.expectOne(
       `${API_URL}/habits/habit%2F1`,
     );
     expect(request.request.method).toBe('PUT');
-    expect(request.request.body).toEqual({ name: 'Leer 10 minutos' });
+    expect(request.request.body).toEqual({
+      name: 'Leer 10 minutos',
+      emoji: '📚',
+    });
     expect(request.request.headers.get('Authorization')).toBe(
       'Bearer access-token',
     );
@@ -305,7 +314,9 @@ describe('HabitService', () => {
 
   it('does not send a request when no access token is available', () => {
     let hasError = false;
-    service.createHabit('Leer').subscribe({ error: () => (hasError = true) });
+    service
+      .createHabit('Leer', '✨')
+      .subscribe({ error: () => (hasError = true) });
 
     expect(hasError).toBe(true);
     httpTestingController.expectNone(`${API_URL}/habits`);

@@ -11,6 +11,7 @@ import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
 })
 export class HabitMakerUICard {
   readonly since = input.required<string>();
+  readonly emoji = input<string | null>(null);
   readonly locale = input('en-US');
   readonly link = input<string | null>(null);
   readonly linkLabel = input('View details');

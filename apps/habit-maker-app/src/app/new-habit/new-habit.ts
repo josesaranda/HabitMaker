@@ -10,6 +10,7 @@ import {
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
+  HabitMakerUIEmojiPicker,
   HabitMakerUIIcon,
   HabitMakerUIInput,
 } from '@habit-maker/habit-maker-ui';
@@ -27,6 +28,7 @@ const nonBlankValidator: ValidatorFn = (control) =>
     HabitMakerUIButton,
     HabitMakerUIIcon,
     HabitMakerUIInput,
+    HabitMakerUIEmojiPicker,
     ReactiveFormsModule,
     TranslocoPipe,
   ],
@@ -44,7 +46,14 @@ export class NewHabit {
         nonBlankValidator,
       ],
     }),
+    emoji: new FormControl<string | null>(null),
   });
+  protected readonly selectedEmoji = toSignal(
+    this.habitForm.controls.emoji.valueChanges.pipe(
+      startWith(this.habitForm.controls.emoji.value),
+    ),
+    { initialValue: this.habitForm.controls.emoji.value },
+  );
   protected readonly isSubmitting = signal(false);
   protected readonly errorMessage = signal('');
   readonly habitCreated = output<void>();
@@ -63,15 +72,16 @@ export class NewHabit {
     }
 
     const name = this.habitForm.controls.name.value.trim();
+    const emoji = this.habitForm.controls.emoji.value;
 
     this.isSubmitting.set(true);
     this.errorMessage.set('');
     this.habitService
-      .createHabit(name)
+      .createHabit(name, emoji)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: () => {
-          this.habitForm.reset();
+          this.habitForm.reset({ name: '', emoji: null });
           this.habitCreated.emit();
         },
         error: () =>
@@ -79,5 +89,9 @@ export class NewHabit {
             'newHabit.error',
           ),
       });
+  }
+
+  protected selectEmoji(emoji: string | null): void {
+    this.habitForm.controls.emoji.setValue(emoji);
   }
 }

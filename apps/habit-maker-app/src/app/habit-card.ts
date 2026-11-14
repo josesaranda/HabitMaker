@@ -32,6 +32,7 @@ export class HabitCard {
 
   readonly id = input.required<string>();
   readonly name = input.required<string>();
+  readonly emoji = input<string | null>(null);
   readonly startedAt = input.required<string>();
   readonly link = input<string | null>(null);
   readonly linkLabel = input('View details');

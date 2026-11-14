@@ -29,6 +29,7 @@
     <app-habit-card
       [id]="habit.id"
       [name]="habit.name"
+      [emoji]="habit.emoji ?? null"
       [startedAt]="habit.createdAt"
       [link]="'/habits/' + habit.id"
       [linkLabel]="'home.habitLink' | transloco: { name: habit.name }"

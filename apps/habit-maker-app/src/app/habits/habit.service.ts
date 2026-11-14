@@ -8,6 +8,7 @@ import { SupportedLanguage } from '../i18n/language.service';
 export interface Habit {
   id: string;
   name: string;
+  emoji?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -42,10 +43,10 @@ export class HabitService {
   private readonly habitCreatedSubject = new Subject<void>();
   readonly habitCreated$ = this.habitCreatedSubject.asObservable();
 
-  createHabit(name: string): Observable<Habit> {
+  createHabit(name: string, emoji: string | null): Observable<Habit> {
     return this.requireAuthentication(
       this.http
-        .post<Habit>(`${API_URL}/habits`, { name: name.trim() })
+        .post<Habit>(`${API_URL}/habits`, { name: name.trim(), emoji })
         .pipe(tap(() => this.habitCreatedSubject.next())),
     );
   }
@@ -62,10 +63,11 @@ export class HabitService {
     );
   }
 
-  updateHabit(id: string, name: string): Observable<Habit> {
+  updateHabit(id: string, name: string, emoji: string | null): Observable<Habit> {
     return this.requireAuthentication(
       this.http.put<Habit>(`${API_URL}/habits/${encodeURIComponent(id)}`, {
         name: name.trim(),
+        emoji,
       }),
     );
   }

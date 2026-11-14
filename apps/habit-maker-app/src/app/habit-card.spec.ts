@@ -49,6 +49,7 @@ describe('HabitCard', () => {
 
   it('renders a seven-day window with a three-day virtual buffer', async () => {
     fixture.componentRef.setInput('name', 'Un poco de lectura');
+    fixture.componentRef.setInput('emoji', '📚');
     fixture.componentRef.setInput('startedAt', '2023-10-01');
     const previousDate = new Date();
     previousDate.setHours(0, 0, 0, 0);
@@ -63,6 +64,9 @@ describe('HabitCard', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h2')?.textContent?.trim()).toBe(
       'Un poco de lectura',
+    );
+    expect(compiled.querySelector('.hm-card__icon')?.textContent?.trim()).toBe(
+      '📚',
     );
     expect(compiled.querySelector('a')).toBeNull();
     expect(

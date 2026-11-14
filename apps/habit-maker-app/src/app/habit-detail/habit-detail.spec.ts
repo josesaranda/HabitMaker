@@ -366,6 +366,13 @@ describe('HabitDetail', () => {
     const editDialog = nameInput.closest<HTMLDialogElement>('dialog')!;
     expect(editDialog.open).toBe(true);
     expect(nameInput.value).toBe('Leer 10 minutos');
+    Array.from(
+      editDialog.querySelectorAll<HTMLButtonElement>(
+        'habit-maker-ui-emoji-picker button',
+      ),
+    )
+      .find((button) => button.textContent?.trim() === '🏃')!
+      .click();
 
     nameInput.value = 'Leer 20 minutos';
     nameInput.dispatchEvent(new Event('input'));
@@ -380,6 +387,7 @@ describe('HabitDetail', () => {
     expect(habitService.updateHabit).toHaveBeenCalledWith(
       'habit-1',
       'Leer 20 minutos',
+      '🏃',
     );
     expect(editDialog.open).toBe(false);
     expect(

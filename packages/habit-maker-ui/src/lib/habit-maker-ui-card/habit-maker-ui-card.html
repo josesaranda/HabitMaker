@@ -1,7 +1,11 @@
 <article class="hm-card">
   <header class="hm-card__header">
     <div class="hm-card__icon" aria-hidden="true">
+      @if (emoji(); as selectedEmoji) {
+      <span class="hm-card__emoji">{{ selectedEmoji }}</span>
+      } @else {
       <habit-maker-ui-icon class="hm-card__brand-icon" name="sprout" />
+      }
     </div>
     <div class="hm-card__heading">
       <div class="hm-card__heading-content">

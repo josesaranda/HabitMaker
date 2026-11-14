@@ -14,6 +14,7 @@ import { firstValueFrom } from 'rxjs';
 import {
   HabitMakerUIButton,
   HabitMakerUIButtonIcon,
+  HabitMakerUIEmojiPicker,
   HabitMakerUIHeader,
   HabitMakerUIIcon,
   HabitMakerUIInput,
@@ -44,6 +45,7 @@ import { HabitDetailResolveResult } from './habit-detail.resolver';
     HabitMakerUIIcon,
     HabitMakerUIInput,
     HabitMakerUIModal,
+    HabitMakerUIEmojiPicker,
     TranslocoPipe,
   ],
   selector: 'app-habit-detail',
@@ -72,6 +74,7 @@ export class HabitDetail implements OnInit {
   protected readonly deleteHabitError = signal('');
   protected readonly isSavingHabitName = signal(false);
   protected readonly editHabitName = signal('');
+  protected readonly editHabitEmoji = signal<string | null>(null);
   protected readonly editHabitNameError = signal('');
   protected readonly editHabitError = signal('');
   protected readonly canSaveHabitName = computed(
@@ -395,6 +398,7 @@ export class HabitDetail implements OnInit {
     if (!currentHabit) return;
 
     this.editHabitName.set(currentHabit.name);
+    this.editHabitEmoji.set(currentHabit.emoji ?? null);
     this.editHabitNameError.set('');
     this.editHabitError.set('');
     modal.openFrom(trigger);
@@ -405,6 +409,10 @@ export class HabitDetail implements OnInit {
     if (name.trim().length > 0) {
       this.editHabitNameError.set('');
     }
+  }
+
+  protected setEditHabitEmoji(emoji: string | null): void {
+    this.editHabitEmoji.set(emoji);
   }
 
   protected saveHabitName(modal: HabitMakerUIModal): void {
@@ -420,7 +428,7 @@ export class HabitDetail implements OnInit {
     this.isSavingHabitName.set(true);
     this.editHabitError.set('');
     this.habitService
-      .updateHabit(currentHabit.id, name)
+      .updateHabit(currentHabit.id, name, this.editHabitEmoji())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (habit) => {

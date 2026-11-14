@@ -6,10 +6,10 @@ import { NewHabit } from './new-habit';
 
 describe('NewHabit', () => {
   let fixture: ComponentFixture<NewHabit>;
-  let submittedNames: string[];
+  let submittedHabits: Array<{ name: string; emoji: string | null }>;
 
   beforeEach(async () => {
-    submittedNames = [];
+    submittedHabits = [];
     await TestBed.configureTestingModule({
       imports: [NewHabit],
       providers: [
@@ -17,11 +17,12 @@ describe('NewHabit', () => {
         {
           provide: HabitService,
           useValue: {
-            createHabit: (name: string) => {
-              submittedNames.push(name);
+            createHabit: (name: string, emoji: string | null) => {
+              submittedHabits.push({ name, emoji });
               return of({
                 id: 'habit-1',
                 name,
+                emoji,
                 createdAt: '',
                 updatedAt: '',
               });
@@ -42,6 +43,14 @@ describe('NewHabit', () => {
       compiled.querySelector('label[for="new-habit-name"]')?.textContent,
     ).toContain('Tu hábito');
     expect(compiled.querySelector('input#new-habit-name')).not.toBeNull();
+    expect(
+      compiled.querySelector('habit-maker-ui-emoji-picker'),
+    ).not.toBeNull();
+    expect(
+      compiled.querySelector(
+        'habit-maker-ui-emoji-picker .hm-emoji-picker__option[aria-pressed="true"]',
+      )?.getAttribute('aria-label'),
+    ).toBe('Sin emoji');
     expect(compiled.textContent).toContain('Comenzar hábito');
   });
 
@@ -83,8 +92,29 @@ describe('NewHabit', () => {
       .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     fixture.detectChanges();
 
-    expect(submittedNames).toEqual(['Leer 10 minutos']);
+    expect(submittedHabits).toEqual([{ name: 'Leer 10 minutos', emoji: null }]);
     expect(emittedCreatedEvent).toBe(true);
     expect(habitInput.value).toBe('');
+  });
+
+  it('submits the selected emoji with the habit', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const habitInput =
+      compiled.querySelector<HTMLInputElement>('#new-habit-name')!;
+    habitInput.value = 'Leer';
+    habitInput.dispatchEvent(new Event('input'));
+    Array.from(
+      compiled.querySelectorAll<HTMLButtonElement>(
+        'habit-maker-ui-emoji-picker button',
+      ),
+    )
+      .find((button) => button.textContent?.trim() === '📚')!
+      .click();
+    fixture.detectChanges();
+    compiled
+      .querySelector<HTMLFormElement>('form')!
+      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+
+    expect(submittedHabits).toEqual([{ name: 'Leer', emoji: '📚' }]);
   });
 });

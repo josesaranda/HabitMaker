@@ -23,12 +23,14 @@ type Story = StoryObj<HabitMakerUICard>;
 export const Playground: Story = {
   args: {
     since: '2023-10-01',
+    emoji: '📚',
     locale: 'en-US',
     link: '/habits/example',
     linkLabel: 'View habit details',
   },
   argTypes: {
     since: { control: 'text' },
+    emoji: { control: 'text' },
     locale: { control: 'text' },
     link: { control: 'text' },
     linkLabel: { control: 'text' },
@@ -37,8 +39,9 @@ export const Playground: Story = {
     props: { ...args, days, localeDays },
     template: `
       <div class="max-w-xl rounded-xl bg-[#172f2b] p-6 text-white">
-        <habit-maker-ui-card
-          [since]="since"
+          <habit-maker-ui-card
+            [since]="since"
+          [emoji]="emoji"
           [locale]="locale"
           [link]="link"
           [linkLabel]="linkLabel"
@@ -61,14 +64,14 @@ export const AllVariants: Story = {
     props: { days, localeDays },
     template: `
       <div class="grid max-w-xl gap-4 rounded-xl bg-[#172f2b] p-6 text-white">
-        <habit-maker-ui-card since="2024-01-15">
+        <habit-maker-ui-card since="2024-01-15" emoji="🚶">
           <h2 hmCardTitle>Take a morning walk</h2>
           <habit-maker-ui-day-selector
             [days]="days"
             [localeDays]="localeDays"
           />
         </habit-maker-ui-card>
-        <habit-maker-ui-card since="2024-02-01">
+        <habit-maker-ui-card since="2024-02-01" emoji="📓">
           <h2 hmCardTitle>Write in my journal</h2>
           <habit-maker-ui-day-selector
             [days]="days"
@@ -78,10 +81,18 @@ export const AllVariants: Story = {
         </habit-maker-ui-card>
         <habit-maker-ui-card
           since="2024-03-01"
+          emoji="🧠"
           link="/habits/example"
           linkLabel="View habit details"
         >
           <h2 hmCardTitle>Practice a new language</h2>
+          <habit-maker-ui-day-selector
+            [days]="days"
+            [localeDays]="localeDays"
+          />
+        </habit-maker-ui-card>
+        <habit-maker-ui-card since="2024-04-01">
+          <h2 hmCardTitle>Build a new habit</h2>
           <habit-maker-ui-day-selector
             [days]="days"
             [localeDays]="localeDays"

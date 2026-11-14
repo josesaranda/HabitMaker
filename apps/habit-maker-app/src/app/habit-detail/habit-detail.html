@@ -31,6 +31,7 @@
       class="mx-auto w-full mt-4 max-w-3xl"
       [id]="currentHabit.id"
       [name]="currentHabit.name"
+      [emoji]="currentHabit.emoji ?? null"
       [startedAt]="currentHabit.createdAt"
       [dayToggleEnabled]="true"
       [showDayNavigation]="true"
@@ -282,6 +283,16 @@
           </p>
           }
         </div>
+        <fieldset class="m-0 grid min-w-0 gap-2 border-0 p-0">
+          <legend class="text-sm font-semibold text-text-primary mb-2">
+            {{ 'emojiPicker.label' | transloco }}
+          </legend>
+          <habit-maker-ui-emoji-picker
+            [noneOptionLabel]="'emojiPicker.none' | transloco"
+            [selectedEmoji]="editHabitEmoji()"
+            (emojiSelected)="setEditHabitEmoji($event)"
+          />
+        </fieldset>
         @if (editHabitError()) {
         <p class="m-0 text-sm text-error" role="alert">
           {{ editHabitError() | transloco }}

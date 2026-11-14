@@ -20,11 +20,7 @@
       {{ 'newHabit.intro' | transloco }}
     </p>
   </header>
-  <form
-    class="grid gap-4"
-    [formGroup]="habitForm"
-    (ngSubmit)="createHabit()"
-  >
+  <form class="grid gap-4" [formGroup]="habitForm" (ngSubmit)="createHabit()">
     <div>
       <label
         class="mb-2 block text-[0.92rem] font-semibold text-text-primary"
@@ -48,8 +44,20 @@
         {{ 'newHabit.hint' | transloco }}
       </p>
     </div>
+    <fieldset class="m-0 grid min-w-0 gap-2 border-0 p-0">
+      <legend class="text-sm font-semibold text-text-primary mb-2">
+        {{ 'emojiPicker.label' | transloco }}
+      </legend>
+      <habit-maker-ui-emoji-picker
+        [noneOptionLabel]="'emojiPicker.none' | transloco"
+        [selectedEmoji]="selectedEmoji()"
+        (emojiSelected)="selectEmoji($event)"
+      />
+    </fieldset>
     @if (errorMessage()) {
-    <p class="m-0 text-sm text-error" role="alert">{{ errorMessage() | transloco }}</p>
+    <p class="m-0 text-sm text-error" role="alert">
+      {{ errorMessage() | transloco }}
+    </p>
     }
     <button
       hmButton="primary"
@@ -57,7 +65,10 @@
       type="submit"
       [disabled]="!canStartHabit()"
     >
-      <span>{{ (isSubmitting() ? 'newHabit.saving' : 'newHabit.submit') | transloco }}</span>
+      <span
+        >{{ (isSubmitting() ? 'newHabit.saving' : 'newHabit.submit') | transloco
+        }}</span
+      >
       <habit-maker-ui-icon class="size-[1.15rem]" name="arrow-right" />
     </button>
   </form>

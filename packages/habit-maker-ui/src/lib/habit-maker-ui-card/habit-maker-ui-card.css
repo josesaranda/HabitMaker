@@ -39,6 +39,11 @@
   height: 1.4rem;
 }
 
+.hm-card__emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
 .hm-card__heading {
   display: flex;
   min-width: 0;

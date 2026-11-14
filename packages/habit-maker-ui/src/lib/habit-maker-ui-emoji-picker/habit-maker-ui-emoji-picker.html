@@ -1,0 +1,28 @@
+<div class="hm-emoji-picker__options">
+  <button
+    class="hm-emoji-picker__option"
+    [class.hm-emoji-picker__option--selected]="selectedEmoji() === null"
+    type="button"
+    [attr.aria-label]="noneOptionLabel()"
+    [attr.aria-pressed]="selectedEmoji() === null"
+    (click)="selectEmoji(null)"
+    (keydown)="activateOnKeydown($event, null)"
+  >
+    <habit-maker-ui-icon
+      class="hm-emoji-picker__none-icon"
+      name="sprout"
+    />
+  </button>
+  @for (emoji of emojis(); track emoji) {
+  <button
+    class="hm-emoji-picker__option"
+    [class.hm-emoji-picker__option--selected]="selectedEmoji() === emoji"
+    type="button"
+    [attr.aria-pressed]="selectedEmoji() === emoji"
+    (click)="selectEmoji(emoji)"
+    (keydown)="activateOnKeydown($event, emoji)"
+  >
+    {{ emoji }}
+  </button>
+  }
+</div>

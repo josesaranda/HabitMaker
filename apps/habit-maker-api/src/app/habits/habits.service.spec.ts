@@ -43,7 +43,7 @@ describe('HabitsService', () => {
 
   it('creates a habit for the authenticated user with automatic timestamps', async () => {
     const created = await service.create(
-      { name: '  Leer 10 minutos  ' },
+      { name: '  Leer 10 minutos  ', emoji: '📚' },
       user.id,
     );
     const stored = await dataSource.getRepository(HabitEntity).findOneOrFail({
@@ -51,7 +51,7 @@ describe('HabitsService', () => {
       relations: { user: true },
     });
 
-    expect(created).toMatchObject({ name: 'Leer 10 minutos' });
+    expect(created).toMatchObject({ name: 'Leer 10 minutos', emoji: '📚' });
     expect(created.createdAt).toBeInstanceOf(Date);
     expect(created.updatedAt).toBeInstanceOf(Date);
     expect(stored.user.id).toBe(user.id);
@@ -89,19 +89,67 @@ describe('HabitsService', () => {
   });
 
   it('renames an owned habit and keeps its identity', async () => {
-    const created = await service.create({ name: 'Leer' }, user.id);
+    const created = await service.create(
+      { name: 'Leer', emoji: '📚' },
+      user.id,
+    );
 
     await expect(
-      service.update(created.id, { name: '  Leer 10 minutos  ' }, user.id),
+      service.update(
+        created.id,
+        { name: '  Leer 10 minutos  ', emoji: '🏃' },
+        user.id,
+      ),
     ).resolves.toMatchObject({
       id: created.id,
       name: 'Leer 10 minutos',
+      emoji: '🏃',
     });
 
     await expect(service.findOne(created.id, user.id)).resolves.toMatchObject({
       id: created.id,
       name: 'Leer 10 minutos',
+      emoji: '🏃',
     });
+  });
+
+  it('creates a habit without an emoji when none is supplied', async () => {
+    await expect(service.create({ name: 'Leer' }, user.id)).resolves.toMatchObject({
+      emoji: null,
+    });
+  });
+
+  it('keeps the current emoji when an older client renames a habit', async () => {
+    const created = await service.create(
+      { name: 'Leer', emoji: '📚' },
+      user.id,
+    );
+
+    await expect(
+      service.update(created.id, { name: 'Leer más' }, user.id),
+    ).resolves.toMatchObject({ name: 'Leer más', emoji: '📚' });
+  });
+
+  it('rejects non-emoji values when creating or updating a habit', async () => {
+    await expect(
+      service.create({ name: 'Leer', emoji: 'books' }, user.id),
+    ).rejects.toThrow(BadRequestException);
+
+    const created = await service.create({ name: 'Leer' }, user.id);
+    await expect(
+      service.update(created.id, { name: 'Leer', emoji: ' ' }, user.id),
+    ).rejects.toThrow(BadRequestException);
+  });
+
+  it('clears an existing emoji when an update explicitly sends null', async () => {
+    const created = await service.create(
+      { name: 'Leer', emoji: '📚' },
+      user.id,
+    );
+
+    await expect(
+      service.update(created.id, { name: 'Leer', emoji: null }, user.id),
+    ).resolves.toMatchObject({ emoji: null });
   });
 
   it('does not rename a habit owned by another user', async () => {

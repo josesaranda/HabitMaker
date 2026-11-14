@@ -19,6 +19,9 @@ export class HabitEntity {
   @Column({ type: 'varchar', length: 100 })
   name!: string;
 
+  @Column({ type: 'varchar', length: 8, nullable: true, default: null })
+  emoji!: string | null;
+
   @Column({ type: 'boolean', default: false })
   reminderEnabled!: boolean;
 

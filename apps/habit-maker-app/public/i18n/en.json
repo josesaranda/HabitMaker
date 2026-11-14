@@ -123,6 +123,10 @@
     "submit": "Start habit",
     "error": "Couldn't save your habit. Please try again."
   },
+  "emojiPicker": {
+    "label": "Choose an emoji",
+    "none": "No emoji"
+  },
   "habitCard": {
     "weeklyProgress": "Weekly progress for {{name}}",
     "since": "Since {{date}}",

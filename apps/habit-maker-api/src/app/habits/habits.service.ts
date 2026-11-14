@@ -13,6 +13,7 @@ import { HabitEntity } from './habit.entity';
 export interface CreatedHabit {
   id: string;
   name: string;
+  emoji: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,6 +35,7 @@ export class HabitsService {
 
   async create(input: unknown, userId: string): Promise<CreatedHabit> {
     const name = this.parseName(input);
+    const emoji = this.parseEmoji(input, null);
     const user = await this.users.findOneBy({ id: userId });
     if (!user) {
       throw new UnauthorizedException(
@@ -42,15 +44,10 @@ export class HabitsService {
     }
 
     const habit = await this.habits.save(
-      this.habits.create({ id: randomUUID(), name, user }),
+      this.habits.create({ id: randomUUID(), name, emoji, user }),
     );
 
-    return {
-      id: habit.id,
-      name: habit.name,
-      createdAt: habit.createdAt,
-      updatedAt: habit.updatedAt,
-    };
+    return this.toHabit(habit);
   }
 
   async findAll(userId: string): Promise<CreatedHabit[]> {
@@ -59,12 +56,7 @@ export class HabitsService {
       order: { createdAt: 'DESC' },
     });
 
-    return habits.map(({ id, name, createdAt, updatedAt }) => ({
-      id,
-      name,
-      createdAt,
-      updatedAt,
-    }));
+    return habits.map((habit) => this.toHabit(habit));
   }
 
   async findOne(id: string, userId: string): Promise<CreatedHabit> {
@@ -76,12 +68,7 @@ export class HabitsService {
       throw new NotFoundException('Habit not found');
     }
 
-    return {
-      id: habit.id,
-      name: habit.name,
-      createdAt: habit.createdAt,
-      updatedAt: habit.updatedAt,
-    };
+    return this.toHabit(habit);
   }
 
   async update(
@@ -93,14 +80,10 @@ export class HabitsService {
     const habit = await this.findOwnedHabit(id, userId);
 
     habit.name = name;
+    habit.emoji = this.parseEmoji(input, habit.emoji ?? null);
     await this.habits.save(habit);
 
-    return {
-      id: habit.id,
-      name: habit.name,
-      createdAt: habit.createdAt,
-      updatedAt: habit.updatedAt,
-    };
+    return this.toHabit(habit);
   }
 
   async remove(id: string, userId: string): Promise<void> {
@@ -180,6 +163,16 @@ export class HabitsService {
     };
   }
 
+  private toHabit(habit: HabitEntity): CreatedHabit {
+    return {
+      id: habit.id,
+      name: habit.name,
+      emoji: habit.emoji ?? null,
+      createdAt: habit.createdAt,
+      updatedAt: habit.updatedAt,
+    };
+  }
+
   private isValidTimeZone(timeZone: string): boolean {
     try {
       new Intl.DateTimeFormat('en-US', { timeZone }).format();
@@ -207,5 +200,23 @@ export class HabitsService {
     }
 
     return normalizedName;
+  }
+
+  private parseEmoji(input: unknown, fallback: string | null): string | null {
+    if (!input || typeof input !== 'object') {
+      throw new BadRequestException('A request body is required');
+    }
+
+    const emoji = (input as Record<string, unknown>)['emoji'];
+    if (emoji === undefined) return fallback;
+    if (emoji === null) return null;
+    if (
+      typeof emoji !== 'string' ||
+      !/^\p{Extended_Pictographic}\uFE0F?$/u.test(emoji)
+    ) {
+      throw new BadRequestException('A valid emoji is required');
+    }
+
+    return emoji;
   }
 }
