@@ -5,10 +5,10 @@ model: opencode-go/gpt-6-luna
 steps: 8
 permissions:
   - action: edit
-    resource: "*"
+    resource: '*'
     effect: deny
   - action: shell
-    resource: "*"
+    resource: '*'
     effect: deny
 ---
 

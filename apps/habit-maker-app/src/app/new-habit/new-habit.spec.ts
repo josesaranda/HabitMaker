@@ -47,9 +47,11 @@ describe('NewHabit', () => {
       compiled.querySelector('habit-maker-ui-emoji-picker'),
     ).not.toBeNull();
     expect(
-      compiled.querySelector(
-        'habit-maker-ui-emoji-picker .hm-emoji-picker__option[aria-pressed="true"]',
-      )?.getAttribute('aria-label'),
+      compiled
+        .querySelector(
+          'habit-maker-ui-emoji-picker .hm-emoji-picker__option[aria-pressed="true"]',
+        )
+        ?.getAttribute('aria-label'),
     ).toBe('Sin emoji');
     expect(compiled.textContent).toContain('Comenzar hábito');
   });

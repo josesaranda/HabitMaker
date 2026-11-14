@@ -8,10 +8,7 @@
     (click)="selectEmoji(null)"
     (keydown)="activateOnKeydown($event, null)"
   >
-    <habit-maker-ui-icon
-      class="hm-emoji-picker__none-icon"
-      name="sprout"
-    />
+    <habit-maker-ui-icon class="hm-emoji-picker__none-icon" name="sprout" />
   </button>
   @for (emoji of emojis(); track emoji) {
   <button

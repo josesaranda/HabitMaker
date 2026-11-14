@@ -114,7 +114,9 @@ describe('HabitsService', () => {
   });
 
   it('creates a habit without an emoji when none is supplied', async () => {
-    await expect(service.create({ name: 'Leer' }, user.id)).resolves.toMatchObject({
+    await expect(
+      service.create({ name: 'Leer' }, user.id),
+    ).resolves.toMatchObject({
       emoji: null,
     });
   });

@@ -84,10 +84,7 @@ export class NewHabit {
           this.habitForm.reset({ name: '', emoji: null });
           this.habitCreated.emit();
         },
-        error: () =>
-          this.errorMessage.set(
-            'newHabit.error',
-          ),
+        error: () => this.errorMessage.set('newHabit.error'),
       });
   }
 

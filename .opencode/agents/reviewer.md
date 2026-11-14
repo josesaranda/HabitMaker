@@ -5,10 +5,10 @@ model: opencode/deepseek-v4.1-flash-free
 steps: 8
 permissions:
   - action: edit
-    resource: "*"
+    resource: '*'
     effect: deny
   - action: shell
-    resource: "*"
+    resource: '*'
     effect: deny
 ---
 

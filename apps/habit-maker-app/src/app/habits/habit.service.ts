@@ -63,7 +63,11 @@ export class HabitService {
     );
   }
 
-  updateHabit(id: string, name: string, emoji: string | null): Observable<Habit> {
+  updateHabit(
+    id: string,
+    name: string,
+    emoji: string | null,
+  ): Observable<Habit> {
     return this.requireAuthentication(
       this.http.put<Habit>(`${API_URL}/habits/${encodeURIComponent(id)}`, {
         name: name.trim(),

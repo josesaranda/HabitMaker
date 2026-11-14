@@ -199,7 +199,7 @@ describe('HabitService', () => {
     service
       .updateHabit('habit/1', '  Leer 10 minutos  ', '📚')
       .subscribe((habit) => {
-      receivedName = habit.name;
+        receivedName = habit.name;
       });
 
     const request = httpTestingController.expectOne(

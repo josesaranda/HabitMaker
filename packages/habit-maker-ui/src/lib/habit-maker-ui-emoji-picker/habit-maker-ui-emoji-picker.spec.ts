@@ -34,16 +34,17 @@ describe('HabitMakerUIEmojiPicker', () => {
     const picker = fixture.nativeElement.querySelector(
       'habit-maker-ui-emoji-picker',
     ) as HTMLElement;
-    const options =
-      picker.querySelectorAll<HTMLButtonElement>('.hm-emoji-picker__option');
+    const options = picker.querySelectorAll<HTMLButtonElement>(
+      '.hm-emoji-picker__option',
+    );
 
     expect(options.length).toBeGreaterThan(40);
-    expect(
-      picker.parentElement?.querySelector('legend')?.textContent,
-    ).toBe('Choose an emoji');
-    expect(
-      picker.querySelector('.hm-emoji-picker__option--selected'),
-    ).toBe(options[0]);
+    expect(picker.parentElement?.querySelector('legend')?.textContent).toBe(
+      'Choose an emoji',
+    );
+    expect(picker.querySelector('.hm-emoji-picker__option--selected')).toBe(
+      options[0],
+    );
     expect(options[0].getAttribute('aria-label')).toBe('No emoji');
     expect(options[0].getAttribute('aria-pressed')).toBe('true');
     expect(options[1].getAttribute('aria-pressed')).toBe('false');

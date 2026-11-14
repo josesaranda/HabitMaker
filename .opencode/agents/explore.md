@@ -5,10 +5,10 @@ model: opencode/glm-5.3-flash-free
 steps: 6
 permissions:
   - action: edit
-    resource: "*"
+    resource: '*'
     effect: deny
   - action: shell
-    resource: "*"
+    resource: '*'
     effect: deny
 ---
 
