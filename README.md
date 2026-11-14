@@ -1,169 +1,139 @@
-# HabitMaker
+# HabitMaker 🌿
 
 [![CI](https://github.com/josesaranda/HabitMaker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/josesaranda/HabitMaker/actions/workflows/ci.yml)
 
-> **Project website:** [habitmaker.josesaranda.es](https://habitmaker.josesaranda.es) — explore the project, screenshots, Docker setup, and contribution guide.
+> **🚀 Project Website:** [habitmaker.josesaranda.es](https://habitmaker.josesaranda.es)
+> Explore the live project, detailed screenshots, Docker setup guides, and contribution guidelines there.
 
-HabitMaker is a habit-tracking web application in an Nx monorepo. It includes an Angular frontend, a NestJS API, and a shared UI component library.
+HabitMaker is a feature-rich habit tracking web application built as an Nx monorepo. It combines a modern Angular frontend with a robust NestJS API, all managed within a shared UI component library.
 
-## Features
+---
 
-- Create habits and view them from a personal home page.
-- Track daily completions and browse completion history in a habit calendar.
-- Schedule per-habit daily web push reminders in the device's local time zone.
-- Sign up, log in, and submit a password-recovery request.
-- Review active device sessions and revoke sessions from account settings.
-- Switch the interface between English and Spanish.
-- View account settings; administrators can also view registered users and check the app version for updates.
+## ✨ Features Overview
+*   **Habit Management:** Create new habits and view them from a personalized home dashboard.
+*   **Tracking & History:** Track daily completions easily and browse detailed completion history in an integrated habit calendar.
+*   **Reminders:** Schedule per-habit daily web push reminders, respecting the user's local time zone.
+*   **User Authentication:** Secure sign-up, login, and password recovery mechanisms.
+*   **Security:** View active device sessions and revoke access from account settings.
+*   **Internationalization (i18n):** Seamless interface switching between English and Spanish.
+*   **Administration:** Comprehensive user management and application version checking for administrators.
 
-## Tech stack
+---
 
-- **Angular 22** and **TypeScript 6** for the frontend.
-- **NestJS 11** for the API.
-- **Nx 24** for the monorepo and task orchestration.
-- **Tailwind CSS 4** and CSS for styling.
-- **TypeORM** with **PostgreSQL** or in-memory **sql.js** for the API data store.
-- **RxJS 7** and **Vitest 4**.
-- **npm workspaces** for package management.
+## 🛠️ Tech Stack & Architecture
+This project utilizes a modern, enterprise-grade stack orchestrated by Nx:
 
-## Workspace structure
+| Layer | Technology | Description |
+| :--- | :--- | :--- |
+| **Frontend** | Angular (22), TypeScript 6, Tailwind CSS 4 | The main client application. Provides a reactive and component-driven user interface. |
+| **Backend/API** | NestJS (11), TypeScript | Handles business logic: authentication, habit data persistence, push notifications, and administration. |
+| **Monorepo Tooling** | Nx (24) | Manages the entire workspace structure and task orchestration across multiple applications and packages. |
+| **Data Layer** | TypeORM & PostgreSQL / sql.js | **Production:** PostgreSQL for reliable persistence. **Development Default:** In-memory `sql.js` for quick local iteration. |
+| **Shared UI** | Angular Component Library | Reusable components (`@habit-maker/ui`) to ensure design consistency across all features. |
 
+### 📂 Workspace Structure
 ```text
 .
 ├── apps/
-│   ├── habit-maker-landing/    # Astro project landing page
-│   ├── habit-maker-app/       # Angular web application
-│   │   └── src/app/           # Routes, screens, auth, habits, and localization
-│   └── habit-maker-api/       # NestJS API (auth, habits, push, completions, admin, version)
+│   ├── habit-maker-landing/    # Astro project: Public marketing and landing page (Static content).
+│   ├── habit-maker-app/       # Angular web application: The main user interface (Client-side logic).
+│   └── habit-maker-api/       # NestJS API: Core backend services.
 ├── packages/
-│   └── habit-maker-ui/        # Shared Angular UI components
-├── nx.json                   # Nx workspace configuration
-├── package.json              # Workspace dependencies and npm scripts
-└── tsconfig.base.json        # Shared TypeScript configuration
+│   └── habit-maker-ui/        # Shared Angular UI components library.
+├── nx.json                   # Nx workspace configuration files.
+├── package.json              # Workspace dependencies and root npm scripts.
+└── tsconfig.base.json        # Shared TypeScript compiler options.
 ```
 
-The frontend routes include `/login`, `/signup`, `/forgot-password`, `/reset-password`, `/home`, `/habits/:id`, and `/settings`. The home, habit detail, and settings pages require authentication. The root route and unknown routes redirect to `/login`.
+---
 
-## Project landing page
+## 🚀 Getting Started
 
-The public project landing page is built with Astro and Tailwind CSS, and is available in [English and Spanish](https://habitmaker.josesaranda.es). Start its development server with:
+Please choose the setup method that best fits your environment: **Docker** (Recommended for Production) or **Local CLI**.
 
-```bash
-npm exec nx serve HabitMakerLanding
-```
+### A. Using Docker Compose (Recommended)
+This is the easiest way to run the full stack with a persistent PostgreSQL database.
 
-The English page is available at [http://localhost:4321](http://localhost:4321), and the Spanish page at [http://localhost:4321/es/](http://localhost:4321/es/). Build it with `npm exec nx build HabitMakerLanding`.
+1.  **Prerequisites:** Install [Docker](https://docs.docker.com/get-docker/) and Docker Compose.
+2.  **Setup Environment Variables:**
+    ```bash
+    cp .env.example .env
+    # IMPORTANT: Edit the .env file! Set a unique, random JWT_SECRET 
+    # and a strong POSTGRES_PASSWORD. Configure SMTP details for emails.
+    ```
+3.  **Build and Run Services:**
+    ```bash
+    docker compose up --build -d
+    ```
+4.  **Access:** The frontend will be available at [http://localhost:8080](http://localhost:8080).
 
-## Requirements
+*   **Cleanup:** To stop containers and remove data volumes, run `docker compose down --volumes`.
 
-- Node.js
-- npm (the workspace specifies npm `12.2.1`)
+### B. Local CLI Setup (Development)
+Use this method for quick local development against an in-memory database (`sql.js`). *Warning: Data will be lost if the API restarts.*
 
-## Getting started
+1.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+2.  **Run Services:** Open two separate terminals and run these commands:
 
-Install dependencies from the repository root:
+    **Terminal 1 (API):**
+    ```bash
+    npm run start:api
+    ```
+    *(The API will listen on `http://localhost:3000/api`)*
 
-```bash
-npm install
-```
+    **Terminal 2 (App):**
+    ```bash
+    npm run start:app
+    ```
+    *(The Angular frontend will be available at [http://localhost:4200](http://localhost:4200))*
 
-Run the API and frontend in separate terminals:
+---
 
-```bash
-npm run start:api
-```
+## ⚙️ Configuration & Environment Variables
 
-```bash
-npm run start:app
-```
+All configuration is managed via environment variables in the `.env` file. The API documentation provides detailed variable descriptions, but here are key groups:
 
-The frontend is available at [http://localhost:4200](http://localhost:4200). During local development, it connects to the API at `http://localhost:3000/api`.
+**Authentication:**
+*   `JWT_SECRET`: Must be a unique, strong secret.
+*   `ADMIN_EMAIL`/`ADMIN_PASSWORD`: Set these together to seed the initial administrator account.
 
-## Environment variables
+**Persistence (Database):**
+*   **For PostgreSQL (Docker):** `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`.
+*   **For Local Development:** Omit database variables; the API defaults to `sql.js` in-memory storage.
 
-The following table lists the variables used by the Docker setup. Values are examples or defaults; configure secrets for your deployment. `JWT_SECRET` must be set to a unique, random value in deployed environments. PostgreSQL settings can be omitted when running the API directly to use in-memory sql.js; if PostgreSQL is configured, set the database variables together and use a strong `POSTGRES_PASSWORD`.
+**External Services:**
+*   **Email (SMTP):** Requires setting `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL`, and credentials (`SMTP_USER`/`SMTP_PASSWORD`) if authentication is required.
+*   **Web Push Notifications (VAPID):** Use `npx web-push generate-vapid-keys`. Set the resulting `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`.
 
-| Variable            | Example or possible value                         | Optional?                                                                           |
-| ------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `APP_PORT`          | `8080`                                            | Yes; defaults to `8080`                                                             |
-| `SERVER_PORT`       | `3000`                                            | Yes; defaults to `3000`                                                             |
-| `CORS_ORIGIN`       | `http://localhost:8080`                           | Yes; defaults to the app URL                                                        |
-| `APP_URL`           | `http://localhost:8080`                           | Yes; defaults to the app URL                                                        |
-| `JWT_SECRET`        | A unique, long random secret                      | No in deployed environments; local development has a fallback                       |
-| `VAPID_PUBLIC_KEY`  | Generated with `npx web-push generate-vapid-keys` | Yes; required to enable push, together with the private key                         |
-| `VAPID_PRIVATE_KEY` | Generated VAPID private key                       | Yes; required to enable push, together with the public key                          |
-| `VAPID_SUBJECT`     | `mailto:admin@habitmaker.local`                   | Yes; defaults to this example subject                                               |
-| `POSTGRES_HOST`     | `db` in Docker                                    | Yes; configure the PostgreSQL variables together to use PostgreSQL                  |
-| `POSTGRES_PORT`     | `5432`                                            | Yes; defaults to `5432`                                                             |
-| `POSTGRES_USER`     | `habitmaker`                                      | Yes; defaults to `habitmaker`                                                       |
-| `POSTGRES_PASSWORD` | A strong, unique password                         | Yes for local/in-memory use; set a strong value when using PostgreSQL in production |
-| `POSTGRES_DB`       | `habitmaker`                                      | Yes; defaults to `habitmaker`                                                       |
-| `ADMIN_EMAIL`       | `admin@habitmaker.local`                          | Yes; set together with `ADMIN_PASSWORD` to seed an admin account                    |
-| `ADMIN_PASSWORD`    | A unique password of at least 8 characters        | Yes; set together with `ADMIN_EMAIL` to seed an admin account                       |
-| `GITHUB_TOKEN`      | A GitHub personal access token                    | Yes; needed only when accessing a private GitHub repository                         |
-| `SMTP_HOST`         | `smtp.example.com`                                | Yes; required to enable email delivery                                              |
-| `SMTP_PORT`         | `587` (STARTTLS) or `465` (implicit TLS)          | Yes; defaults to `587`                                                              |
-| `SMTP_PROTOCOL`     | `smtp` or `smtps`                                 | Yes; defaults to `smtp`                                                             |
-| `SMTP_USER`         | SMTP username                                     | Yes; set with `SMTP_PASSWORD` when the server requires authentication               |
-| `SMTP_PASSWORD`     | SMTP password                                     | Yes; set with `SMTP_USER` when the server requires authentication                   |
-| `SMTP_FROM`         | `no-reply@example.com`                            | Yes; required to enable email delivery                                              |
+---
 
-Access tokens always expire: sessions last 24 hours by default, or 30 days when the user chooses “Remember me”. Signed-in users can review and revoke device sessions from Settings. Session records contain a device/browser label and activity timestamps; access tokens are not stored in the API database. Expired and revoked records are pruned when a new session is created. Existing tokens issued before session tracking is enabled will require users to sign in again. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long.
+## 🧪 Running Tasks & Development Commands
 
-To enable email delivery, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL` (`smtp` for STARTTLS or `smtps` for implicit TLS), `SMTP_FROM`, and, when authentication is required, both `SMTP_USER` and `SMTP_PASSWORD`. Set `APP_URL` to the public address of the frontend so password reset emails link to the correct site (it defaults to `http://localhost:4200` in local API development). Reset links expire after one hour and can only be used once. Administrators can view these settings and send a test email from the application settings page. SMTP passwords are never returned to the web application.
+Use `npm exec nx <target> [project]` to run tasks.
 
-To enable web push reminders, generate a VAPID key pair with `npx web-push generate-vapid-keys` and set `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, and (optionally) `VAPID_SUBJECT` on the API. Keep the private key secret. Push requires HTTPS in deployed environments (localhost is allowed for development), a supported browser/service worker, and notification permission granted by the user when they enable a reminder. In Docker, set these variables in `.env`; reminders and subscriptions are persisted in PostgreSQL. The API checks due reminders every 15 seconds and records each habit/device/local-day delivery to prevent duplicate notifications. Reminders are skipped for a habit already completed that day.
+| Goal | Command Example | Notes |
+| :--- | :--- | :--- |
+| **Run All Tests** | `npm exec nx test HabitMakerApp` | Run tests for a specific application (e.g., API, App). |
+| **Build Frontend** | `npm exec nx build HabitMakerApp` | Output written to `dist/apps/habit-maker-app`. |
+| **Build Backend** | `npm exec nx build HabitMakerApi` | Output written to `dist/apps/habit-maker-api`. |
+| **View Project Structure** | Use the `nx-workspace` skill. | Ideal for understanding dependencies and available targets. |
 
-To use PostgreSQL, configure `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB`; `POSTGRES_PORT` is optional and defaults to `5432`. When these variables are omitted, the API uses its in-memory sql.js database. If PostgreSQL configuration is started but incomplete, the API reports the missing variables. See `.env.example` for a template.
+### 🔖 Release Management
+Releases are automated via [`semantic-release`](https://www.conventionalcommits.org/) on pushes to `main`, provided that Nx reports changes in either `HabitMakerApp` or `HabitMakerApi`.
 
-> **Development data:** Without PostgreSQL configuration, sql.js stores data in memory. Users, sessions, habits, and completions are lost when the API process restarts; this setup is not suitable for production persistence.
+*   **Commit Convention:** Follow [Conventional Commits](https://www.conventionalcommits.org/):
+    *   `fix:` $\rightarrow$ Patch Release (Minor version increment)
+    *   `feat:` $\rightarrow$ Minor Release (Major version increment)
+    *   `feat!:` or `BREAKING CHANGE:` $\rightarrow$ Major Release
 
-## Run with Docker
+---
 
-Install [Docker](https://docs.docker.com/get-docker/) with Docker Compose, then run these commands from the repository root. The Compose setup builds the frontend and API images and starts them with PostgreSQL:
+## 🌐 Contributing
+1.  **Setup:** Follow the "Getting Started" section above to get the project running locally.
+2.  **Develop:** Use the appropriate agent/skill (e.g., `frontend` for UI, `backend` for API logic) when making changes.
+3.  **Test:** Always run the relevant tests (`npm exec nx test <project>`) before submitting a pull request.
 
-```bash
-cp .env.example .env
-```
-
-Edit `.env` before starting the services. Set a unique, random `JWT_SECRET` and a strong `POSTGRES_PASSWORD`. To create an initial administrator account, set both `ADMIN_EMAIL` and `ADMIN_PASSWORD`; the password must be at least eight characters long. Configure the SMTP variables to enable email delivery. The example file uses `APP_PORT=8080` and `CORS_ORIGIN=http://localhost:8080`; if you change `APP_PORT`, update `CORS_ORIGIN` to match.
-
-Build and start the containers:
-
-```bash
-docker compose up --build -d
-```
-
-Open [http://localhost:8080](http://localhost:8080). The frontend serves the app and forwards `/api` requests to the API container. To use a different host port, change `APP_PORT` in `.env` and restart the stack.
-
-View service logs or stop the containers with:
-
-```bash
-docker compose logs -f app api db
-docker compose down
-```
-
-PostgreSQL data is kept in the `postgres-data` Docker volume when the containers are stopped or removed. To delete the containers and the database volume, run `docker compose down --volumes`; this permanently removes the stored data.
-
-## Nx commands
-
-Run tests for each project:
-
-```bash
-npm exec nx test HabitMakerApp
-npm exec nx test HabitMakerApi
-npm exec nx test HabitMakerUI
-```
-
-Build the frontend or API:
-
-```bash
-npm exec nx build HabitMakerApp
-npm exec nx build HabitMakerApi
-```
-
-The frontend build output is written to `dist/apps/habit-maker-app` and the API build output to `dist/apps/habit-maker-api`.
-
-## Releases
-
-Releases are managed by `semantic-release` on pushes to `main` when Nx reports `HabitMakerApp` and/or `HabitMakerApi` as affected. Landing-only changes do not trigger a version update. Use [Conventional Commits](https://www.conventionalcommits.org/): `fix:` creates a patch release, `feat:` a minor release, and breaking changes (for example, `feat!:` or a `BREAKING CHANGE:` footer) a major release. A release updates the root `package.json`, `package-lock.json`, and `CHANGELOG.md` and creates a GitHub Release; the package is not published to npm.
+*Feel free to refer to the [OpenCode documentation](https://opencode.dev/) if you are working on our tooling or agent infrastructure.*
