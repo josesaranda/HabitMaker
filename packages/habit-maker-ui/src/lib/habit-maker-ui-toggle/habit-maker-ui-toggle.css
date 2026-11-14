@@ -1,0 +1,101 @@
+.hm-toggle {
+  appearance: none;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 3.25rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 2px solid var(--color-neutral-500);
+  border-radius: 9999px;
+  background-color: var(--color-neutral-200);
+  cursor: pointer;
+  --hm-toggle-thumb-size: 1rem;
+  --hm-toggle-thumb-left: 0.375rem;
+  transition:
+    border-color 75ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 75ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 75ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sliding thumb, styled after the Material 3 switch handle. */
+.hm-toggle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--hm-toggle-thumb-left);
+  width: var(--hm-toggle-thumb-size);
+  height: var(--hm-toggle-thumb-size);
+  transform: translateY(-50%);
+  border-radius: 9999px;
+  background-color: var(--color-neutral-500);
+  transition:
+    left 75ms cubic-bezier(0.4, 0, 0.2, 1),
+    width 75ms cubic-bezier(0.4, 0, 0.2, 1),
+    height 75ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 75ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Check mark inside the thumb, drawn like the checkbox check. */
+.hm-toggle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(var(--hm-toggle-thumb-left) + var(--hm-toggle-thumb-size) / 2 - 0.1875rem);
+  width: 0.375rem;
+  height: 0.625rem;
+  transform: translateY(calc(-50% - 0.04rem)) rotate(45deg);
+  border: solid var(--color-primary);
+  border-width: 0 2px 2px 0;
+  opacity: 0;
+  transition:
+    left 75ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 75ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hm-toggle:hover:not(:disabled)::before {
+  background-color: var(--color-neutral-800);
+}
+
+.hm-toggle:checked {
+  --hm-toggle-thumb-size: 1.5rem;
+  --hm-toggle-thumb-left: 1.375rem;
+  border-color: transparent;
+  background-color: var(--color-primary);
+}
+
+.hm-toggle:checked::after {
+  opacity: 1;
+}
+
+.hm-toggle:checked:hover:not(:disabled)::before {
+  background-color: var(--color-primary-soft);
+}
+
+.hm-toggle:active:not(:disabled) {
+  --hm-toggle-thumb-size: 1.75rem;
+  --hm-toggle-thumb-left: 0.125rem;
+}
+
+.hm-toggle:active:not(:disabled):checked {
+  --hm-toggle-thumb-left: calc(100% - 1.875rem);
+}
+
+.hm-toggle:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary-hover) 20%, transparent);
+  outline-offset: 2px;
+}
+
+.hm-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-toggle,
+  .hm-toggle::before,
+  .hm-toggle::after {
+    transition: none;
+  }
+}

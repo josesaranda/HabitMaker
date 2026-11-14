@@ -19,6 +19,7 @@ import {
   HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUIModal,
+  HabitMakerUIToggle,
 } from '@habit-maker/habit-maker-ui';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card';
@@ -45,6 +46,7 @@ import { HabitDetailResolveResult } from './habit-detail.resolver';
     HabitMakerUIIcon,
     HabitMakerUIInput,
     HabitMakerUIModal,
+    HabitMakerUIToggle,
     HabitMakerUIEmojiPicker,
     TranslocoPipe,
   ],

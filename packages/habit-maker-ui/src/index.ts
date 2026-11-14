@@ -4,6 +4,7 @@ export * from './lib/habit-maker-ui-button-day/habit-maker-ui-button-day';
 export * from './lib/habit-maker-ui-day-selector/habit-maker-ui-day-selector';
 export * from './lib/habit-maker-ui-button-icon/habit-maker-ui-button-icon';
 export * from './lib/habit-maker-ui-checkbox/habit-maker-ui-checkbox';
+export * from './lib/habit-maker-ui-toggle/habit-maker-ui-toggle';
 export * from './lib/habit-maker-ui-input/habit-maker-ui-input';
 export * from './lib/habit-maker-ui-emoji-picker/habit-maker-ui-emoji-picker';
 export * from './lib/habit-maker-ui-option/habit-maker-ui-option';

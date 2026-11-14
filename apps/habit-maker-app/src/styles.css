@@ -3,6 +3,7 @@
 @import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-button/habit-maker-ui-button.css';
 @import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-button-icon/habit-maker-ui-button-icon.css';
 @import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-checkbox/habit-maker-ui-checkbox.css';
+@import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-toggle/habit-maker-ui-toggle.css';
 @import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-input/habit-maker-ui-input.css';
 @import '../../../packages/habit-maker-ui/src/lib/habit-maker-ui-link/habit-maker-ui-link.css';
 @import './app/auth/auth.css';
