@@ -18,11 +18,16 @@ export const Playground: Story = {
   args: {
     noneOptionLabel: 'No emoji',
     selectedEmoji: null,
+    pinnedEmoji: null,
     emojis: [...HABIT_MAKER_UI_EMOJIS],
   },
   argTypes: {
     noneOptionLabel: { control: 'text' },
     selectedEmoji: {
+      control: 'select',
+      options: [null, ...HABIT_MAKER_UI_EMOJIS],
+    },
+    pinnedEmoji: {
       control: 'select',
       options: [null, ...HABIT_MAKER_UI_EMOJIS],
     },
@@ -37,6 +42,7 @@ export const Playground: Story = {
         <habit-maker-ui-emoji-picker
           [noneOptionLabel]="noneOptionLabel"
           [selectedEmoji]="selectedEmoji"
+          [pinnedEmoji]="pinnedEmoji"
           [emojis]="emojis"
           (emojiSelected)="selectedEmoji = $event"
         />
@@ -59,18 +65,20 @@ export const AllVariants: Story = {
           />
         </fieldset>
         <fieldset>
-          <legend>Reading habit — selected</legend>
+          <legend>Reading habit — selected and pinned</legend>
           <habit-maker-ui-emoji-picker
             noneOptionLabel="No emoji"
             selectedEmoji="📚"
+            pinnedEmoji="📚"
             [emojis]="emojis"
           />
         </fieldset>
         <fieldset>
-          <legend>Movement habit — selected</legend>
+          <legend>Movement habit — selected and pinned</legend>
           <habit-maker-ui-emoji-picker
             noneOptionLabel="No emoji"
             selectedEmoji="🏃"
+            pinnedEmoji="🏃"
             [emojis]="emojis"
           />
         </fieldset>

@@ -290,6 +290,7 @@
           <habit-maker-ui-emoji-picker
             [noneOptionLabel]="'emojiPicker.none' | transloco"
             [selectedEmoji]="editHabitEmoji()"
+            [pinnedEmoji]="pinnedEditHabitEmoji()"
             (emojiSelected)="setEditHabitEmoji($event)"
           />
         </fieldset>

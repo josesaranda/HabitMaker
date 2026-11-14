@@ -77,6 +77,7 @@ export class HabitDetail implements OnInit {
   protected readonly isSavingHabitName = signal(false);
   protected readonly editHabitName = signal('');
   protected readonly editHabitEmoji = signal<string | null>(null);
+  protected readonly pinnedEditHabitEmoji = signal<string | null>(null);
   protected readonly editHabitNameError = signal('');
   protected readonly editHabitError = signal('');
   protected readonly canSaveHabitName = computed(
@@ -403,6 +404,7 @@ export class HabitDetail implements OnInit {
     this.editHabitEmoji.set(currentHabit.emoji ?? null);
     this.editHabitNameError.set('');
     this.editHabitError.set('');
+    this.pinnedEditHabitEmoji.set(currentHabit.emoji ?? null);
     modal.openFrom(trigger);
   }
 
