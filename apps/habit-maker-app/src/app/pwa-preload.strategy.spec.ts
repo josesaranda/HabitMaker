@@ -10,9 +10,8 @@ describe('PwaPreloadStrategy', () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
-    delete (
-      window.navigator as Navigator & { standalone?: boolean }
-    ).standalone;
+    delete (window.navigator as Navigator & { standalone?: boolean })
+      .standalone;
   });
 
   it('preloads lazy routes when running as an installed PWA', async () => {
@@ -44,9 +43,8 @@ describe('PwaPreloadStrategy', () => {
 describe('isRunningAsStandalonePwa', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
-    delete (
-      window.navigator as Navigator & { standalone?: boolean }
-    ).standalone;
+    delete (window.navigator as Navigator & { standalone?: boolean })
+      .standalone;
   });
 
   it('detects standalone display mode', () => {

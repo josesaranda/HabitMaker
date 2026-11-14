@@ -29,8 +29,12 @@ describe('HabitMakerUINavbar', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('habit-maker-ui-brand')).not.toBeNull();
     const actions = compiled.querySelector('.hm-navbar__actions');
-    expect(actions?.querySelector('.test-link')?.textContent).toContain('Inicio');
-    expect(actions?.querySelector('.test-button')?.textContent).toContain('Acción');
+    expect(actions?.querySelector('.test-link')?.textContent).toContain(
+      'Inicio',
+    );
+    expect(actions?.querySelector('.test-button')?.textContent).toContain(
+      'Acción',
+    );
   });
 
   it('keeps projected child actions interactive', async () => {

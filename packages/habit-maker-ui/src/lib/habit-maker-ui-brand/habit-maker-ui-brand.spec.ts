@@ -17,8 +17,9 @@ describe('HabitMakerUIBrand', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const brand: HTMLElement =
-      fixture.nativeElement.querySelector('habit-maker-ui-brand');
+    const brand: HTMLElement = fixture.nativeElement.querySelector(
+      'habit-maker-ui-brand',
+    );
     const mark = brand.querySelector<HTMLElement>('.brand-mark');
 
     expect(brand.textContent).toContain('HabitMaker');

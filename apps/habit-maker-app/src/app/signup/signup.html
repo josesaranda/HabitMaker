@@ -5,9 +5,7 @@
     <div class="auth-content">
       <span class="auth-welcome-label">{{ 'signup.welcome' | transloco }}</span>
       <h2 id="signup-title">{{ 'signup.title' | transloco }}</h2>
-      <p class="auth-intro">
-        {{ 'signup.intro' | transloco }}
-      </p>
+      <p class="auth-intro">{{ 'signup.intro' | transloco }}</p>
 
       <form class="auth-form auth-form--signup" (submit)="onSubmit($event)">
         <div class="form-field">
@@ -73,7 +71,9 @@
               [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
               [attr.aria-pressed]="passwordVisible()"
             >
-              <habit-maker-ui-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
+              <habit-maker-ui-icon
+                [name]="passwordVisible() ? 'eye-off' : 'eye'"
+              />
             </button>
           </div>
           <span
@@ -96,7 +96,9 @@
           {{ 'signup.submit' | transloco }}
           <habit-maker-ui-icon name="arrow-right" />
         </button>
-        <p class="form-message" aria-live="polite">{{ message() | transloco }}</p>
+        <p class="form-message" aria-live="polite">
+          {{ message() | transloco }}
+        </p>
       </form>
 
       <p class="auth-account-prompt">
@@ -109,7 +111,8 @@
       </div>
     </div>
     <footer class="auth-footer">
-      © {{ currentYear() }} HabitMaker <span>·</span> {{ 'login.footer' | transloco }}
+      © {{ currentYear() }} HabitMaker <span>·</span> {{ 'login.footer' |
+      transloco }}
     </footer>
   </section>
 </main>

@@ -8,14 +8,24 @@
   (click)="onDialogClick($event)"
 >
   <section class="hm-modal__surface">
-    <button
-      class="hm-modal__close-button"
-      type="button"
-      [attr.aria-label]="closeLabel()"
-      (click)="close()"
+    <header
+      class="hm-modal__header"
+      [class.hm-modal__header--titled]="hasTitle()"
     >
-      <habit-maker-ui-icon name="close" />
-    </button>
+      @if (hasTitle()) {
+      <div class="hm-modal__title">
+        <ng-content select="[hmModalTitle]" />
+      </div>
+      }
+      <button
+        class="hm-modal__close-button"
+        type="button"
+        [attr.aria-label]="closeLabel()"
+        (click)="close()"
+      >
+        <habit-maker-ui-icon name="close" />
+      </button>
+    </header>
     <div class="hm-modal__content">
       <ng-content />
     </div>

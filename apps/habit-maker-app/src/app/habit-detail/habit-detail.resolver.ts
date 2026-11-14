@@ -5,8 +5,7 @@ import { catchError, map, of } from 'rxjs';
 import { Habit, HabitService } from '../habits/habit.service';
 
 export type HabitDetailResolveResult =
-  | { habit: Habit; error: null }
-  | { habit: null; error: 'not-found' | 'load' };
+  { habit: Habit; error: null } | { habit: null; error: 'not-found' | 'load' };
 
 export const habitDetailResolver: ResolveFn<HabitDetailResolveResult> = (
   route,

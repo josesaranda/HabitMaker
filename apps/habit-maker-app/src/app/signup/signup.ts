@@ -83,10 +83,7 @@ export class Signup {
       )
       .subscribe({
         next: () => void this.router.navigateByUrl('/home'),
-        error: () =>
-          this.message.set(
-            'signup.error',
-          ),
+        error: () => this.message.set('signup.error'),
       });
   }
 }

@@ -50,10 +50,7 @@ export class Login {
       )
       .subscribe({
         next: () => void this.router.navigateByUrl('/home'),
-        error: () =>
-          this.message.set(
-            'login.error',
-          ),
+        error: () => this.message.set('login.error'),
       });
   }
 }

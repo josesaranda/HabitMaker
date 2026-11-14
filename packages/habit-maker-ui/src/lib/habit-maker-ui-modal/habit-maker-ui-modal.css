@@ -38,6 +38,24 @@
   box-shadow: 0 1.5rem 4rem rgb(23 47 43 / 0.2);
 }
 
+.hm-modal__header {
+  display: flex;
+}
+
+.hm-modal__header--titled {
+  padding: 0.875rem 0 0.625rem clamp(1.25rem, 5vw, 2rem);
+}
+
+.hm-modal__title {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 2.5rem;
+  align-items: center;
+  /* Keep clear of the absolutely positioned close button. */
+  margin-right: calc(0.875rem + 2.5rem);
+}
+
 .hm-modal__content {
   padding: 3.75rem clamp(1.25rem, 5vw, 2rem) clamp(1.5rem, 5vw, 2rem);
 }
@@ -76,4 +94,12 @@
   .hm-modal::backdrop {
     transition: none;
   }
+}
+
+:host ::ng-deep .hm-modal__title > [hmModalTitle] {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
 }

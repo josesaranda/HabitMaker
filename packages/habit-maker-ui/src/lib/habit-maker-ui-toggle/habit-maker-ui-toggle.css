@@ -42,7 +42,9 @@
   content: '';
   position: absolute;
   top: 50%;
-  left: calc(var(--hm-toggle-thumb-left) + var(--hm-toggle-thumb-size) / 2 - 0.1875rem);
+  left: calc(
+    var(--hm-toggle-thumb-left) + var(--hm-toggle-thumb-size) / 2 - 0.1875rem
+  );
   width: 0.375rem;
   height: 0.625rem;
   transform: translateY(calc(-50% - 0.04rem)) rotate(45deg);
@@ -83,7 +85,8 @@
 }
 
 .hm-toggle:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--color-primary-hover) 20%, transparent);
+  outline: 3px solid
+    color-mix(in srgb, var(--color-primary-hover) 20%, transparent);
   outline-offset: 2px;
 }
 

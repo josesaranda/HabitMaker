@@ -114,8 +114,8 @@ describe('PushService', () => {
 
     const bodies = vi
       .mocked(webpush.sendNotification)
-      .mock.calls.map(([, message]) =>
-        JSON.parse(message as string).notification.body,
+      .mock.calls.map(
+        ([, message]) => JSON.parse(message as string).notification.body,
       );
     expect(bodies).toContain('Time for: Walk');
     expect(bodies).toContain('Es hora de: Walk');

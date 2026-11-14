@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { HabitMakerUIModal } from './habit-maker-ui-modal';
+import { HabitMakerUIModalTitle } from './habit-maker-ui-modal-title';
 
 @Component({
   imports: [HabitMakerUIModal],
@@ -22,6 +23,17 @@ import { HabitMakerUIModal } from './habit-maker-ui-modal';
 })
 class ModalHost {}
 
+@Component({
+  imports: [HabitMakerUIModal, HabitMakerUIModalTitle],
+  template: `
+    <habit-maker-ui-modal #modal label="Detalles del hábito">
+      <h2 hmModalTitle>Detalles del hábito</h2>
+      <p>El contenido se proyecta dentro del modal.</p>
+    </habit-maker-ui-modal>
+  `,
+})
+class TitledModalHost {}
+
 function mockNativeDialog(dialog: HTMLDialogElement): void {
   Object.defineProperty(dialog, 'showModal', {
     configurable: true,
@@ -36,7 +48,7 @@ function mockNativeDialog(dialog: HTMLDialogElement): void {
 describe('HabitMakerUIModal', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalHost],
+      imports: [ModalHost, TitledModalHost],
     }).compileComponents();
   });
 
@@ -49,9 +61,22 @@ describe('HabitMakerUIModal', () => {
     expect(dialog.getAttribute('aria-modal')).toBe('true');
     expect(dialog.querySelector('h2')?.textContent).toContain('Crear hábito');
     expect(dialog.querySelector('ng-content')).toBeNull();
-    expect(
-      dialog.querySelector('[aria-label="Close dialog"]'),
-    ).not.toBeNull();
+    expect(dialog.querySelector('[aria-label="Close dialog"]')).not.toBeNull();
+  });
+
+  it('renders a title beside the close button when hmModalTitle is present', () => {
+    const fixture = TestBed.createComponent(TitledModalHost);
+    fixture.detectChanges();
+
+    const dialog = fixture.nativeElement.querySelector('dialog');
+    const header = dialog.querySelector('.hm-modal__header');
+    expect(header.getAttribute('class')).toContain('hm-modal__header--titled');
+    expect(header.querySelector('.hm-modal__title')?.textContent).toContain(
+      'Detalles del hábito',
+    );
+    // The title is placed in the header row, not duplicated in the content.
+    expect(dialog.querySelector('.hm-modal__content h2')).toBeNull();
+    expect(header.querySelector('.hm-modal__close-button')).not.toBeNull();
   });
 
   it('opens from the invoking element and restores focus when closed', () => {

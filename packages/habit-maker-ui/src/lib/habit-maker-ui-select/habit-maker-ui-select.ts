@@ -10,10 +10,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { HabitMakerUIOption } from '../habit-maker-ui-option/habit-maker-ui-option';
 import { HABIT_MAKER_UI_SELECT_CONTEXT } from './habit-maker-ui-select-context';
 

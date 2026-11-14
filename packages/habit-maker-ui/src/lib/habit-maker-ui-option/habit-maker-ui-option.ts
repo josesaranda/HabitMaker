@@ -47,9 +47,7 @@ export class HabitMakerUIOption implements AfterContentInit {
   readonly isSelected = computed(
     () => this.select.selectedValue() === this.value(),
   );
-  readonly isActive = computed(
-    () => this.select.activeOptionId() === this.id,
-  );
+  readonly isActive = computed(() => this.select.activeOptionId() === this.id);
 
   ngAfterContentInit(): void {
     this.contentLabel.set(

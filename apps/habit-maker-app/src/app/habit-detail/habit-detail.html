@@ -210,9 +210,7 @@
       [closeLabel]="'navigation.closeDialog' | transloco"
     >
       <div class="grid gap-4">
-        <h2 class="m-0 text-xl font-semibold text-text-primary">
-          {{ 'habitDetail.deleteDialogTitle' | transloco }}
-        </h2>
+        <h2 hmModalTitle>{{ 'habitDetail.deleteDialogTitle' | transloco }}</h2>
         <p class="m-0 leading-relaxed text-text-secondary">
           {{ 'habitDetail.deleteConfirmation' | transloco: { name: habit()?.name
           ?? '' } }}
@@ -254,9 +252,7 @@
         class="grid gap-4"
         (submit)="saveHabitName(editHabitModal); $event.preventDefault()"
       >
-        <h2 class="m-0 text-xl font-semibold text-text-primary">
-          {{ 'habitDetail.editDialogTitle' | transloco }}
-        </h2>
+        <h2 hmModalTitle>{{ 'habitDetail.editDialogTitle' | transloco }}</h2>
         <div>
           <label
             class="mb-2 block text-sm font-semibold text-text-primary"

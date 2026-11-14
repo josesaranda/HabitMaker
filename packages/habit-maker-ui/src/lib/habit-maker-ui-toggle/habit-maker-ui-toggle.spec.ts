@@ -17,7 +17,8 @@ describe('HabitMakerUIToggle', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const toggle: HTMLInputElement = fixture.nativeElement.querySelector('input');
+    const toggle: HTMLInputElement =
+      fixture.nativeElement.querySelector('input');
     expect(toggle.type).toBe('checkbox');
     expect(toggle.classList).toContain('hm-toggle');
   });

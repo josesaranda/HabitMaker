@@ -18,7 +18,10 @@
   (keydown)="onKeydown($event)"
   (blur)="onBlur()"
 >
-  <span class="hm-ui-select__value" [class.hm-ui-select__value--placeholder]="!selectedValue()">
+  <span
+    class="hm-ui-select__value"
+    [class.hm-ui-select__value--placeholder]="!selectedValue()"
+  >
     {{ displayValue() }}
   </span>
   <svg

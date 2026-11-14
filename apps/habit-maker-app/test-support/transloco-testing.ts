@@ -1,4 +1,8 @@
-import { provideTransloco, Translation, TranslocoLoader } from '@jsverse/transloco';
+import {
+  provideTransloco,
+  Translation,
+  TranslocoLoader,
+} from '@jsverse/transloco';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import english from '../public/i18n/en.json';

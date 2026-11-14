@@ -22,9 +22,13 @@ describe('isQueryParamOnlyNavigation', () => {
       snapshot({}, { id: 'habit-1' }, { from: '2026-10-02' }),
     ]);
     const differentPathParam = snapshot(null, {}, {}, [
-      snapshot(from.children[0].routeConfig, { id: 'habit-2' }, {
-        from: '2026-10-02',
-      }),
+      snapshot(
+        from.children[0].routeConfig,
+        { id: 'habit-2' },
+        {
+          from: '2026-10-02',
+        },
+      ),
     ]);
 
     expect(isQueryParamOnlyNavigation(from, differentRoute)).toBe(false);

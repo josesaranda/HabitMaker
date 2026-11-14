@@ -46,8 +46,7 @@ export class AdminEmailService {
       from,
       passwordConfigured,
       missingVariables: [...missingVariables],
-      isConfigured:
-        missingVariables.length === 0 && validPort && validProtocol,
+      isConfigured: missingVariables.length === 0 && validPort && validProtocol,
     };
   }
 

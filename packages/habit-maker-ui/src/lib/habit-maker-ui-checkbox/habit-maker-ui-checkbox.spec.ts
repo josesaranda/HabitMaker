@@ -17,7 +17,8 @@ describe('HabitMakerUICheckbox', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const checkbox: HTMLInputElement = fixture.nativeElement.querySelector('input');
+    const checkbox: HTMLInputElement =
+      fixture.nativeElement.querySelector('input');
     expect(checkbox.type).toBe('checkbox');
     expect(checkbox.classList).toContain('hm-checkbox');
   });

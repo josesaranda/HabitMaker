@@ -20,7 +20,8 @@ describe('HabitMakerUIInput', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+    const input: HTMLInputElement =
+      fixture.nativeElement.querySelector('input');
     expect(input.classList).toContain('hm-input');
   });
 
@@ -32,7 +33,8 @@ describe('HabitMakerUIInput', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
 
-    const input: HTMLInputElement = fixture.nativeElement.querySelectorAll('input')[1];
+    const input: HTMLInputElement =
+      fixture.nativeElement.querySelectorAll('input')[1];
     expect(input.classList).toContain('hm-input--error');
   });
 });

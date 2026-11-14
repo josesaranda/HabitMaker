@@ -46,9 +46,8 @@ export class LanguageService {
 
   private getInitialLanguage(): SupportedLanguage {
     try {
-      const storedLanguage = this.document.defaultView?.localStorage.getItem(
-        LANGUAGE_STORAGE_KEY,
-      );
+      const storedLanguage =
+        this.document.defaultView?.localStorage.getItem(LANGUAGE_STORAGE_KEY);
       if (this.isSupportedLanguage(storedLanguage)) return storedLanguage;
     } catch {
       // Fall back to the browser language when storage cannot be read.

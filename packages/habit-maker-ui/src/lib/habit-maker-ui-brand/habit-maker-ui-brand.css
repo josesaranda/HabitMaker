@@ -13,8 +13,7 @@
   height: 2.3rem;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid
-    var(--hm-brand-mark-border, rgb(255 255 255 / 20%));
+  border: 1px solid var(--hm-brand-mark-border, rgb(255 255 255 / 20%));
   border-radius: 0.75rem;
   background: var(--hm-brand-mark-background, rgb(255 255 255 / 9%));
   color: var(--hm-brand-mark-color, #c0d8b9);

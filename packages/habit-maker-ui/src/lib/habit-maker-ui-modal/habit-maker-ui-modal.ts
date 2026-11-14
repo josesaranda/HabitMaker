@@ -1,5 +1,13 @@
-import { Component, ElementRef, input, viewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  computed,
+  contentChild,
+  input,
+  viewChild,
+} from '@angular/core';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIModalTitle } from './habit-maker-ui-modal-title';
 
 const MODAL_TRANSITION_DURATION = 240;
 const MODAL_TRANSITION_EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
@@ -13,6 +21,9 @@ const MODAL_TRANSITION_EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 export class HabitMakerUIModal {
   label = input.required<string>();
   closeLabel = input('Close dialog');
+
+  private readonly modalTitle = contentChild(HabitMakerUIModalTitle);
+  protected readonly hasTitle = computed(() => this.modalTitle() !== undefined);
 
   private readonly dialogRef =
     viewChild.required<ElementRef<HTMLDialogElement>>('dialog');

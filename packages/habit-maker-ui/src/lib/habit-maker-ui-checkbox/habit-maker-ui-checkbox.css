@@ -41,7 +41,8 @@
 }
 
 .hm-checkbox:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--color-primary-hover) 20%, transparent);
+  outline: 3px solid
+    color-mix(in srgb, var(--color-primary-hover) 20%, transparent);
   outline-offset: 2px;
 }
 

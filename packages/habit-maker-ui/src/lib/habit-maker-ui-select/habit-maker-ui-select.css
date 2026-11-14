@@ -32,7 +32,8 @@
 
 .hm-ui-select__trigger:focus-visible {
   border-color: var(--color-primary-hover);
-  outline: 3px solid color-mix(in srgb, var(--color-primary-hover) 18%, transparent);
+  outline: 3px solid
+    color-mix(in srgb, var(--color-primary-hover) 18%, transparent);
   outline-offset: 1px;
 }
 
