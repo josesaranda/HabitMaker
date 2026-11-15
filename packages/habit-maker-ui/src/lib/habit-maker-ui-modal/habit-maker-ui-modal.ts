@@ -33,10 +33,15 @@ export class HabitMakerUIModal {
   private activeAnimation: Animation | null = null;
   private originScale = { x: 0.92, y: 0.92 };
 
+  private bodyOverflow: string = '';
+
   /** Opens the modal and animates it from the element that invoked it. */
   openFrom(trigger: HTMLElement): void {
     const dialog = this.dialogRef().nativeElement;
     if (dialog.open) return;
+
+    this.bodyOverflow = getComputedStyle(document.body).overflow || '';
+    document.body.style.overflow = 'hidden';
 
     this.triggerElement = trigger;
     if (typeof dialog.showModal === 'function') {
@@ -146,6 +151,8 @@ export class HabitMakerUIModal {
     this.triggerElement = null;
     if (trigger?.isConnected && !trigger.hasAttribute('disabled'))
       trigger.focus();
+
+    document.body.style.overflow = this.bodyOverflow;
   }
 
   private getScale(sourceSize: number, targetSize: number): number {
