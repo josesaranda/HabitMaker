@@ -110,7 +110,10 @@
     "intro": "Tu espacio para crear hábitos que te hacen bien empieza aquí.",
     "addFirst": "Añade tu primer hábito",
     "loadError": "No se pudieron cargar tus hábitos.",
-    "newHabitModal": "¿Qué hábito quieres crear?"
+    "newHabitModal": "¿Qué hábito quieres crear?",
+    "showArchived": "Mostrar hábitos archivados",
+    "hideArchived": "Ocultar hábitos archivados",
+    "archivedTitle": "Hábitos archivados"
   },
   "newHabit": {
     "eyebrow": "Un hábito a la vez",
@@ -181,7 +184,15 @@
     "reminderDisabled": "Recordatorio diario desactivado.",
     "reminderBlocked": "Las notificaciones están bloqueadas. Permítelas en los ajustes del navegador o dispositivo para activar recordatorios.",
     "reminderUnsupported": "Las notificaciones push no están disponibles en este navegador o no están configuradas para esta aplicación.",
-    "reminderError": "No se pudo actualizar el recordatorio. Inténtalo de nuevo."
+    "reminderError": "No se pudo actualizar el recordatorio. Inténtalo de nuevo.",
+    "archiveSectionTitle": "Archivar hábito",
+    "archiveSectionDescription": "Los hábitos archivados se ocultan en la pantalla de inicio. Puedes desarchivarlos en cualquier momento.",
+    "unarchiveSectionTitle": "Desarchivar hábito",
+    "unarchiveSectionDescription": "Este hábito está archivado y no aparece en tu pantalla de inicio. Los hábitos archivados son de solo lectura: no se puede registrar actividad hasta que lo desarchives.",
+    "archiveButton": "Archivar hábito",
+    "unarchiveButton": "Desarchivar hábito",
+    "archiving": "Guardando…",
+    "archiveError": "No se pudo actualizar el hábito. Inténtalo de nuevo."
   },
   "settings": {
     "title": "Ajustes",

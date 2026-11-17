@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -21,8 +22,18 @@ export class HabitsController {
   constructor(private readonly habitsService: HabitsService) {}
 
   @Get()
-  findAll(@Req() request: AuthenticatedUserRequest) {
-    return this.habitsService.findAll(request.user.id);
+  findAll(
+    @Query('includeArchived') includeArchived: string,
+    @Req() request: AuthenticatedUserRequest,
+  ) {
+    return this.habitsService.findAll(request.user.id, includeArchived === 'true');
+  }
+
+  @Get('archived/count')
+  countArchived(@Req() request: AuthenticatedUserRequest) {
+    return this.habitsService
+      .countArchived(request.user.id)
+      .then((count) => ({ count }));
   }
 
   @Get(':id')
@@ -51,6 +62,22 @@ export class HabitsController {
   @Post()
   create(@Body() body: unknown, @Req() request: AuthenticatedUserRequest) {
     return this.habitsService.create(body, request.user.id);
+  }
+
+  @Put(':id/archive')
+  archive(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Req() request: AuthenticatedUserRequest,
+  ) {
+    const archived =
+      body && typeof body === 'object'
+        ? (body as Record<string, unknown>)['archived']
+        : undefined;
+    if (typeof archived !== 'boolean') {
+      return this.habitsService.archive(id, true, request.user.id);
+    }
+    return this.habitsService.archive(id, archived, request.user.id);
   }
 
   @Get(':id/reminder')

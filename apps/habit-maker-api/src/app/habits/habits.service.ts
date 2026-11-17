@@ -14,6 +14,7 @@ export interface CreatedHabit {
   id: string;
   name: string;
   emoji: string | null;
+  archivedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -50,13 +51,15 @@ export class HabitsService {
     return this.toHabit(habit);
   }
 
-  async findAll(userId: string): Promise<CreatedHabit[]> {
+  async findAll(userId: string, includeArchived = false): Promise<CreatedHabit[]> {
     const habits = await this.habits.find({
       where: { user: { id: userId } },
       order: { createdAt: 'DESC' },
     });
 
-    return habits.map((habit) => this.toHabit(habit));
+    return habits
+      .filter((h) => includeArchived || h.archivedAt === null)
+      .map((habit) => this.toHabit(habit));
   }
 
   async findOne(id: string, userId: string): Promise<CreatedHabit> {
@@ -83,6 +86,22 @@ export class HabitsService {
     habit.emoji = this.parseEmoji(input, habit.emoji ?? null);
     await this.habits.save(habit);
 
+    return this.toHabit(habit);
+  }
+
+  async countArchived(userId: string): Promise<number> {
+    return this.habits
+      .createQueryBuilder('habit')
+      .innerJoin('habit.user', 'user')
+      .where('user.id = :userId', { userId })
+      .andWhere('habit.archivedAt IS NOT NULL')
+      .getCount();
+  }
+
+  async archive(id: string, archived: boolean, userId: string): Promise<CreatedHabit> {
+    const habit = await this.findOwnedHabit(id, userId);
+    habit.archivedAt = archived ? new Date() : null;
+    await this.habits.save(habit);
     return this.toHabit(habit);
   }
 
@@ -168,6 +187,7 @@ export class HabitsService {
       id: habit.id,
       name: habit.name,
       emoji: habit.emoji ?? null,
+      archivedAt: habit.archivedAt ?? null,
       createdAt: habit.createdAt,
       updatedAt: habit.updatedAt,
     };

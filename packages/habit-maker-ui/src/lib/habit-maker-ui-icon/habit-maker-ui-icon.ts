@@ -2,6 +2,9 @@ import { Component, computed, input } from '@angular/core';
 
 export type HabitMakerUIIconName =
   | 'add'
+  | 'archive'
+  | 'archive-check'
+  | 'archive-off'
   | 'arrow-right'
   | 'arrow-left'
   | 'brand-mark'
@@ -16,10 +19,14 @@ export type HabitMakerUIIconName =
   | 'logout'
   | 'sparkle'
   | 'settings'
-  | 'sprout';
+  | 'sprout'
+  | 'unarchive';
 
 const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   add: 'assets/icons/add.svg#add',
+  archive: 'assets/icons/archive.svg#archive',
+  'archive-check': 'assets/icons/archive-check.svg#archive-check',
+  'archive-off': 'assets/icons/archive-off.svg#archive-off',
   'arrow-right': 'assets/icons/arrow-right.svg#arrow-right',
   'arrow-left': 'assets/icons/arrow-left.svg#arrow-left',
   'brand-mark': 'assets/icons/brand-mark.svg#brand-mark',
@@ -35,6 +42,7 @@ const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   sparkle: 'assets/icons/sparkle.svg#sparkle',
   settings: 'assets/icons/settings.svg#settings',
   sprout: 'assets/icons/sprout.svg#sprout',
+  unarchive: 'assets/icons/unarchive.svg#unarchive',
 };
 
 @Component({

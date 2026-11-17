@@ -110,7 +110,10 @@
     "intro": "Your space to build habits that are good for you starts here.",
     "addFirst": "Add your first habit",
     "loadError": "Couldn't load your habits.",
-    "newHabitModal": "What habit would you like to create?"
+    "newHabitModal": "What habit would you like to create?",
+    "showArchived": "Show archived habits",
+    "hideArchived": "Hide archived habits",
+    "archivedTitle": "Archived habits"
   },
   "newHabit": {
     "eyebrow": "One habit at a time",
@@ -181,7 +184,15 @@
     "reminderDisabled": "Daily reminder disabled.",
     "reminderBlocked": "Notifications are blocked. Allow them in your browser or device settings to enable reminders.",
     "reminderUnsupported": "Push notifications are unavailable in this browser or have not been configured for this app.",
-    "reminderError": "Couldn't update the reminder. Please try again."
+    "reminderError": "Couldn't update the reminder. Please try again.",
+    "archiveSectionTitle": "Archive habit",
+    "archiveSectionDescription": "Archived habits are hidden from your home screen. You can unarchive them at any time.",
+    "unarchiveSectionTitle": "Unarchive habit",
+    "unarchiveSectionDescription": "This habit is currently archived and hidden from your home screen. Archived habits are read-only: no activity can be logged until you unarchive it.",
+    "archiveButton": "Archive habit",
+    "unarchiveButton": "Unarchive habit",
+    "archiving": "Saving…",
+    "archiveError": "Couldn't update this habit. Please try again."
   },
   "settings": {
     "title": "Settings",

@@ -31,6 +31,9 @@ export class HabitEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   reminderTimeZone!: string | null;
 
+  @Column({ type: 'datetime', nullable: true, default: null })
+  archivedAt!: Date | null;
+
   @CreateDateColumn()
   createdAt!: Date;
 

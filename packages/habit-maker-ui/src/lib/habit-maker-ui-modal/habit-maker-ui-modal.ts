@@ -42,6 +42,7 @@ export class HabitMakerUIModal {
 
     this.bodyOverflow = getComputedStyle(document.body).overflow || '';
     document.body.style.overflow = 'hidden';
+    document.body.style.scrollbarGutter = 'stable';
 
     this.triggerElement = trigger;
     if (typeof dialog.showModal === 'function') {
@@ -153,6 +154,7 @@ export class HabitMakerUIModal {
       trigger.focus();
 
     document.body.style.overflow = this.bodyOverflow;
+    document.body.style.scrollbarGutter = '';
   }
 
   private getScale(sourceSize: number, targetSize: number): number {

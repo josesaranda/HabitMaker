@@ -2,12 +2,13 @@ import {
   Component,
   computed,
   DestroyRef,
+  ElementRef,
   inject,
   OnInit,
   signal,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
@@ -16,13 +17,13 @@ import {
   HabitMakerUIIcon,
   HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
-import { finalize } from 'rxjs';
+import { catchError, finalize, forkJoin, of } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
 import { Habit, HabitService } from '../habits/habit.service';
 import { NewHabit } from '../new-habit/new-habit';
-import { HomeHabitsResolveResult } from './home.resolver';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   imports: [
@@ -40,11 +41,15 @@ import { HomeHabitsResolveResult } from './home.resolver';
 })
 export class Home implements OnInit {
   private readonly browserService = inject(BrowserService);
-  private readonly route = inject(ActivatedRoute);
   private readonly habitService = inject(HabitService);
+  private readonly homePreferences = inject(SettingsService);
   private readonly destroyRef = inject(DestroyRef);
+
   protected readonly habits = signal<Habit[]>([]);
+  protected readonly showArchived = signal(false);
+  protected readonly hasArchived = signal(false);
   protected readonly isLoading = signal(true);
+  protected readonly isReloading = signal(false);
   protected readonly loadError = signal('');
   protected readonly isSavingDayCompletion = signal(false);
   protected readonly dayCompletionError = signal('');
@@ -52,38 +57,78 @@ export class Home implements OnInit {
     Record<string, HabitMakerUICardDayToggleEvent>
   >({});
   protected readonly hasHabits = computed(() => this.habits().length > 0);
+  protected readonly activeHabits = computed(() =>
+    this.habits().filter((h) => !h.archivedAt),
+  );
+  protected readonly archivedHabits = computed(() =>
+    this.habits().filter((h) => !!h.archivedAt),
+  );
+  protected readonly archivedSectionRef =
+    viewChild<ElementRef<HTMLElement>>('archivedSection');
 
   ngOnInit(): void {
     this.browserService.setTitle('pageTitles.home');
-    this.route.data
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((data) => {
-        const result = data['habitsResult'] as
-          HomeHabitsResolveResult | undefined;
-        if (!result) return;
-
-        this.habits.set(result.habits);
-        this.loadError.set(result.hasError ? 'home.loadError' : '');
-        this.isLoading.set(false);
-      });
+    const showArchived = this.homePreferences.getShowArchived();
+    this.showArchived.set(showArchived);
+    this.loadHabits();
     this.habitService.habitCreated$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadHabits());
+      .subscribe(() => this.loadHabits({ silent: true }));
   }
 
-  private loadHabits(): void {
-    this.isLoading.set(true);
+  protected toggleShowArchived(): void {
+    const wasHidden = !this.showArchived();
+    this.showArchived.update((v) => !v);
+    this.homePreferences.setShowArchived(this.showArchived());
+    this.loadHabits({
+      silent: true,
+      onLoaded: wasHidden
+        ? () => this.scrollToArchived()
+        : () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+    });
+  }
+
+  private loadHabits({ silent = false, onLoaded }: { silent?: boolean; onLoaded?: () => void } = {}): void {
+    if (silent) {
+      this.isReloading.set(true);
+    } else {
+      this.isLoading.set(true);
+    }
     this.loadError.set('');
-    this.habitService
-      .getHabits()
-      .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe({
-        next: (habits) => this.habits.set(habits),
-        error: () => {
+    forkJoin({
+      habits: this.habitService
+        .getHabits({ includeArchived: this.showArchived() })
+        .pipe(catchError(() => of(null))),
+      archived: this.habitService
+        .getArchivedCount()
+        .pipe(catchError(() => of({ count: 0 }))),
+    })
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+          this.isReloading.set(false);
+        }),
+      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(({ habits, archived }) => {
+        if (habits === null) {
           this.habits.set([]);
           this.loadError.set('home.loadError');
-        },
+        } else {
+          this.habits.set(habits);
+        }
+        this.hasArchived.set(archived.count > 0);
+        if (onLoaded) {
+          setTimeout(onLoaded);
+        }
       });
+  }
+
+  private scrollToArchived(): void {
+    this.archivedSectionRef()?.nativeElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   }
 
   protected toggleDayCompletion(

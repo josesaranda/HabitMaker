@@ -9,6 +9,7 @@ export interface Habit {
   id: string;
   name: string;
   emoji?: string | null;
+  archivedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -51,9 +52,11 @@ export class HabitService {
     );
   }
 
-  getHabits(): Observable<Habit[]> {
+  getHabits({ includeArchived = false } = {}): Observable<Habit[]> {
     return this.requireAuthentication(
-      this.http.get<Habit[]>(`${API_URL}/habits`),
+      this.http.get<Habit[]>(`${API_URL}/habits`, {
+        params: includeArchived ? { includeArchived: 'true' } : {},
+      }),
     );
   }
 
@@ -141,6 +144,21 @@ export class HabitService {
       this.http.put<HabitCompletionStatus>(
         `${API_URL}/habits/${encodeURIComponent(id)}/completions/${encodeURIComponent(date)}`,
         { completed },
+      ),
+    );
+  }
+
+  getArchivedCount(): Observable<{ count: number }> {
+    return this.requireAuthentication(
+      this.http.get<{ count: number }>(`${API_URL}/habits/archived/count`),
+    );
+  }
+
+  archiveHabit(id: string, archived: boolean): Observable<Habit> {
+    return this.requireAuthentication(
+      this.http.put<Habit>(
+        `${API_URL}/habits/${encodeURIComponent(id)}/archive`,
+        { archived },
       ),
     );
   }

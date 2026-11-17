@@ -78,6 +78,8 @@ export class HabitDetail implements OnInit {
   protected readonly loadError = signal('');
   protected readonly isDeletingHabit = signal(false);
   protected readonly deleteHabitError = signal('');
+  protected readonly isArchivingHabit = signal(false);
+  protected readonly archiveHabitError = signal('');
   protected readonly isSavingHabitName = signal(false);
   protected readonly editHabitName = signal('');
   protected readonly editHabitEmoji = signal<string | null>(null);
@@ -450,6 +452,27 @@ export class HabitDetail implements OnInit {
         error: () => {
           this.isSavingHabitName.set(false);
           this.editHabitError.set('habitDetail.editError');
+        },
+      });
+  }
+
+  protected archiveHabit(archived: boolean): void {
+    const currentHabit = this.habit();
+    if (!currentHabit || this.isArchivingHabit()) return;
+
+    this.isArchivingHabit.set(true);
+    this.archiveHabitError.set('');
+    this.habitService
+      .archiveHabit(currentHabit.id, archived)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (habit) => {
+          this.isArchivingHabit.set(false);
+          this.habit.set(habit);
+        },
+        error: () => {
+          this.isArchivingHabit.set(false);
+          this.archiveHabitError.set('habitDetail.archiveError');
         },
       });
   }
