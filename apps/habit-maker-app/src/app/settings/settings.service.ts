@@ -32,7 +32,8 @@ export class SettingsService {
     // chose "remember me", so we persist preferences there too. Otherwise we
     // use sessionStorage so preferences last only for the current tab.
     const token = this.authService.getAuthToken();
-    const inLocal = token !== null && localStorage.getItem('habitmaker.authToken') === token;
+    const inLocal =
+      token !== null && localStorage.getItem('habitmaker.authToken') === token;
     return inLocal ? localStorage : sessionStorage;
   }
 }

@@ -88,7 +88,10 @@ export class Home implements OnInit {
     });
   }
 
-  private loadHabits({ silent = false, onLoaded }: { silent?: boolean; onLoaded?: () => void } = {}): void {
+  private loadHabits({
+    silent = false,
+    onLoaded,
+  }: { silent?: boolean; onLoaded?: () => void } = {}): void {
     if (silent) {
       this.isReloading.set(true);
     } else {

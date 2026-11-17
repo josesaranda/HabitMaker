@@ -26,7 +26,10 @@ export class HabitsController {
     @Query('includeArchived') includeArchived: string,
     @Req() request: AuthenticatedUserRequest,
   ) {
-    return this.habitsService.findAll(request.user.id, includeArchived === 'true');
+    return this.habitsService.findAll(
+      request.user.id,
+      includeArchived === 'true',
+    );
   }
 
   @Get('archived/count')

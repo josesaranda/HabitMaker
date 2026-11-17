@@ -51,7 +51,10 @@ export class HabitsService {
     return this.toHabit(habit);
   }
 
-  async findAll(userId: string, includeArchived = false): Promise<CreatedHabit[]> {
+  async findAll(
+    userId: string,
+    includeArchived = false,
+  ): Promise<CreatedHabit[]> {
     const habits = await this.habits.find({
       where: { user: { id: userId } },
       order: { createdAt: 'DESC' },
@@ -98,7 +101,11 @@ export class HabitsService {
       .getCount();
   }
 
-  async archive(id: string, archived: boolean, userId: string): Promise<CreatedHabit> {
+  async archive(
+    id: string,
+    archived: boolean,
+    userId: string,
+  ): Promise<CreatedHabit> {
     const habit = await this.findOwnedHabit(id, userId);
     habit.archivedAt = archived ? new Date() : null;
     await this.habits.save(habit);

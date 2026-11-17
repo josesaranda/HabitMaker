@@ -1,7 +1,6 @@
 <main class="flex h-full flex-col bg-background px-4 sm:px-[4vw] lg:px-12">
   <habit-maker-ui-header titleId="habits-title">
-    {{ 'home.title' | transloco }}
-    @if (hasArchived() || showArchived()) {
+    {{ 'home.title' | transloco }} @if (hasArchived() || showArchived()) {
     <button
       hmButtonIcon="secondary"
       type="button"
@@ -10,7 +9,9 @@
       [attr.aria-pressed]="showArchived()"
       (click)="toggleShowArchived()"
     >
-      <habit-maker-ui-icon [name]="showArchived() ? 'archive-check' : 'archive-off'" />
+      <habit-maker-ui-icon
+        [name]="showArchived() ? 'archive-check' : 'archive-off'"
+      />
     </button>
     }
     <button
@@ -53,11 +54,18 @@
     }
   </section>
   @if (archivedHabits().length > 0) {
-  <div #archivedSection class="mx-auto mt-8 w-full max-w-6xl scroll-mt-16 min-[700px]:scroll-mt-32">
-    <h2 class="mb-4 text-sm font-semibold uppercase tracking-widest text-text-secondary">
+  <div
+    #archivedSection
+    class="mx-auto mt-8 w-full max-w-6xl scroll-mt-16 min-[700px]:scroll-mt-32"
+  >
+    <h2
+      class="mb-4 text-sm font-semibold uppercase tracking-widest text-text-secondary"
+    >
       {{ 'home.archivedTitle' | transloco }}
     </h2>
-    <div class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <div
+      class="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3"
+    >
       @for (habit of archivedHabits(); track habit.id) {
       <app-habit-card
         [id]="habit.id"
@@ -74,8 +82,7 @@
       }
     </div>
   </div>
-  }
-  } @else {
+  } } @else {
   <section
     class="mx-auto mt-3 my-auto w-full max-w-xl rounded-2xl border border-border bg-surface p-8 text-center sm:p-12 lg:p-16"
     aria-labelledby="home-title"
