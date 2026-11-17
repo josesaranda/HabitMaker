@@ -1,3 +1,16 @@
+# [1.11.0](https://github.com/josesaranda/HabitMaker/compare/v1.10.0...v1.11.0) (2026-11-17)
+
+
+### Features
+
+* add custom toggle component with styles and tests ([ea9d2e6](https://github.com/josesaranda/HabitMaker/commit/ea9d2e67d68d6ccbf4c1eeab0a119e4001d86488))
+* add getArchivedCount method to HabitService mock for improved testing ([2ea8ac4](https://github.com/josesaranda/HabitMaker/commit/2ea8ac471f5ac38efd1f268fde5ab4ee584e7af8))
+* add habit archiving functionality ([5df3a92](https://github.com/josesaranda/HabitMaker/commit/5df3a922f273bf18dd0d09f2aac375571d99a83a))
+* add hmModalContent directive and update modal structure for better content projection ([0a42229](https://github.com/josesaranda/HabitMaker/commit/0a42229a1d7753a21a8f7cbad75c9bf078c9f3d7))
+* add pinned emoji functionality to emoji picker component ([dc87807](https://github.com/josesaranda/HabitMaker/commit/dc87807a62aedf1f95206bca03a6645c8d7f622b))
+* implement PWA preload strategy for lazy loading routes in standalone mode ([79b48af](https://github.com/josesaranda/HabitMaker/commit/79b48af9004d2031e402eb2e865b0c407e7efc4d))
+* manage body overflow during modal open and close for improved user experience ([fe80cc4](https://github.com/josesaranda/HabitMaker/commit/fe80cc46d4cc73027bf899410a9e7b4890236bcf))
+
 # [1.10.0](https://github.com/josesaranda/HabitMaker/compare/v1.9.0...v1.10.0) (2026-11-14)
 
 ### Features
