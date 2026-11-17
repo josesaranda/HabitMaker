@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/josesaranda/HabitMaker/compare/v1.11.0...v1.11.1) (2026-11-17)
+
+
+### Bug Fixes
+
+* correct type for archivedAt column from datetime to Date in HabitEntity ([875b218](https://github.com/josesaranda/HabitMaker/commit/875b218b4d9cf5a4a732d4f2ada8459b908b8432))
+
 # [1.11.0](https://github.com/josesaranda/HabitMaker/compare/v1.10.0...v1.11.0) (2026-11-17)
 
 
