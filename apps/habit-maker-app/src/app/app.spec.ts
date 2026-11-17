@@ -22,6 +22,7 @@ describe('App', () => {
           provide: HabitService,
           useValue: {
             getHabits: () => of([]),
+            getArchivedCount: () => of({ count: 0 }),
             getHabit: (id: string) =>
               of({
                 id,

@@ -25,6 +25,7 @@ describe('Home', () => {
           provide: HabitService,
           useValue: {
             getHabits: () => of(habits),
+            getArchivedCount: () => of({ count: 0 }),
             getCompletionsForDates: vi.fn(() => of([])),
             setCompletion: vi.fn(
               (_id: string, date: string, completed: boolean) =>
@@ -167,8 +168,9 @@ describe('Home', () => {
           useValue: {
             getHabits: () => {
               requestCount++;
-              return of([habit]);
+              return requestCount === 1 ? of([]) : of([habit]);
             },
+            getArchivedCount: () => of({ count: 0 }),
             getCompletionsForDates: () => of([]),
             habitCreated$: habitCreated.asObservable(),
           },
@@ -189,6 +191,6 @@ describe('Home', () => {
     expect(
       fixture.nativeElement.querySelector('app-habit-card'),
     ).not.toBeNull();
-    expect(requestCount).toBe(1);
+    expect(requestCount).toBe(2);
   });
 });
