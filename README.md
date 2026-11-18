@@ -58,6 +58,8 @@ Please choose the setup method that best fits your environment: **Docker** (Reco
 
 This is the easiest way to run the full stack with a persistent PostgreSQL database.
 
+> Cloning the repository checks out `main`, which always mirrors the latest release — so this setup runs exactly the released code, not work-in-progress from `next`.
+
 1.  **Prerequisites:** Install [Docker](https://docs.docker.com/get-docker/) and Docker Compose.
 2.  **Setup Environment Variables:**
     ```bash
@@ -137,8 +139,8 @@ Use `npm exec nx <target> [project]` to run tasks.
 
 Releases are published with [`semantic-release`](https://github.com/semantic-release/semantic-release) when the **Release** workflow is manually dispatched on `next`, after CI has passed for that commit.
 
-- **`next`** is the base branch: all new work starts from `next`, and pull requests target it.
-- **`main`** mirrors the latest release: after each release it is fast-forwarded to the release commit. Never commit to it directly.
+- **`main`** (the default branch) mirrors the latest release: after each release it is fast-forwarded to the release commit. This is what users clone and run with `docker compose up`. Never commit to it directly, and never open pull requests against it.
+- **`next`** is the base branch: all new work starts from `next`, and pull requests target it (CI rejects PRs aimed at `main`).
 - **Commit Convention:** Follow [Conventional Commits](https://www.conventionalcommits.org/):
   - `fix:` $\rightarrow$ Patch Release (`x.y.Z`)
   - `feat:` $\rightarrow$ Minor Release (`x.Y.0`)
@@ -149,7 +151,7 @@ Releases are published with [`semantic-release`](https://github.com/semantic-rel
 ## 🌐 Contributing
 
 1.  **Setup:** Follow the "Getting Started" section above to get the project running locally.
-2.  **Branch:** Create feature branches from `next` and open pull requests against `next`. Both `next` and `main` are protected — never commit to them directly.
+2.  **Branch:** Create feature branches from `next` and open pull requests against `next` (never `main` — CI rejects those). Both `next` and `main` are protected — never commit to them directly.
 3.  **Develop:** Use the appropriate agent/skill (e.g., `frontend` for UI, `backend` for API logic) when making changes.
 4.  **Test:** Always run the relevant tests (`npm exec nx test <project>`) before submitting a pull request.
 
