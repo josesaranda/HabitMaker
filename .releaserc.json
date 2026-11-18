@@ -16,7 +16,7 @@
     [
       "@semantic-release/exec",
       {
-        "successCmd": "if [ -n \"$GH_TOKEN\" ]; then git push https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git HEAD:main; else echo 'GH_TOKEN not set: skipping main mirror push'; fi"
+        "successCmd": "if [ \"$CI\" = \"true\" ]; then git push origin HEAD:main; else echo 'Not running in CI: skipping main mirror push'; fi"
       }
     ]
   ]
