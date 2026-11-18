@@ -12,6 +12,14 @@ permissions:
   contents: read
 
 jobs:
+  base-branch:
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::Pull requests must target 'next' (the base branch). 'main' mirrors the latest release and must not receive PRs."
+          exit 1
+
   dependencies:
     runs-on: ubuntu-latest
     steps:
