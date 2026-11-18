@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   release:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/next'
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -23,7 +23,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'ci.yml',
-              branch: 'main',
+              branch: 'next',
               event: 'push',
               head_sha: context.sha,
               per_page: 100,
@@ -52,4 +52,4 @@ jobs:
       - run: npm ci
       - run: npm run release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}

@@ -9,7 +9,8 @@ Use this skill when the user explicitly asks to commit changes, prepare a commit
 
 ## Repository release behavior
 
-- `.releaserc.json` runs semantic-release on `main` after the CI job succeeds.
+- `.releaserc.json` runs semantic-release on `next` (the base branch) after the CI job succeeds for that commit.
+- After every release, the Release workflow fast-forwards `main` to the release commit, so `main` always mirrors the latest release. Never commit to `main` directly.
 - Commit messages are analyzed using the default Angular/Conventional Commits rules.
 - A release updates the root `package.json` and `package-lock.json`, generates `CHANGELOG.md`, and creates a GitHub Release. The private package is not published to npm.
 - The generated release commit is `chore(release): <version> [skip ci]`; do not create or imitate it manually.

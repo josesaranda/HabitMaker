@@ -1,6 +1,6 @@
 # HabitMaker 🌿
 
-[![CI](https://github.com/josesaranda/HabitMaker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/josesaranda/HabitMaker/actions/workflows/ci.yml)
+[![CI](https://github.com/josesaranda/HabitMaker/actions/workflows/ci.yml/badge.svg?branch=next)](https://github.com/josesaranda/HabitMaker/actions/workflows/ci.yml)
 
 > **🚀 Project Website:** [habitmaker.josesaranda.es](https://habitmaker.josesaranda.es)
 > Explore the live project, detailed screenshots, Docker setup guides, and contribution guidelines there.
@@ -135,19 +135,22 @@ Use `npm exec nx <target> [project]` to run tasks.
 
 ### 🔖 Release Management
 
-Releases are automated via [`semantic-release`](https://www.conventionalcommits.org/) on pushes to `main`, provided that Nx reports changes in either `HabitMakerApp` or `HabitMakerApi`.
+Releases are published with [`semantic-release`](https://github.com/semantic-release/semantic-release) when the **Release** workflow is manually dispatched on `next`, after CI has passed for that commit.
 
+- **`next`** is the base branch: all new work starts from `next`, and pull requests target it.
+- **`main`** mirrors the latest release: after each release it is fast-forwarded to the release commit. Never commit to it directly.
 - **Commit Convention:** Follow [Conventional Commits](https://www.conventionalcommits.org/):
-  - `fix:` $\rightarrow$ Patch Release (Minor version increment)
-  - `feat:` $\rightarrow$ Minor Release (Major version increment)
-  - `feat!:` or `BREAKING CHANGE:` $\rightarrow$ Major Release
+  - `fix:` $\rightarrow$ Patch Release (`x.y.Z`)
+  - `feat:` $\rightarrow$ Minor Release (`x.Y.0`)
+  - `feat!:` or `BREAKING CHANGE:` $\rightarrow$ Major Release (`X.0.0`)
 
 ---
 
 ## 🌐 Contributing
 
 1.  **Setup:** Follow the "Getting Started" section above to get the project running locally.
-2.  **Develop:** Use the appropriate agent/skill (e.g., `frontend` for UI, `backend` for API logic) when making changes.
-3.  **Test:** Always run the relevant tests (`npm exec nx test <project>`) before submitting a pull request.
+2.  **Branch:** Create feature branches from `next` and open pull requests against `next`. Both `next` and `main` are protected — never commit to them directly.
+3.  **Develop:** Use the appropriate agent/skill (e.g., `frontend` for UI, `backend` for API logic) when making changes.
+4.  **Test:** Always run the relevant tests (`npm exec nx test <project>`) before submitting a pull request.
 
 _Feel free to refer to the [OpenCode documentation](https://opencode.dev/) if you are working on our tooling or agent infrastructure._
