@@ -15,6 +15,41 @@ export interface HabitCompletionStatus {
   completedAt: Date | null;
 }
 
+export interface HabitCompletionUpdate extends HabitCompletionStatus {
+  currentStreak: number;
+}
+
+function getTodayDate(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function getPreviousDate(date: string): string {
+  const [year, month, day] = date.split('-').map(Number);
+  const previous = new Date(Date.UTC(year, month - 1, day - 1));
+  return previous.toISOString().slice(0, 10);
+}
+
+/**
+ * Counts the consecutive completed days ending today (or yesterday when today
+ * is still in progress). The first missed day breaks the chain and the streak
+ * restarts from zero.
+ */
+export function calculateStreak(
+  completedDates: readonly string[],
+  today: string,
+): number {
+  const completed = new Set(completedDates.filter((date) => date <= today));
+  let cursor = completed.has(today) ? today : getPreviousDate(today);
+  if (!completed.has(cursor)) return 0;
+
+  let streak = 0;
+  while (completed.has(cursor)) {
+    streak += 1;
+    cursor = getPreviousDate(cursor);
+  }
+  return streak;
+}
+
 @Injectable()
 export class HabitCompletionsService {
   constructor(
@@ -83,7 +118,7 @@ export class HabitCompletionsService {
     dateInput: unknown,
     input: unknown,
     userId: string,
-  ): Promise<HabitCompletionEntity> {
+  ): Promise<HabitCompletionUpdate> {
     const date = this.parseDate(dateInput);
     const completed = this.parseCompleted(input);
     const habit = await this.findOwnedHabit(habitId, userId);
@@ -100,8 +135,61 @@ export class HabitCompletionsService {
       });
     completion.completed = completed;
     completion.completedAt = completed ? new Date() : null;
+    const saved = await this.completions.save(completion);
 
-    return this.completions.save(completion);
+    return {
+      date: saved.date,
+      completed: saved.completed,
+      completedAt: saved.completedAt,
+      currentStreak: await this.getStreakForHabit(habitId),
+    };
+  }
+
+  /**
+   * Consecutive completed days ending today (or yesterday while today is
+   * still in progress). A single missed day resets the streak to zero.
+   */
+  async getStreak(habitId: string, userId: string): Promise<number> {
+    await this.findOwnedHabit(habitId, userId);
+    return this.getStreakForHabit(habitId);
+  }
+
+  /** Current streak for every habit of a user, keyed by habit id. */
+  async findStreaksByUser(userId: string): Promise<Map<string, number>> {
+    const completions = await this.completions
+      .createQueryBuilder('completion')
+      .select('habit.id', 'habitId')
+      .addSelect('completion.date', 'date')
+      .innerJoin('completion.habit', 'habit')
+      .innerJoin('habit.user', 'user')
+      .where('user.id = :userId', { userId })
+      .andWhere('completion.completed = :completed', { completed: true })
+      .orderBy('completion.date', 'DESC')
+      .getRawMany<{ habitId: string; date: string }>();
+
+    const completedDatesByHabit = new Map<string, string[]>();
+    for (const { habitId, date } of completions) {
+      const dates = completedDatesByHabit.get(habitId) ?? [];
+      dates.push(date);
+      completedDatesByHabit.set(habitId, dates);
+    }
+
+    const streaks = new Map<string, number>();
+    for (const [habitId, dates] of completedDatesByHabit) {
+      streaks.set(habitId, calculateStreak(dates, getTodayDate()));
+    }
+    return streaks;
+  }
+
+  private async getStreakForHabit(habitId: string): Promise<number> {
+    const completions = await this.completions.find({
+      where: { habit: { id: habitId }, completed: true },
+      order: { date: 'DESC' },
+    });
+    return calculateStreak(
+      completions.map((completion) => completion.date),
+      getTodayDate(),
+    );
   }
 
   private async findOwnedHabit(

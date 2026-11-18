@@ -29,7 +29,12 @@ describe('Home', () => {
             getCompletionsForDates: vi.fn(() => of([])),
             setCompletion: vi.fn(
               (_id: string, date: string, completed: boolean) =>
-                of({ date, completed, completedAt: null }),
+                of({
+                  date,
+                  completed,
+                  completedAt: null,
+                  currentStreak: completed ? 4 : 0,
+                }),
             ),
             habitCreated$: EMPTY,
           },
@@ -140,6 +145,40 @@ describe('Home', () => {
       TestBed.inject(HabitService).getCompletionsForDates,
     ).toHaveBeenCalledTimes(1);
     expect(compiled.querySelector('.hm-button-day--selected')).not.toBeNull();
+  });
+
+  it('shows the current streak and updates it when a day is completed', async () => {
+    const fixture = await renderHome([
+      {
+        id: 'habit-1',
+        name: 'Leer 10 minutos',
+        createdAt: '2026-11-01T00:00:00.000Z',
+        updatedAt: '2026-11-01T00:00:00.000Z',
+        currentStreak: 3,
+      },
+    ]);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const streak = compiled.querySelector('.hm-card__streak');
+
+    expect(streak?.textContent).toContain('3');
+    expect(streak?.getAttribute('aria-label')).toBe('3 días consecutivos');
+    expect(
+      streak?.querySelector('habit-maker-ui-icon[name="flame"]'),
+    ).not.toBeNull();
+
+    const toggle = Array.from(
+      compiled.querySelectorAll<HTMLButtonElement>(
+        'app-habit-card button[aria-label^="Marcar como completado"]',
+      ),
+    ).find((button) => !button.disabled);
+    toggle?.click();
+    fixture.detectChanges();
+
+    const updatedStreak = compiled.querySelector('.hm-card__streak');
+    expect(updatedStreak?.textContent).toContain('4');
+    expect(updatedStreak?.getAttribute('aria-label')).toBe(
+      '4 días consecutivos',
+    );
   });
 
   it('reloads the list when a habit is created from the global modal', async () => {

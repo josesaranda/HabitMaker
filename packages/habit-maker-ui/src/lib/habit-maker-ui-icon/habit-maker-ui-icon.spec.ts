@@ -38,6 +38,7 @@ class ArrowLeftIconHostComponent {}
     <habit-maker-ui-icon name="edit" />
     <habit-maker-ui-icon name="eye" />
     <habit-maker-ui-icon name="eye-off" />
+    <habit-maker-ui-icon name="flame" />
     <habit-maker-ui-icon name="sparkle" />
     <habit-maker-ui-icon name="sprout" />
   `,
@@ -123,6 +124,7 @@ describe('HabitMakerUIIcon', () => {
       'assets/icons/edit.svg#edit',
       'assets/icons/eye.svg#eye',
       'assets/icons/eye-off.svg#eye-off',
+      'assets/icons/flame.svg#flame',
       'assets/icons/sparkle.svg#sparkle',
       'assets/icons/sprout.svg#sprout',
     ]);

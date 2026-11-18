@@ -15,6 +15,10 @@ export class HabitMakerUICard {
   readonly locale = input('en-US');
   readonly link = input<string | null>(null);
   readonly linkLabel = input('View details');
+  readonly streak = input<number | null>(null);
+  readonly streakLabel = input<string | null>(null);
+
+  protected readonly showStreak = computed(() => this.streak() !== null);
 
   protected readonly dateTime = computed(() => this.since().split('T', 1)[0]);
   protected readonly formattedSinceDate = computed(() => {

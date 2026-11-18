@@ -436,6 +436,11 @@ export class HabitDetail implements OnInit {
             date: completion.date,
             completed: completion.completed,
           });
+          this.habit.update((habit) =>
+            habit && typeof completion.currentStreak === 'number'
+              ? { ...habit, currentStreak: completion.currentStreak }
+              : habit,
+          );
           if (completion.date === this.getLocalDate()) {
             this.isCompletedToday.set(completion.completed);
           }

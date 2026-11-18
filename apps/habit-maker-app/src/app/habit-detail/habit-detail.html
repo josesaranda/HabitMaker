@@ -35,6 +35,7 @@
       [startedAt]="currentHabit.createdAt"
       [dayToggleEnabled]="!currentHabit.archivedAt"
       [showDayNavigation]="true"
+      [streak]="currentHabit.currentStreak ?? null"
       [windowStartDate]="calendarWindowStart()"
       [dayToggleDisabled]="isSavingDayCompletion() || !!currentHabit.archivedAt"
       [completionUpdate]="completionUpdate()"

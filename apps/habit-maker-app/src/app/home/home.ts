@@ -56,6 +56,14 @@ export class Home implements OnInit {
   protected readonly completionUpdates = signal<
     Record<string, HabitMakerUICardDayToggleEvent>
   >({});
+  protected readonly streakUpdates = signal<Record<string, number>>({});
+  protected readonly currentStreaks = computed(() => {
+    const streaks: Record<string, number | undefined> = {};
+    for (const habit of this.habits()) {
+      streaks[habit.id] = habit.currentStreak;
+    }
+    return { ...streaks, ...this.streakUpdates() };
+  });
   protected readonly hasHabits = computed(() => this.habits().length > 0);
   protected readonly activeHabits = computed(() =>
     this.habits().filter((h) => !h.archivedAt),
@@ -121,6 +129,7 @@ export class Home implements OnInit {
           this.habits.set(habits);
         }
         this.hasArchived.set(archived.count > 0);
+        this.streakUpdates.set({});
         if (onLoaded) {
           setTimeout(onLoaded);
         }
@@ -155,6 +164,12 @@ export class Home implements OnInit {
               completed: completion.completed,
             },
           }));
+          if (typeof completion.currentStreak === 'number') {
+            this.streakUpdates.update((streaks) => ({
+              ...streaks,
+              [habitId]: completion.currentStreak,
+            }));
+          }
         },
         error: () => {
           this.isSavingDayCompletion.set(false);

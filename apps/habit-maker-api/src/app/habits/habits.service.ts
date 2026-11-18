@@ -9,6 +9,7 @@ import { randomUUID } from 'node:crypto';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../auth/user.entity';
 import { HabitEntity } from './habit.entity';
+import { HabitCompletionsService } from './habit-completions.service';
 
 export interface CreatedHabit {
   id: string;
@@ -17,6 +18,7 @@ export interface CreatedHabit {
   archivedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  currentStreak: number;
 }
 
 export interface HabitReminder {
@@ -32,6 +34,7 @@ export class HabitsService {
     private readonly habits: Repository<HabitEntity>,
     @InjectRepository(UserEntity)
     private readonly users: Repository<UserEntity>,
+    private readonly completionsService: HabitCompletionsService,
   ) {}
 
   async create(input: unknown, userId: string): Promise<CreatedHabit> {
@@ -48,7 +51,7 @@ export class HabitsService {
       this.habits.create({ id: randomUUID(), name, emoji, user }),
     );
 
-    return this.toHabit(habit);
+    return this.toHabit(habit, 0);
   }
 
   async findAll(
@@ -59,22 +62,20 @@ export class HabitsService {
       where: { user: { id: userId } },
       order: { createdAt: 'DESC' },
     });
+    const streaks = await this.completionsService.findStreaksByUser(userId);
 
     return habits
       .filter((h) => includeArchived || h.archivedAt === null)
-      .map((habit) => this.toHabit(habit));
+      .map((habit) => this.toHabit(habit, streaks.get(habit.id) ?? 0));
   }
 
   async findOne(id: string, userId: string): Promise<CreatedHabit> {
-    const habit = await this.habits.findOne({
-      where: { id, user: { id: userId } },
-    });
+    const habit = await this.findOwnedHabit(id, userId);
 
-    if (!habit) {
-      throw new NotFoundException('Habit not found');
-    }
-
-    return this.toHabit(habit);
+    return this.toHabit(
+      habit,
+      await this.completionsService.getStreak(id, userId),
+    );
   }
 
   async update(
@@ -89,7 +90,10 @@ export class HabitsService {
     habit.emoji = this.parseEmoji(input, habit.emoji ?? null);
     await this.habits.save(habit);
 
-    return this.toHabit(habit);
+    return this.toHabit(
+      habit,
+      await this.completionsService.getStreak(id, userId),
+    );
   }
 
   async countArchived(userId: string): Promise<number> {
@@ -109,7 +113,10 @@ export class HabitsService {
     const habit = await this.findOwnedHabit(id, userId);
     habit.archivedAt = archived ? new Date() : null;
     await this.habits.save(habit);
-    return this.toHabit(habit);
+    return this.toHabit(
+      habit,
+      await this.completionsService.getStreak(id, userId),
+    );
   }
 
   async remove(id: string, userId: string): Promise<void> {
@@ -189,7 +196,7 @@ export class HabitsService {
     };
   }
 
-  private toHabit(habit: HabitEntity): CreatedHabit {
+  private toHabit(habit: HabitEntity, currentStreak: number): CreatedHabit {
     return {
       id: habit.id,
       name: habit.name,
@@ -197,6 +204,7 @@ export class HabitsService {
       archivedAt: habit.archivedAt ?? null,
       createdAt: habit.createdAt,
       updatedAt: habit.updatedAt,
+      currentStreak,
     };
   }
 

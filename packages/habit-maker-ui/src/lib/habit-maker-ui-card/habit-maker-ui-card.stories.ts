@@ -27,6 +27,8 @@ export const Playground: Story = {
     locale: 'en-US',
     link: '/habits/example',
     linkLabel: 'View habit details',
+    streak: 12,
+    streakLabel: '12 day streak',
   },
   argTypes: {
     since: { control: 'text' },
@@ -34,6 +36,8 @@ export const Playground: Story = {
     locale: { control: 'text' },
     link: { control: 'text' },
     linkLabel: { control: 'text' },
+    streak: { control: 'number' },
+    streakLabel: { control: 'text' },
   },
   render: (args) => ({
     props: { ...args, days, localeDays },
@@ -45,6 +49,8 @@ export const Playground: Story = {
           [locale]="locale"
           [link]="link"
           [linkLabel]="linkLabel"
+          [streak]="streak"
+          [streakLabel]="streakLabel"
         >
           <h2 hmCardTitle>Read for twenty minutes</h2>
           <habit-maker-ui-day-selector
@@ -64,14 +70,24 @@ export const AllVariants: Story = {
     props: { days, localeDays },
     template: `
       <div class="grid max-w-xl gap-4 rounded-xl bg-[#172f2b] p-6 text-white">
-        <habit-maker-ui-card since="2024-01-15" emoji="🚶">
+        <habit-maker-ui-card
+          since="2024-01-15"
+          emoji="🚶"
+          [streak]="5"
+          streakLabel="5 day streak"
+        >
           <h2 hmCardTitle>Take a morning walk</h2>
           <habit-maker-ui-day-selector
             [days]="days"
             [localeDays]="localeDays"
           />
         </habit-maker-ui-card>
-        <habit-maker-ui-card since="2024-02-01" emoji="📓">
+        <habit-maker-ui-card
+          since="2024-02-01"
+          emoji="📓"
+          [streak]="0"
+          streakLabel="No current streak"
+        >
           <h2 hmCardTitle>Write in my journal</h2>
           <habit-maker-ui-day-selector
             [days]="days"

@@ -48,6 +48,7 @@
       [linkLabel]="'home.habitLink' | transloco: { name: habit.name }"
       [dayToggleEnabled]="true"
       [dayToggleDisabled]="isSavingDayCompletion()"
+      [streak]="currentStreaks()[habit.id] ?? null"
       [completionUpdate]="completionUpdates()[habit.id] ?? null"
       (dayToggled)="toggleDayCompletion(habit.id, $event)"
     />
@@ -76,6 +77,7 @@
         [linkLabel]="'home.habitLink' | transloco: { name: habit.name }"
         [dayToggleEnabled]="false"
         [dayToggleDisabled]="true"
+        [streak]="currentStreaks()[habit.id] ?? null"
         [completionUpdate]="completionUpdates()[habit.id] ?? null"
         (dayToggled)="toggleDayCompletion(habit.id, $event)"
       />

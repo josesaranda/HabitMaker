@@ -9,10 +9,22 @@
     </div>
     <div class="hm-card__heading">
       <div class="hm-card__heading-content">
-        <time class="hm-card__since" [attr.datetime]="dateTime()">
-          <habit-maker-ui-icon class="hm-card__since-icon" name="clock" />
-          {{ formattedSinceDate() }}
-        </time>
+        <div class="hm-card__meta">
+          <time class="hm-card__since" [attr.datetime]="dateTime()">
+            <habit-maker-ui-icon class="hm-card__since-icon" name="clock" />
+            {{ formattedSinceDate() }}
+          </time>
+          @if (showStreak()) {
+          <span
+            class="hm-card__streak"
+            [title]="streakLabel()"
+            [attr.aria-label]="streakLabel()"
+          >
+            <habit-maker-ui-icon class="hm-card__streak-icon" name="flame" />
+            {{ streak() }}
+          </span>
+          }
+        </div>
         <div class="hm-card__title">
           <ng-content select="[hmCardTitle]"></ng-content>
         </div>

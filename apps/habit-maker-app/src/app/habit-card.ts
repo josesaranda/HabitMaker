@@ -40,6 +40,7 @@ export class HabitCard {
   readonly dayToggleDisabled = input(false);
   readonly showDayNavigation = input(false);
   readonly windowStartDate = input<string | null>(null);
+  readonly streak = input<number | null>(null);
   readonly completionUpdate = input<HabitMakerUICardDayToggleEvent | null>(
     null,
   );
@@ -61,6 +62,16 @@ export class HabitCard {
           completionError: "Couldn't load recent progress.",
         },
   );
+
+  protected readonly streakLabel = computed(() => {
+    const streak = this.streak();
+    if (streak === null) return null;
+    const spanish = this.locale().startsWith('es');
+    if (spanish) {
+      return streak === 1 ? '1 día consecutivo' : `${streak} días consecutivos`;
+    }
+    return streak === 1 ? '1 day streak' : `${streak} day streak`;
+  });
 
   private readonly today = signal(new Date());
   private readonly firstDayOffset = computed(() =>

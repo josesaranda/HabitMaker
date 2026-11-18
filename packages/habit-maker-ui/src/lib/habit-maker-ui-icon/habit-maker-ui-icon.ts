@@ -16,6 +16,7 @@ export type HabitMakerUIIconName =
   | 'edit'
   | 'eye'
   | 'eye-off'
+  | 'flame'
   | 'logout'
   | 'sparkle'
   | 'settings'
@@ -38,6 +39,7 @@ const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   edit: 'assets/icons/edit.svg#edit',
   eye: 'assets/icons/eye.svg#eye',
   'eye-off': 'assets/icons/eye-off.svg#eye-off',
+  flame: 'assets/icons/flame.svg#flame',
   logout: 'assets/icons/logout.svg#logout',
   sparkle: 'assets/icons/sparkle.svg#sparkle',
   settings: 'assets/icons/settings.svg#settings',

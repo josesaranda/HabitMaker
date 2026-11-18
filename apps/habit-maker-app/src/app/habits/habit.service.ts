@@ -12,6 +12,7 @@ export interface Habit {
   archivedAt?: string | null;
   createdAt: string;
   updatedAt: string;
+  currentStreak?: number;
 }
 
 export interface HabitCompletionStatus {
@@ -139,9 +140,11 @@ export class HabitService {
     id: string,
     date: string,
     completed: boolean,
-  ): Observable<HabitCompletionStatus> {
-    return this.requireAuthentication(
-      this.http.put<HabitCompletionStatus>(
+  ): Observable<HabitCompletionStatus & { currentStreak: number }> {
+    return this.requireAuthentication<
+      HabitCompletionStatus & { currentStreak: number }
+    >(
+      this.http.put<HabitCompletionStatus & { currentStreak: number }>(
         `${API_URL}/habits/${encodeURIComponent(id)}/completions/${encodeURIComponent(date)}`,
         { completed },
       ),

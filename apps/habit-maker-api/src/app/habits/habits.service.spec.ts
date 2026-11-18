@@ -8,7 +8,14 @@ import { DataSource } from 'typeorm';
 import { UserEntity } from '../auth/user.entity';
 import { HabitEntity } from './habit.entity';
 import { HabitCompletionEntity } from './habit-completion.entity';
+import { HabitCompletionsService } from './habit-completions.service';
 import { HabitsService } from './habits.service';
+
+function dateFromToday(offset: number): string {
+  const date = new Date();
+  date.setUTCDate(date.getUTCDate() + offset);
+  return date.toISOString().slice(0, 10);
+}
 
 describe('HabitsService', () => {
   let dataSource: DataSource;
@@ -34,6 +41,10 @@ describe('HabitsService', () => {
     service = new HabitsService(
       dataSource.getRepository(HabitEntity),
       dataSource.getRepository(UserEntity),
+      new HabitCompletionsService(
+        dataSource.getRepository(HabitEntity),
+        dataSource.getRepository(HabitCompletionEntity),
+      ),
     );
   });
 
@@ -71,6 +82,41 @@ describe('HabitsService', () => {
     await expect(service.findAll(user.id)).resolves.toMatchObject([
       { name: 'Leer' },
     ]);
+  });
+
+  it('includes the current streak in the habit responses', async () => {
+    const created = await service.create({ name: 'Leer' }, user.id);
+    const habit = await dataSource
+      .getRepository(HabitEntity)
+      .findOneByOrFail({ id: created.id });
+    const completions = dataSource.getRepository(HabitCompletionEntity);
+    await completions.save({
+      id: 'completion-1',
+      habit,
+      date: dateFromToday(-1),
+      completed: true,
+      completedAt: new Date(),
+    });
+    await completions.save({
+      id: 'completion-2',
+      habit,
+      date: dateFromToday(0),
+      completed: true,
+      completedAt: new Date(),
+    });
+
+    await expect(service.findAll(user.id)).resolves.toMatchObject([
+      { name: 'Leer', currentStreak: 2 },
+    ]);
+    await expect(service.findOne(created.id, user.id)).resolves.toMatchObject({
+      currentStreak: 2,
+    });
+    await expect(
+      service.update(created.id, { name: 'Leer más' }, user.id),
+    ).resolves.toMatchObject({ currentStreak: 2 });
+    await expect(
+      service.archive(created.id, true, user.id),
+    ).resolves.toMatchObject({ currentStreak: 2 });
   });
 
   it('returns a habit by id only for its owner', async () => {

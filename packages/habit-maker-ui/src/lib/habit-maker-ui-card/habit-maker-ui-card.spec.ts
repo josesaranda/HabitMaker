@@ -28,6 +28,21 @@ class CardHost {}
 })
 class CardWithLinkHost {}
 
+@Component({
+  imports: [HabitMakerUICard],
+  template: `
+    <habit-maker-ui-card
+      since="2024-03-09"
+      emoji="📚"
+      [streak]="12"
+      streakLabel="12 day streak"
+    >
+      <h2 hmCardTitle>Build a reading habit</h2>
+    </habit-maker-ui-card>
+  `,
+})
+class CardWithStreakHost {}
+
 describe('HabitMakerUICard', () => {
   let fixture: ComponentFixture<CardHost>;
 
@@ -82,5 +97,29 @@ describe('HabitMakerUICard', () => {
     ).not.toBeNull();
     expect(card.querySelector('.hm-card__icon .hm-card__emoji')).toBeNull();
     expect(card.querySelector('article')?.closest('a')).toBeNull();
+  });
+
+  it('shows the streak with a flame icon and an accessible label', async () => {
+    const fixture = TestBed.createComponent(CardWithStreakHost);
+    fixture.detectChanges();
+    const card = fixture.nativeElement.querySelector(
+      'habit-maker-ui-card',
+    ) as HTMLElement;
+    const streak = card.querySelector('.hm-card__streak');
+
+    expect(streak?.textContent).toContain('12');
+    expect(streak?.getAttribute('aria-label')).toBe('12 day streak');
+    expect(streak?.getAttribute('title')).toBe('12 day streak');
+    expect(
+      streak?.querySelector('habit-maker-ui-icon[name="flame"]'),
+    ).not.toBeNull();
+  });
+
+  it('hides the streak when no value is provided', () => {
+    const card = fixture.nativeElement.querySelector(
+      'habit-maker-ui-card',
+    ) as HTMLElement;
+
+    expect(card.querySelector('.hm-card__streak')).toBeNull();
   });
 });
