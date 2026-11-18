@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/josesaranda/HabitMaker/compare/v1.11.1...v1.12.0) (2026-11-18)
+
+
+### Features
+
+* enhance form validation and UI components across habit and settings modules ([fca6358](https://github.com/josesaranda/HabitMaker/commit/fca635828e08a5457c9950d6d46f8160068272e6))
+* refactor reset password and signup forms to use reactive forms with improved validation ([87b0fdc](https://github.com/josesaranda/HabitMaker/commit/87b0fdc1b1aec08b078a0463c22e5eb3f2ea719e))
+
 ## [1.11.1](https://github.com/josesaranda/HabitMaker/compare/v1.11.0...v1.11.1) (2026-11-17)
 
 
