@@ -1,10 +1,20 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
+  HabitMakerUIFormField,
+  HabitMakerUIFormFieldError,
+  HabitMakerUIFormFieldLabel,
   HabitMakerUIInput,
   HabitMakerUIButton,
 } from '@habit-maker/habit-maker-ui';
-import { finalize } from 'rxjs';
+import { finalize, startWith } from 'rxjs';
 import {
   AdminEmailConfiguration,
   AdminPushConfiguration,
@@ -16,7 +26,15 @@ import { AppVersionService, VersionCheckResult } from './app-version.service';
 const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
 
 @Component({
-  imports: [HabitMakerUIInput, HabitMakerUIButton, TranslocoPipe],
+  imports: [
+    HabitMakerUIFormField,
+    HabitMakerUIFormFieldError,
+    HabitMakerUIFormFieldLabel,
+    HabitMakerUIInput,
+    HabitMakerUIButton,
+    ReactiveFormsModule,
+    TranslocoPipe,
+  ],
   selector: 'app-settings-admin',
   templateUrl: './settings-admin.html',
 })
@@ -33,7 +51,32 @@ export class SettingsAdmin implements OnInit {
   );
   protected readonly isLoadingPushConfiguration = signal(false);
   protected readonly pushConfigurationError = signal('');
-  protected readonly testEmailAddress = signal('');
+  protected readonly testEmailForm = new FormGroup({
+    testEmailAddress: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+  });
+  protected readonly testEmailAddressTouched = signal(false);
+  private readonly testEmailFormStatus = toSignal(
+    this.testEmailForm.statusChanges.pipe(startWith(this.testEmailForm.status)),
+    { initialValue: this.testEmailForm.status },
+  );
+  protected readonly testEmailAddressError = computed(() => {
+    this.testEmailFormStatus();
+    this.testEmailAddressTouched();
+    const control = this.testEmailForm.controls.testEmailAddress;
+    if (!this.testEmailAddressTouched() || control.valid) return '';
+    return control.hasError('required')
+      ? 'signup.emailRequired'
+      : 'signup.emailInvalid';
+  });
+  protected readonly canSendTestEmail = computed(
+    () =>
+      this.testEmailFormStatus() === 'VALID' &&
+      !this.isSendingTestEmail() &&
+      !!this.emailConfiguration()?.isConfigured,
+  );
   protected readonly isSendingTestEmail = signal(false);
   protected readonly testEmailMessage = signal('');
   protected readonly isLoadingUsers = signal(false);
@@ -130,10 +173,12 @@ export class SettingsAdmin implements OnInit {
       });
   }
 
-  protected sendTestEmail(event: SubmitEvent): void {
-    event.preventDefault();
-    const recipient = this.testEmailAddress().trim();
-    if (!recipient || this.isSendingTestEmail()) return;
+  protected sendTestEmail(): void {
+    this.testEmailForm.markAllAsTouched();
+    this.testEmailAddressTouched.set(true);
+    if (this.testEmailForm.invalid || this.isSendingTestEmail()) return;
+
+    const recipient = this.testEmailForm.controls.testEmailAddress.value.trim();
 
     this.isSendingTestEmail.set(true);
     this.testEmailMessage.set('');

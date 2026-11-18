@@ -8,41 +8,43 @@
   >
     {{ 'settings.userTitle' | transloco }}
   </h2>
-  <div class="w-full">
-    <label
-      class="mb-2 block text-sm font-semibold text-text-primary"
-      for="user-email"
-    >
-      {{ 'settings.email' | transloco }}
-    </label>
-    <input
-      hmInput
-      id="user-email"
-      name="email"
-      type="email"
-      autocomplete="email"
-      [value]="email()"
-      readonly
-    />
-    <label
-      id="language-label"
-      class="mb-2 mt-5 block text-sm font-semibold text-text-primary"
-    >
-      {{ 'settings.language' | transloco }}
-    </label>
-    <habit-maker-ui-select
-      name="language"
-      [aria-labelledby]="'language-label'"
-      [ngModel]="languageService.language()"
-      (ngModelChange)="setLanguage($event)"
-    >
-      <habit-maker-ui-option value="en" [label]="'settings.english' | transloco"
-        >{{ 'settings.english' | transloco }}</habit-maker-ui-option
+  <div class="grid w-full gap-5">
+    <hm-form-field>
+      <label hmLabel for="user-email">
+        {{ 'settings.email' | transloco }}
+      </label>
+      <input
+        hmInput
+        id="user-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        [value]="email()"
+        readonly
+      />
+    </hm-form-field>
+    <hm-form-field>
+      <label hmLabel id="language-label">
+        {{ 'settings.language' | transloco }}
+      </label>
+      <habit-maker-ui-select
+        name="language"
+        [aria-labelledby]="'language-label'"
+        [ngModel]="languageService.language()"
+        (ngModelChange)="setLanguage($event)"
       >
-      <habit-maker-ui-option value="es" [label]="'settings.spanish' | transloco"
-        >{{ 'settings.spanish' | transloco }}</habit-maker-ui-option
-      >
-    </habit-maker-ui-select>
+        <habit-maker-ui-option
+          value="en"
+          [label]="'settings.english' | transloco"
+          >{{ 'settings.english' | transloco }}</habit-maker-ui-option
+        >
+        <habit-maker-ui-option
+          value="es"
+          [label]="'settings.spanish' | transloco"
+          >{{ 'settings.spanish' | transloco }}</habit-maker-ui-option
+        >
+      </habit-maker-ui-select>
+    </hm-form-field>
   </div>
   <section
     class="mt-8 border-t border-border pt-8"

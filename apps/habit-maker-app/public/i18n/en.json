@@ -134,6 +134,8 @@
     "label": "Your habit",
     "placeholder": "Read for 10 minutes",
     "hint": "The more specific it is, the easier it is to get started.",
+    "nameRequired": "Enter a name for the habit.",
+    "nameTooLong": "The habit name must be 100 characters or fewer.",
     "saving": "Saving…",
     "submit": "Start habit",
     "error": "Couldn't save your habit. Please try again."
@@ -163,6 +165,7 @@
     "editLabel": "Habit name",
     "editPlaceholder": "Read for 10 minutes",
     "editInvalidName": "The habit name can't be empty.",
+    "editNameTooLong": "The habit name must be 100 characters or fewer.",
     "cancelEdit": "Cancel",
     "confirmEdit": "Save changes",
     "savingEdit": "Saving…",

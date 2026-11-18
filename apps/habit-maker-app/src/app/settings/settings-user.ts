@@ -6,6 +6,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { SwPush } from '@angular/service-worker';
 import {
   HabitMakerUIBadge,
+  HabitMakerUIFormField,
+  HabitMakerUIFormFieldLabel,
   HabitMakerUIInput,
   HabitMakerUIOption,
   HabitMakerUISelect,
@@ -22,6 +24,8 @@ import { LanguageService, SupportedLanguage } from '../i18n/language.service';
     DatePipe,
     FormsModule,
     HabitMakerUIBadge,
+    HabitMakerUIFormField,
+    HabitMakerUIFormFieldLabel,
     HabitMakerUIInput,
     HabitMakerUIOption,
     HabitMakerUISelect,

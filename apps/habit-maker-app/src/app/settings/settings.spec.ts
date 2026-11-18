@@ -309,6 +309,16 @@ describe('Settings', () => {
     const testEmail = compiled.querySelector<HTMLInputElement>(
       '#test-email-address',
     )!;
+    expect(
+      testEmail.closest('hm-form-field')?.querySelector('label[hmLabel]')
+        ?.textContent,
+    ).toContain('Correo electrónico de destino');
+    testEmail.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+    expect(testEmail.classList).toContain('hm-input--error');
+    expect(
+      compiled.querySelector('#test-email-address-error')?.textContent?.trim(),
+    ).toBe('El correo electrónico es obligatorio.');
     testEmail.value = 'recipient@example.com';
     testEmail.dispatchEvent(new Event('input'));
     fixture.detectChanges();

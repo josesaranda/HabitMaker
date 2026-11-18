@@ -134,6 +134,8 @@
     "label": "Tu hábito",
     "placeholder": "Leer 10 minutos",
     "hint": "Cuanto más concreto, más fácil será empezar.",
+    "nameRequired": "Escribe un nombre para el hábito.",
+    "nameTooLong": "El nombre del hábito no puede superar los 100 caracteres.",
     "saving": "Guardando…",
     "submit": "Comenzar hábito",
     "error": "No se pudo guardar el hábito. Inténtalo de nuevo."
@@ -163,6 +165,7 @@
     "editLabel": "Nombre del hábito",
     "editPlaceholder": "Leer 10 minutos",
     "editInvalidName": "El nombre del hábito no puede estar vacío.",
+    "editNameTooLong": "El nombre del hábito no puede superar los 100 caracteres.",
     "cancelEdit": "Cancelar",
     "confirmEdit": "Guardar cambios",
     "savingEdit": "Guardando…",
