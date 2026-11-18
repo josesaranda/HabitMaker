@@ -9,7 +9,7 @@ const meta: Meta<HabitMakerUIInput> = {
     docs: {
       description: {
         component: [
-          'Apply `hmInput` to a native `<input>` to use the shared field styling. Native input types, values, validation, and form behavior remain available.',
+          'Apply `hmInput` to a native `<input>` or `<textarea>` to use the shared field styling. Native attributes, values, validation, and form behavior remain available.',
           '',
           'Choose the `default` variant (the default) or `error`. Pair every input with a visible label, and set `aria-invalid="true"` when its value is invalid.',
           '',
@@ -50,6 +50,7 @@ export const AllVariants: Story = {
         <input hmInput="error" type="text" value="Invalid value" aria-label="Error input" aria-invalid="true">
         <input hmInput type="text" value="Read-only value" aria-label="Read-only input" readonly>
         <input hmInput type="text" placeholder="Disabled input" aria-label="Disabled input" disabled>
+        <textarea hmInput rows="3" placeholder="Additional notes" aria-label="Additional notes"></textarea>
       </div>
     `,
   }),

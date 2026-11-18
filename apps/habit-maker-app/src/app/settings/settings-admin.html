@@ -143,12 +143,8 @@
     </div>
     }
     <div class="grid gap-4 sm:grid-cols-2">
-      <div>
-        <label
-          for="smtp-host"
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          >SMTP_HOST</label
-        >
+      <hm-form-field>
+        <label hmLabel for="smtp-host">SMTP_HOST</label>
         <input
           hmInput
           id="smtp-host"
@@ -157,13 +153,9 @@
           [placeholder]="!configuration.host ? ('settings.notDefined' | transloco) : ''"
           readonly
         />
-      </div>
-      <div>
-        <label
-          for="smtp-port"
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          >SMTP_PORT</label
-        >
+      </hm-form-field>
+      <hm-form-field>
+        <label hmLabel for="smtp-port">SMTP_PORT</label>
         <input
           hmInput
           id="smtp-port"
@@ -172,13 +164,9 @@
           [placeholder]="!configuration.port ? ('settings.notDefined' | transloco) : ''"
           readonly
         />
-      </div>
-      <div>
-        <label
-          for="smtp-protocol"
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          >SMTP_PROTOCOL</label
-        >
+      </hm-form-field>
+      <hm-form-field>
+        <label hmLabel for="smtp-protocol">SMTP_PROTOCOL</label>
         <input
           hmInput
           id="smtp-protocol"
@@ -187,13 +175,9 @@
           [placeholder]="!configuration.protocol ? ('settings.notDefined' | transloco) : ''"
           readonly
         />
-      </div>
-      <div>
-        <label
-          for="smtp-from"
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          >SMTP_FROM</label
-        >
+      </hm-form-field>
+      <hm-form-field>
+        <label hmLabel for="smtp-from">SMTP_FROM</label>
         <input
           hmInput
           id="smtp-from"
@@ -202,13 +186,9 @@
           [placeholder]="!configuration.from ? ('settings.notDefined' | transloco) : ''"
           readonly
         />
-      </div>
-      <div>
-        <label
-          for="smtp-user"
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          >SMTP_USER</label
-        >
+      </hm-form-field>
+      <hm-form-field>
+        <label hmLabel for="smtp-user">SMTP_USER</label>
         <input
           hmInput
           id="smtp-user"
@@ -217,13 +197,9 @@
           [placeholder]="!configuration.user ? ('settings.notDefined' | transloco) : ''"
           readonly
         />
-      </div>
-      <div>
-        <label
-          for="smtp-password"
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          >SMTP_PASSWORD</label
-        >
+      </hm-form-field>
+      <hm-form-field>
+        <label hmLabel for="smtp-password">SMTP_PASSWORD</label>
         <input
           hmInput
           id="smtp-password"
@@ -232,38 +208,47 @@
           [placeholder]="(configuration.passwordConfigured ? 'settings.secretConfigured' : 'settings.notDefined') | transloco"
           readonly
         />
-      </div>
+      </hm-form-field>
     </div>
     }
-    <form class="mt-6 space-y-4" (submit)="sendTestEmail($event)">
+    <form
+      class="mt-6 space-y-4"
+      novalidate
+      [formGroup]="testEmailForm"
+      (ngSubmit)="sendTestEmail()"
+    >
       <h4 class="text-base font-semibold text-text-primary">
         {{ 'settings.testEmailTitle' | transloco }}
       </h4>
-      <div>
-        <label
-          for="test-email-address"
-          class="mb-2 block text-sm font-semibold text-text-primary"
-        >
+      <hm-form-field>
+        <label hmLabel for="test-email-address">
           {{ 'settings.testEmailAddress' | transloco }}
         </label>
         <input
-          hmInput
+          [hmInput]="testEmailAddressError() ? 'error' : 'default'"
           id="test-email-address"
           name="testEmailAddress"
+          formControlName="testEmailAddress"
           type="email"
           autocomplete="email"
-          required
-          [value]="testEmailAddress()"
-          (input)="testEmailAddress.set($any($event.target).value)"
           [placeholder]="'settings.testEmailPlaceholder' | transloco"
+          [attr.aria-invalid]="testEmailAddressError() ? 'true' : null"
+          [attr.aria-describedby]="testEmailAddressError() ? 'test-email-address-error' : null"
+          required
+          (blur)="testEmailAddressTouched.set(true)"
         />
-      </div>
+        @if (testEmailAddressError(); as testEmailErrorKey) {
+        <p hmError id="test-email-address-error">
+          {{ testEmailErrorKey | transloco }}
+        </p>
+        }
+      </hm-form-field>
       <div class="flex flex-wrap items-center gap-4">
         <button
           hmButton="primary"
           class="rounded-lg text-sm font-semibold"
           type="submit"
-          [disabled]="isSendingTestEmail() || !testEmailAddress().trim() || !emailConfiguration()?.isConfigured"
+          [disabled]="!canSendTestEmail()"
         >
           {{ (isSendingTestEmail() ? 'settings.sendingTestEmail' :
           'settings.sendTestEmail') | transloco }}

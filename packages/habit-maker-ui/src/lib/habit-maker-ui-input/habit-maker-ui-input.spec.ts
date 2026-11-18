@@ -7,6 +7,7 @@ import { HabitMakerUIInput } from './habit-maker-ui-input';
   template: `
     <input hmInput aria-label="Correo electrónico" />
     <input hmInput="error" aria-label="Campo inválido" />
+    <textarea hmInput aria-label="Descripción"></textarea>
   `,
 })
 class HostComponent {}
@@ -36,5 +37,18 @@ describe('HabitMakerUIInput', () => {
     const input: HTMLInputElement =
       fixture.nativeElement.querySelectorAll('input')[1];
     expect(input.classList).toContain('hm-input--error');
+  });
+
+  it('applies the shared input class to textareas without an input variant', async () => {
+    await TestBed.configureTestingModule({
+      imports: [HostComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    const textarea: HTMLTextAreaElement =
+      fixture.nativeElement.querySelector('textarea');
+    expect(textarea.classList).toContain('hm-input');
   });
 });

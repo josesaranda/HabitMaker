@@ -366,6 +366,33 @@ describe('HabitDetail', () => {
     const editDialog = nameInput.closest<HTMLDialogElement>('dialog')!;
     expect(editDialog.open).toBe(true);
     expect(nameInput.value).toBe('Leer 10 minutos');
+    expect(nameInput.classList).toContain('hm-input');
+    expect(
+      editDialog.querySelector(
+        'hm-form-field > label[hmLabel][for="edit-habit-name"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      editDialog.querySelector(
+        'hm-form-field > label[hmLabel]#edit-habit-emoji-label',
+      )?.textContent,
+    ).toContain('Elige un emoji');
+
+    nameInput.value = '   ';
+    nameInput.dispatchEvent(new Event('input'));
+    nameInput.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+    expect(
+      editDialog.querySelector<HTMLButtonElement>('button[hmButton="primary"]')
+        ?.disabled,
+    ).toBe(true);
+    expect(editDialog.textContent).toContain(
+      'El nombre del hábito no puede estar vacío.',
+    );
+
+    nameInput.value = 'Leer 10 minutos';
+    nameInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
     Array.from(
       editDialog.querySelectorAll<HTMLButtonElement>(
         'habit-maker-ui-emoji-picker button',

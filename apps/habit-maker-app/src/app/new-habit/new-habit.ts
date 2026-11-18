@@ -11,6 +11,10 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUIEmojiPicker,
+  HabitMakerUIFormField,
+  HabitMakerUIFormFieldError,
+  HabitMakerUIFormFieldHint,
+  HabitMakerUIFormFieldLabel,
   HabitMakerUIIcon,
   HabitMakerUIInput,
 } from '@habit-maker/habit-maker-ui';
@@ -28,6 +32,10 @@ const nonBlankValidator: ValidatorFn = (control) =>
     HabitMakerUIButton,
     HabitMakerUIIcon,
     HabitMakerUIInput,
+    HabitMakerUIFormField,
+    HabitMakerUIFormFieldError,
+    HabitMakerUIFormFieldHint,
+    HabitMakerUIFormFieldLabel,
     HabitMakerUIEmojiPicker,
     ReactiveFormsModule,
     TranslocoPipe,
@@ -56,6 +64,7 @@ export class NewHabit {
   );
   protected readonly isSubmitting = signal(false);
   protected readonly errorMessage = signal('');
+  protected readonly nameTouched = signal(false);
   readonly habitCreated = output<void>();
   private readonly formStatus = toSignal(
     this.habitForm.statusChanges.pipe(startWith(this.habitForm.status)),
@@ -64,10 +73,20 @@ export class NewHabit {
   protected readonly canStartHabit = computed(
     () => this.formStatus() === 'VALID' && !this.isSubmitting(),
   );
+  protected readonly nameError = computed(() => {
+    this.formStatus();
+    this.nameTouched();
+    const control = this.habitForm.controls.name;
+    if (!this.nameTouched() || control.valid) return '';
+    return control.hasError('maxlength')
+      ? 'newHabit.nameTooLong'
+      : 'newHabit.nameRequired';
+  });
 
   protected createHabit(): void {
     if (this.habitForm.invalid || this.isSubmitting()) {
       this.habitForm.markAllAsTouched();
+      this.nameTouched.set(true);
       return;
     }
 
@@ -82,6 +101,7 @@ export class NewHabit {
       .subscribe({
         next: () => {
           this.habitForm.reset({ name: '', emoji: null });
+          this.nameTouched.set(false);
           this.habitCreated.emit();
         },
         error: () => this.errorMessage.set('newHabit.error'),

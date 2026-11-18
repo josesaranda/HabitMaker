@@ -135,22 +135,19 @@
         />
         {{ 'habitDetail.reminderToggle' | transloco }}
       </label>
-      <div class="mt-4 max-w-xs">
-        <label
-          class="mb-2 block text-sm font-semibold text-text-primary"
-          for="habit-reminder-time"
-        >
+      <hm-form-field class="mt-4 max-w-xs">
+        <label hmLabel for="habit-reminder-time">
           {{ 'habitDetail.reminderTime' | transloco }}
         </label>
         <input
-          class="w-full rounded-lg border border-border bg-background px-3 py-2 text-text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          hmInput
           id="habit-reminder-time"
           type="time"
           [value]="reminderTime()"
           [disabled]="!reminderEnabled() || isLoadingReminder() || isSavingReminder() || pushConfigurationState() !== 'available'"
           (change)="setReminderTime($any($event.target).value)"
         />
-      </div>
+      </hm-form-field>
       @if (reminderEnabled()) { @if (hasPendingReminderChanges()) {
       <p class="mt-3 text-sm text-text-secondary" role="status">
         {{ 'habitDetail.reminderTimePending' | transloco }}
@@ -288,46 +285,50 @@
       <h2 hmModalTitle>{{ 'habitDetail.editDialogTitle' | transloco }}</h2>
       <form
         class="grid gap-4"
-        (submit)="saveHabitName(editHabitModal); $event.preventDefault()"
+        novalidate
+        [formGroup]="editHabitForm"
+        (ngSubmit)="saveHabitName(editHabitModal)"
         hmModalContent
       >
-        <div>
-          <label
-            class="mb-2 block text-sm font-semibold text-text-primary"
-            for="edit-habit-name"
-          >
+        <hm-form-field>
+          <label hmLabel for="edit-habit-name">
             {{ 'habitDetail.editLabel' | transloco }}
           </label>
           <input
-            hmInput
+            [hmInput]="editHabitNameError() ? 'error' : 'default'"
             id="edit-habit-name"
+            name="name"
+            formControlName="name"
             type="text"
             maxlength="100"
             autocomplete="off"
             autofocus
             class="rounded-[0.85rem]"
-            [value]="editHabitName()"
             [attr.aria-invalid]="editHabitNameError() ? 'true' : null"
+            [attr.aria-describedby]="editHabitNameError() ? 'edit-habit-name-error' : null"
             [placeholder]="'habitDetail.editPlaceholder' | transloco"
-            (input)="setEditHabitName($any($event.target).value)"
+            required
+            (blur)="editHabitNameTouched.set(true)"
           />
           @if (editHabitNameError()) {
-          <p class="mt-2 mb-0 text-sm text-error" role="alert">
+          <p hmError id="edit-habit-name-error">
             {{ editHabitNameError() | transloco }}
           </p>
           }
-        </div>
-        <fieldset class="m-0 grid min-w-0 gap-2 border-0 p-0">
-          <legend class="text-sm font-semibold text-text-primary mb-2">
+        </hm-form-field>
+        <hm-form-field>
+          <label hmLabel id="edit-habit-emoji-label">
             {{ 'emojiPicker.label' | transloco }}
-          </legend>
+          </label>
           <habit-maker-ui-emoji-picker
+            role="group"
+            aria-labelledby="edit-habit-emoji-label"
             [noneOptionLabel]="'emojiPicker.none' | transloco"
             [selectedEmoji]="editHabitEmoji()"
             [pinnedEmoji]="pinnedEditHabitEmoji()"
             (emojiSelected)="setEditHabitEmoji($event)"
           />
-        </fieldset>
+        </hm-form-field>
         @if (editHabitError()) {
         <p class="m-0 text-sm text-error" role="alert">
           {{ editHabitError() | transloco }}

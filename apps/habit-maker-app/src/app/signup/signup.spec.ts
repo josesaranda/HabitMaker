@@ -26,7 +26,7 @@ describe('Signup', () => {
   it('renders the signup fields with shared UI components', () => {
     expect(component).toBeTruthy();
     const compiled = fixture.nativeElement as HTMLElement;
-    const name = compiled.querySelector('input[hmInput][name="name"]');
+    const name = compiled.querySelector('input.hm-input[name="name"]');
     const email = compiled.querySelector('input#email');
     const password = compiled.querySelector('input#password');
 
@@ -39,9 +39,37 @@ describe('Signup', () => {
     expect(compiled.querySelector('button[hmButton="primary"]')).not.toBeNull();
   });
 
+  it('shows required errors and blocks an invalid submission', () => {
+    const form: HTMLFormElement = fixture.nativeElement.querySelector('form');
+    form.dispatchEvent(
+      new SubmitEvent('submit', { bubbles: true, cancelable: true }),
+    );
+    fixture.detectChanges();
+
+    const name: HTMLInputElement = fixture.nativeElement.querySelector('#name');
+    const email: HTMLInputElement =
+      fixture.nativeElement.querySelector('#email');
+    const password: HTMLInputElement =
+      fixture.nativeElement.querySelector('#password');
+    const terms: HTMLInputElement =
+      fixture.nativeElement.querySelector('[name="terms"]');
+
+    expect(name.getAttribute('aria-invalid')).toBe('true');
+    expect(email.getAttribute('aria-invalid')).toBe('true');
+    expect(password.getAttribute('aria-invalid')).toBe('true');
+    expect(terms.getAttribute('aria-invalid')).toBe('true');
+    expect(
+      fixture.nativeElement.querySelector('#signup-name-error')?.textContent,
+    ).toContain('El nombre es obligatorio');
+    expect(
+      fixture.nativeElement.querySelector('#signup-terms-error')?.textContent,
+    ).toContain('Debes aceptar los términos');
+  });
+
   it('toggles password visibility', () => {
-    const toggle: HTMLButtonElement =
-      fixture.nativeElement.querySelector('.password-toggle');
+    const toggle: HTMLButtonElement = fixture.nativeElement.querySelector(
+      'button[hmIconRight]',
+    );
     toggle.click();
     fixture.detectChanges();
 
@@ -70,7 +98,7 @@ describe('Signup', () => {
     password.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    expect(password.getAttribute('aria-invalid')).toBe('false');
+    expect(password.getAttribute('aria-invalid')).toBeNull();
     expect(password.classList).not.toContain('hm-input--error');
   });
 
@@ -91,7 +119,7 @@ describe('Signup', () => {
     email.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    expect(email.getAttribute('aria-invalid')).toBe('false');
+    expect(email.getAttribute('aria-invalid')).toBeNull();
     expect(email.classList).not.toContain('hm-input--error');
   });
 });

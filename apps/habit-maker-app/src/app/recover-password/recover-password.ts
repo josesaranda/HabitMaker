@@ -1,12 +1,23 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
+  HabitMakerUIFormField,
+  HabitMakerUIFormFieldError,
+  HabitMakerUIFormFieldLabel,
   HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
+import { startWith } from 'rxjs';
 import { AuthStory } from '../auth-story/auth-story';
 import { AuthService } from '../auth/auth.service';
 import { BrowserService } from '../browser/browser.service';
@@ -18,7 +29,11 @@ import { BrowserService } from '../browser/browser.service';
     HabitMakerUIButton,
     HabitMakerUIIcon,
     HabitMakerUIInput,
+    HabitMakerUIFormField,
+    HabitMakerUIFormFieldError,
+    HabitMakerUIFormFieldLabel,
     HabitMakerUILink,
+    ReactiveFormsModule,
     RouterLink,
     TranslocoPipe,
   ],
@@ -28,21 +43,58 @@ import { BrowserService } from '../browser/browser.service';
 export class RecoverPassword {
   private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
+  protected readonly form = new FormGroup({
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+  });
   protected readonly requestSent = signal(false);
   protected readonly submitting = signal(false);
   protected readonly email = signal('');
   protected readonly errorMessage = signal('');
   protected readonly currentYear = signal(new Date().getFullYear());
+  protected readonly emailTouched = signal(false);
+  protected readonly submitted = signal(false);
+  private readonly formStatus = toSignal(
+    this.form.statusChanges.pipe(startWith(this.form.status)),
+    { initialValue: this.form.status },
+  );
+  private readonly emailValue = toSignal(
+    this.form.controls.email.valueChanges.pipe(
+      startWith(this.form.controls.email.value),
+    ),
+    { initialValue: this.form.controls.email.value },
+  );
 
   constructor() {
     this.browserService.setTitle('pageTitles.recover');
   }
 
-  protected onSubmit(event: SubmitEvent): void {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget as HTMLFormElement);
-    const email = String(formData.get('email') ?? '');
+  protected readonly emailError = computed(() => {
+    this.formStatus();
+    const value = this.emailValue();
+    const shouldValidate =
+      this.submitted() || this.emailTouched() || value.length > 0;
+    if (!shouldValidate) return null;
+    const errors = this.form.controls.email.errors;
+    if (errors?.['required']) return 'recover.emailRequired';
+    if (errors?.['email']) return 'recover.emailInvalid';
+    return null;
+  });
+
+  protected onEmailBlur(): void {
+    this.emailTouched.set(true);
+  }
+
+  protected onSubmit(): void {
+    this.submitted.set(true);
+    this.form.markAllAsTouched();
     this.errorMessage.set('');
+
+    if (this.form.invalid) return;
+
+    const { email } = this.form.getRawValue();
     this.submitting.set(true);
     this.authService.forgotPassword(email).subscribe({
       next: () => {

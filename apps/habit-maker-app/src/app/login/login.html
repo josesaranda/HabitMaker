@@ -6,52 +6,76 @@
       <h2 id="login-title">{{ 'login.title' | transloco }}</h2>
       <p class="auth-intro">{{ 'login.intro' | transloco }}</p>
 
-      <form class="auth-form" (submit)="onSubmit($event)">
-        <div class="form-field">
-          <label for="email">{{ 'login.email' | transloco }}</label>
+      <form
+        class="auth-form"
+        novalidate
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+      >
+        <hm-form-field>
+          <label hmLabel for="email">{{ 'login.email' | transloco }}</label>
           <input
-            hmInput
+            [hmInput]="emailError() ? 'error' : 'default'"
             id="email"
             name="email"
+            formControlName="email"
             type="email"
             autocomplete="email"
             [placeholder]="'login.emailPlaceholder' | transloco"
+            (blur)="onEmailBlur()"
+            [attr.aria-invalid]="emailError() ? 'true' : null"
+            [attr.aria-describedby]="emailError() ? 'login-email-error' : null"
             required
           />
-        </div>
+          @if (emailError(); as emailErrorKey) {
+          <p hmError id="login-email-error">{{ emailErrorKey | transloco }}</p>
+          }
+        </hm-form-field>
 
-        <div class="form-field">
-          <div class="field-heading">
-            <label for="password">{{ 'login.password' | transloco }}</label>
-          </div>
-          <div class="password-field">
-            <input
-              hmInput
-              id="password"
-              name="password"
-              [type]="passwordVisible() ? 'text' : 'password'"
-              autocomplete="current-password"
-              [placeholder]="'login.passwordPlaceholder' | transloco"
-              required
-              minlength="8"
+        <hm-form-field>
+          <label hmLabel for="password"
+            >{{ 'login.password' | transloco }}</label
+          >
+          <input
+            [hmInput]="passwordError() ? 'error' : 'default'"
+            id="password"
+            name="password"
+            formControlName="password"
+            [type]="passwordVisible() ? 'text' : 'password'"
+            autocomplete="current-password"
+            [placeholder]="'login.passwordPlaceholder' | transloco"
+            (blur)="onPasswordBlur()"
+            [attr.aria-invalid]="passwordError() ? 'true' : null"
+            [attr.aria-describedby]="passwordError() ? 'login-password-error' : null"
+            required
+            minlength="8"
+          />
+          @if (passwordError(); as passwordErrorKey) {
+          <p hmError id="login-password-error">
+            {{ passwordErrorKey | transloco }}
+          </p>
+          }
+          <button
+            hmIconRight
+            type="button"
+            (click)="passwordVisible.update((visible) => !visible)"
+            [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
+            [attr.aria-pressed]="passwordVisible()"
+          >
+            <habit-maker-ui-icon
+              [name]="passwordVisible() ? 'eye-off' : 'eye'"
             />
-            <button
-              class="password-toggle"
-              type="button"
-              (click)="passwordVisible.update((visible) => !visible)"
-              [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
-              [attr.aria-pressed]="passwordVisible()"
-            >
-              <habit-maker-ui-icon
-                [name]="passwordVisible() ? 'eye-off' : 'eye'"
-              />
-            </button>
-          </div>
-        </div>
+          </button>
+        </hm-form-field>
 
         <div class="flex flew-wrap gap-2 justify-between items-center">
           <label class="remember-option">
-            <input hmCheckbox type="checkbox" name="remember" checked />
+            <input
+              hmCheckbox
+              type="checkbox"
+              name="remember"
+              formControlName="remember"
+            />
             <span>{{ 'login.remember' | transloco }}</span>
           </label>
           <a class="text-xs" hmLink routerLink="/forgot-password"

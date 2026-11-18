@@ -7,90 +7,114 @@
       <h2 id="signup-title">{{ 'signup.title' | transloco }}</h2>
       <p class="auth-intro">{{ 'signup.intro' | transloco }}</p>
 
-      <form class="auth-form auth-form--signup" (submit)="onSubmit($event)">
-        <div class="form-field">
-          <label for="name">{{ 'signup.name' | transloco }}</label>
+      <form
+        class="auth-form auth-form--signup"
+        novalidate
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+      >
+        <hm-form-field>
+          <label hmLabel for="name">{{ 'signup.name' | transloco }}</label>
           <input
-            hmInput
+            [hmInput]="nameInvalid() ? 'error' : 'default'"
             id="name"
             name="name"
+            formControlName="name"
             type="text"
             autocomplete="name"
             [placeholder]="'signup.namePlaceholder' | transloco"
+            (blur)="onNameBlur()"
+            [attr.aria-invalid]="nameInvalid() ? 'true' : null"
+            [attr.aria-describedby]="nameInvalid() ? 'signup-name-error' : null"
             required
           />
-        </div>
+          @if (nameError(); as nameErrorKey) {
+          <p hmError id="signup-name-error">{{ nameErrorKey | transloco }}</p>
+          }
+        </hm-form-field>
 
-        <div class="form-field">
-          <label for="email">{{ 'signup.email' | transloco }}</label>
+        <hm-form-field>
+          <label hmLabel for="email">{{ 'signup.email' | transloco }}</label>
           <input
             [hmInput]="emailInvalid() ? 'error' : 'default'"
             id="email"
             name="email"
+            formControlName="email"
             type="email"
             autocomplete="email"
             [placeholder]="'signup.emailPlaceholder' | transloco"
-            (input)="onEmailInput($event)"
-            (blur)="onEmailBlur($event)"
-            [attr.aria-invalid]="emailInvalid()"
+            (blur)="onEmailBlur()"
+            [attr.aria-invalid]="emailInvalid() ? 'true' : null"
             aria-describedby="signup-email-help"
             required
           />
-          <span
-            id="signup-email-help"
-            class="field-help"
-            [class.field-help--error]="emailInvalid()"
-            aria-live="polite"
-          >
-            {{ (emailInvalid() ? emailValue() ? 'signup.emailInvalid' :
-            'signup.emailRequired' : 'signup.emailHelp') | transloco }}
+          @if (emailError(); as emailErrorKey) {
+          <span id="signup-email-help" hmError>
+            {{ emailErrorKey | transloco }}
           </span>
-        </div>
+          } @else {
+          <span id="signup-email-help" hmHint>
+            {{ 'signup.emailHelp' | transloco }}
+          </span>
+          }
+        </hm-form-field>
 
-        <div class="form-field">
-          <label for="password">{{ 'signup.password' | transloco }}</label>
-          <div class="password-field">
-            <input
-              [hmInput]="passwordInvalid() ? 'error' : 'default'"
-              id="password"
-              name="password"
-              [type]="passwordVisible() ? 'text' : 'password'"
-              autocomplete="new-password"
-              [placeholder]="'signup.passwordPlaceholder' | transloco"
-              (input)="onPasswordInput($event)"
-              (blur)="passwordTouched.set(true)"
-              [attr.aria-invalid]="passwordInvalid()"
-              aria-describedby="signup-password-help"
-              required
-              minlength="8"
-            />
-            <button
-              class="password-toggle"
-              type="button"
-              (click)="passwordVisible.update((visible) => !visible)"
-              [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
-              [attr.aria-pressed]="passwordVisible()"
-            >
-              <habit-maker-ui-icon
-                [name]="passwordVisible() ? 'eye-off' : 'eye'"
-              />
-            </button>
-          </div>
-          <span
-            id="signup-password-help"
-            class="field-help"
-            [class.field-help--error]="passwordInvalid()"
-            aria-live="polite"
+        <hm-form-field>
+          <label hmLabel for="password"
+            >{{ 'signup.password' | transloco }}</label
           >
-            {{ (passwordInvalid() ? 'signup.passwordInvalid' :
-            'signup.passwordHelp') | transloco }}
+          <input
+            [hmInput]="passwordInvalid() ? 'error' : 'default'"
+            id="password"
+            name="password"
+            formControlName="password"
+            [type]="passwordVisible() ? 'text' : 'password'"
+            autocomplete="new-password"
+            [placeholder]="'signup.passwordPlaceholder' | transloco"
+            (blur)="onPasswordBlur()"
+            [attr.aria-invalid]="passwordInvalid() ? 'true' : null"
+            aria-describedby="signup-password-help"
+            required
+            minlength="8"
+          />
+          <button
+            hmIconRight
+            type="button"
+            (click)="passwordVisible.update((visible) => !visible)"
+            [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
+            [attr.aria-pressed]="passwordVisible()"
+          >
+            <habit-maker-ui-icon
+              [name]="passwordVisible() ? 'eye-off' : 'eye'"
+            />
+          </button>
+          @if (passwordError(); as passwordErrorKey) {
+          <span id="signup-password-help" hmError>
+            {{ passwordErrorKey | transloco }}
           </span>
-        </div>
+          } @else {
+          <span id="signup-password-help" hmHint>
+            {{ 'signup.passwordHelp' | transloco }}
+          </span>
+          }
+        </hm-form-field>
 
         <label class="remember-option">
-          <input hmCheckbox type="checkbox" name="terms" required />
+          <input
+            hmCheckbox
+            type="checkbox"
+            name="terms"
+            formControlName="terms"
+            required
+            [attr.aria-invalid]="termsInvalid() ? 'true' : null"
+            [attr.aria-describedby]="termsInvalid() ? 'signup-terms-error' : null"
+            (blur)="onTermsBlur()"
+          />
           <span>{{ 'signup.terms' | transloco }}</span>
         </label>
+        @if (termsError(); as termsErrorKey) {
+        <p hmError id="signup-terms-error">{{ termsErrorKey | transloco }}</p>
+        }
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
           {{ 'signup.submit' | transloco }}

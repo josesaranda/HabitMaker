@@ -1,13 +1,26 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUICheckbox,
+  HabitMakerUIFormField,
+  HabitMakerUIFormFieldError,
+  HabitMakerUIFormFieldHint,
+  HabitMakerUIFormFieldIconRight,
+  HabitMakerUIFormFieldLabel,
   HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
+import { startWith } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
 import { AuthService } from '../auth/auth.service';
 import { AuthStory } from '../auth-story/auth-story';
@@ -20,7 +33,13 @@ import { AuthStory } from '../auth-story/auth-story';
     HabitMakerUICheckbox,
     HabitMakerUIIcon,
     HabitMakerUIInput,
+    HabitMakerUIFormField,
+    HabitMakerUIFormFieldError,
+    HabitMakerUIFormFieldHint,
+    HabitMakerUIFormFieldIconRight,
+    HabitMakerUIFormFieldLabel,
     HabitMakerUILink,
+    ReactiveFormsModule,
     RouterLink,
     TranslocoPipe,
   ],
@@ -30,60 +49,139 @@ export class Signup {
   private readonly browserService = inject(BrowserService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  protected readonly form = new FormGroup({
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(8)],
+    }),
+    terms: new FormControl(false, {
+      nonNullable: true,
+      validators: [Validators.requiredTrue],
+    }),
+  });
   protected passwordVisible = signal(false);
   protected message = signal('');
   protected readonly currentYear = signal(new Date().getFullYear());
-  protected emailValue = signal('');
-  protected emailTouched = signal(false);
-  protected emailFormatValid = signal(true);
-  protected passwordValue = signal('');
-  protected passwordTouched = signal(false);
+  protected readonly nameTouched = signal(false);
+  protected readonly emailTouched = signal(false);
+  protected readonly passwordTouched = signal(false);
+  protected readonly termsTouched = signal(false);
+  protected readonly submitted = signal(false);
+  private readonly formStatus = toSignal(
+    this.form.statusChanges.pipe(startWith(this.form.status)),
+    { initialValue: this.form.status },
+  );
+  protected readonly nameValue = toSignal(
+    this.form.controls.name.valueChanges.pipe(
+      startWith(this.form.controls.name.value),
+    ),
+    { initialValue: this.form.controls.name.value },
+  );
+  protected readonly emailValue = toSignal(
+    this.form.controls.email.valueChanges.pipe(
+      startWith(this.form.controls.email.value),
+    ),
+    { initialValue: this.form.controls.email.value },
+  );
+  protected readonly passwordValue = toSignal(
+    this.form.controls.password.valueChanges.pipe(
+      startWith(this.form.controls.password.value),
+    ),
+    { initialValue: this.form.controls.password.value },
+  );
+  protected readonly termsValue = toSignal(
+    this.form.controls.terms.valueChanges.pipe(
+      startWith(this.form.controls.terms.value),
+    ),
+    { initialValue: this.form.controls.terms.value },
+  );
 
   constructor() {
     this.browserService.setTitle('pageTitles.signup');
   }
 
-  protected emailInvalid = computed(
-    () =>
-      (this.emailTouched() || this.emailValue().length > 0) &&
-      !this.emailFormatValid(),
-  );
+  protected readonly nameError = computed(() => {
+    this.formStatus();
+    this.nameValue();
+    if (!(this.submitted() || this.nameTouched())) return null;
+    return this.form.controls.name.errors?.['required']
+      ? 'signup.nameRequired'
+      : null;
+  });
+  protected readonly emailError = computed(() => {
+    this.formStatus();
+    const value = this.emailValue();
+    const shouldValidate =
+      this.submitted() || this.emailTouched() || value.length > 0;
+    if (!shouldValidate) return null;
+    const errors = this.form.controls.email.errors;
+    if (errors?.['required']) return 'signup.emailRequired';
+    if (errors?.['email']) return 'signup.emailInvalid';
+    return null;
+  });
+  protected readonly passwordError = computed(() => {
+    this.formStatus();
+    const value = this.passwordValue();
+    const shouldValidate =
+      this.submitted() || this.passwordTouched() || value.length > 0;
+    if (!shouldValidate) return null;
+    const errors = this.form.controls.password.errors;
+    if (errors?.['required']) return 'signup.passwordRequired';
+    if (errors?.['minlength']) return 'signup.passwordInvalid';
+    return null;
+  });
+  protected readonly termsError = computed(() => {
+    this.formStatus();
+    this.termsValue();
+    return this.submitted() || this.termsTouched()
+      ? this.form.controls.terms.errors?.['required']
+        ? 'signup.termsRequired'
+        : null
+      : null;
+  });
 
-  protected passwordInvalid = computed(
-    () =>
-      this.passwordValue().length < 8 &&
-      (this.passwordTouched() || this.passwordValue().length > 0),
+  protected readonly nameInvalid = computed(() => this.nameError() !== null);
+  protected readonly emailInvalid = computed(() => this.emailError() !== null);
+  protected readonly passwordInvalid = computed(
+    () => this.passwordError() !== null,
   );
+  protected readonly termsInvalid = computed(() => this.termsError() !== null);
 
-  protected onEmailInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.emailValue.set(input.value);
-    this.emailFormatValid.set(input.validity.valid);
+  protected onNameBlur(): void {
+    this.nameTouched.set(true);
   }
 
-  protected onEmailBlur(event: Event): void {
-    const input = event.target as HTMLInputElement;
+  protected onEmailBlur(): void {
     this.emailTouched.set(true);
-    this.emailFormatValid.set(input.validity.valid);
   }
 
-  protected onPasswordInput(event: Event): void {
-    this.passwordValue.set((event.target as HTMLInputElement).value);
+  protected onPasswordBlur(): void {
+    this.passwordTouched.set(true);
   }
 
-  protected onSubmit(event: SubmitEvent): void {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget as HTMLFormElement);
+  protected onTermsBlur(): void {
+    this.termsTouched.set(true);
+  }
+
+  protected onSubmit(): void {
+    this.submitted.set(true);
+    this.form.markAllAsTouched();
     this.message.set('');
-    this.authService
-      .signup(
-        String(formData.get('name') ?? ''),
-        String(formData.get('email') ?? ''),
-        String(formData.get('password') ?? ''),
-      )
-      .subscribe({
-        next: () => void this.router.navigateByUrl('/home'),
-        error: () => this.message.set('signup.error'),
-      });
+
+    if (this.form.invalid) return;
+
+    const { name, email, password } = this.form.getRawValue();
+    this.authService.signup(name, email, password).subscribe({
+      next: () => void this.router.navigateByUrl('/home'),
+      error: () => this.message.set('signup.error'),
+    });
   }
 }

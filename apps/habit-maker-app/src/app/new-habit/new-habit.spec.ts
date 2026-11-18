@@ -40,9 +40,19 @@ describe('NewHabit', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(
-      compiled.querySelector('label[for="new-habit-name"]')?.textContent,
+      compiled.querySelector('label[hmLabel][for="new-habit-name"]')
+        ?.textContent,
     ).toContain('Tu hábito');
-    expect(compiled.querySelector('input#new-habit-name')).not.toBeNull();
+    expect(
+      compiled.querySelector(
+        'hm-form-field .hm-form-field__control > input.hm-input#new-habit-name',
+      ),
+    ).not.toBeNull();
+    expect(
+      compiled.querySelector(
+        'hm-form-field > label[hmLabel]#new-habit-emoji-label',
+      )?.textContent,
+    ).toContain('Elige un emoji');
     expect(
       compiled.querySelector('habit-maker-ui-emoji-picker'),
     ).not.toBeNull();
@@ -54,6 +64,20 @@ describe('NewHabit', () => {
         ?.getAttribute('aria-label'),
     ).toBe('Sin emoji');
     expect(compiled.textContent).toContain('Comenzar hábito');
+  });
+
+  it('shows a field-level validation error after the name field is blurred', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const habitInput =
+      compiled.querySelector<HTMLInputElement>('#new-habit-name')!;
+
+    habitInput.dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+
+    expect(habitInput.classList).toContain('hm-input--error');
+    expect(
+      compiled.querySelector('#new-habit-name-error')?.textContent?.trim(),
+    ).toBe('Escribe un nombre para el hábito.');
   });
 
   it('enables the start button only when the habit name has non-whitespace content', () => {

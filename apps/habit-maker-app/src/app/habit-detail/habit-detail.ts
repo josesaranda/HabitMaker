@@ -6,15 +6,24 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { SwPush } from '@angular/service-worker';
-import { firstValueFrom } from 'rxjs';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import {
   HabitMakerUIButton,
   HabitMakerUIButtonIcon,
   HabitMakerUIEmojiPicker,
+  HabitMakerUIFormField,
+  HabitMakerUIFormFieldError,
+  HabitMakerUIFormFieldLabel,
   HabitMakerUIHeader,
   HabitMakerUIIcon,
   HabitMakerUIInput,
@@ -23,6 +32,7 @@ import {
   HabitMakerUIModalTitle,
   HabitMakerUIToggle,
 } from '@habit-maker/habit-maker-ui';
+import { firstValueFrom } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
@@ -32,6 +42,7 @@ import {
   distinctUntilChanged,
   filter,
   map,
+  startWith,
   switchMap,
   tap,
 } from 'rxjs';
@@ -39,11 +50,20 @@ import { Habit, HabitService } from '../habits/habit.service';
 import { LanguageService } from '../i18n/language.service';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
+const nonBlankValidator: ValidatorFn = (control) =>
+  typeof control.value === 'string' && control.value.trim().length > 0
+    ? null
+    : { nonBlank: true };
+
 @Component({
   imports: [
     HabitCard,
     HabitMakerUIButton,
     HabitMakerUIButtonIcon,
+    HabitMakerUIEmojiPicker,
+    HabitMakerUIFormField,
+    HabitMakerUIFormFieldError,
+    HabitMakerUIFormFieldLabel,
     HabitMakerUIHeader,
     HabitMakerUIIcon,
     HabitMakerUIInput,
@@ -51,7 +71,7 @@ import { HabitDetailResolveResult } from './habit-detail.resolver';
     HabitMakerUIModalContent,
     HabitMakerUIModalTitle,
     HabitMakerUIToggle,
-    HabitMakerUIEmojiPicker,
+    ReactiveFormsModule,
     TranslocoPipe,
   ],
   selector: 'app-habit-detail',
@@ -81,13 +101,41 @@ export class HabitDetail implements OnInit {
   protected readonly isArchivingHabit = signal(false);
   protected readonly archiveHabitError = signal('');
   protected readonly isSavingHabitName = signal(false);
-  protected readonly editHabitName = signal('');
-  protected readonly editHabitEmoji = signal<string | null>(null);
+  protected readonly editHabitForm = new FormGroup({
+    name: new FormControl('', {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.maxLength(100),
+        nonBlankValidator,
+      ],
+    }),
+    emoji: new FormControl<string | null>(null),
+  });
+  private readonly editFormStatus = toSignal(
+    this.editHabitForm.statusChanges.pipe(startWith(this.editHabitForm.status)),
+    { initialValue: this.editHabitForm.status },
+  );
+  protected readonly editHabitEmoji = toSignal(
+    this.editHabitForm.controls.emoji.valueChanges.pipe(
+      startWith(this.editHabitForm.controls.emoji.value),
+    ),
+    { initialValue: this.editHabitForm.controls.emoji.value },
+  );
+  protected readonly editHabitNameTouched = signal(false);
   protected readonly pinnedEditHabitEmoji = signal<string | null>(null);
-  protected readonly editHabitNameError = signal('');
+  protected readonly editHabitNameError = computed(() => {
+    this.editFormStatus();
+    this.editHabitNameTouched();
+    const control = this.editHabitForm.controls.name;
+    if (!this.editHabitNameTouched() || control.valid) return '';
+    return control.hasError('maxlength')
+      ? 'habitDetail.editNameTooLong'
+      : 'habitDetail.editInvalidName';
+  });
   protected readonly editHabitError = signal('');
   protected readonly canSaveHabitName = computed(
-    () => this.editHabitName().trim().length > 0 && !this.isSavingHabitName(),
+    () => this.editFormStatus() === 'VALID' && !this.isSavingHabitName(),
   );
   protected readonly isLoadingReminder = signal(true);
   protected readonly isSavingReminder = signal(false);
@@ -406,39 +454,36 @@ export class HabitDetail implements OnInit {
     const currentHabit = this.habit();
     if (!currentHabit) return;
 
-    this.editHabitName.set(currentHabit.name);
-    this.editHabitEmoji.set(currentHabit.emoji ?? null);
-    this.editHabitNameError.set('');
+    this.editHabitForm.reset({
+      name: currentHabit.name,
+      emoji: currentHabit.emoji ?? null,
+    });
+    this.editHabitNameTouched.set(false);
     this.editHabitError.set('');
     this.pinnedEditHabitEmoji.set(currentHabit.emoji ?? null);
     modal.openFrom(trigger);
   }
 
-  protected setEditHabitName(name: string): void {
-    this.editHabitName.set(name);
-    if (name.trim().length > 0) {
-      this.editHabitNameError.set('');
-    }
-  }
-
   protected setEditHabitEmoji(emoji: string | null): void {
-    this.editHabitEmoji.set(emoji);
+    this.editHabitForm.controls.emoji.setValue(emoji);
   }
 
   protected saveHabitName(modal: HabitMakerUIModal): void {
     const currentHabit = this.habit();
     if (!currentHabit || this.isSavingHabitName()) return;
 
-    const name = this.editHabitName().trim();
-    if (name.length === 0) {
-      this.editHabitNameError.set('habitDetail.editInvalidName');
+    if (this.editHabitForm.invalid) {
+      this.editHabitForm.markAllAsTouched();
+      this.editHabitNameTouched.set(true);
       return;
     }
 
+    const { name: rawName, emoji } = this.editHabitForm.getRawValue();
+    const name = rawName.trim();
     this.isSavingHabitName.set(true);
     this.editHabitError.set('');
     this.habitService
-      .updateHabit(currentHabit.id, name, this.editHabitEmoji())
+      .updateHabit(currentHabit.id, name, emoji)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (habit) => {
