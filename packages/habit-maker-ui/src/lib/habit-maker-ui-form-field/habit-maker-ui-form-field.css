@@ -1,0 +1,67 @@
+.hm-form-field {
+  display: grid;
+  min-width: 0;
+  gap: 0.55rem;
+}
+
+.hm-form-field__control {
+  position: relative;
+  min-width: 0;
+}
+
+.hm-form-field__control:has(.hm-form-field__icon-right) .hm-input {
+  padding-inline-end: 3.5rem;
+}
+
+.hm-form-field__label {
+  color: var(--color-text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.hm-form-field__icon-right {
+  position: absolute;
+  top: 50%;
+  right: 0.55rem;
+  z-index: 1;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 0;
+  border-radius: 0.4rem;
+  padding: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.hm-form-field__icon-right:hover {
+  color: var(--color-primary);
+}
+
+.hm-form-field__icon-right:focus-visible {
+  outline: 2px solid var(--color-primary-hover);
+  outline-offset: 2px;
+}
+
+.hm-form-field__icon-right habit-maker-ui-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.hm-form-field__hint,
+.hm-form-field__error {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+.hm-form-field__hint {
+  color: var(--color-text-secondary);
+}
+
+.hm-form-field__error {
+  color: var(--color-error);
+}

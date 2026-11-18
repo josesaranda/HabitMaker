@@ -40,6 +40,51 @@ describe('ResetPassword', () => {
 
   afterEach(() => httpTestingController?.verify());
 
+  it('shows required and length errors without submitting empty passwords', async () => {
+    await createComponent('one-time-token');
+    const form: HTMLFormElement = fixture.nativeElement.querySelector('form');
+    form.dispatchEvent(
+      new SubmitEvent('submit', { bubbles: true, cancelable: true }),
+    );
+    fixture.detectChanges();
+
+    const password: HTMLInputElement =
+      fixture.nativeElement.querySelector('#password');
+    const confirmPassword: HTMLInputElement =
+      fixture.nativeElement.querySelector('#confirmPassword');
+    expect(password.getAttribute('aria-invalid')).toBe('true');
+    expect(confirmPassword.getAttribute('aria-invalid')).toBe('true');
+    expect(
+      fixture.nativeElement.querySelector('#password-error')?.textContent,
+    ).toContain('La contraseña es obligatoria');
+    expect(
+      fixture.nativeElement.querySelector('#password-match-error')?.textContent,
+    ).toContain('Confirma la contraseña');
+    httpTestingController.expectNone(`${API_URL}/auth/reset-password`);
+  });
+
+  it('rejects passwords shorter than eight characters', async () => {
+    await createComponent('one-time-token');
+    const password: HTMLInputElement =
+      fixture.nativeElement.querySelector('#password');
+    const confirmPassword: HTMLInputElement =
+      fixture.nativeElement.querySelector('#confirmPassword');
+    password.value = 'short';
+    confirmPassword.value = 'short';
+    password.dispatchEvent(new Event('input'));
+    confirmPassword.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(password.getAttribute('aria-invalid')).toBe('true');
+    expect(confirmPassword.getAttribute('aria-invalid')).toBe('true');
+    expect(
+      fixture.nativeElement.querySelector('#password-error')?.textContent,
+    ).toContain('La contraseña debe tener al menos 8 caracteres');
+    expect(
+      fixture.nativeElement.querySelector('#password-match-error')?.textContent,
+    ).toContain('La contraseña debe tener al menos 8 caracteres');
+  });
+
   it('submits matching passwords and confirms success', async () => {
     await createComponent('one-time-token');
     const form: HTMLFormElement = fixture.nativeElement.querySelector('form');

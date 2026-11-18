@@ -40,10 +40,40 @@ describe('RecoverPassword', () => {
       'Recupera tu contraseña',
     );
     expect(
-      compiled.querySelector('input[hmInput][type="email"]'),
+      compiled.querySelector('input.hm-input[type="email"]'),
     ).not.toBeNull();
     expect(compiled.querySelector('a[routerLink="/login"]')).not.toBeNull();
     expect(compiled.querySelector('button[hmButton="primary"]')).not.toBeNull();
+  });
+
+  it('shows a required email error and does not submit an empty value', () => {
+    const form: HTMLFormElement = fixture.nativeElement.querySelector('form');
+    form.dispatchEvent(
+      new SubmitEvent('submit', { bubbles: true, cancelable: true }),
+    );
+    fixture.detectChanges();
+
+    const email: HTMLInputElement =
+      fixture.nativeElement.querySelector('#email');
+    expect(email.getAttribute('aria-invalid')).toBe('true');
+    expect(
+      fixture.nativeElement.querySelector('#recover-email-error')?.textContent,
+    ).toContain('El correo electrónico es obligatorio');
+    httpTestingController.expectNone(`${API_URL}/auth/forgot-password`);
+  });
+
+  it('rejects an email with an invalid format', () => {
+    const email: HTMLInputElement =
+      fixture.nativeElement.querySelector('#email');
+    email.value = 'not-an-email';
+    email.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(email.getAttribute('aria-invalid')).toBe('true');
+    expect(
+      fixture.nativeElement.querySelector('#recover-email-error')?.textContent,
+    ).toContain('Introduce un correo electrónico válido');
+    httpTestingController.expectNone(`${API_URL}/auth/forgot-password`);
   });
 
   it('shows a generic confirmation after submitting an email', () => {

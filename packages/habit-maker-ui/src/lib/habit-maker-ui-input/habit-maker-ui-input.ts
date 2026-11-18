@@ -7,7 +7,7 @@ function normalizeInputVariant(value: string): HabitMakerUIInputVariant {
 }
 
 @Directive({
-  selector: 'input[hmInput]',
+  selector: 'input[hmInput], textarea[hmInput]',
   standalone: true,
   host: {
     class: 'hm-input',
