@@ -24,3 +24,4 @@ export * from './lib/habit-maker-ui-modal/habit-maker-ui-modal-content';
 export * from './lib/habit-maker-ui-badge/habit-maker-ui-badge';
 
 export * from './lib/habit-maker-ui-card/habit-maker-ui-card';
+export * from './lib/habit-maker-ui-card-compact/habit-maker-ui-card-compact';

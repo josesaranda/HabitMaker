@@ -14,8 +14,8 @@ export type HabitMakerUIButtonDayState =
   host: { class: 'hm-button-day__host' },
 })
 export class HabitMakerUIButtonDay {
-  readonly weekday = input.required<string>();
-  readonly dayOfMonth = input.required<number | string>();
+  readonly weekday = input<string | null>(null);
+  readonly dayOfMonth = input<number | string | null>(null);
   readonly ariaLabel = input('');
   readonly state = input<HabitMakerUIButtonDayState>('default');
   readonly selected = input(false);

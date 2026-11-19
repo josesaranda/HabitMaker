@@ -113,6 +113,110 @@ describe('App', () => {
     ).toContain('Leer 10 minutos');
   });
 
+  it('opens the Today page with the date in the header', async () => {
+    const payload = btoa(
+      JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 3600 }),
+    );
+    localStorage.setItem('habitmaker.authToken', `header.${payload}.signature`);
+    TestBed.inject(AuthService).syncAuthenticatedState();
+
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl('/today');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const expectedDate = new Intl.DateTimeFormat('es-ES', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date());
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-today')).not.toBeNull();
+    expect(
+      compiled.querySelector('habit-maker-ui-header-outlet h1#today-title')
+        ?.textContent,
+    ).toContain(`Hoy ${expectedDate}`);
+    expect(
+      compiled.querySelector('a.app-navbar__link[href="/today"]')?.textContent,
+    ).toContain('Hoy');
+    expect(
+      compiled.querySelector(
+        'habit-maker-ui-header-outlet button[aria-label="Mostrar hábitos archivados"]',
+      ),
+    ).toBeNull();
+    const mobileTodayLink = compiled.querySelector<HTMLAnchorElement>(
+      'a.app-navbar__mobile-today',
+    );
+    expect(mobileTodayLink?.getAttribute('href')).toBe('/today');
+    expect(mobileTodayLink?.getAttribute('aria-label')).toBe('Hoy');
+    expect(
+      mobileTodayLink
+        ?.querySelector('habit-maker-ui-icon')
+        ?.getAttribute('name'),
+    ).toBe('calendar');
+    expect(mobileTodayLink?.textContent?.trim()).toBe(
+      String(new Date().getDate()),
+    );
+  });
+
+  it('shows the archived option on the Today page when archived habits exist', async () => {
+    const payload = btoa(
+      JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 3600 }),
+    );
+    localStorage.setItem('habitmaker.authToken', `header.${payload}.signature`);
+
+    const activeHabit = {
+      id: 'habit-1',
+      name: 'Leer 10 minutos',
+      createdAt: '2026-11-01T00:00:00.000Z',
+      updatedAt: '2026-11-01T00:00:00.000Z',
+    };
+    const archivedHabit = {
+      id: 'habit-2',
+      name: 'Caminar',
+      createdAt: '2026-10-01T00:00:00.000Z',
+      updatedAt: '2026-10-01T00:00:00.000Z',
+      archivedAt: '2026-11-10T00:00:00.000Z',
+    };
+    TestBed.overrideProvider(HabitService, {
+      useValue: {
+        getHabits: ({ includeArchived = false } = {}) =>
+          of(includeArchived ? [activeHabit, archivedHabit] : [activeHabit]),
+        getArchivedCount: () => of({ count: 1 }),
+        getTodayCompletion: () =>
+          of({ date: '2026-11-19', completed: false, completedAt: null }),
+        habitCreated$: EMPTY,
+      },
+    });
+    TestBed.inject(AuthService).syncAuthenticatedState();
+
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl('/today');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const archivedToggle = compiled.querySelector<HTMLButtonElement>(
+      'habit-maker-ui-header-outlet button[aria-label="Mostrar hábitos archivados"]',
+    );
+
+    expect(archivedToggle).not.toBeNull();
+    expect(compiled.textContent).not.toContain('Caminar');
+
+    archivedToggle?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(
+      compiled.querySelector('#today-archived-title')?.textContent,
+    ).toContain('Hábitos archivados');
+    expect(compiled.textContent).toContain('Caminar');
+  });
+
   it('redirects authenticated users from login and signup to home', async () => {
     const payload = btoa(
       JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 3600 }),

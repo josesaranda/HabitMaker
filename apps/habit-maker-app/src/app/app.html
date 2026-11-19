@@ -9,10 +9,30 @@
     <a class="app-navbar__link" routerLink="/home" aria-current="page">
       {{ 'navigation.home' | transloco }}
     </a>
+    <a class="app-navbar__link" routerLink="/today">
+      {{ 'navigation.today' | transloco }}
+    </a>
     <a class="app-navbar__link" routerLink="/settings"
       >{{ 'navigation.settings' | transloco }}</a
     >
     <div class="app-navbar__icon-actions flex flex-row gap-3">
+      <a
+        class="app-navbar__mobile-today"
+        hmButtonIcon="secondary"
+        size="normal"
+        routerLink="/today"
+        [attr.aria-label]="'navigation.today' | transloco"
+        [title]="'navigation.today' | transloco"
+      >
+        <span class="relative inline-grid place-items-center">
+          <habit-maker-ui-icon name="calendar" />
+          <span
+            class="absolute left-1/2 top-[64%] -translate-x-1/2 -translate-y-1/2 text-[0.5rem] font-semibold leading-none"
+            aria-hidden="true"
+            >{{ currentDay() }}</span
+          >
+        </span>
+      </a>
       <a
         class="app-navbar__mobile-settings"
         hmButtonIcon="secondary"

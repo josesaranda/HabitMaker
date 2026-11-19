@@ -41,6 +41,7 @@ export class App {
     ),
     { initialValue: this.router.url },
   );
+  protected readonly currentDay = computed(() => new Date().getDate());
   protected readonly shouldShowNavbar = computed(() => {
     const currentPath = this.currentUrl().split(/[?#]/, 1)[0];
     const isAuthPage =
