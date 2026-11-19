@@ -27,32 +27,29 @@
     </button>
   </habit-maker-ui-header>
 
-  @if (isLoading()) {
-  <p class="mt-6 self-center text-text-secondary" role="status">
-    {{ 'home.loading' | transloco }}
-  </p>
-  } @else { @if (completionError()) {
+  @if (completionError()) {
   <p class="mx-auto mt-3 w-full max-w-6xl text-error" role="alert">
     {{ completionError() | transloco }}
   </p>
-  } @if (hasActiveHabits()) {
+  }
   <section
     class="mx-auto mt-4 grid w-full max-w-6xl grid-cols-1 items-start gap-3 sm:grid-cols-2 xl:grid-cols-3"
     aria-labelledby="today-title"
   >
     @for (habit of activeHabits(); track habit.id) {
     <hm-card-compact
+      class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
       [emoji]="habit.emoji ?? null"
       [selected]="completions()[habit.id] ?? false"
-      [disabled]="isSavingCompletion()"
       [actionLabel]="completionLabels()[habit.id]"
+      [style.animation-delay.ms]="$index * 50"
       (toggle)="toggleCompletion(habit.id, $event)"
     >
       {{ habit.name }}
     </hm-card-compact>
     }
   </section>
-  } @else {
+  @if (hasLoadedHabits() && !hasActiveHabits()) {
   <section
     class="mx-auto my-auto mt-3 w-full max-w-xl rounded-2xl border border-border bg-surface p-8 text-center sm:p-12 lg:p-16"
     aria-labelledby="today-empty-title"
@@ -90,10 +87,12 @@
     >
       @for (habit of archivedHabits(); track habit.id) {
       <hm-card-compact
+        class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
         [emoji]="habit.emoji ?? null"
         [selected]="completions()[habit.id] ?? false"
         disabled
         [actionLabel]="completionLabels()[habit.id]"
+        [style.animation-delay.ms]="(activeHabits().length + $index) * 50"
       >
         {{ habit.name }}
       </hm-card-compact>
@@ -104,7 +103,7 @@
   <p class="mx-auto mt-3 w-full max-w-6xl text-error" role="alert">
     {{ loadError() | transloco }}
   </p>
-  } }
+  }
 
   <habit-maker-ui-modal
     #newHabitModal

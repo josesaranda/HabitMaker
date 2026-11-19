@@ -52,10 +52,10 @@ export class Today implements OnInit {
   protected readonly completions = signal<Record<string, boolean>>({});
   protected readonly showArchived = signal(false);
   protected readonly hasArchived = signal(false);
-  protected readonly isLoading = signal(true);
+  protected readonly hasLoadedHabits = signal(false);
   protected readonly loadError = signal('');
   protected readonly completionError = signal('');
-  protected readonly isSavingCompletion = signal(false);
+  protected readonly savingHabitIds = signal<ReadonlySet<string>>(new Set());
   protected readonly locale = this.languageService.locale;
   protected readonly todayDate = computed(() =>
     new Intl.DateTimeFormat(this.locale(), {
@@ -98,38 +98,38 @@ export class Today implements OnInit {
     this.loadHabits();
     this.habitService.habitCreated$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadHabits({ silent: true }));
+      .subscribe(() => this.loadHabits());
   }
 
   protected toggleShowArchived(): void {
     this.showArchived.update((value) => !value);
     this.homePreferences.setShowArchived(this.showArchived());
-    this.loadHabits({ silent: true });
+    this.loadHabits();
   }
 
   protected toggleCompletion(habitId: string, completed: boolean): void {
-    if (this.isSavingCompletion()) return;
+    if (this.savingHabitIds().has(habitId)) return;
 
     const previous = this.completions()[habitId] ?? false;
     this.completions.update((completions) => ({
       ...completions,
       [habitId]: completed,
     }));
-    this.isSavingCompletion.set(true);
+    this.setSaving(habitId, true);
     this.completionError.set('');
     this.habitService
       .setCompletion(habitId, this.getLocalDate(), completed)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (completion) => {
-          this.isSavingCompletion.set(false);
+          this.setSaving(habitId, false);
           this.completions.update((completions) => ({
             ...completions,
             [habitId]: completion.completed,
           }));
         },
         error: () => {
-          this.isSavingCompletion.set(false);
+          this.setSaving(habitId, false);
           this.completions.update((completions) => ({
             ...completions,
             [habitId]: previous,
@@ -139,10 +139,19 @@ export class Today implements OnInit {
       });
   }
 
-  private loadHabits({ silent = false } = {}): void {
-    if (!silent) {
-      this.isLoading.set(true);
-    }
+  private setSaving(habitId: string, saving: boolean): void {
+    this.savingHabitIds.update((habitIds) => {
+      const next = new Set(habitIds);
+      if (saving) {
+        next.add(habitId);
+      } else {
+        next.delete(habitId);
+      }
+      return next;
+    });
+  }
+
+  private loadHabits(): void {
     this.loadError.set('');
     forkJoin({
       habits: this.habitService
@@ -154,6 +163,7 @@ export class Today implements OnInit {
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ habits, archived }) => {
+        this.hasLoadedHabits.set(habits !== null);
         if (habits === null) {
           this.habits.set([]);
           this.completions.set({});
@@ -163,7 +173,6 @@ export class Today implements OnInit {
           this.loadTodayCompletions(habits);
         }
         this.hasArchived.set(archived.count > 0);
-        this.isLoading.set(false);
       });
   }
 

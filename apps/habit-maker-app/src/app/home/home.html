@@ -25,11 +25,7 @@
       <habit-maker-ui-icon name="add" />
     </button>
   </habit-maker-ui-header>
-  @if (isLoading()) {
-  <p class="mt-6 self-center text-text-secondary" role="status">
-    {{ 'home.loading' | transloco }}
-  </p>
-  } @else if (hasHabits()) { @if (dayCompletionError()) {
+  @if (hasHabits()) { @if (dayCompletionError()) {
   <p class="mx-auto mt-3 w-full max-w-6xl text-error" role="alert">
     {{ dayCompletionError() | transloco }}
   </p>
@@ -40,6 +36,8 @@
   >
     @for (habit of activeHabits(); track habit.id) {
     <app-habit-card
+      class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
+      [style.animation-delay.ms]="$index * 50"
       [id]="habit.id"
       [name]="habit.name"
       [emoji]="habit.emoji ?? null"
@@ -47,7 +45,6 @@
       [link]="'/habits/' + habit.id"
       [linkLabel]="'home.habitLink' | transloco: { name: habit.name }"
       [dayToggleEnabled]="true"
-      [dayToggleDisabled]="isSavingDayCompletion()"
       [streak]="currentStreaks()[habit.id] ?? null"
       [completionUpdate]="completionUpdates()[habit.id] ?? null"
       (dayToggled)="toggleDayCompletion(habit.id, $event)"
@@ -69,6 +66,8 @@
     >
       @for (habit of archivedHabits(); track habit.id) {
       <app-habit-card
+        class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
+        [style.animation-delay.ms]="(activeHabits().length + $index) * 50"
         [id]="habit.id"
         [name]="habit.name"
         [emoji]="habit.emoji ?? null"
@@ -84,7 +83,7 @@
       }
     </div>
   </div>
-  } } @else {
+  } } @else if (hasLoadedHabits() || loadError()) {
   <section
     class="mx-auto mt-3 my-auto w-full max-w-xl rounded-2xl border border-border bg-surface p-8 text-center sm:p-12 lg:p-16"
     aria-labelledby="home-title"

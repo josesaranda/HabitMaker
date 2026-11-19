@@ -17,7 +17,7 @@ import {
   HabitMakerUIIcon,
   HabitMakerUIModal,
 } from '@habit-maker/habit-maker-ui';
-import { catchError, finalize, forkJoin, of } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
@@ -48,10 +48,9 @@ export class Home implements OnInit {
   protected readonly habits = signal<Habit[]>([]);
   protected readonly showArchived = signal(false);
   protected readonly hasArchived = signal(false);
-  protected readonly isLoading = signal(true);
-  protected readonly isReloading = signal(false);
+  protected readonly hasLoadedHabits = signal(false);
   protected readonly loadError = signal('');
-  protected readonly isSavingDayCompletion = signal(false);
+  protected readonly savingDayHabitIds = signal<ReadonlySet<string>>(new Set());
   protected readonly dayCompletionError = signal('');
   protected readonly completionUpdates = signal<
     Record<string, HabitMakerUICardDayToggleEvent>
@@ -81,7 +80,7 @@ export class Home implements OnInit {
     this.loadHabits();
     this.habitService.habitCreated$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadHabits({ silent: true }));
+      .subscribe(() => this.loadHabits());
   }
 
   protected toggleShowArchived(): void {
@@ -89,22 +88,13 @@ export class Home implements OnInit {
     this.showArchived.update((v) => !v);
     this.homePreferences.setShowArchived(this.showArchived());
     this.loadHabits({
-      silent: true,
       onLoaded: wasHidden
         ? () => this.scrollToArchived()
         : () => window.scrollTo({ top: 0, behavior: 'smooth' }),
     });
   }
 
-  private loadHabits({
-    silent = false,
-    onLoaded,
-  }: { silent?: boolean; onLoaded?: () => void } = {}): void {
-    if (silent) {
-      this.isReloading.set(true);
-    } else {
-      this.isLoading.set(true);
-    }
+  private loadHabits({ onLoaded }: { onLoaded?: () => void } = {}): void {
     this.loadError.set('');
     forkJoin({
       habits: this.habitService
@@ -114,14 +104,9 @@ export class Home implements OnInit {
         .getArchivedCount()
         .pipe(catchError(() => of({ count: 0 }))),
     })
-      .pipe(
-        finalize(() => {
-          this.isLoading.set(false);
-          this.isReloading.set(false);
-        }),
-      )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ habits, archived }) => {
+        this.hasLoadedHabits.set(habits !== null);
         if (habits === null) {
           this.habits.set([]);
           this.loadError.set('home.loadError');
@@ -147,16 +132,16 @@ export class Home implements OnInit {
     habitId: string,
     event: HabitMakerUICardDayToggleEvent,
   ): void {
-    if (this.isSavingDayCompletion()) return;
+    if (this.savingDayHabitIds().has(habitId)) return;
 
-    this.isSavingDayCompletion.set(true);
+    this.setSavingDayHabit(habitId, true);
     this.dayCompletionError.set('');
     this.habitService
       .setCompletion(habitId, event.date, event.completed)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (completion) => {
-          this.isSavingDayCompletion.set(false);
+          this.setSavingDayHabit(habitId, false);
           this.completionUpdates.update((updates) => ({
             ...updates,
             [habitId]: {
@@ -172,9 +157,21 @@ export class Home implements OnInit {
           }
         },
         error: () => {
-          this.isSavingDayCompletion.set(false);
+          this.setSavingDayHabit(habitId, false);
           this.dayCompletionError.set('home.activityError');
         },
       });
+  }
+
+  private setSavingDayHabit(habitId: string, saving: boolean): void {
+    this.savingDayHabitIds.update((habitIds) => {
+      const next = new Set(habitIds);
+      if (saving) {
+        next.add(habitId);
+      } else {
+        next.delete(habitId);
+      }
+      return next;
+    });
   }
 }

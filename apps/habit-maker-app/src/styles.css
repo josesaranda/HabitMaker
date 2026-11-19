@@ -92,6 +92,18 @@ body {
   }
 }
 
+@keyframes hm-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(root),
