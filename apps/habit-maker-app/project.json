@@ -76,7 +76,8 @@
     "test": {
       "executor": "@angular/build:unit-test",
       "options": {
-        "watch": false
+        "watch": false,
+        "isolate": true
       }
     },
     "serve-static": {
