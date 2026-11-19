@@ -1,0 +1,116 @@
+<main class="flex h-full flex-col bg-background px-4 sm:px-[4vw] lg:px-12">
+  <habit-maker-ui-header titleId="today-title">
+    {{ 'today.title' | transloco: { date: todayDate() } }} @if (hasArchived() ||
+    showArchived()) {
+    <button
+      hmButtonIcon="secondary"
+      type="button"
+      [attr.aria-label]="(showArchived() ? 'home.hideArchived' : 'home.showArchived') | transloco"
+      [title]="(showArchived() ? 'home.hideArchived' : 'home.showArchived') | transloco"
+      [attr.aria-pressed]="showArchived()"
+      (click)="toggleShowArchived()"
+    >
+      <habit-maker-ui-icon
+        [name]="showArchived() ? 'archive-check' : 'archive-off'"
+      />
+    </button>
+    }
+    <button
+      #addHabitTrigger
+      hmButtonIcon="primary"
+      type="button"
+      [attr.aria-label]="'navigation.addHabit' | transloco"
+      [title]="'navigation.addHabit' | transloco"
+      (click)="newHabitModal.openFrom(addHabitTrigger)"
+    >
+      <habit-maker-ui-icon name="add" />
+    </button>
+  </habit-maker-ui-header>
+
+  @if (isLoading()) {
+  <p class="mt-6 self-center text-text-secondary" role="status">
+    {{ 'home.loading' | transloco }}
+  </p>
+  } @else { @if (completionError()) {
+  <p class="mx-auto mt-3 w-full max-w-6xl text-error" role="alert">
+    {{ completionError() | transloco }}
+  </p>
+  } @if (hasActiveHabits()) {
+  <section
+    class="mx-auto mt-4 grid w-full max-w-6xl grid-cols-1 items-start gap-3 sm:grid-cols-2 xl:grid-cols-3"
+    aria-labelledby="today-title"
+  >
+    @for (habit of activeHabits(); track habit.id) {
+    <hm-card-compact
+      [emoji]="habit.emoji ?? null"
+      [selected]="completions()[habit.id] ?? false"
+      [disabled]="isSavingCompletion()"
+      [actionLabel]="completionLabels()[habit.id]"
+      (toggle)="toggleCompletion(habit.id, $event)"
+    >
+      {{ habit.name }}
+    </hm-card-compact>
+    }
+  </section>
+  } @else {
+  <section
+    class="mx-auto my-auto mt-3 w-full max-w-xl rounded-2xl border border-border bg-surface p-8 text-center sm:p-12 lg:p-16"
+    aria-labelledby="today-empty-title"
+    data-testid="today-empty"
+  >
+    <h1
+      id="today-empty-title"
+      class="m-0 text-[clamp(1.75rem,4vw,2.5rem)] font-semibold tracking-[-0.05em] text-text-primary"
+    >
+      {{ 'today.empty' | transloco }}
+    </h1>
+    <button
+      #addHabitTrigger
+      hmButton="primary"
+      class="mt-6"
+      type="button"
+      (click)="newHabitModal.openFrom(addHabitTrigger)"
+    >
+      {{ 'home.addFirst' | transloco }}
+    </button>
+  </section>
+  } @if (archivedHabits().length > 0) {
+  <section
+    class="mx-auto mt-8 w-full max-w-6xl"
+    aria-labelledby="today-archived-title"
+  >
+    <h2
+      id="today-archived-title"
+      class="mb-4 text-sm font-semibold uppercase tracking-widest text-text-secondary"
+    >
+      {{ 'home.archivedTitle' | transloco }}
+    </h2>
+    <div
+      class="grid grid-cols-1 items-start gap-3 sm:grid-cols-2 xl:grid-cols-3"
+    >
+      @for (habit of archivedHabits(); track habit.id) {
+      <hm-card-compact
+        [emoji]="habit.emoji ?? null"
+        [selected]="completions()[habit.id] ?? false"
+        disabled
+        [actionLabel]="completionLabels()[habit.id]"
+      >
+        {{ habit.name }}
+      </hm-card-compact>
+      }
+    </div>
+  </section>
+  } @if (loadError()) {
+  <p class="mx-auto mt-3 w-full max-w-6xl text-error" role="alert">
+    {{ loadError() | transloco }}
+  </p>
+  } }
+
+  <habit-maker-ui-modal
+    #newHabitModal
+    [label]="'home.newHabitModal' | transloco"
+    [closeLabel]="'navigation.closeDialog' | transloco"
+  >
+    <app-new-habit (habitCreated)="newHabitModal.close()" />
+  </habit-maker-ui-modal>
+</main>

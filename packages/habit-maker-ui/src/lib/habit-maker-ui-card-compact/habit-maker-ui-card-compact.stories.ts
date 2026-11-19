@@ -15,11 +15,13 @@ export const Playground: Story = {
   args: {
     emoji: '📚',
     selected: false,
+    disabled: false,
     actionLabel: 'Toggle reading habit completion',
   },
   argTypes: {
     emoji: { control: 'text' },
     selected: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     actionLabel: { control: 'text' },
   },
   render: (args) => ({
@@ -29,6 +31,7 @@ export const Playground: Story = {
         <hm-card-compact
           [emoji]="emoji"
           [selected]="selected"
+          [disabled]="disabled"
           [actionLabel]="actionLabel"
           (toggle)="selected = $event"
         >
@@ -58,6 +61,9 @@ export const AllVariants: Story = {
         </hm-card-compact>
         <hm-card-compact>
           Build a new habit
+        </hm-card-compact>
+        <hm-card-compact emoji="📓" disabled>
+          Write in my journal
         </hm-card-compact>
       </div>
     `,

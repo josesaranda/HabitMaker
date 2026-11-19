@@ -36,6 +36,11 @@ export const appRoutes: Route[] = [
     canActivate: [authGuard],
   },
   {
+    path: 'today',
+    loadComponent: () => import('./today/today').then((module) => module.Today),
+    canActivate: [authGuard],
+  },
+  {
     path: 'habits/:id',
     loadComponent: () =>
       import('./habit-detail/habit-detail').then(

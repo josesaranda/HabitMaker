@@ -8,6 +8,7 @@ export type HabitMakerUIIconName =
   | 'arrow-right'
   | 'arrow-left'
   | 'brand-mark'
+  | 'calendar'
   | 'check'
   | 'chevron-left'
   | 'chevron-right'
@@ -31,6 +32,7 @@ const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   'arrow-right': 'assets/icons/arrow-right.svg#arrow-right',
   'arrow-left': 'assets/icons/arrow-left.svg#arrow-left',
   'brand-mark': 'assets/icons/brand-mark.svg#brand-mark',
+  calendar: 'assets/icons/calendar.svg#calendar',
   check: 'assets/icons/check.svg#check',
   'chevron-left': 'assets/icons/chevron-left.svg#chevron-left',
   'chevron-right': 'assets/icons/chevron-right.svg#chevron-right',

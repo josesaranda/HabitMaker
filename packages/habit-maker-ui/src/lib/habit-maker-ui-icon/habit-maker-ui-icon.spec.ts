@@ -32,6 +32,7 @@ class ArrowLeftIconHostComponent {}
   template: `
     <habit-maker-ui-icon name="arrow-right" />
     <habit-maker-ui-icon name="brand-mark" />
+    <habit-maker-ui-icon name="calendar" />
     <habit-maker-ui-icon name="chevron-left" />
     <habit-maker-ui-icon name="chevron-right" />
     <habit-maker-ui-icon name="close" />
@@ -118,6 +119,7 @@ describe('HabitMakerUIIcon', () => {
     ).toEqual([
       'assets/icons/arrow-right.svg#arrow-right',
       'assets/icons/brand-mark.svg#brand-mark',
+      'assets/icons/calendar.svg#calendar',
       'assets/icons/chevron-left.svg#chevron-left',
       'assets/icons/chevron-right.svg#chevron-right',
       'assets/icons/close.svg#close',

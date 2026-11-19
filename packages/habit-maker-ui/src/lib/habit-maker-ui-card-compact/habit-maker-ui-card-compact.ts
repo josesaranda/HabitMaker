@@ -15,6 +15,7 @@ import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
 export class HabitMakerUICardCompact {
   readonly emoji = input<string | null>(null);
   readonly selected = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly actionLabel = input('Toggle habit completion');
   readonly toggle = output<boolean>();
 

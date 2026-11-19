@@ -1,6 +1,7 @@
 {
   "navigation": {
     "home": "Inicio",
+    "today": "Hoy",
     "settings": "Ajustes",
     "addHabit": "Añadir hábito",
     "logout": "Cerrar sesión",
@@ -23,6 +24,7 @@
     "recover": "Recuperar contraseña",
     "resetPassword": "Crear nueva contraseña",
     "home": "Mis hábitos",
+    "today": "Hoy",
     "settings": "Ajustes",
     "habitDetail": "Detalle del hábito",
     "habitNamed": "Hábito: {{name}}"
@@ -126,6 +128,10 @@
     "showArchived": "Mostrar hábitos archivados",
     "hideArchived": "Ocultar hábitos archivados",
     "archivedTitle": "Hábitos archivados"
+  },
+  "today": {
+    "title": "Hoy {{date}}",
+    "empty": "No tienes hábitos activos."
   },
   "newHabit": {
     "eyebrow": "Un hábito a la vez",

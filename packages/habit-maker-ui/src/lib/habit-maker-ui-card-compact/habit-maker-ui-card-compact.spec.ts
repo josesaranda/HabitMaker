@@ -42,6 +42,14 @@ class SelectedCardCompactHost {}
 })
 class NoEmojiCardCompactHost {}
 
+@Component({
+  imports: [HabitMakerUICardCompact],
+  template: `
+    <hm-card-compact emoji="📓" disabled>Write in my journal</hm-card-compact>
+  `,
+})
+class DisabledCardCompactHost {}
+
 describe('HabitMakerUICardCompact', () => {
   let fixture: ComponentFixture<CardCompactHost>;
 
@@ -148,10 +156,20 @@ describe('HabitMakerUICardCompact', () => {
       '.hm-card-compact__toggle button',
     );
 
-    expect(card.querySelector('.hm-card-compact--selected')).not.toBeNull();
+    expect(card.classList.contains('hm-card-compact--selected')).toBe(true);
     expect(button?.getAttribute('aria-pressed')).toBe('true');
     expect(
       button?.querySelector('habit-maker-ui-icon[name="check"]'),
     ).not.toBeNull();
+  });
+
+  it('disables the toggle when the card is disabled', () => {
+    const disabledFixture = TestBed.createComponent(DisabledCardCompactHost);
+    disabledFixture.detectChanges();
+    const button = disabledFixture.nativeElement.querySelector(
+      '.hm-card-compact__toggle button',
+    ) as HTMLButtonElement;
+
+    expect(button.disabled).toBe(true);
   });
 });

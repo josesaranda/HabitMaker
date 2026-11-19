@@ -1,6 +1,7 @@
 {
   "navigation": {
     "home": "Home",
+    "today": "Today",
     "settings": "Settings",
     "addHabit": "Add habit",
     "logout": "Log out",
@@ -23,6 +24,7 @@
     "recover": "Reset password",
     "resetPassword": "Create a new password",
     "home": "My habits",
+    "today": "Today",
     "settings": "Settings",
     "habitDetail": "Habit details",
     "habitNamed": "Habit: {{name}}"
@@ -126,6 +128,10 @@
     "showArchived": "Show archived habits",
     "hideArchived": "Hide archived habits",
     "archivedTitle": "Archived habits"
+  },
+  "today": {
+    "title": "Today {{date}}",
+    "empty": "You have no active habits."
   },
   "newHabit": {
     "eyebrow": "One habit at a time",

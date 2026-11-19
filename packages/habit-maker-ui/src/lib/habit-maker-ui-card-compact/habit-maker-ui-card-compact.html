@@ -9,6 +9,7 @@
 <habit-maker-ui-button-day
   class="hm-card-compact__toggle"
   [selected]="selected()"
+  [disabled]="disabled()"
   [ariaLabel]="actionLabel()"
   (pressed)="emitToggle()"
 />

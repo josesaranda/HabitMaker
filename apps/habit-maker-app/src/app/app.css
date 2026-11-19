@@ -37,7 +37,8 @@
   outline-offset: 3px;
 }
 
-.app-navbar__mobile-settings {
+.app-navbar__mobile-settings,
+.app-navbar__mobile-today {
   display: none;
 }
 
@@ -65,7 +66,8 @@
     gap: 0.75rem;
   }
 
-  .app-navbar__mobile-settings {
+  .app-navbar__mobile-settings,
+  .app-navbar__mobile-today {
     display: inline-grid;
   }
 }
