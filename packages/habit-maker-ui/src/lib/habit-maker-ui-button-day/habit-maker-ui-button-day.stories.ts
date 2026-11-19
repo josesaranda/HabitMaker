@@ -73,6 +73,8 @@ export const AllVariants: Story = {
         <habit-maker-ui-button-day weekday="F" [dayOfMonth]="14" state="selected" ariaLabel="Friday, day 14, complete" />
         <habit-maker-ui-button-day weekday="S" [dayOfMonth]="15" state="disabled" ariaLabel="Saturday, day 15, unavailable" />
         <habit-maker-ui-button-day weekday="S" [dayOfMonth]="16" state="today" ariaLabel="Today, Sunday, day 16" />
+        <habit-maker-ui-button-day state="selected" ariaLabel="Habit complete" />
+        <habit-maker-ui-button-day ariaLabel="Habit not complete" />
       </div>
     `,
   }),

@@ -27,11 +27,15 @@
 }
 
 <ng-template #dayContent>
+  @if (weekday() !== null) {
   <span class="hm-button-day__weekday">{{ weekday() }}</span>
+  }
   <span class="hm-button-day__marker" aria-hidden="true">
     @if (isSelected()) {
     <habit-maker-ui-icon class="hm-button-day__check" name="check" />
     }
   </span>
+  @if (dayOfMonth() !== null) {
   <span class="hm-button-day__date">{{ dayOfMonth() }}</span>
+  }
 </ng-template>

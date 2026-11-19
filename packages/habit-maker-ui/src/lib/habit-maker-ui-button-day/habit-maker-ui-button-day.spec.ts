@@ -56,6 +56,19 @@ describe('HabitMakerUIButtonDay', () => {
     });
   });
 
+  it('renders only the marker when weekday and day of month are omitted', () => {
+    fixture.componentRef.setInput('weekday', null);
+    fixture.componentRef.setInput('dayOfMonth', null);
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector(
+      'button',
+    ) as HTMLButtonElement;
+    expect(button.querySelector('.hm-button-day__marker')).not.toBeNull();
+    expect(button.querySelector('.hm-button-day__weekday')).toBeNull();
+    expect(button.querySelector('.hm-button-day__date')).toBeNull();
+  });
+
   it('keeps disabled days unavailable to keyboard and pointer activation', () => {
     fixture.componentRef.setInput('state', 'disabled');
     fixture.detectChanges();
