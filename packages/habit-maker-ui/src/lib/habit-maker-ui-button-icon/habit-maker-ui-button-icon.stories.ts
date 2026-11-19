@@ -32,15 +32,16 @@ export default meta;
 type Story = StoryObj<HabitMakerUIButtonIcon>;
 
 export const Playground: Story = {
-  args: { hmButtonIcon: 'primary', size: 'normal' },
+  args: { hmButtonIcon: 'primary', size: 'normal', selected: false },
   argTypes: {
     hmButtonIcon: { control: 'select', options: ['primary', 'secondary'] },
     size: { control: 'select', options: ['small', 'normal', 'big'] },
+    selected: { control: 'boolean' },
   },
   render: (args) => ({
     props: args,
     template:
-      '<button type="button" aria-label="Add habit" [hmButtonIcon]="hmButtonIcon" [size]="size"><habit-maker-ui-icon name="add" /></button>',
+      '<button type="button" aria-label="Add habit" [hmButtonIcon]="hmButtonIcon" [size]="size" [selected]="selected"><habit-maker-ui-icon name="add" /></button>',
   }),
 };
 
@@ -55,6 +56,7 @@ export const AllVariants: Story = {
         <button hmButtonIcon="secondary" size="small" aria-label="Settings small"><habit-maker-ui-icon name="settings" /></button>
         <button hmButtonIcon="secondary" size="normal" aria-label="Settings normal"><habit-maker-ui-icon name="settings" /></button>
         <button hmButtonIcon="secondary" size="big" aria-label="Settings big"><habit-maker-ui-icon name="settings" /></button>
+        <button hmButtonIcon="secondary" size="normal" selected aria-label="Settings selected"><habit-maker-ui-icon name="settings" /></button>
         <button hmButtonIcon="primary" aria-label="Disabled" disabled><habit-maker-ui-icon name="add" /></button>
       </div>
     `,

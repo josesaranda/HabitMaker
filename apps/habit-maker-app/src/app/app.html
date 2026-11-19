@@ -6,20 +6,39 @@
     [brandLabel]="'navigation.brandLabel' | transloco"
     [navigationLabel]="'navigation.main' | transloco"
   >
-    <a class="app-navbar__link" routerLink="/home" aria-current="page">
+    <a
+      class="app-navbar__link"
+      routerLink="/home"
+      routerLinkActive="app-navbar__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
+    >
       {{ 'navigation.home' | transloco }}
     </a>
-    <a class="app-navbar__link" routerLink="/today">
+    <a
+      class="app-navbar__link"
+      routerLink="/today"
+      routerLinkActive="app-navbar__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
+    >
       {{ 'navigation.today' | transloco }}
     </a>
-    <a class="app-navbar__link" routerLink="/settings"
-      >{{ 'navigation.settings' | transloco }}</a
+    <a
+      class="app-navbar__link"
+      routerLink="/settings"
+      routerLinkActive="app-navbar__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
     >
+      {{ 'navigation.settings' | transloco }}
+    </a>
     <div class="app-navbar__icon-actions flex flex-row gap-3">
       <a
         class="app-navbar__mobile-today"
         hmButtonIcon="secondary"
         size="normal"
+        [selected]="isTodayActive()"
         routerLink="/today"
         [attr.aria-label]="'navigation.today' | transloco"
         [title]="'navigation.today' | transloco"
@@ -37,6 +56,7 @@
         class="app-navbar__mobile-settings"
         hmButtonIcon="secondary"
         size="normal"
+        [selected]="isSettingsActive()"
         routerLink="/settings"
         [attr.aria-label]="'navigation.settings' | transloco"
         [title]="'navigation.settings' | transloco"

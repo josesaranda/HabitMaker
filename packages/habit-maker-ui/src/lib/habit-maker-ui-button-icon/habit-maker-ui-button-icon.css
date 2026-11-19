@@ -88,6 +88,22 @@ button.hm-button-icon:disabled {
   opacity: 0.5;
 }
 
+.hm-button-icon--selected {
+  background-color: var(--color-surface);
+  border-color: var(--color-green-600);
+  border-width: 2px;
+  color: var(--color-green-600);
+}
+
+.hm-button-icon--selected:hover:not(:disabled) {
+  background-color: var(--color-surface-secondary);
+}
+
+.hm-button-icon--selected:focus-visible {
+  outline: 2px solid var(--color-primary-hover);
+  outline-offset: 2px;
+}
+
 .hm-button-icon habit-maker-ui-icon {
   width: 1em;
   height: 1em;

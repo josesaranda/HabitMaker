@@ -10,6 +10,8 @@ import { Directive, input } from '@angular/core';
     '[class.hm-button-icon--small]': 'size() === "small"',
     '[class.hm-button-icon--normal]': 'size() === "normal"',
     '[class.hm-button-icon--big]': 'size() === "big"',
+    '[class.hm-button-icon--selected]': 'selected()',
+    '[attr.aria-pressed]': 'selected() ? "true" : null',
   },
 })
 export class HabitMakerUIButtonIcon {
@@ -20,6 +22,7 @@ export class HabitMakerUIButtonIcon {
   size = input<HabitMakerUIButtonIconSize, string>('normal', {
     transform: normalizeSize,
   });
+  selected = input<boolean>(false);
 }
 
 export type HabitMakerUIButtonIconVariant = 'primary' | 'secondary';
