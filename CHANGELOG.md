@@ -1,3 +1,13 @@
+# [1.13.0](https://github.com/josesaranda/HabitMaker/compare/v1.12.0...v1.13.0) (2026-11-19)
+
+
+### Features
+
+* add compact card component and enhance button-day functionality ([c40103f](https://github.com/josesaranda/HabitMaker/commit/c40103febf89397be38a7ded0fb38023e95439c8))
+* add current streak tracking for habits ([6cc29bc](https://github.com/josesaranda/HabitMaker/commit/6cc29bc4df987d2f149f16549e9f1427cb2f7edc))
+* enable isolate option for unit tests in project configuration ([25f7474](https://github.com/josesaranda/HabitMaker/commit/25f7474436cc252faffd7e270bf26593411243c7))
+* implement Today view with habit tracking and UI enhancements ([b992344](https://github.com/josesaranda/HabitMaker/commit/b992344d04469f5c2b933c60b6d55041d2e978d1))
+
 # [1.12.0](https://github.com/josesaranda/HabitMaker/compare/v1.11.1...v1.12.0) (2026-11-18)
 
 
