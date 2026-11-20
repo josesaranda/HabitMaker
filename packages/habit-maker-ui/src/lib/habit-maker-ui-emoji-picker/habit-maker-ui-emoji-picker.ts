@@ -1,5 +1,6 @@
 import { Component, computed, input, output } from '@angular/core';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIText } from '../habit-maker-ui-text/habit-maker-ui-text';
 
 export const HABIT_MAKER_UI_EMOJIS = [
   '✨',
@@ -77,7 +78,7 @@ export const HABIT_MAKER_UI_EMOJIS = [
 
 @Component({
   selector: 'hm-emoji-picker',
-  imports: [HabitMakerUIIcon],
+  imports: [HabitMakerUIIcon, HabitMakerUIText],
   templateUrl: './habit-maker-ui-emoji-picker.html',
   styleUrl: './habit-maker-ui-emoji-picker.css',
   host: { class: 'hm-emoji-picker' },

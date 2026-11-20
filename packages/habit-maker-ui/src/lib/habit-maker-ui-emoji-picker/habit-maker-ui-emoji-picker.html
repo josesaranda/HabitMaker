@@ -1,5 +1,6 @@
 <div class="hm-emoji-picker__options">
   <button
+    hmText="body-xl"
     class="hm-emoji-picker__option"
     [class.hm-emoji-picker__option--selected]="selectedEmoji() === null"
     type="button"
@@ -12,6 +13,7 @@
   </button>
   @for (emoji of orderedEmojis(); track emoji) {
   <button
+    hmText="body-xl"
     class="hm-emoji-picker__option"
     [class.hm-emoji-picker__option--selected]="selectedEmoji() === emoji"
     type="button"

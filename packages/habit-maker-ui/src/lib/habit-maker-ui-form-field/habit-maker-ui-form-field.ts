@@ -23,7 +23,7 @@ export class HabitMakerUIFormField {}
   selector: 'label[hmLabel]',
   standalone: true,
   host: {
-    class: 'hm-form-field__label',
+    class: 'hm-form-field__label hm-text hm-text--caption',
   },
 })
 export class HabitMakerUIFormFieldLabel {}
@@ -41,7 +41,7 @@ export class HabitMakerUIFormFieldIconRight {}
   selector: '[hmHint]',
   standalone: true,
   host: {
-    class: 'hm-form-field__hint',
+    class: 'hm-form-field__hint hm-text hm-text--caption',
   },
 })
 export class HabitMakerUIFormFieldHint {}
@@ -50,7 +50,7 @@ export class HabitMakerUIFormFieldHint {}
   selector: '[hmError]',
   standalone: true,
   host: {
-    class: 'hm-form-field__error',
+    class: 'hm-form-field__error hm-text hm-text--caption',
     role: 'alert',
     'aria-live': 'assertive',
   },

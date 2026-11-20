@@ -2,13 +2,14 @@ import { NgTemplateOutlet } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import confetti from '@hiseb/confetti';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIText } from '../habit-maker-ui-text/habit-maker-ui-text';
 
 export type HabitMakerUIButtonDayState =
   'default' | 'hover' | 'focus' | 'active' | 'selected' | 'disabled' | 'today';
 
 @Component({
   selector: 'hm-button-day',
-  imports: [HabitMakerUIIcon, NgTemplateOutlet],
+  imports: [HabitMakerUIIcon, HabitMakerUIText, NgTemplateOutlet],
   templateUrl: './habit-maker-ui-button-day.html',
   styleUrl: './habit-maker-ui-button-day.css',
   host: { class: 'hm-button-day__host' },

@@ -19,7 +19,7 @@ function normalizeBadgeVariant(value: string): HabitMakerUIBadgeVariant {
 @Component({
   selector: 'hm-badge',
   host: {
-    class: 'hm-badge',
+    class: 'hm-badge hm-text hm-text--caption',
     '[class.hm-badge--default]': 'variant() === "default"',
     '[class.hm-badge--secondary]': 'variant() === "secondary"',
     '[class.hm-badge--destructive]': 'variant() === "destructive"',

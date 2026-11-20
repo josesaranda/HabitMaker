@@ -104,7 +104,6 @@
   border-radius: 9999px;
   padding: 0.25rem 0.5rem;
   color: var(--color-accent);
-  font-size: 0.7rem;
 }
 
 .hm-card__since-icon {
@@ -120,7 +119,6 @@
   border-radius: 9999px;
   padding: 0.25rem 0.5rem;
   color: var(--color-warning);
-  font-size: 0.7rem;
   font-weight: 600;
 }
 
@@ -137,6 +135,5 @@
 :host ::ng-deep .hm-card__title > [hmCardTitle] {
   margin: 0;
   color: var(--color-text-white);
-  font-size: 0.875rem;
   font-weight: 600;
 }

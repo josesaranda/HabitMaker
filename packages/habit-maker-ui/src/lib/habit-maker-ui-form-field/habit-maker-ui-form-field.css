@@ -15,7 +15,6 @@
 
 .hm-form-field__label {
   color: var(--color-text-primary);
-  font-size: 0.8rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -55,7 +54,6 @@
 .hm-form-field__hint,
 .hm-form-field__error {
   margin: 0;
-  font-size: 0.75rem;
 }
 
 .hm-form-field__hint {

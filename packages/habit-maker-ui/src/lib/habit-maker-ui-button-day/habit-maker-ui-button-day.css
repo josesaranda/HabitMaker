@@ -13,7 +13,6 @@
   background: transparent;
   color: rgb(255 255 255 / 55%);
   font: inherit;
-  font-size: 0.65rem;
   cursor: pointer;
   transition:
     color 150ms ease,
@@ -44,7 +43,6 @@
 
 .hm-button-day__date {
   color: rgb(255 255 255 / 55%);
-  font-size: 0.6rem;
 }
 
 .hm-button-day:hover,

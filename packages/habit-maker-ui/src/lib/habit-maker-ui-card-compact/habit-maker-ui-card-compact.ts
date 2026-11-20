@@ -1,10 +1,11 @@
 import { Component, booleanAttribute, input, output } from '@angular/core';
 import { HabitMakerUIButtonDay } from '../habit-maker-ui-button-day/habit-maker-ui-button-day';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIText } from '../habit-maker-ui-text/habit-maker-ui-text';
 
 @Component({
   selector: 'hm-card-compact',
-  imports: [HabitMakerUIButtonDay, HabitMakerUIIcon],
+  imports: [HabitMakerUIButtonDay, HabitMakerUIIcon, HabitMakerUIText],
   templateUrl: './habit-maker-ui-card-compact.html',
   styleUrl: './habit-maker-ui-card-compact.css',
   host: {

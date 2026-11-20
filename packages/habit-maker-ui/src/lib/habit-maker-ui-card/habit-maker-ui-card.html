@@ -10,12 +10,17 @@
     <div class="hm-card__heading">
       <div class="hm-card__heading-content">
         <div class="hm-card__meta">
-          <time class="hm-card__since" [attr.datetime]="dateTime()">
+          <time
+            hmText="caption"
+            class="hm-card__since"
+            [attr.datetime]="dateTime()"
+          >
             <hm-icon class="hm-card__since-icon" name="clock" />
             {{ formattedSinceDate() }}
           </time>
           @if (showStreak()) {
           <span
+            hmText="caption"
             class="hm-card__streak"
             [title]="streakLabel()"
             [attr.aria-label]="streakLabel()"
@@ -25,7 +30,7 @@
           </span>
           }
         </div>
-        <div class="hm-card__title">
+        <div hmText="body-sm" class="hm-card__title">
           <ng-content select="[hmCardTitle]"></ng-content>
         </div>
       </div>
