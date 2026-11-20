@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
   signal,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -15,6 +16,7 @@ import {
   HabitMakerUIHeader,
   HabitMakerUIIcon,
   HabitMakerUIModal,
+  HabitMakerUINotification,
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
@@ -25,6 +27,7 @@ import {
   HabitService,
 } from '../habits/habit.service';
 import { LanguageService } from '../i18n/language.service';
+import confetti from '@hiseb/confetti';
 import { NewHabit } from '../new-habit/new-habit';
 import { SettingsService } from '../settings/settings.service';
 
@@ -37,6 +40,7 @@ import { SettingsService } from '../settings/settings.service';
     HabitMakerUIHeader,
     HabitMakerUIIcon,
     HabitMakerUIModal,
+    HabitMakerUINotification,
     NewHabit,
     TranslocoPipe,
   ],
@@ -49,6 +53,7 @@ export class Today implements OnInit {
   private readonly languageService = inject(LanguageService);
   private readonly homePreferences = inject(SettingsService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly allDoneNotification = viewChild(HabitMakerUINotification);
 
   protected readonly habits = signal<Habit[]>([]);
   protected readonly completions = signal<Record<string, boolean>>({});
@@ -129,6 +134,17 @@ export class Today implements OnInit {
             ...completions,
             [habitId]: completion.completed,
           }));
+
+          if (
+            completion.completed &&
+            this.activeHabits().length > 0 &&
+            this.activeHabits().every(
+              (habit) => this.completions()[habit.id] === true,
+            )
+          ) {
+            this.allDoneNotification()?.open();
+            this.launchConfetti();
+          }
         },
         error: () => {
           this.setSaving(habitId, false);
@@ -139,6 +155,24 @@ export class Today implements OnInit {
           this.completionError.set('home.activityError');
         },
       });
+  }
+
+  private launchConfetti(): void {
+    const width = window.innerWidth || 1024;
+    const launchPoints = [0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9].map((fraction) =>
+      Math.round(width * fraction),
+    );
+
+    launchPoints.forEach((x, index) => {
+      setTimeout(() => {
+        confetti({
+          position: { x, y: 0 },
+          count: 140,
+          size: 1.1,
+          velocity: 220,
+        });
+      }, index * 120);
+    });
   }
 
   private setSaving(habitId: string, saving: boolean): void {

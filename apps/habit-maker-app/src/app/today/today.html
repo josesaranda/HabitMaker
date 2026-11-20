@@ -112,4 +112,14 @@
   >
     <app-new-habit (habitCreated)="newHabitModal.close()" />
   </hm-modal>
+
+  <hm-notification
+    #allDoneNotification
+    type="success"
+    label="All habits completed"
+    duration="5000"
+    position="top-right"
+  >
+    Congratulations! You completed all your habits today.
+  </hm-notification>
 </main>

@@ -29,6 +29,7 @@ class ArrowLeftIconHostComponent {}
 @Component({
   imports: [HabitMakerUIIcon],
   template: `
+    <hm-icon name="alert-triangle" />
     <hm-icon name="arrow-right" />
     <hm-icon name="brand-mark" />
     <hm-icon name="calendar" />
@@ -39,8 +40,10 @@ class ArrowLeftIconHostComponent {}
     <hm-icon name="eye" />
     <hm-icon name="eye-off" />
     <hm-icon name="flame" />
+    <hm-icon name="info" />
     <hm-icon name="sparkle" />
     <hm-icon name="sprout" />
+    <hm-icon name="x-circle" />
   `,
 })
 class AdditionalIconsHostComponent {}
@@ -116,6 +119,7 @@ describe('HabitMakerUIIcon', () => {
         (use: SVGUseElement) => use.getAttribute('href'),
       ),
     ).toEqual([
+      'assets/icons/alert-triangle.svg#alert-triangle',
       'assets/icons/arrow-right.svg#arrow-right',
       'assets/icons/brand-mark.svg#brand-mark',
       'assets/icons/calendar.svg#calendar',
@@ -126,8 +130,10 @@ describe('HabitMakerUIIcon', () => {
       'assets/icons/eye.svg#eye',
       'assets/icons/eye-off.svg#eye-off',
       'assets/icons/flame.svg#flame',
+      'assets/icons/info.svg#info',
       'assets/icons/sparkle.svg#sparkle',
       'assets/icons/sprout.svg#sprout',
+      'assets/icons/x-circle.svg#x-circle',
     ]);
   });
 });
