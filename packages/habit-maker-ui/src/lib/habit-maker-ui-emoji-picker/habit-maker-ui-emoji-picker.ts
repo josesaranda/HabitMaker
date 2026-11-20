@@ -76,7 +76,7 @@ export const HABIT_MAKER_UI_EMOJIS = [
 ] as const;
 
 @Component({
-  selector: 'habit-maker-ui-emoji-picker',
+  selector: 'hm-emoji-picker',
   imports: [HabitMakerUIIcon],
   templateUrl: './habit-maker-ui-emoji-picker.html',
   styleUrl: './habit-maker-ui-emoji-picker.css',

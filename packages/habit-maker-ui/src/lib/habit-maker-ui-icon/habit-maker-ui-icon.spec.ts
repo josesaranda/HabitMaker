@@ -4,44 +4,43 @@ import { HabitMakerUIIcon } from './habit-maker-ui-icon';
 
 @Component({
   imports: [HabitMakerUIIcon],
-  template: '<habit-maker-ui-icon name="logout" />',
+  template: '<hm-icon name="logout" />',
 })
 class HostComponent {}
 
 @Component({
   imports: [HabitMakerUIIcon],
-  template: '<habit-maker-ui-icon name="add" />',
+  template: '<hm-icon name="add" />',
 })
 class AddIconHostComponent {}
 
 @Component({
   imports: [HabitMakerUIIcon],
-  template:
-    '<habit-maker-ui-icon name="check" /><habit-maker-ui-icon name="clock" />',
+  template: '<hm-icon name="check" /><hm-icon name="clock" />',
 })
 class CompletionIconsHostComponent {}
 
 @Component({
   imports: [HabitMakerUIIcon],
-  template: '<habit-maker-ui-icon name="arrow-left" />',
+  template: '<hm-icon name="arrow-left" />',
 })
 class ArrowLeftIconHostComponent {}
 
 @Component({
   imports: [HabitMakerUIIcon],
   template: `
-    <habit-maker-ui-icon name="arrow-right" />
-    <habit-maker-ui-icon name="brand-mark" />
-    <habit-maker-ui-icon name="calendar" />
-    <habit-maker-ui-icon name="chevron-left" />
-    <habit-maker-ui-icon name="chevron-right" />
-    <habit-maker-ui-icon name="close" />
-    <habit-maker-ui-icon name="edit" />
-    <habit-maker-ui-icon name="eye" />
-    <habit-maker-ui-icon name="eye-off" />
-    <habit-maker-ui-icon name="flame" />
-    <habit-maker-ui-icon name="sparkle" />
-    <habit-maker-ui-icon name="sprout" />
+    <hm-icon name="arrow-right" />
+    <hm-icon name="brand-mark" />
+    <hm-icon name="calendar" />
+    <hm-icon name="chevron-left" />
+    <hm-icon name="chevron-right" />
+    <hm-icon name="close" />
+    <hm-icon name="edit" />
+    <hm-icon name="eye" />
+    <hm-icon name="eye-off" />
+    <hm-icon name="flame" />
+    <hm-icon name="sparkle" />
+    <hm-icon name="sprout" />
   `,
 })
 class AdditionalIconsHostComponent {}

@@ -1,5 +1,5 @@
 <main class="flex h-full flex-col bg-background px-4 sm:px-[4vw] lg:px-12">
-  <habit-maker-ui-header titleId="habits-title">
+  <hm-header titleId="habits-title">
     {{ 'home.title' | transloco }} @if (hasArchived() || showArchived()) {
     <button
       hmButtonIcon="secondary"
@@ -9,9 +9,7 @@
       [attr.aria-pressed]="showArchived()"
       (click)="toggleShowArchived()"
     >
-      <habit-maker-ui-icon
-        [name]="showArchived() ? 'archive-check' : 'archive-off'"
-      />
+      <hm-icon [name]="showArchived() ? 'archive-check' : 'archive-off'" />
     </button>
     }
     <button
@@ -22,9 +20,9 @@
       [title]="'navigation.addHabit' | transloco"
       (click)="newHabitModal.openFrom(addHabitTrigger)"
     >
-      <habit-maker-ui-icon name="add" />
+      <hm-icon name="add" />
     </button>
-  </habit-maker-ui-header>
+  </hm-header>
   @if (hasHabits()) { @if (dayCompletionError()) {
   <p class="mx-auto mt-3 w-full max-w-6xl text-error" role="alert">
     {{ dayCompletionError() | transloco }}
@@ -113,11 +111,11 @@
     </button>
   </section>
   }
-  <habit-maker-ui-modal
+  <hm-modal
     #newHabitModal
     [label]="'home.newHabitModal' | transloco"
     [closeLabel]="'navigation.closeDialog' | transloco"
   >
     <app-new-habit (habitCreated)="newHabitModal.close()" />
-  </habit-maker-ui-modal>
+  </hm-modal>
 </main>

@@ -84,9 +84,7 @@
             [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
             [attr.aria-pressed]="passwordVisible()"
           >
-            <habit-maker-ui-icon
-              [name]="passwordVisible() ? 'eye-off' : 'eye'"
-            />
+            <hm-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
           </button>
           @if (passwordError(); as passwordErrorKey) {
           <span id="signup-password-help" hmError>
@@ -118,7 +116,7 @@
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
           {{ 'signup.submit' | transloco }}
-          <habit-maker-ui-icon name="arrow-right" />
+          <hm-icon name="arrow-right" />
         </button>
         <p class="form-message" aria-live="polite">
           {{ message() | transloco }}

@@ -20,7 +20,7 @@ import { HabitMakerUIHeader } from './habit-maker-ui-header';
   ],
   providers: [HabitMakerUIHeaderPortalService],
   template: `
-    <habit-maker-ui-header [backNavigation]="backNavigation()">
+    <hm-header [backNavigation]="backNavigation()">
       {{ title() }}
       <button
         hmButton
@@ -35,10 +35,10 @@ import { HabitMakerUIHeader } from './habit-maker-ui-header';
         type="button"
         [style.display]="showActions() ? null : 'none'"
       >
-        <habit-maker-ui-icon name="settings" />
+        <hm-icon name="settings" />
       </button>
-    </habit-maker-ui-header>
-    <habit-maker-ui-header-outlet />
+    </hm-header>
+    <hm-header-outlet />
   `,
 })
 class HeaderStoryVariant {
@@ -54,7 +54,7 @@ const meta: Meta<HabitMakerUIHeader> = {
     docs: {
       description: {
         component: [
-          'Declare the page title and optional back link or actions directly inside `habit-maker-ui-header`. Its content is projected into the shared root header outlet when the route becomes active.',
+          'Declare the page title and optional back link or actions directly inside `hm-header`. Its content is projected into the shared root header outlet when the route becomes active.',
           '',
           'Add one `HabitMakerUIHeaderOutlet` to the application root, outside the router outlet. See the **Header Outlet** documentation for the root setup.',
           '',
@@ -63,14 +63,14 @@ const meta: Meta<HabitMakerUIHeader> = {
           'Actions are projected from buttons or links using `hmButton` or `hmButtonIcon`:',
           '',
           '```html',
-          '<habit-maker-ui-header',
+          '<hm-header',
           '  backNavigation="/home"',
           '  backLabel="Back to habits"',
           '  titleId="settings-title"',
           '>',
           '  Account settings',
           '  <button hmButton="primary" type="button">Save changes</button>',
-          '</habit-maker-ui-header>',
+          '</hm-header>',
           '```',
         ].join('\n'),
       },
@@ -102,7 +102,7 @@ export const Playground: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <habit-maker-ui-header
+      <hm-header
         [backNavigation]="backNavigation"
         [backLabel]="backLabel"
         [backTitle]="backTitle"
@@ -110,8 +110,8 @@ export const Playground: Story = {
       >
         Weekly overview
         <button hmButton type="button">New habit</button>
-      </habit-maker-ui-header>
-      <habit-maker-ui-header-outlet />
+      </hm-header>
+      <hm-header-outlet />
     `,
   }),
 };

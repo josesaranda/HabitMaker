@@ -7,7 +7,7 @@ import { HabitMakerUIEmojiPicker } from './habit-maker-ui-emoji-picker';
   template: `
     <fieldset>
       <legend>Choose an emoji</legend>
-      <habit-maker-ui-emoji-picker
+      <hm-emoji-picker
         noneOptionLabel="No emoji"
         [selectedEmoji]="selectedEmoji()"
         [pinnedEmoji]="pinnedEmoji()"
@@ -34,7 +34,7 @@ describe('HabitMakerUIEmojiPicker', () => {
 
   it('renders the emoji options and indicates the current selection', () => {
     const picker = fixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const options = picker.querySelectorAll<HTMLButtonElement>(
       '.hm-emoji-picker__option',
@@ -78,7 +78,7 @@ describe('HabitMakerUIEmojiPicker', () => {
   it('shows the pinned emoji as the second option, without duplicating it', () => {
     const pinnedFixture = createPickerWithPinnedEmoji('📚');
     const picker = pinnedFixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const options = Array.from(
       picker.querySelectorAll<HTMLButtonElement>('.hm-emoji-picker__option'),
@@ -94,7 +94,7 @@ describe('HabitMakerUIEmojiPicker', () => {
 
   it('does not reorder the options when a previously unselected emoji is chosen', () => {
     const picker = fixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const indexesBeforeSelection = getOptionIndexes(picker);
 
@@ -112,7 +112,7 @@ describe('HabitMakerUIEmojiPicker', () => {
   it('keeps the pinned emoji second when another emoji is chosen', () => {
     const pinnedFixture = createPickerWithPinnedEmoji('📚');
     const picker = pinnedFixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const indexesBeforeSelection = getOptionIndexes(picker);
 
@@ -135,7 +135,7 @@ describe('HabitMakerUIEmojiPicker', () => {
 
   it('emits the chosen emoji and updates the selected state', () => {
     const picker = fixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const booksOption = Array.from(
       picker.querySelectorAll<HTMLButtonElement>('.hm-emoji-picker__option'),
@@ -152,7 +152,7 @@ describe('HabitMakerUIEmojiPicker', () => {
 
   it('also selects an emoji with the space key', () => {
     const picker = fixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const waterOption = Array.from(
       picker.querySelectorAll<HTMLButtonElement>('.hm-emoji-picker__option'),
@@ -168,7 +168,7 @@ describe('HabitMakerUIEmojiPicker', () => {
 
   it('clears the selected emoji when the selected button is chosen again', () => {
     const picker = fixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const sparklesOption = Array.from(
       picker.querySelectorAll<HTMLButtonElement>('.hm-emoji-picker__option'),
@@ -186,7 +186,7 @@ describe('HabitMakerUIEmojiPicker', () => {
 
   it('selects the first no-emoji option to save a null value', () => {
     const picker = fixture.nativeElement.querySelector(
-      'habit-maker-ui-emoji-picker',
+      'hm-emoji-picker',
     ) as HTMLElement;
     const noEmojiOption = picker.querySelector<HTMLButtonElement>(
       'button[aria-label="No emoji"]',

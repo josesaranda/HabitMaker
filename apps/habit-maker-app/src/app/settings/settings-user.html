@@ -27,23 +27,19 @@
       <label hmLabel id="language-label">
         {{ 'settings.language' | transloco }}
       </label>
-      <habit-maker-ui-select
+      <hm-select
         name="language"
         [aria-labelledby]="'language-label'"
         [ngModel]="languageService.language()"
         (ngModelChange)="setLanguage($event)"
       >
-        <habit-maker-ui-option
-          value="en"
-          [label]="'settings.english' | transloco"
-          >{{ 'settings.english' | transloco }}</habit-maker-ui-option
+        <hm-option value="en" [label]="'settings.english' | transloco"
+          >{{ 'settings.english' | transloco }}</hm-option
         >
-        <habit-maker-ui-option
-          value="es"
-          [label]="'settings.spanish' | transloco"
-          >{{ 'settings.spanish' | transloco }}</habit-maker-ui-option
+        <hm-option value="es" [label]="'settings.spanish' | transloco"
+          >{{ 'settings.spanish' | transloco }}</hm-option
         >
-      </habit-maker-ui-select>
+      </hm-select>
     </hm-form-field>
   </div>
   <section
@@ -99,9 +95,9 @@
               {{ session.deviceName }}
             </p>
             @if (session.isCurrent) {
-            <habit-maker-ui-badge variant="secondary">
+            <hm-badge variant="secondary">
               {{ 'settings.currentSession' | transloco }}
-            </habit-maker-ui-badge>
+            </hm-badge>
             }
           </div>
           <dl

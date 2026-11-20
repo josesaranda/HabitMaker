@@ -54,7 +54,7 @@ export const Playground: Story = {
           type="button"
           aria-label="Toggle password visibility"
         >
-          <habit-maker-ui-icon name="eye" />
+          <hm-icon name="eye" />
         </button>
         <p hmHint>Use at least 8 characters.</p>
       </hm-form-field>
@@ -91,7 +91,7 @@ export const AllVariants: Story = {
             type="button"
             aria-label="Show password"
           >
-            <habit-maker-ui-icon name="eye" />
+            <hm-icon name="eye" />
           </button>
           <p id="form-field-help" hmHint>Use at least 8 characters.</p>
         </hm-form-field>

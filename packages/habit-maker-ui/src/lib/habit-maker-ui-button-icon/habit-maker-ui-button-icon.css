@@ -104,7 +104,7 @@ button.hm-button-icon:disabled {
   outline-offset: 2px;
 }
 
-.hm-button-icon habit-maker-ui-icon {
+.hm-button-icon hm-icon {
   width: 1em;
   height: 1em;
 }

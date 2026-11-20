@@ -94,7 +94,7 @@ describe('Home', () => {
     expect(compiled.querySelector('[data-testid="home-add-habit"]')).toBeNull();
     expect(compiled.querySelector('[data-testid="home-welcome"]')).toBeNull();
     expect(compiled.querySelector('#home-title')).toBeNull();
-    expect(compiled.querySelector('habit-maker-ui-header')).not.toBeNull();
+    expect(compiled.querySelector('hm-header')).not.toBeNull();
     expect(compiled.querySelectorAll('app-habit-card')).toHaveLength(2);
     expect(compiled.querySelector('app-habit-card')?.closest('a')).toBeNull();
     expect(
@@ -162,9 +162,7 @@ describe('Home', () => {
 
     expect(streak?.textContent).toContain('3');
     expect(streak?.getAttribute('aria-label')).toBe('3 días consecutivos');
-    expect(
-      streak?.querySelector('habit-maker-ui-icon[name="flame"]'),
-    ).not.toBeNull();
+    expect(streak?.querySelector('hm-icon[name="flame"]')).not.toBeNull();
 
     const toggle = Array.from(
       compiled.querySelectorAll<HTMLButtonElement>(

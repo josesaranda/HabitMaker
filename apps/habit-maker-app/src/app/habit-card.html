@@ -1,4 +1,4 @@
-<habit-maker-ui-card
+<hm-card
   [since]="startedAt()"
   [emoji]="emoji()"
   [locale]="locale()"
@@ -10,7 +10,7 @@
   <h2 hmCardTitle>
     {{ name().substring(0, 30) + (name().length > 30 ? '...' : '') }}
   </h2>
-  <habit-maker-ui-day-selector
+  <hm-day-selector
     [days]="days()"
     [localeDays]="localeDays()"
     [showNavigation]="showDayNavigation()"
@@ -26,4 +26,4 @@
     {{ labels().completionError }}
   </p>
   }
-</habit-maker-ui-card>
+</hm-card>

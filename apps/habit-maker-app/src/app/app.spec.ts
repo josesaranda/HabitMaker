@@ -66,7 +66,7 @@ describe('App', () => {
     expect(
       compiled.querySelector('app-login #login-title')?.textContent,
     ).toContain('Inicia sesión');
-    expect(compiled.querySelector('habit-maker-ui-navbar')).toBeNull();
+    expect(compiled.querySelector('hm-navbar')).toBeNull();
     expect(
       compiled
         .querySelector('.app-content-shell')
@@ -103,12 +103,11 @@ describe('App', () => {
       fixture.nativeElement.querySelector('app-habit-detail'),
     ).not.toBeNull();
     expect(
-      fixture.nativeElement.querySelector('habit-maker-ui-header-outlet h1')
-        ?.textContent,
+      fixture.nativeElement.querySelector('hm-header-outlet h1')?.textContent,
     ).toContain('Detalle del hábito');
     expect(
       fixture.nativeElement.querySelector(
-        'app-habit-detail app-habit-card habit-maker-ui-card article h2',
+        'app-habit-detail app-habit-card hm-card article h2',
       )?.textContent,
     ).toContain('Leer 10 minutos');
   });
@@ -135,15 +134,14 @@ describe('App', () => {
 
     expect(compiled.querySelector('app-today')).not.toBeNull();
     expect(
-      compiled.querySelector('habit-maker-ui-header-outlet h1#today-title')
-        ?.textContent,
+      compiled.querySelector('hm-header-outlet h1#today-title')?.textContent,
     ).toContain(`Hoy ${expectedDate}`);
     expect(
       compiled.querySelector('a.app-navbar__link[href="/today"]')?.textContent,
     ).toContain('Hoy');
     expect(
       compiled.querySelector(
-        'habit-maker-ui-header-outlet button[aria-label="Mostrar hábitos archivados"]',
+        'hm-header-outlet button[aria-label="Mostrar hábitos archivados"]',
       ),
     ).toBeNull();
     const mobileTodayLink = compiled.querySelector<HTMLAnchorElement>(
@@ -152,9 +150,7 @@ describe('App', () => {
     expect(mobileTodayLink?.getAttribute('href')).toBe('/today');
     expect(mobileTodayLink?.getAttribute('aria-label')).toBe('Hoy');
     expect(
-      mobileTodayLink
-        ?.querySelector('habit-maker-ui-icon')
-        ?.getAttribute('name'),
+      mobileTodayLink?.querySelector('hm-icon')?.getAttribute('name'),
     ).toBe('calendar');
     expect(mobileTodayLink?.textContent?.trim()).toBe(
       String(new Date().getDate()),
@@ -200,7 +196,7 @@ describe('App', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const archivedToggle = compiled.querySelector<HTMLButtonElement>(
-      'habit-maker-ui-header-outlet button[aria-label="Mostrar hábitos archivados"]',
+      'hm-header-outlet button[aria-label="Mostrar hábitos archivados"]',
     );
 
     expect(archivedToggle).not.toBeNull();
@@ -237,9 +233,7 @@ describe('App', () => {
         ?.textContent,
     ).toContain('Añade tu primer hábito');
     expect(
-      fixture.nativeElement.querySelector(
-        'habit-maker-ui-navbar habit-maker-ui-brand',
-      ),
+      fixture.nativeElement.querySelector('hm-navbar hm-brand'),
     ).not.toBeNull();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
@@ -248,15 +242,12 @@ describe('App', () => {
         ?.classList.contains('app-content-shell--with-mobile-navbar'),
     ).toBe(true);
     expect(
-      compiled.querySelector('habit-maker-ui-header-outlet h1#habits-title')
-        ?.textContent,
+      compiled.querySelector('hm-header-outlet h1#habits-title')?.textContent,
     ).toContain('Tus hábitos');
     const addHabitButton = compiled.querySelector<HTMLButtonElement>(
-      'habit-maker-ui-header-outlet button[hmButtonIcon]',
+      'hm-header-outlet button[hmButtonIcon]',
     );
-    expect(
-      compiled.querySelector('app-home habit-maker-ui-header h1'),
-    ).toBeNull();
+    expect(compiled.querySelector('app-home hm-header h1')).toBeNull();
     expect(addHabitButton?.getAttribute('aria-label')).toBe('Añadir hábito');
     const mobileSettingsLink = compiled.querySelector<HTMLAnchorElement>(
       'a.app-navbar__mobile-settings',
@@ -264,9 +255,7 @@ describe('App', () => {
     expect(mobileSettingsLink?.getAttribute('href')).toBe('/settings');
     expect(mobileSettingsLink?.getAttribute('aria-label')).toBe('Ajustes');
     expect(
-      mobileSettingsLink
-        ?.querySelector('habit-maker-ui-icon')
-        ?.getAttribute('name'),
+      mobileSettingsLink?.querySelector('hm-icon')?.getAttribute('name'),
     ).toBe('settings');
     const logoutButton = compiled.querySelector<HTMLButtonElement>(
       'button[aria-label="Cerrar sesión"]',
@@ -274,9 +263,8 @@ describe('App', () => {
     expect(logoutButton?.getAttribute('hmButtonIcon')).toBe('secondary');
     expect(logoutButton?.getAttribute('size')).toBe('normal');
 
-    const dialog = compiled.querySelector<HTMLDialogElement>(
-      'habit-maker-ui-modal dialog',
-    )!;
+    const dialog =
+      compiled.querySelector<HTMLDialogElement>('hm-modal dialog')!;
     Object.defineProperty(dialog, 'showModal', {
       configurable: true,
       value: () => dialog.setAttribute('open', ''),
@@ -306,17 +294,14 @@ describe('App', () => {
     await fixture.whenStable();
     fixture.detectChanges();
     expect(
-      fixture.nativeElement.querySelector('habit-maker-ui-header-outlet h1')
-        ?.textContent,
+      fixture.nativeElement.querySelector('hm-header-outlet h1')?.textContent,
     ).toContain('Ajustes');
     expect(
-      fixture.nativeElement.querySelector('app-home habit-maker-ui-header h1'),
+      fixture.nativeElement.querySelector('app-home hm-header h1'),
     ).toBeNull();
 
     expect(
-      fixture.nativeElement.querySelector(
-        'habit-maker-ui-navbar habit-maker-ui-brand',
-      ),
+      fixture.nativeElement.querySelector('hm-navbar hm-brand'),
     ).not.toBeNull();
   });
 });

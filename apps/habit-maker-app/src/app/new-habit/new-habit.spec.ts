@@ -53,13 +53,11 @@ describe('NewHabit', () => {
         'hm-form-field > label[hmLabel]#new-habit-emoji-label',
       )?.textContent,
     ).toContain('Elige un emoji');
-    expect(
-      compiled.querySelector('habit-maker-ui-emoji-picker'),
-    ).not.toBeNull();
+    expect(compiled.querySelector('hm-emoji-picker')).not.toBeNull();
     expect(
       compiled
         .querySelector(
-          'habit-maker-ui-emoji-picker .hm-emoji-picker__option[aria-pressed="true"]',
+          'hm-emoji-picker .hm-emoji-picker__option[aria-pressed="true"]',
         )
         ?.getAttribute('aria-label'),
     ).toBe('Sin emoji');
@@ -130,9 +128,7 @@ describe('NewHabit', () => {
     habitInput.value = 'Leer';
     habitInput.dispatchEvent(new Event('input'));
     Array.from(
-      compiled.querySelectorAll<HTMLButtonElement>(
-        'habit-maker-ui-emoji-picker button',
-      ),
+      compiled.querySelectorAll<HTMLButtonElement>('hm-emoji-picker button'),
     )
       .find((button) => button.textContent?.trim() === '📚')!
       .click();

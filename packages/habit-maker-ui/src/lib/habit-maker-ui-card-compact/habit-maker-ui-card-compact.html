@@ -2,11 +2,11 @@
   @if (emoji(); as selectedEmoji) {
   <span class="hm-card-compact__emoji-value">{{ selectedEmoji }}</span>
   } @else {
-  <habit-maker-ui-icon class="hm-card-compact__brand-icon" name="sprout" />
+  <hm-icon class="hm-card-compact__brand-icon" name="sprout" />
   }
 </span>
 <span class="hm-card-compact__name"><ng-content /></span>
-<habit-maker-ui-button-day
+<hm-button-day
   class="hm-card-compact__toggle"
   [selected]="selected()"
   [disabled]="disabled()"

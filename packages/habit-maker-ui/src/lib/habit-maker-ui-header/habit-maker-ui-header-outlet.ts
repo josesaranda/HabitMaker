@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { HabitMakerUIHeaderPortalService } from './habit-maker-ui-header-portal.service';
 
 @Component({
-  selector: 'habit-maker-ui-header-outlet',
+  selector: 'hm-header-outlet',
   standalone: true,
   imports: [NgTemplateOutlet],
   styleUrl: './habit-maker-ui-header-outlet.css',

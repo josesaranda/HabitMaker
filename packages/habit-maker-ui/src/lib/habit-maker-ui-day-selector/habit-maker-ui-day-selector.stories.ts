@@ -39,7 +39,7 @@ export const Playground: Story = {
     props: args,
     template: `
       <div class="min-h-36 rounded-xl bg-[#172f2b] p-6 text-white">
-        <habit-maker-ui-day-selector
+        <hm-day-selector
           [days]="days"
           [localeDays]="localeDays"
           [showNavigation]="showNavigation"
@@ -60,11 +60,11 @@ export const AllVariants: Story = {
     props: { days, localeDays },
     template: `
       <div class="grid max-w-xl gap-6 rounded-xl bg-[#172f2b] p-6 text-white">
-        <habit-maker-ui-day-selector
+        <hm-day-selector
           [days]="days"
           [localeDays]="localeDays"
         />
-        <habit-maker-ui-day-selector
+        <hm-day-selector
           [days]="days"
           [localeDays]="localeDays"
           [showNavigation]="true"

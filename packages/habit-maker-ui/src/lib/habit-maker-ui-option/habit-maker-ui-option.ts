@@ -13,7 +13,7 @@ import { HABIT_MAKER_UI_SELECT_CONTEXT } from '../habit-maker-ui-select/habit-ma
 let nextOptionId = 0;
 
 @Component({
-  selector: 'habit-maker-ui-option',
+  selector: 'hm-option',
   standalone: true,
   template: '<ng-content />',
   styleUrl: './habit-maker-ui-option.css',

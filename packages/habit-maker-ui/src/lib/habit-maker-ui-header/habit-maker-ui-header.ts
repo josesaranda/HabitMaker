@@ -16,7 +16,7 @@ import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
 import { HabitMakerUIHeaderPortalService } from './habit-maker-ui-header-portal.service';
 
 @Component({
-  selector: 'habit-maker-ui-header',
+  selector: 'hm-header',
   standalone: true,
   imports: [HabitMakerUIIcon, RouterLink],
   templateUrl: './habit-maker-ui-header.html',

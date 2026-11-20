@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
 
 @Component({
-  selector: 'habit-maker-ui-card',
+  selector: 'hm-card',
   imports: [HabitMakerUIIcon, RouterLink],
   templateUrl: './habit-maker-ui-card.html',
   styleUrl: './habit-maker-ui-card.css',

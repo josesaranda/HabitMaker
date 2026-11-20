@@ -110,10 +110,10 @@ describe('Settings', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const email = compiled.querySelector<HTMLInputElement>('#user-email');
     const language = compiled.querySelector<HTMLButtonElement>(
-      'habit-maker-ui-select .hm-ui-select__trigger',
+      'hm-select .hm-ui-select__trigger',
     );
 
-    expect(compiled.querySelector('habit-maker-ui-header')).not.toBeNull();
+    expect(compiled.querySelector('hm-header')).not.toBeNull();
     expect(compiled.querySelector('h2')?.textContent).toContain(
       'Ajustes de usuario',
     );
@@ -135,9 +135,7 @@ describe('Settings', () => {
     expect(language?.textContent).toContain('Español');
     language!.click();
     fixture.detectChanges();
-    compiled
-      .querySelector<HTMLElement>('habit-maker-ui-option[value="en"]')!
-      .click();
+    compiled.querySelector<HTMLElement>('hm-option[value="en"]')!.click();
     fixture.detectChanges();
     expect(compiled.querySelector('h2')?.textContent).toContain(
       'User settings',

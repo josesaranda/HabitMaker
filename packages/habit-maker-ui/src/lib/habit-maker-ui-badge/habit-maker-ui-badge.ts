@@ -17,7 +17,7 @@ function normalizeBadgeVariant(value: string): HabitMakerUIBadgeVariant {
 }
 
 @Component({
-  selector: 'habit-maker-ui-badge',
+  selector: 'hm-badge',
   host: {
     class: 'hm-badge',
     '[class.hm-badge--default]': 'variant() === "default"',

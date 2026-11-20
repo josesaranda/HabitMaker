@@ -31,7 +31,7 @@ export interface HabitMakerUIDaySelectorToggleEvent {
 }
 
 @Component({
-  selector: 'habit-maker-ui-day-selector',
+  selector: 'hm-day-selector',
   imports: [HabitMakerUIButtonDay, HabitMakerUIIcon],
   templateUrl: './habit-maker-ui-day-selector.html',
   styleUrl: './habit-maker-ui-day-selector.css',

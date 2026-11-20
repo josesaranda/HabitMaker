@@ -1,6 +1,6 @@
 <main class="min-h-full bg-background px-4 pb-8 sm:px-[4vw] lg:px-12">
   <div class="mx-auto grid w-full max-w-6xl grid-cols-1">
-    <habit-maker-ui-header
+    <hm-header
       backNavigation="/home"
       [backLabel]="'navigation.back' | transloco"
       [backTitle]="'navigation.backTitle' | transloco"
@@ -14,10 +14,10 @@
         [title]="'habitDetail.editButton' | transloco"
         (click)="openEditHabitModal(editHabitModal, editHabitTrigger)"
       >
-        <habit-maker-ui-icon name="edit" />
+        <hm-icon name="edit" />
       </button>
       }
-    </habit-maker-ui-header>
+    </hm-header>
     @if (isLoading()) {
     <p class="mx-auto mt-8 w-full max-w-3xl text-text-secondary" role="status">
       {{ 'habitDetail.loading' | transloco }}
@@ -70,7 +70,7 @@
           class="grid size-11 shrink-0 place-items-center rounded-full border border-[#a8c5ad]/40 bg-[#a8c5ad]/10 text-[#55785f]"
           aria-hidden="true"
         >
-          <habit-maker-ui-icon
+          <hm-icon
             class="size-5"
             [name]="isCompletedToday() ? 'check' : 'clock'"
           />
@@ -207,7 +207,7 @@
         [disabled]="isArchivingHabit()"
         (click)="archiveHabit(!habit()?.archivedAt)"
       >
-        <habit-maker-ui-icon
+        <hm-icon
           class="mr-2 inline-block size-4 align-text-bottom"
           [name]="habit()?.archivedAt ? 'unarchive' : 'archive'"
         />
@@ -239,7 +239,7 @@
         {{ 'habitDetail.deleteButton' | transloco }}
       </button>
     </section>
-    <habit-maker-ui-modal
+    <hm-modal
       #deleteHabitModal
       [label]="'habitDetail.deleteDialogTitle' | transloco"
       [closeLabel]="'navigation.closeDialog' | transloco"
@@ -276,9 +276,9 @@
           </button>
         </div>
       </div>
-    </habit-maker-ui-modal>
+    </hm-modal>
     }
-    <habit-maker-ui-modal
+    <hm-modal
       #editHabitModal
       [label]="'habitDetail.editDialogTitle' | transloco"
       [closeLabel]="'navigation.closeDialog' | transloco"
@@ -321,7 +321,7 @@
           <label hmLabel id="edit-habit-emoji-label">
             {{ 'emojiPicker.label' | transloco }}
           </label>
-          <habit-maker-ui-emoji-picker
+          <hm-emoji-picker
             role="group"
             aria-labelledby="edit-habit-emoji-label"
             [noneOptionLabel]="'emojiPicker.none' | transloco"
@@ -354,6 +354,6 @@
           </button>
         </div>
       </form>
-    </habit-maker-ui-modal>
+    </hm-modal>
   </div>
 </main>

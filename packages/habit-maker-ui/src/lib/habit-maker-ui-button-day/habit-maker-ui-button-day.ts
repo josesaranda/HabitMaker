@@ -7,7 +7,7 @@ export type HabitMakerUIButtonDayState =
   'default' | 'hover' | 'focus' | 'active' | 'selected' | 'disabled' | 'today';
 
 @Component({
-  selector: 'habit-maker-ui-button-day',
+  selector: 'hm-button-day',
   imports: [HabitMakerUIIcon, NgTemplateOutlet],
   templateUrl: './habit-maker-ui-button-day.html',
   styleUrl: './habit-maker-ui-button-day.css',

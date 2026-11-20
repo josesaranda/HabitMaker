@@ -4,14 +4,14 @@
       @if (emoji(); as selectedEmoji) {
       <span class="hm-card__emoji">{{ selectedEmoji }}</span>
       } @else {
-      <habit-maker-ui-icon class="hm-card__brand-icon" name="sprout" />
+      <hm-icon class="hm-card__brand-icon" name="sprout" />
       }
     </div>
     <div class="hm-card__heading">
       <div class="hm-card__heading-content">
         <div class="hm-card__meta">
           <time class="hm-card__since" [attr.datetime]="dateTime()">
-            <habit-maker-ui-icon class="hm-card__since-icon" name="clock" />
+            <hm-icon class="hm-card__since-icon" name="clock" />
             {{ formattedSinceDate() }}
           </time>
           @if (showStreak()) {
@@ -20,7 +20,7 @@
             [title]="streakLabel()"
             [attr.aria-label]="streakLabel()"
           >
-            <habit-maker-ui-icon class="hm-card__streak-icon" name="flame" />
+            <hm-icon class="hm-card__streak-icon" name="flame" />
             {{ streak() }}
           </span>
           }
@@ -35,7 +35,7 @@
         [routerLink]="linkUrl"
         [attr.aria-label]="linkLabel()"
       >
-        <habit-maker-ui-icon class="hm-card__link-icon" name="arrow-right" />
+        <hm-icon class="hm-card__link-icon" name="arrow-right" />
       </a>
       }
     </div>

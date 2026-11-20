@@ -83,9 +83,7 @@ describe('HabitMakerUICardCompact', () => {
     ) as HTMLElement;
 
     expect(
-      card.querySelector(
-        '.hm-card-compact__emoji habit-maker-ui-icon[name="sprout"]',
-      ),
+      card.querySelector('.hm-card-compact__emoji hm-icon[name="sprout"]'),
     ).not.toBeNull();
     expect(card.querySelector('.hm-card-compact__emoji-value')).toBeNull();
   });
@@ -103,9 +101,7 @@ describe('HabitMakerUICardCompact', () => {
       'Mark reading as completed',
     );
     expect(button?.getAttribute('aria-pressed')).toBe('false');
-    expect(
-      button?.querySelector('habit-maker-ui-icon[name="check"]'),
-    ).toBeNull();
+    expect(button?.querySelector('hm-icon[name="check"]')).toBeNull();
   });
 
   it('emits the next selected state when the toggle is clicked', () => {
@@ -158,9 +154,7 @@ describe('HabitMakerUICardCompact', () => {
 
     expect(card.classList.contains('hm-card-compact--selected')).toBe(true);
     expect(button?.getAttribute('aria-pressed')).toBe('true');
-    expect(
-      button?.querySelector('habit-maker-ui-icon[name="check"]'),
-    ).not.toBeNull();
+    expect(button?.querySelector('hm-icon[name="check"]')).not.toBeNull();
   });
 
   it('disables the toggle when the card is disabled', () => {
