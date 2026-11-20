@@ -74,7 +74,7 @@ export const AllVariants: Story = {
         ${variants
           .map(
             (variant) =>
-              `<div style="display: grid; gap: 0.25rem;"><span style="font-size: 0.75rem; font-weight: 600; color: var(--color-text-secondary);">${variant}:</span><p hmText="${variant}">The quick brown fox jumps over the lazy dog.</p></div>`,
+              `<div style="display: grid; gap: 0.25rem;"><span hmText="caption" class="font-semibold text-text-secondary">${variant}:</span><p hmText="${variant}">The quick brown fox jumps over the lazy dog.</p></div>`,
           )
           .join('\n        ')}
       </div>
