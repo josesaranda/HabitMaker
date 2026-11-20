@@ -15,6 +15,7 @@ import {
   HabitMakerUIHeader,
   HabitMakerUIIcon,
   HabitMakerUIModal,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
@@ -29,6 +30,7 @@ import { SettingsService } from '../settings/settings.service';
 
 @Component({
   imports: [
+    HabitMakerUIText,
     HabitMakerUIButton,
     HabitMakerUIButtonIcon,
     HabitMakerUICardCompact,

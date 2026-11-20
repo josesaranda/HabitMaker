@@ -1,6 +1,7 @@
 <h2
   id="admin-settings-title"
-  class="mt-4 mb-6 text-xl font-semibold tracking-tight text-text-primary"
+  hmText="heading-xs"
+  class="mt-4 mb-6 font-semibold tracking-tight text-text-primary"
 >
   {{ 'settings.adminTitle' | transloco }}
 </h2>
@@ -11,7 +12,8 @@
   <section aria-labelledby="admin-users-title">
     <h3
       id="admin-users-title"
-      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+      hmText="body-lg"
+      class="mb-4 font-semibold tracking-tight text-text-primary"
     >
       {{ 'settings.usersTitle' | transloco }}
     </h3>
@@ -25,7 +27,7 @@
     <p class="text-text-secondary">{{ 'settings.noUsers' | transloco }}</p>
     } @else {
     <div class="overflow-x-auto">
-      <table class="w-full min-w-[24rem] text-left text-sm">
+      <table hmText="body-sm" class="w-full min-w-[24rem] text-left">
         <thead class="border-b border-border text-text-secondary">
           <tr>
             <th class="px-3 py-3 font-semibold" scope="col">
@@ -57,21 +59,23 @@
   >
     <h3
       id="admin-push-settings-title"
-      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+      hmText="body-lg"
+      class="mb-4 font-semibold tracking-tight text-text-primary"
     >
       {{ 'settings.pushTitle' | transloco }}
     </h3>
     @if (isLoadingPushConfiguration()) {
-    <p class="text-sm text-text-secondary" role="status">
+    <p hmText="body-sm" class="text-text-secondary" role="status">
       {{ 'settings.loadingPushConfiguration' | transloco }}
     </p>
     } @else if (pushConfigurationError()) {
-    <p class="text-sm text-error" role="alert">
+    <p hmText="body-sm" class="text-error" role="alert">
       {{ pushConfigurationError() | transloco }}
     </p>
     } @else if (pushConfiguration(); as configuration) {
     <p
-      class="mb-4 text-sm font-medium"
+      hmText="body-sm"
+      class="mb-4 font-medium"
       [class.text-text-primary]="configuration.isConfigured"
       [class.text-error]="!configuration.isConfigured"
       role="status"
@@ -79,7 +83,7 @@
       {{ (configuration.isConfigured ? 'settings.pushConfigured' :
       'settings.pushNotConfigured') | transloco }}
     </p>
-    <dl class="grid gap-3 text-sm sm:grid-cols-2">
+    <dl hmText="body-sm" class="grid gap-3 sm:grid-cols-2">
       <div class="rounded-xl border border-border bg-background p-4">
         <dt class="font-semibold text-text-primary">VAPID_PUBLIC_KEY</dt>
         <dd class="mb-0 mt-1 text-text-secondary">
@@ -116,22 +120,24 @@
   >
     <h3
       id="email-settings-title"
-      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+      hmText="body-lg"
+      class="mb-4 font-semibold tracking-tight text-text-primary"
     >
       {{ 'settings.emailTitle' | transloco }}
     </h3>
     @if (isLoadingEmailConfiguration()) {
-    <p class="text-sm text-text-secondary" role="status">
+    <p hmText="body-sm" class="text-text-secondary" role="status">
       {{ 'settings.loadingEmailConfiguration' | transloco }}
     </p>
     } @else if (emailConfigurationError()) {
-    <p class="text-sm text-error" role="alert">
+    <p hmText="body-sm" class="text-error" role="alert">
       {{ emailConfigurationError() | transloco }}
     </p>
     } @else if (emailConfiguration(); as configuration) { @if
     (configuration.missingVariables.length > 0) {
     <div
-      class="mb-5 rounded-xl border border-border bg-background p-4 text-sm text-text-secondary"
+      hmText="body-sm"
+      class="mb-5 rounded-xl border border-border bg-background p-4 text-text-secondary"
       role="status"
     >
       <p>{{ 'settings.emailVariablesMissing' | transloco }}</p>
@@ -217,7 +223,7 @@
       [formGroup]="testEmailForm"
       (ngSubmit)="sendTestEmail()"
     >
-      <h4 class="text-base font-semibold text-text-primary">
+      <h4 hmText="body" class="font-semibold text-text-primary">
         {{ 'settings.testEmailTitle' | transloco }}
       </h4>
       <hm-form-field>
@@ -246,7 +252,8 @@
       <div class="flex flex-wrap items-center gap-4">
         <button
           hmButton="primary"
-          class="rounded-lg text-sm font-semibold"
+          hmText="body-sm"
+          class="rounded-lg font-semibold"
           type="submit"
           [disabled]="!canSendTestEmail()"
         >
@@ -255,7 +262,8 @@
         </button>
         @if (testEmailMessage()) {
         <p
-          class="text-sm"
+          hmText="body-sm"
+          class=""
           [class.text-error]="testEmailMessage() === 'settings.testEmailError'"
           [class.text-text-secondary]="testEmailMessage() === 'settings.testEmailSent'"
           [attr.role]="testEmailMessage() === 'settings.testEmailError' ? 'alert' : 'status'"
@@ -272,41 +280,42 @@
   >
     <h3
       id="app-settings-title"
-      class="mb-4 text-lg font-semibold tracking-tight text-text-primary"
+      hmText="body-lg"
+      class="mb-4 font-semibold tracking-tight text-text-primary"
     >
       {{ 'settings.appVersion' | transloco }}
     </h3>
     <div class="space-y-5">
       <div>
         @if (isLoadingAppVersion()) {
-        <p class="text-sm text-text-secondary" role="status">
+        <p hmText="body-sm" class="text-text-secondary" role="status">
           {{ 'settings.loadingVersion' | transloco }}
         </p>
         } @else if (appVersionLoadError()) {
-        <p class="text-sm text-error" role="alert">
+        <p hmText="body-sm" class="text-error" role="alert">
           {{ appVersionLoadError() | transloco }}
         </p>
         } @else {
-        <p class="text-sm text-text-secondary">{{ appVersion() }}</p>
+        <p hmText="body-sm" class="text-text-secondary">{{ appVersion() }}</p>
         }
       </div>
 
       <div aria-live="polite">
         @if (isCheckingUpdates()) {
-        <p class="text-sm text-text-secondary" role="status">
+        <p hmText="body-sm" class="text-text-secondary" role="status">
           {{ 'settings.checkingUpdates' | transloco }}
         </p>
         } @else if (updateCheckError()) {
-        <p class="text-sm text-error" role="alert">
+        <p hmText="body-sm" class="text-error" role="alert">
           {{ updateCheckError() | transloco }}
         </p>
         } @else if (updateAvailable()) {
-        <p class="text-sm font-medium text-text-primary" role="status">
+        <p hmText="body-sm" class="font-medium text-text-primary" role="status">
           {{ 'settings.updateAvailable' | transloco: { version: latestVersion()
           } }}
         </p>
         } @else if (updateAvailable() === false) {
-        <p class="text-sm text-text-secondary" role="status">
+        <p hmText="body-sm" class="text-text-secondary" role="status">
           {{ 'settings.upToDate' | transloco }}
         </p>
         }
@@ -315,7 +324,8 @@
       <div class="flex flex-wrap items-center gap-4">
         <button
           hmButton="primary"
-          class="rounded-lg text-sm font-semibold"
+          hmText="body-sm"
+          class="rounded-lg font-semibold"
           type="button"
           [disabled]="isCheckingUpdates()"
           (click)="checkForUpdates()"
@@ -324,7 +334,8 @@
           'settings.checkUpdates') | transloco }}
         </button>
         <a
-          class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
+          hmText="body-sm"
+          class="font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
           href="https://github.com/josesaranda/HabitMaker/releases"
           target="_blank"
           rel="noopener noreferrer"
@@ -334,7 +345,8 @@
         @if (updateAvailable() && releasesUrl() !==
         'https://github.com/josesaranda/HabitMaker/releases') {
         <a
-          class="text-sm font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
+          hmText="body-sm"
+          class="font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
           [href]="releasesUrl()"
           target="_blank"
           rel="noopener noreferrer"

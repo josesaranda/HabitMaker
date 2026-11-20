@@ -11,6 +11,7 @@ import {
 import {
   HabitMakerUICard,
   HabitMakerUIDaySelector,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { HabitCompletionStatus, HabitService } from './habits/habit.service';
 import { LanguageService } from './i18n/language.service';
@@ -21,7 +22,7 @@ export interface HabitMakerUICardDayToggleEvent {
 }
 
 @Component({
-  imports: [HabitMakerUICard, HabitMakerUIDaySelector],
+  imports: [HabitMakerUICard, HabitMakerUIDaySelector, HabitMakerUIText],
   selector: 'app-habit-card',
   templateUrl: './habit-card.html',
   host: { class: 'block w-full' },

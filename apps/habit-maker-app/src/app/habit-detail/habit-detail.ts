@@ -31,6 +31,7 @@ import {
   HabitMakerUIModalContent,
   HabitMakerUIModalTitle,
   HabitMakerUIToggle,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { firstValueFrom } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
@@ -57,6 +58,7 @@ const nonBlankValidator: ValidatorFn = (control) =>
 
 @Component({
   imports: [
+    HabitMakerUIText,
     HabitCard,
     HabitMakerUIButton,
     HabitMakerUIButtonIcon,

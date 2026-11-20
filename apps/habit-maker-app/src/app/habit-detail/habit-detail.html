@@ -61,7 +61,7 @@
       [attr.aria-label]="isCompletedToday() ? ('habitDetail.completedLabel' | transloco) : null"
     >
       @if (dayCompletionError()) {
-      <p class="mt-3 text-sm text-error" role="alert">
+      <p hmText="body-sm" class="mt-3 text-error" role="alert">
         {{ dayCompletionError() | transloco }}
       </p>
       }
@@ -77,7 +77,8 @@
         </div>
         <div class="min-w-0 pt-0.5">
           <span
-            class="text-[0.65rem] font-bold tracking-[0.16em] text-[#55785f]"
+            hmText="caption-xs"
+            class="font-bold tracking-[0.16em] text-[#55785f]"
           >
             {{ isCompletedToday() ? ('habitDetail.completedEyebrow' | transloco)
             : ('habitDetail.goalEyebrow' | transloco) }}
@@ -85,24 +86,30 @@
 
           @if (isCompletedToday()) {
           <h2
-            class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
+            hmText="body-lg"
+            class="mt-1.5 font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
             role="status"
           >
             {{ 'habitDetail.congratulations' | transloco }}
           </h2>
-          <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+          <p
+            hmText="body-sm"
+            class="mb-0 mt-2 leading-relaxed text-text-secondary"
+          >
             {{ 'habitDetail.encouragement' | transloco }}
           </p>
           } @else {
           <h2
             id="habit-completion-title"
-            class="mt-1.5 text-lg font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
+            hmText="body-lg"
+            class="mt-1.5 font-semibold leading-snug tracking-tight text-text-primary sm:text-xl"
           >
             {{ 'habitDetail.question' | transloco }}
           </h2>
           <p
             id="habit-completion-help"
-            class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary"
+            hmText="body-sm"
+            class="mb-0 mt-2 leading-relaxed text-text-secondary"
           >
             {{ 'habitDetail.instructions' | transloco }}
           </p>
@@ -117,15 +124,17 @@
     >
       <h2
         id="habit-reminder-title"
-        class="m-0 text-lg font-semibold text-text-primary"
+        hmText="body-lg"
+        class="m-0 font-semibold text-text-primary"
       >
         {{ 'habitDetail.reminderTitle' | transloco }}
       </h2>
-      <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+      <p hmText="body-sm" class="mb-0 mt-2 leading-relaxed text-text-secondary">
         {{ 'habitDetail.reminderDescription' | transloco }}
       </p>
       <label
-        class="mt-5 flex w-fit items-center gap-3 text-sm font-medium text-text-primary"
+        hmText="body-sm"
+        class="mt-5 flex w-fit items-center gap-3 font-medium text-text-primary"
       >
         <input
           hmToggle
@@ -150,13 +159,14 @@
         />
       </hm-form-field>
       @if (reminderEnabled()) { @if (hasPendingReminderChanges()) {
-      <p class="mt-3 text-sm text-text-secondary" role="status">
+      <p hmText="body-sm" class="mt-3 text-text-secondary" role="status">
         {{ 'habitDetail.reminderTimePending' | transloco }}
       </p>
       }
       <button
         hmButton="primary"
-        class="mt-4 rounded-lg text-sm font-semibold"
+        hmText="body-sm"
+        class="mt-4 rounded-lg font-semibold"
         type="button"
         [disabled]="!hasPendingReminderChanges() || isSavingReminder()"
         (click)="saveReminderTime()"
@@ -164,13 +174,14 @@
         {{ 'habitDetail.saveReminderChanges' | transloco }}
       </button>
       } @if (isLoadingReminder() || isSavingReminder()) {
-      <p class="mt-3 text-sm text-text-secondary" role="status">
+      <p hmText="body-sm" class="mt-3 text-text-secondary" role="status">
         {{ (isSavingReminder() ? 'habitDetail.reminderSaving' :
         'habitDetail.reminderLoading') | transloco }}
       </p>
       } @if (reminderNotice()) {
       <p
-        class="mt-3 text-sm"
+        hmText="body-sm"
+        class="mt-3"
         [class.text-error]="reminderNotice() === 'habitDetail.reminderError' || reminderNotice() === 'habitDetail.reminderBlocked' || reminderNotice() === 'habitDetail.reminderUnsupported'"
         [class.text-text-secondary]="reminderNotice() !== 'habitDetail.reminderError' && reminderNotice() !== 'habitDetail.reminderBlocked' && reminderNotice() !== 'habitDetail.reminderUnsupported'"
         [attr.role]="reminderNotice() === 'habitDetail.reminderError' || reminderNotice() === 'habitDetail.reminderBlocked' || reminderNotice() === 'habitDetail.reminderUnsupported' ? 'alert' : 'status'"
@@ -186,17 +197,18 @@
     >
       <h2
         id="archive-habit-title"
-        class="m-0 text-lg font-semibold text-text-primary"
+        hmText="body-lg"
+        class="m-0 font-semibold text-text-primary"
       >
         {{ (habit()?.archivedAt ? 'habitDetail.unarchiveSectionTitle' :
         'habitDetail.archiveSectionTitle') | transloco }}
       </h2>
-      <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+      <p hmText="body-sm" class="mb-0 mt-2 leading-relaxed text-text-secondary">
         {{ (habit()?.archivedAt ? 'habitDetail.unarchiveSectionDescription' :
         'habitDetail.archiveSectionDescription') | transloco }}
       </p>
       @if (archiveHabitError()) {
-      <p class="mt-3 text-sm text-error" role="alert">
+      <p hmText="body-sm" class="mt-3 text-error" role="alert">
         {{ archiveHabitError() | transloco }}
       </p>
       }
@@ -222,11 +234,12 @@
     >
       <h2
         id="delete-habit-title"
-        class="m-0 text-lg font-semibold text-text-primary"
+        hmText="body-lg"
+        class="m-0 font-semibold text-text-primary"
       >
         {{ 'habitDetail.deleteSectionTitle' | transloco }}
       </h2>
-      <p class="mb-0 mt-2 text-sm leading-relaxed text-text-secondary">
+      <p hmText="body-sm" class="mb-0 mt-2 leading-relaxed text-text-secondary">
         {{ 'habitDetail.deleteSectionDescription' | transloco }}
       </p>
       <button
@@ -251,7 +264,7 @@
           ?? '' } }}
         </p>
         @if (deleteHabitError()) {
-        <p class="m-0 text-sm text-error" role="alert">
+        <p hmText="body-sm" class="m-0 text-error" role="alert">
           {{ deleteHabitError() | transloco }}
         </p>
         }
@@ -331,7 +344,7 @@
           />
         </hm-form-field>
         @if (editHabitError()) {
-        <p class="m-0 text-sm text-error" role="alert">
+        <p hmText="body-sm" class="m-0 text-error" role="alert">
           {{ editHabitError() | transloco }}
         </p>
         }

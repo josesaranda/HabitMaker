@@ -43,7 +43,10 @@ const variants: HabitMakerUITextVariant[] = [
   'heading-lg',
   'heading-xl',
   'heading-fluid',
+  'heading-fluid-sm',
   'caption',
+  'caption-xs',
+  'caption-2xs',
   'overline',
   'code',
 ];

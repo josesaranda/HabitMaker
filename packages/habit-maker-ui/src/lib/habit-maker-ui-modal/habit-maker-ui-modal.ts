@@ -7,6 +7,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIText } from '../habit-maker-ui-text/habit-maker-ui-text';
 import { HabitMakerUIModalTitle } from './habit-maker-ui-modal-title';
 
 const MODAL_TRANSITION_DURATION = 240;
@@ -14,7 +15,7 @@ const MODAL_TRANSITION_EASING = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
 
 @Component({
   selector: 'hm-modal',
-  imports: [HabitMakerUIIcon],
+  imports: [HabitMakerUIIcon, HabitMakerUIText],
   templateUrl: './habit-maker-ui-modal.html',
   styleUrl: './habit-maker-ui-modal.css',
 })

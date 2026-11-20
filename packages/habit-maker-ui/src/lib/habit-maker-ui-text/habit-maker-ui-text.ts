@@ -15,7 +15,10 @@ export type HabitMakerUITextVariant =
   | 'heading-lg'
   | 'heading-xl'
   | 'heading-fluid'
+  | 'heading-fluid-sm'
   | 'caption'
+  | 'caption-xs'
+  | 'caption-2xs'
   | 'overline'
   | 'code';
 
@@ -34,7 +37,10 @@ const TEXT_VARIANTS: readonly HabitMakerUITextVariant[] = [
   'heading-lg',
   'heading-xl',
   'heading-fluid',
+  'heading-fluid-sm',
   'caption',
+  'caption-xs',
+  'caption-2xs',
   'overline',
   'code',
 ];
@@ -64,7 +70,10 @@ function normalizeTextVariant(value: string): HabitMakerUITextVariant {
     '[class.hm-text--heading-lg]': 'hmText() === "heading-lg"',
     '[class.hm-text--heading-xl]': 'hmText() === "heading-xl"',
     '[class.hm-text--heading-fluid]': 'hmText() === "heading-fluid"',
+    '[class.hm-text--heading-fluid-sm]': 'hmText() === "heading-fluid-sm"',
     '[class.hm-text--caption]': 'hmText() === "caption"',
+    '[class.hm-text--caption-xs]': 'hmText() === "caption-xs"',
+    '[class.hm-text--caption-2xs]': 'hmText() === "caption-2xs"',
     '[class.hm-text--overline]': 'hmText() === "overline"',
     '[class.hm-text--code]': 'hmText() === "code"',
   },

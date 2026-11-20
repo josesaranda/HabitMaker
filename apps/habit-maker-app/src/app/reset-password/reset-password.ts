@@ -20,6 +20,7 @@ import {
   HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUILink,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { startWith } from 'rxjs';
 import { AuthStory } from '../auth-story/auth-story';
@@ -37,6 +38,7 @@ const matchingPasswordsValidator: ValidatorFn = (
 @Component({
   selector: 'app-reset-password',
   imports: [
+    HabitMakerUIText,
     AuthStory,
     HabitMakerUIButton,
     HabitMakerUIIcon,

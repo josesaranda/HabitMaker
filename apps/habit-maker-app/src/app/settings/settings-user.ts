@@ -12,6 +12,7 @@ import {
   HabitMakerUIOption,
   HabitMakerUISelect,
   HabitMakerUIButton,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { finalize, take } from 'rxjs';
 import { AppUpdateService } from '../app-update.service';
@@ -21,6 +22,7 @@ import { LanguageService, SupportedLanguage } from '../i18n/language.service';
 
 @Component({
   imports: [
+    HabitMakerUIText,
     DatePipe,
     FormsModule,
     HabitMakerUIBadge,

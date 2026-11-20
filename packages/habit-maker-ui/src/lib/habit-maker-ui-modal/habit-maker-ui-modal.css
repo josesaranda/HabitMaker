@@ -103,7 +103,6 @@
 :host ::ng-deep .hm-modal__title > [hmModalTitle] {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.3;
 }

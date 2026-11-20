@@ -7,12 +7,14 @@
       <hm-icon class="size-[1.6rem]" name="sparkle" />
     </span>
     <p
-      class="mb-2 mt-0 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-green-800"
+      hmText="caption-xs"
+      class="mb-2 mt-0 font-bold uppercase tracking-[0.12em] text-green-800"
     >
       {{ 'newHabit.eyebrow' | transloco }}
     </p>
     <h2
-      class="m-0 text-[clamp(1.45rem,4vw,1.8rem)] leading-[1.2] tracking-[-0.045em] text-text-primary"
+      hmText="heading-fluid"
+      class="m-0 leading-[1.2] tracking-[-0.045em] text-text-primary"
     >
       {{ 'newHabit.title' | transloco }}
     </h2>
@@ -59,7 +61,7 @@
       />
     </hm-form-field>
     @if (errorMessage()) {
-    <p class="m-0 text-sm text-error" role="alert">
+    <p hmText="body-sm" class="m-0 text-error" role="alert">
       {{ errorMessage() | transloco }}
     </p>
     }

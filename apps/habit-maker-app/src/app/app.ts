@@ -13,6 +13,7 @@ import {
   HabitMakerUIHeaderOutlet,
   HabitMakerUIIcon,
   HabitMakerUINavbar,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { filter, map } from 'rxjs';
 import { AuthService } from './auth/auth.service';
@@ -20,6 +21,7 @@ import { AppUpdateService } from './app-update.service';
 
 @Component({
   imports: [
+    HabitMakerUIText,
     HabitMakerUIButtonIcon,
     HabitMakerUIHeaderOutlet,
     HabitMakerUIIcon,

@@ -1,6 +1,7 @@
 <h2
   id="user-settings-title"
-  class="mt-4 mb-6 text-xl font-semibold tracking-tight text-text-primary"
+  hmText="heading-xs"
+  class="mt-4 mb-6 font-semibold tracking-tight text-text-primary"
 >
   {{ 'settings.userTitle' | transloco }}
 </h2>
@@ -50,18 +51,20 @@
       <div>
         <h3
           id="sessions-title"
-          class="text-lg font-semibold tracking-tight text-text-primary"
+          hmText="body-lg"
+          class="font-semibold tracking-tight text-text-primary"
         >
           {{ 'settings.sessionsTitle' | transloco }}
         </h3>
-        <p class="mt-1 text-sm text-text-secondary">
+        <p hmText="body-sm" class="mt-1 text-text-secondary">
           {{ 'settings.sessionsDescription' | transloco }}
         </p>
       </div>
       @if (sessions().length > 1) {
       <button
         hmButton="primary"
-        class="rounded-lg text-sm font-semibold"
+        hmText="body-sm"
+        class="rounded-lg font-semibold"
         type="button"
         [disabled]="isRevokingOtherSessions() || !!revokingSessionId()"
         (click)="revokeOtherSessions()"
@@ -72,15 +75,15 @@
       }
     </div>
     @if (isLoadingSessions()) {
-    <p class="text-sm text-text-secondary" role="status">
+    <p hmText="body-sm" class="text-text-secondary" role="status">
       {{ 'settings.loadingSessions' | transloco }}
     </p>
     } @else if (sessionsLoadError()) {
-    <p class="text-sm text-error" role="alert">
+    <p hmText="body-sm" class="text-error" role="alert">
       {{ sessionsLoadError() | transloco }}
     </p>
     } @else if (sessions().length === 0) {
-    <p class="text-sm text-text-secondary">
+    <p hmText="body-sm" class="text-text-secondary">
       {{ 'settings.noSessions' | transloco }}
     </p>
     } @else {
@@ -101,7 +104,8 @@
             }
           </div>
           <dl
-            class="mt-2 grid gap-x-5 gap-y-1 text-sm text-text-secondary sm:grid-cols-2"
+            hmText="body-sm"
+            class="mt-2 grid gap-x-5 gap-y-1 text-text-secondary sm:grid-cols-2"
           >
             <div>
               <dt class="inline font-medium">
@@ -131,7 +135,8 @@
         </div>
         <button
           hmButton="primary"
-          class="shrink-0 rounded-lg text-sm font-semibold"
+          hmText="body-sm"
+          class="shrink-0 rounded-lg font-semibold"
           type="button"
           [disabled]="isRevokingOtherSessions() || !!revokingSessionId()"
           (click)="revokeSession(session)"
@@ -143,7 +148,7 @@
       }
     </ul>
     } @if (sessionActionError()) {
-    <p class="mt-4 text-sm text-error" role="alert">
+    <p hmText="body-sm" class="mt-4 text-error" role="alert">
       {{ sessionActionError() | transloco }}
     </p>
     }
@@ -155,11 +160,12 @@
     <div class="mb-4">
       <h3
         id="pwa-update-title"
-        class="text-lg font-semibold tracking-tight text-text-primary"
+        hmText="body-lg"
+        class="font-semibold tracking-tight text-text-primary"
       >
         {{ 'settings.pwaUpdateTitle' | transloco }}
       </h3>
-      <p class="mt-1 text-sm text-text-secondary">
+      <p hmText="body-sm" class="mt-1 text-text-secondary">
         {{ 'settings.pwaUpdateDescription' | transloco }}
       </p>
     </div>
@@ -167,7 +173,8 @@
       <button
         id="check-pwa-update"
         hmButton="primary"
-        class="rounded-lg text-sm font-semibold"
+        hmText="body-sm"
+        class="rounded-lg font-semibold"
         type="button"
         [disabled]="pwaUpdateStatus() === 'checking'"
         (click)="checkForPwaUpdates()"
@@ -177,7 +184,8 @@
       </button>
       @if (pwaUpdateStatus() !== 'idle' && pwaUpdateStatus() !== 'checking') {
       <p
-        class="text-sm"
+        hmText="body-sm"
+        class=""
         [class.text-error]="pwaUpdateStatus() === 'error' || pwaUpdateStatus() === 'unavailable'"
         [class.text-text-secondary]="pwaUpdateStatus() === 'update-available' || pwaUpdateStatus() === 'up-to-date'"
         [attr.role]="pwaUpdateStatus() === 'error' || pwaUpdateStatus() === 'unavailable' ? 'alert' : 'status'"
