@@ -116,10 +116,10 @@
   <hm-notification
     #allDoneNotification
     type="success"
-    label="All habits completed"
     duration="5000"
+    [label]="'today.allDoneTitle' | transloco"
     position="top-right"
   >
-    Congratulations! You completed all your habits today.
+    {{ 'today.allDoneMessage' | transloco }}
   </hm-notification>
 </main>
