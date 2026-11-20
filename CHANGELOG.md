@@ -1,3 +1,16 @@
+# [1.14.0](https://github.com/josesaranda/HabitMaker/compare/v1.13.0...v1.14.0) (2026-11-20)
+
+
+### Features
+
+* add all done notification messages and improve styling ([52475dc](https://github.com/josesaranda/HabitMaker/commit/52475dcaeade1aa4ccf785af170889772d37e717))
+* add color tokens and swatch template for design foundations ([b9cf025](https://github.com/josesaranda/HabitMaker/commit/b9cf025f7b84ee74856abab9ece8965091599f8c))
+* add HabitMakerUIText component with typography styles and variants ([87f593a](https://github.com/josesaranda/HabitMaker/commit/87f593a7263878cfb6164817a79396a0abded2f5))
+* add notification component with success message and icons ([24c4a01](https://github.com/josesaranda/HabitMaker/commit/24c4a01cad781a138af3f893b6bc620fe05b1b0c))
+* enhance habit tracking UI with loading states and animations ([9673b93](https://github.com/josesaranda/HabitMaker/commit/9673b93c9a0aff0144c8c097e4b8e03a7d2d109a))
+* enhance navbar and button icon components with active and selected states ([e06b41e](https://github.com/josesaranda/HabitMaker/commit/e06b41ea8503c5cc377353069ace2fffdd235111))
+* integrate HabitMakerUIText component across various app modules ([5678f8a](https://github.com/josesaranda/HabitMaker/commit/5678f8a485a8bc6c993c0b49be60c92462eebd5e))
+
 # [1.13.0](https://github.com/josesaranda/HabitMaker/compare/v1.12.0...v1.13.0) (2026-11-19)
 
 
