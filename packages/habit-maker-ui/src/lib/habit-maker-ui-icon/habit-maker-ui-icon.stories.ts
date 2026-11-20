@@ -32,10 +32,10 @@ const meta: Meta<HabitMakerUIIcon> = {
           'Icons are marked `aria-hidden` because they are decorative. Put an icon-only control inside a button with an `aria-label`, or pair the icon with visible text.',
           '',
           '```html',
-          '<habit-maker-ui-icon name="sprout" />',
+          '<hm-icon name="sprout" />',
           '',
           '<button type="button" aria-label="Add habit">',
-          '  <habit-maker-ui-icon name="add" />',
+          '  <hm-icon name="add" />',
           '</button>',
           '```',
           '',
@@ -64,7 +64,7 @@ export const AllVariants: Story = {
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr)); gap: 1rem;">
         @for (iconName of iconNames; track iconName) {
           <div style="display: grid; justify-items: center; gap: .5rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: .75rem; color: var(--color-text-primary);">
-            <habit-maker-ui-icon [name]="iconName" style="width: 1.5rem; height: 1.5rem;" />
+            <hm-icon [name]="iconName" style="width: 1.5rem; height: 1.5rem;" />
             <small>{{ iconName }}</small>
           </div>
         }

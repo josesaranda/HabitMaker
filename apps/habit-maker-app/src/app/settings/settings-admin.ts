@@ -13,6 +13,7 @@ import {
   HabitMakerUIFormFieldLabel,
   HabitMakerUIInput,
   HabitMakerUIButton,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { finalize, startWith } from 'rxjs';
 import {
@@ -27,6 +28,7 @@ const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
 
 @Component({
   imports: [
+    HabitMakerUIText,
     HabitMakerUIFormField,
     HabitMakerUIFormFieldError,
     HabitMakerUIFormFieldLabel,

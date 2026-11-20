@@ -18,6 +18,7 @@ import {
   HabitMakerUIIcon,
   HabitMakerUIInput,
   HabitMakerUILink,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { startWith } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
@@ -27,6 +28,7 @@ import { AuthStory } from '../auth-story/auth-story';
 @Component({
   selector: 'app-login',
   imports: [
+    HabitMakerUIText,
     AuthStory,
     HabitMakerUIButton,
     HabitMakerUICheckbox,

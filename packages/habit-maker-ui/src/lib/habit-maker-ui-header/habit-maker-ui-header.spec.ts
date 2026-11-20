@@ -9,10 +9,10 @@ import { HabitMakerUIHeader } from './habit-maker-ui-header';
 @Component({
   imports: [HabitMakerUIHeader, HabitMakerUIHeaderOutlet],
   template: `
-    <habit-maker-ui-header backNavigation="/" titleId="habits-title">
+    <hm-header backNavigation="/" titleId="habits-title">
       Tus hábitos
-    </habit-maker-ui-header>
-    <habit-maker-ui-header-outlet />
+    </hm-header>
+    <hm-header-outlet />
   `,
 })
 class HeaderWithBackNavigation {}
@@ -20,8 +20,8 @@ class HeaderWithBackNavigation {}
 @Component({
   imports: [HabitMakerUIHeader, HabitMakerUIHeaderOutlet],
   template: `
-    <habit-maker-ui-header>Configuración</habit-maker-ui-header>
-    <habit-maker-ui-header-outlet />
+    <hm-header>Configuración</hm-header>
+    <hm-header-outlet />
   `,
 })
 class HeaderWithoutBackNavigation {}
@@ -34,14 +34,14 @@ class HeaderWithoutBackNavigation {}
     HabitMakerUIHeaderOutlet,
   ],
   template: `
-    <habit-maker-ui-header>
+    <hm-header>
       Tus hábitos
       <button hmButton="primary" type="button">Crear hábito</button>
       <button hmButtonIcon="primary" type="button" aria-label="Añadir hábito">
         +
       </button>
-    </habit-maker-ui-header>
-    <habit-maker-ui-header-outlet />
+    </hm-header>
+    <hm-header-outlet />
   `,
 })
 class HeaderWithActions {}
@@ -62,7 +62,7 @@ describe('HabitMakerUIHeader', () => {
     fixture.detectChanges();
 
     const header = fixture.nativeElement.querySelector(
-      'habit-maker-ui-header-outlet header',
+      'hm-header-outlet header',
     ) as HTMLElement;
     const backLink = header.querySelector('a');
 
@@ -70,7 +70,7 @@ describe('HabitMakerUIHeader', () => {
     expect(header.querySelector('h1')?.getAttribute('id')).toBe('habits-title');
     expect(backLink?.getAttribute('href')).toBe('/');
     expect(
-      backLink?.querySelector('habit-maker-ui-icon[name="arrow-left"]'),
+      backLink?.querySelector('hm-icon[name="arrow-left"]'),
     ).not.toBeNull();
   });
 
@@ -83,7 +83,7 @@ describe('HabitMakerUIHeader', () => {
     fixture.detectChanges();
 
     const header = fixture.nativeElement.querySelector(
-      'habit-maker-ui-header-outlet header',
+      'hm-header-outlet header',
     ) as HTMLElement;
 
     expect(header.querySelector('h1')?.textContent?.trim()).toBe(
@@ -104,7 +104,7 @@ describe('HabitMakerUIHeader', () => {
     fixture.detectChanges();
 
     const header = fixture.nativeElement.querySelector(
-      'habit-maker-ui-header-outlet header',
+      'hm-header-outlet header',
     ) as HTMLElement;
     const actions = header.querySelector('.habit-maker-ui-header__actions');
 

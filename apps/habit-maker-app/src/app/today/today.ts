@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
   signal,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -15,6 +16,8 @@ import {
   HabitMakerUIHeader,
   HabitMakerUIIcon,
   HabitMakerUIModal,
+  HabitMakerUINotification,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { BrowserService } from '../browser/browser.service';
@@ -24,17 +27,20 @@ import {
   HabitService,
 } from '../habits/habit.service';
 import { LanguageService } from '../i18n/language.service';
+import confetti from '@hiseb/confetti';
 import { NewHabit } from '../new-habit/new-habit';
 import { SettingsService } from '../settings/settings.service';
 
 @Component({
   imports: [
+    HabitMakerUIText,
     HabitMakerUIButton,
     HabitMakerUIButtonIcon,
     HabitMakerUICardCompact,
     HabitMakerUIHeader,
     HabitMakerUIIcon,
     HabitMakerUIModal,
+    HabitMakerUINotification,
     NewHabit,
     TranslocoPipe,
   ],
@@ -47,15 +53,16 @@ export class Today implements OnInit {
   private readonly languageService = inject(LanguageService);
   private readonly homePreferences = inject(SettingsService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly allDoneNotification = viewChild(HabitMakerUINotification);
 
   protected readonly habits = signal<Habit[]>([]);
   protected readonly completions = signal<Record<string, boolean>>({});
   protected readonly showArchived = signal(false);
   protected readonly hasArchived = signal(false);
-  protected readonly isLoading = signal(true);
+  protected readonly hasLoadedHabits = signal(false);
   protected readonly loadError = signal('');
   protected readonly completionError = signal('');
-  protected readonly isSavingCompletion = signal(false);
+  protected readonly savingHabitIds = signal<ReadonlySet<string>>(new Set());
   protected readonly locale = this.languageService.locale;
   protected readonly todayDate = computed(() =>
     new Intl.DateTimeFormat(this.locale(), {
@@ -98,38 +105,49 @@ export class Today implements OnInit {
     this.loadHabits();
     this.habitService.habitCreated$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.loadHabits({ silent: true }));
+      .subscribe(() => this.loadHabits());
   }
 
   protected toggleShowArchived(): void {
     this.showArchived.update((value) => !value);
     this.homePreferences.setShowArchived(this.showArchived());
-    this.loadHabits({ silent: true });
+    this.loadHabits();
   }
 
   protected toggleCompletion(habitId: string, completed: boolean): void {
-    if (this.isSavingCompletion()) return;
+    if (this.savingHabitIds().has(habitId)) return;
 
     const previous = this.completions()[habitId] ?? false;
     this.completions.update((completions) => ({
       ...completions,
       [habitId]: completed,
     }));
-    this.isSavingCompletion.set(true);
+    this.setSaving(habitId, true);
     this.completionError.set('');
     this.habitService
       .setCompletion(habitId, this.getLocalDate(), completed)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (completion) => {
-          this.isSavingCompletion.set(false);
+          this.setSaving(habitId, false);
           this.completions.update((completions) => ({
             ...completions,
             [habitId]: completion.completed,
           }));
+
+          if (
+            completion.completed &&
+            this.activeHabits().length > 0 &&
+            this.activeHabits().every(
+              (habit) => this.completions()[habit.id] === true,
+            )
+          ) {
+            this.allDoneNotification()?.open();
+            this.launchConfetti();
+          }
         },
         error: () => {
-          this.isSavingCompletion.set(false);
+          this.setSaving(habitId, false);
           this.completions.update((completions) => ({
             ...completions,
             [habitId]: previous,
@@ -139,10 +157,37 @@ export class Today implements OnInit {
       });
   }
 
-  private loadHabits({ silent = false } = {}): void {
-    if (!silent) {
-      this.isLoading.set(true);
-    }
+  private launchConfetti(): void {
+    const width = window.innerWidth || 1024;
+    const launchPoints = [0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9].map((fraction) =>
+      Math.round(width * fraction),
+    );
+
+    launchPoints.forEach((x, index) => {
+      setTimeout(() => {
+        confetti({
+          position: { x, y: 0 },
+          count: 140,
+          size: 1.1,
+          velocity: 220,
+        });
+      }, index * 120);
+    });
+  }
+
+  private setSaving(habitId: string, saving: boolean): void {
+    this.savingHabitIds.update((habitIds) => {
+      const next = new Set(habitIds);
+      if (saving) {
+        next.add(habitId);
+      } else {
+        next.delete(habitId);
+      }
+      return next;
+    });
+  }
+
+  private loadHabits(): void {
     this.loadError.set('');
     forkJoin({
       habits: this.habitService
@@ -154,6 +199,7 @@ export class Today implements OnInit {
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ habits, archived }) => {
+        this.hasLoadedHabits.set(habits !== null);
         if (habits === null) {
           this.habits.set([]);
           this.completions.set({});
@@ -163,7 +209,6 @@ export class Today implements OnInit {
           this.loadTodayCompletions(habits);
         }
         this.hasArchived.set(archived.count > 0);
-        this.isLoading.set(false);
       });
   }
 

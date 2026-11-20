@@ -5,12 +5,12 @@ import { HabitMakerUINavbar } from './habit-maker-ui-navbar';
 
 @Component({
   imports: [HabitMakerUINavbar],
-  template: `<habit-maker-ui-navbar brandLink="/home">
+  template: `<hm-navbar brandLink="/home">
     <a class="test-link" routerLink="/home">Inicio</a>
     <button class="test-button" type="button" (click)="clicked = true">
       Acción
     </button>
-  </habit-maker-ui-navbar>`,
+  </hm-navbar>`,
 })
 class HostComponent {
   clicked = false;
@@ -27,7 +27,7 @@ describe('HabitMakerUINavbar', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('habit-maker-ui-brand')).not.toBeNull();
+    expect(compiled.querySelector('hm-brand')).not.toBeNull();
     const actions = compiled.querySelector('.hm-navbar__actions');
     expect(actions?.querySelector('.test-link')?.textContent).toContain(
       'Inicio',

@@ -62,9 +62,7 @@
             [attr.aria-label]="(passwordVisible() ? 'login.hidePassword' : 'login.showPassword') | transloco"
             [attr.aria-pressed]="passwordVisible()"
           >
-            <habit-maker-ui-icon
-              [name]="passwordVisible() ? 'eye-off' : 'eye'"
-            />
+            <hm-icon [name]="passwordVisible() ? 'eye-off' : 'eye'" />
           </button>
         </hm-form-field>
 
@@ -78,14 +76,14 @@
             />
             <span>{{ 'login.remember' | transloco }}</span>
           </label>
-          <a class="text-xs" hmLink routerLink="/forgot-password"
+          <a hmText="body-xs" class="" hmLink routerLink="/forgot-password"
             >{{ 'login.forgot' | transloco }}</a
           >
         </div>
 
         <button hmButton="primary" class="auth-submit-button" type="submit">
           {{ 'login.submit' | transloco }}
-          <habit-maker-ui-icon name="arrow-right" />
+          <hm-icon name="arrow-right" />
         </button>
         <p class="form-message" aria-live="polite">
           {{ message() | transloco }}

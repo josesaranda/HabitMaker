@@ -17,7 +17,7 @@ import { HABIT_MAKER_UI_SELECT_CONTEXT } from './habit-maker-ui-select-context';
 let nextSelectId = 0;
 
 @Component({
-  selector: 'habit-maker-ui-select',
+  selector: 'hm-select',
   standalone: true,
   templateUrl: './habit-maker-ui-select.html',
   styleUrl: './habit-maker-ui-select.css',

@@ -1,10 +1,11 @@
 <header class="hm-navbar">
   <a
+    hmText="body-lg"
     class="hm-navbar__brand"
     [routerLink]="brandLink()"
     [attr.aria-label]="brandLabel()"
   >
-    <habit-maker-ui-brand />
+    <hm-brand />
   </a>
 
   <nav class="hm-navbar__actions" [attr.aria-label]="navigationLabel()">

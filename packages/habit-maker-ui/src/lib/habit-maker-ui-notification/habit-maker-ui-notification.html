@@ -1,0 +1,30 @@
+<dialog
+  #dialog
+  class="hm-notification"
+  [class.hm-notification--default]="type() === 'default'"
+  [class.hm-notification--success]="type() === 'success'"
+  [class.hm-notification--warning]="type() === 'warning'"
+  [class.hm-notification--info]="type() === 'info'"
+  [class.hm-notification--danger]="type() === 'danger'"
+  [class.hm-notification--top-left]="position() === 'top-left'"
+  [class.hm-notification--top-right]="position() === 'top-right'"
+  [class.hm-notification--top-center]="position() === 'top-center'"
+  [class.hm-notification--bottom-left]="position() === 'bottom-left'"
+  [class.hm-notification--bottom-right]="position() === 'bottom-right'"
+  [class.hm-notification--bottom-center]="position() === 'bottom-center'"
+  role="status"
+  [attr.aria-label]="label()"
+  (cancel)="onCancel($event)"
+  (click)="onDialogClick($event)"
+>
+  <div class="hm-notification__surface">
+    @if (icon()) {
+    <span class="hm-notification__icon" aria-hidden="true">
+      <hm-icon [name]="$any(icon())" />
+    </span>
+    }
+    <div class="hm-notification__content">
+      <ng-content />
+    </div>
+  </div>
+</dialog>

@@ -1,33 +1,53 @@
 @if (shouldShowNavbar()) {
 <div class="app-navbar-shell">
-  <habit-maker-ui-navbar
+  <hm-navbar
     class="app-navbar"
     brandLink="/home"
     [brandLabel]="'navigation.brandLabel' | transloco"
     [navigationLabel]="'navigation.main' | transloco"
   >
-    <a class="app-navbar__link" routerLink="/home" aria-current="page">
+    <a
+      class="app-navbar__link"
+      routerLink="/home"
+      routerLinkActive="app-navbar__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
+    >
       {{ 'navigation.home' | transloco }}
     </a>
-    <a class="app-navbar__link" routerLink="/today">
+    <a
+      class="app-navbar__link"
+      routerLink="/today"
+      routerLinkActive="app-navbar__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
+    >
       {{ 'navigation.today' | transloco }}
     </a>
-    <a class="app-navbar__link" routerLink="/settings"
-      >{{ 'navigation.settings' | transloco }}</a
+    <a
+      class="app-navbar__link"
+      routerLink="/settings"
+      routerLinkActive="app-navbar__link--active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      ariaCurrentWhenActive="page"
     >
+      {{ 'navigation.settings' | transloco }}
+    </a>
     <div class="app-navbar__icon-actions flex flex-row gap-3">
       <a
         class="app-navbar__mobile-today"
         hmButtonIcon="secondary"
         size="normal"
+        [selected]="isTodayActive()"
         routerLink="/today"
         [attr.aria-label]="'navigation.today' | transloco"
         [title]="'navigation.today' | transloco"
       >
         <span class="relative inline-grid place-items-center">
-          <habit-maker-ui-icon name="calendar" />
+          <hm-icon name="calendar" />
           <span
-            class="absolute left-1/2 top-[64%] -translate-x-1/2 -translate-y-1/2 text-[0.5rem] font-semibold leading-none"
+            hmText="caption-2xs"
+            class="absolute left-1/2 top-[64%] -translate-x-1/2 -translate-y-1/2 font-semibold leading-none"
             aria-hidden="true"
             >{{ currentDay() }}</span
           >
@@ -37,11 +57,12 @@
         class="app-navbar__mobile-settings"
         hmButtonIcon="secondary"
         size="normal"
+        [selected]="isSettingsActive()"
         routerLink="/settings"
         [attr.aria-label]="'navigation.settings' | transloco"
         [title]="'navigation.settings' | transloco"
       >
-        <habit-maker-ui-icon name="settings" />
+        <hm-icon name="settings" />
       </a>
       <button
         hmButtonIcon="secondary"
@@ -51,13 +72,13 @@
         [title]="'navigation.logout' | transloco"
         (click)="logout()"
       >
-        <habit-maker-ui-icon name="logout" />
+        <hm-icon name="logout" />
       </button>
     </div>
-  </habit-maker-ui-navbar>
+  </hm-navbar>
 </div>
 }
-<habit-maker-ui-header-outlet class="sticky top-16 max-[700px]:top-0" />
+<hm-header-outlet class="sticky top-16 max-[700px]:top-0" />
 <div
   class="app-content-shell"
   [class.app-content-shell--with-mobile-navbar]="shouldShowNavbar()"

@@ -13,7 +13,7 @@
       [class.hm-modal__header--titled]="hasTitle()"
     >
       @if (hasTitle()) {
-      <div class="hm-modal__title">
+      <div hmText="heading-xs" class="hm-modal__title">
         <ng-content select="[hmModalTitle]" />
       </div>
       }
@@ -23,7 +23,7 @@
         [attr.aria-label]="closeLabel()"
         (click)="close()"
       >
-        <habit-maker-ui-icon name="close" />
+        <hm-icon name="close" />
       </button>
     </header>
     <div

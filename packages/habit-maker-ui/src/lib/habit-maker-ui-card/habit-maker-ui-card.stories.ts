@@ -43,7 +43,7 @@ export const Playground: Story = {
     props: { ...args, days, localeDays },
     template: `
       <div class="max-w-xl rounded-xl bg-[#172f2b] p-6 text-white">
-          <habit-maker-ui-card
+          <hm-card
             [since]="since"
           [emoji]="emoji"
           [locale]="locale"
@@ -53,12 +53,12 @@ export const Playground: Story = {
           [streakLabel]="streakLabel"
         >
           <h2 hmCardTitle>Read for twenty minutes</h2>
-          <habit-maker-ui-day-selector
+          <hm-day-selector
             [days]="days"
             [localeDays]="localeDays"
             [showNavigation]="true"
           />
-        </habit-maker-ui-card>
+        </hm-card>
       </div>
     `,
   }),
@@ -70,50 +70,50 @@ export const AllVariants: Story = {
     props: { days, localeDays },
     template: `
       <div class="grid max-w-xl gap-4 rounded-xl bg-[#172f2b] p-6 text-white">
-        <habit-maker-ui-card
+        <hm-card
           since="2024-01-15"
           emoji="🚶"
           [streak]="5"
           streakLabel="5 day streak"
         >
           <h2 hmCardTitle>Take a morning walk</h2>
-          <habit-maker-ui-day-selector
+          <hm-day-selector
             [days]="days"
             [localeDays]="localeDays"
           />
-        </habit-maker-ui-card>
-        <habit-maker-ui-card
+        </hm-card>
+        <hm-card
           since="2024-02-01"
           emoji="📓"
           [streak]="0"
           streakLabel="No current streak"
         >
           <h2 hmCardTitle>Write in my journal</h2>
-          <habit-maker-ui-day-selector
+          <hm-day-selector
             [days]="days"
             [localeDays]="localeDays"
             [showNavigation]="true"
           />
-        </habit-maker-ui-card>
-        <habit-maker-ui-card
+        </hm-card>
+        <hm-card
           since="2024-03-01"
           emoji="🧠"
           link="/habits/example"
           linkLabel="View habit details"
         >
           <h2 hmCardTitle>Practice a new language</h2>
-          <habit-maker-ui-day-selector
+          <hm-day-selector
             [days]="days"
             [localeDays]="localeDays"
           />
-        </habit-maker-ui-card>
-        <habit-maker-ui-card since="2024-04-01">
+        </hm-card>
+        <hm-card since="2024-04-01">
           <h2 hmCardTitle>Build a new habit</h2>
-          <habit-maker-ui-day-selector
+          <hm-day-selector
             [days]="days"
             [localeDays]="localeDays"
           />
-        </habit-maker-ui-card>
+        </hm-card>
       </div>
     `,
   }),

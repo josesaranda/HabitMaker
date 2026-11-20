@@ -8,24 +8,13 @@ import { HabitMakerUISelect } from './habit-maker-ui-select';
   imports: [ReactiveFormsModule, HabitMakerUISelect, HabitMakerUIOption],
   template: `
     <label id="locale-label">Language</label>
-    <habit-maker-ui-select
-      [aria-labelledby]="'locale-label'"
-      [formControl]="language"
-    >
-      <habit-maker-ui-option [value]="'en'" [label]="'English'">
-        English
-      </habit-maker-ui-option>
-      <habit-maker-ui-option [value]="'es'" [label]="'Spanish'">
-        Spanish
-      </habit-maker-ui-option>
-      <habit-maker-ui-option
-        [value]="'fr'"
-        [label]="'French'"
-        [disabled]="true"
-      >
+    <hm-select [aria-labelledby]="'locale-label'" [formControl]="language">
+      <hm-option [value]="'en'" [label]="'English'"> English </hm-option>
+      <hm-option [value]="'es'" [label]="'Spanish'"> Spanish </hm-option>
+      <hm-option [value]="'fr'" [label]="'French'" [disabled]="true">
         French
-      </habit-maker-ui-option>
-    </habit-maker-ui-select>
+      </hm-option>
+    </hm-select>
   `,
 })
 class SelectHostComponent {

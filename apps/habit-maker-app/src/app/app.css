@@ -32,6 +32,14 @@
   color: var(--color-primary-hover);
 }
 
+.app-navbar__link--active {
+  color: var(--color-primary-hover);
+  scale: 1.05;
+  transition:
+    color 150ms ease-in-out,
+    scale 150ms ease-in-out;
+}
+
 .app-navbar__link:focus-visible {
   outline: 2px solid var(--color-primary-hover);
   outline-offset: 3px;

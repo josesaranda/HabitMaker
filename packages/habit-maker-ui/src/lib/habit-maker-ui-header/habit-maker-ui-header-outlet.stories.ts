@@ -27,7 +27,7 @@ const meta: Meta<HabitMakerUIHeaderOutlet> = {
           '@Component({',
           '  imports: [HabitMakerUIHeaderOutlet, RouterOutlet],',
           '  template: `',
-          '    <habit-maker-ui-header-outlet />',
+          '    <hm-header-outlet />',
           '    <router-outlet />',
           '  `,',
           '})',
@@ -39,10 +39,10 @@ const meta: Meta<HabitMakerUIHeaderOutlet> = {
           'Import `HabitMakerUIHeader` in the page and write the title and optional actions directly in its content. The component registers and clears itself as routes activate and deactivate.',
           '',
           '```html',
-          '<habit-maker-ui-header backNavigation="/home">',
+          '<hm-header backNavigation="/home">',
           '  Account settings',
           '  <button hmButton="primary" type="button">Save changes</button>',
-          '</habit-maker-ui-header>',
+          '</hm-header>',
           '```',
           '',
           'The outlet is required once in the root layout; do not add an outlet to each page. The header component and outlet share the library portal service automatically.',
@@ -77,10 +77,10 @@ export const Playground: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <habit-maker-ui-header [backNavigation]="backNavigation" titleId="story-title">
+      <hm-header [backNavigation]="backNavigation" titleId="story-title">
         {{ title }}
-      </habit-maker-ui-header>
-      <habit-maker-ui-header-outlet />
+      </hm-header>
+      <hm-header-outlet />
     `,
   }),
 };
@@ -89,14 +89,14 @@ export const AllVariants: Story = {
   parameters: { controls: { disable: true } },
   render: () => ({
     template: `
-      <habit-maker-ui-header backNavigation="/home" titleId="settings-title">
+      <hm-header backNavigation="/home" titleId="settings-title">
         Account settings
         <button hmButton type="button">Save changes</button>
         <button hmButtonIcon="secondary" aria-label="Settings" type="button">
-          <habit-maker-ui-icon name="settings" />
+          <hm-icon name="settings" />
         </button>
-      </habit-maker-ui-header>
-      <habit-maker-ui-header-outlet />
+      </hm-header>
+      <hm-header-outlet />
     `,
   }),
 };

@@ -17,6 +17,7 @@ import {
   HabitMakerUIFormFieldLabel,
   HabitMakerUIIcon,
   HabitMakerUIInput,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { finalize, startWith } from 'rxjs';
 import { HabitService } from '../habits/habit.service';
@@ -29,6 +30,7 @@ const nonBlankValidator: ValidatorFn = (control) =>
 @Component({
   selector: 'app-new-habit',
   imports: [
+    HabitMakerUIText,
     HabitMakerUIButton,
     HabitMakerUIIcon,
     HabitMakerUIInput,

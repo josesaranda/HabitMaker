@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { EMPTY, of } from 'rxjs';
+import { EMPTY, Observable, Subject, of, throwError } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { Habit } from '../habits/habit.service';
 import { HabitService } from '../habits/habit.service';
@@ -14,6 +14,14 @@ const activeHabit: Habit = {
   emoji: '📚',
   createdAt: '2026-11-01T00:00:00.000Z',
   updatedAt: '2026-11-01T00:00:00.000Z',
+};
+
+const secondHabit: Habit = {
+  id: 'habit-3',
+  name: 'Meditar',
+  emoji: '🧘',
+  createdAt: '2026-11-02T00:00:00.000Z',
+  updatedAt: '2026-11-02T00:00:00.000Z',
 };
 
 const archivedHabit: Habit = {
@@ -34,14 +42,24 @@ describe('Today', () => {
     habits = [activeHabit],
     archivedCount = 0,
     completed = false,
+    habitsRequest,
+    setCompletionRequest,
   }: {
     habits?: Habit[];
     archivedCount?: number;
     completed?: boolean;
+    habitsRequest?: Observable<Habit[]>;
+    setCompletionRequest?: Observable<{
+      date: string;
+      completed: boolean;
+      completedAt: string | null;
+      currentStreak: number;
+    }>;
   } = {}) => {
     const habitService = {
       getHabits: vi.fn(
         ({ includeArchived = false }: { includeArchived?: boolean } = {}) =>
+          habitsRequest ??
           of(
             includeArchived
               ? habits
@@ -56,13 +74,15 @@ describe('Today', () => {
           completedAt: completed ? '2026-11-19T08:00:00.000Z' : null,
         }),
       ),
-      setCompletion: vi.fn((_id: string, date: string, value: boolean) =>
-        of({
-          date,
-          completed: value,
-          completedAt: value ? '2026-11-19T08:00:00.000Z' : null,
-          currentStreak: value ? 3 : 0,
-        }),
+      setCompletion: vi.fn(
+        (_id: string, date: string, value: boolean) =>
+          setCompletionRequest ??
+          of({
+            date,
+            completed: value,
+            completedAt: value ? '2026-11-19T08:00:00.000Z' : null,
+            currentStreak: value ? 3 : 0,
+          }),
       ),
       habitCreated$: EMPTY,
     };
@@ -163,5 +183,77 @@ describe('Today', () => {
       compiled.querySelector('[data-testid="today-empty"]'),
     ).not.toBeNull();
     expect(compiled.querySelector('hm-card-compact')).toBeNull();
+  });
+
+  it('keeps habit buttons enabled while a save is in flight', async () => {
+    const completion$ = new Subject<{
+      date: string;
+      completed: boolean;
+      completedAt: string | null;
+      currentStreak: number;
+    }>();
+    const { fixture } = await renderToday({
+      habits: [activeHabit, secondHabit],
+      setCompletionRequest: completion$.asObservable(),
+    });
+    const compiled = fixture.nativeElement as HTMLElement;
+    const toggles = compiled.querySelectorAll<HTMLButtonElement>(
+      'hm-card-compact button',
+    );
+
+    toggles[0].click();
+    fixture.detectChanges();
+
+    expect(toggles[0].disabled).toBe(false);
+    expect(toggles[1].disabled).toBe(false);
+
+    completion$.next({
+      date: '2026-11-19',
+      completed: true,
+      completedAt: '2026-11-19T08:00:00.000Z',
+      currentStreak: 1,
+    });
+    completion$.complete();
+    fixture.detectChanges();
+
+    expect(toggles[0].disabled).toBe(false);
+  });
+
+  it('does not show the empty state until habits finish loading', async () => {
+    const habits$ = new Subject<Habit[]>();
+    const { fixture } = await renderToday({
+      habitsRequest: habits$.asObservable(),
+    });
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('[data-testid="today-empty"]')).toBeNull();
+
+    habits$.next([]);
+    habits$.complete();
+    fixture.detectChanges();
+
+    expect(
+      compiled.querySelector('[data-testid="today-empty"]'),
+    ).not.toBeNull();
+  });
+
+  it('renders habits with a staggered entrance delay', async () => {
+    const { fixture } = await renderToday({
+      habits: [activeHabit, secondHabit],
+    });
+    const compiled = fixture.nativeElement as HTMLElement;
+    const cards = compiled.querySelectorAll<HTMLElement>('hm-card-compact');
+
+    expect(cards[0].style.animationDelay).toBe('0ms');
+    expect(cards[1].style.animationDelay).toBe('50ms');
+  });
+
+  it('does not show the empty state when loading habits fails', async () => {
+    const { fixture } = await renderToday({
+      habitsRequest: throwError(() => new Error('load failed')),
+    });
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('[data-testid="today-empty"]')).toBeNull();
   });
 });

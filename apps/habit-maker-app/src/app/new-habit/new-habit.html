@@ -4,15 +4,17 @@
       class="mb-4 grid size-[3.25rem] place-items-center rounded-[1.1rem] border border-accent/55 bg-accent/20 text-primary"
       aria-hidden="true"
     >
-      <habit-maker-ui-icon class="size-[1.6rem]" name="sparkle" />
+      <hm-icon class="size-[1.6rem]" name="sparkle" />
     </span>
     <p
-      class="mb-2 mt-0 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-green-800"
+      hmText="caption-xs"
+      class="mb-2 mt-0 font-bold uppercase tracking-[0.12em] text-green-800"
     >
       {{ 'newHabit.eyebrow' | transloco }}
     </p>
     <h2
-      class="m-0 text-[clamp(1.45rem,4vw,1.8rem)] leading-[1.2] tracking-[-0.045em] text-text-primary"
+      hmText="heading-fluid"
+      class="m-0 leading-[1.2] tracking-[-0.045em] text-text-primary"
     >
       {{ 'newHabit.title' | transloco }}
     </h2>
@@ -50,7 +52,7 @@
       <label hmLabel id="new-habit-emoji-label">
         {{ 'emojiPicker.label' | transloco }}
       </label>
-      <habit-maker-ui-emoji-picker
+      <hm-emoji-picker
         role="group"
         aria-labelledby="new-habit-emoji-label"
         [noneOptionLabel]="'emojiPicker.none' | transloco"
@@ -59,7 +61,7 @@
       />
     </hm-form-field>
     @if (errorMessage()) {
-    <p class="m-0 text-sm text-error" role="alert">
+    <p hmText="body-sm" class="m-0 text-error" role="alert">
       {{ errorMessage() | transloco }}
     </p>
     }
@@ -73,7 +75,7 @@
         >{{ (isSubmitting() ? 'newHabit.saving' : 'newHabit.submit') | transloco
         }}</span
       >
-      <habit-maker-ui-icon class="size-[1.15rem]" name="arrow-right" />
+      <hm-icon class="size-[1.15rem]" name="arrow-right" />
     </button>
   </form>
 </div>

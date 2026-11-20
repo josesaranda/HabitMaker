@@ -131,7 +131,9 @@
   },
   "today": {
     "title": "Hoy {{date}}",
-    "empty": "No tienes hábitos activos."
+    "empty": "No tienes hábitos activos.",
+    "allDoneTitle": "Todos los hábitos completados",
+    "allDoneMessage": "¡Enhorabuena! Has completado todos tus hábitos de hoy."
   },
   "newHabit": {
     "eyebrow": "Un hábito a la vez",

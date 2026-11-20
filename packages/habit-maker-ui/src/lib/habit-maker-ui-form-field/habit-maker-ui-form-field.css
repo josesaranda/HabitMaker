@@ -15,7 +15,6 @@
 
 .hm-form-field__label {
   color: var(--color-text-primary);
-  font-size: 0.8rem;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -47,7 +46,7 @@
   outline-offset: 2px;
 }
 
-.hm-form-field__icon-right habit-maker-ui-icon {
+.hm-form-field__icon-right hm-icon {
   width: 1.2rem;
   height: 1.2rem;
 }
@@ -55,7 +54,6 @@
 .hm-form-field__hint,
 .hm-form-field__error {
   margin: 0;
-  font-size: 0.75rem;
 }
 
 .hm-form-field__hint {

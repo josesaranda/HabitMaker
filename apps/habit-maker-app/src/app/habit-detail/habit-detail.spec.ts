@@ -18,7 +18,7 @@ vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));
 @Component({
   imports: [HabitDetail, HabitMakerUIHeaderOutlet],
   template: `
-    <habit-maker-ui-header-outlet />
+    <hm-header-outlet />
     <app-habit-detail />
   `,
 })
@@ -78,9 +78,7 @@ describe('HabitDetail', () => {
     );
     const pageContent = fixture.nativeElement.querySelector('main > div');
     expect(pageContent?.classList.contains('max-w-6xl')).toBe(true);
-    expect(
-      pageContent?.querySelector(':scope > habit-maker-ui-header'),
-    ).not.toBeNull();
+    expect(pageContent?.querySelector(':scope > hm-header')).not.toBeNull();
     expect(habitCard?.querySelector('a')).toBeNull();
     expect(
       habitCard?.querySelectorAll(
@@ -103,7 +101,7 @@ describe('HabitDetail', () => {
       ),
     ).toBeNull();
     expect(
-      compiled.querySelector('habit-maker-ui-modal button[hmButton="primary"]'),
+      compiled.querySelector('hm-modal button[hmButton="primary"]'),
     ).not.toBeNull();
     expect(
       compiled.querySelector('#habit-completion-help')?.textContent?.trim(),
@@ -284,9 +282,8 @@ describe('HabitDetail', () => {
     deleteButton.click();
     fixture.detectChanges();
 
-    const dialog = compiled.querySelector<HTMLDialogElement>(
-      'habit-maker-ui-modal dialog',
-    )!;
+    const dialog =
+      compiled.querySelector<HTMLDialogElement>('hm-modal dialog')!;
     expect(dialog.open).toBe(true);
     expect(dialog.textContent).toContain(
       '¿Seguro que quieres eliminar «Leer 10 minutos»? Esta acción no se puede deshacer.',
@@ -355,7 +352,7 @@ describe('HabitDetail', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const editButton = compiled.querySelector<HTMLButtonElement>(
-      'habit-maker-ui-header-outlet button[hmButtonIcon]',
+      'hm-header-outlet button[hmButtonIcon]',
     )!;
     expect(editButton.getAttribute('aria-label')).toBe('Editar hábito');
     editButton.click();
@@ -394,9 +391,7 @@ describe('HabitDetail', () => {
     nameInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
     Array.from(
-      editDialog.querySelectorAll<HTMLButtonElement>(
-        'habit-maker-ui-emoji-picker button',
-      ),
+      editDialog.querySelectorAll<HTMLButtonElement>('hm-emoji-picker button'),
     )
       .find((button) => button.textContent?.trim() === '🏃')!
       .click();
@@ -468,7 +463,7 @@ describe('HabitDetail', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     compiled
       .querySelector<HTMLButtonElement>(
-        'habit-maker-ui-header-outlet button[hmButtonIcon]',
+        'hm-header-outlet button[hmButtonIcon]',
       )!
       .click();
     fixture.detectChanges();

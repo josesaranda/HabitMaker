@@ -13,12 +13,13 @@ import { RouterLink } from '@angular/router';
 import { HabitMakerUIButton } from '../habit-maker-ui-button/habit-maker-ui-button';
 import { HabitMakerUIButtonIcon } from '../habit-maker-ui-button-icon/habit-maker-ui-button-icon';
 import { HabitMakerUIIcon } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIText } from '../habit-maker-ui-text/habit-maker-ui-text';
 import { HabitMakerUIHeaderPortalService } from './habit-maker-ui-header-portal.service';
 
 @Component({
-  selector: 'habit-maker-ui-header',
+  selector: 'hm-header',
   standalone: true,
-  imports: [HabitMakerUIIcon, RouterLink],
+  imports: [HabitMakerUIIcon, HabitMakerUIText, RouterLink],
   templateUrl: './habit-maker-ui-header.html',
   styleUrl: './habit-maker-ui-header.css',
 })

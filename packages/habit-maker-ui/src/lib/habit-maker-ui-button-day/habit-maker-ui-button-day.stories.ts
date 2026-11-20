@@ -46,7 +46,7 @@ export const Playground: Story = {
     props: args,
     template: `
       <div class="min-h-36 rounded-xl bg-[#172f2b] p-8 text-white">
-        <habit-maker-ui-button-day
+        <hm-button-day
           [weekday]="weekday"
           [dayOfMonth]="dayOfMonth"
           [ariaLabel]="ariaLabel"
@@ -66,15 +66,15 @@ export const AllVariants: Story = {
   render: () => ({
     template: `
       <div class="flex flex-wrap items-start gap-6 rounded-xl bg-[#172f2b] p-8 text-white">
-        <habit-maker-ui-button-day weekday="M" [dayOfMonth]="10" state="default" ariaLabel="Monday, day 10" />
-        <habit-maker-ui-button-day weekday="T" [dayOfMonth]="11" state="hover" ariaLabel="Tuesday, day 11" />
-        <habit-maker-ui-button-day weekday="W" [dayOfMonth]="12" state="focus" ariaLabel="Wednesday, day 12" />
-        <habit-maker-ui-button-day weekday="T" [dayOfMonth]="13" state="active" ariaLabel="Thursday, day 13" />
-        <habit-maker-ui-button-day weekday="F" [dayOfMonth]="14" state="selected" ariaLabel="Friday, day 14, complete" />
-        <habit-maker-ui-button-day weekday="S" [dayOfMonth]="15" state="disabled" ariaLabel="Saturday, day 15, unavailable" />
-        <habit-maker-ui-button-day weekday="S" [dayOfMonth]="16" state="today" ariaLabel="Today, Sunday, day 16" />
-        <habit-maker-ui-button-day state="selected" ariaLabel="Habit complete" />
-        <habit-maker-ui-button-day ariaLabel="Habit not complete" />
+        <hm-button-day weekday="M" [dayOfMonth]="10" state="default" ariaLabel="Monday, day 10" />
+        <hm-button-day weekday="T" [dayOfMonth]="11" state="hover" ariaLabel="Tuesday, day 11" />
+        <hm-button-day weekday="W" [dayOfMonth]="12" state="focus" ariaLabel="Wednesday, day 12" />
+        <hm-button-day weekday="T" [dayOfMonth]="13" state="active" ariaLabel="Thursday, day 13" />
+        <hm-button-day weekday="F" [dayOfMonth]="14" state="selected" ariaLabel="Friday, day 14, complete" />
+        <hm-button-day weekday="S" [dayOfMonth]="15" state="disabled" ariaLabel="Saturday, day 15, unavailable" />
+        <hm-button-day weekday="S" [dayOfMonth]="16" state="today" ariaLabel="Today, Sunday, day 16" />
+        <hm-button-day state="selected" ariaLabel="Habit complete" />
+        <hm-button-day ariaLabel="Habit not complete" />
       </div>
     `,
   }),

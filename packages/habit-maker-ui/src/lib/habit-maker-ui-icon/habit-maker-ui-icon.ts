@@ -2,6 +2,7 @@ import { Component, computed, input } from '@angular/core';
 
 export type HabitMakerUIIconName =
   | 'add'
+  | 'alert-triangle'
   | 'archive'
   | 'archive-check'
   | 'archive-off'
@@ -18,14 +19,17 @@ export type HabitMakerUIIconName =
   | 'eye'
   | 'eye-off'
   | 'flame'
+  | 'info'
   | 'logout'
   | 'sparkle'
   | 'settings'
   | 'sprout'
-  | 'unarchive';
+  | 'unarchive'
+  | 'x-circle';
 
 const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   add: 'assets/icons/add.svg#add',
+  'alert-triangle': 'assets/icons/alert-triangle.svg#alert-triangle',
   archive: 'assets/icons/archive.svg#archive',
   'archive-check': 'assets/icons/archive-check.svg#archive-check',
   'archive-off': 'assets/icons/archive-off.svg#archive-off',
@@ -42,15 +46,17 @@ const ICON_PATHS: Record<HabitMakerUIIconName, string> = {
   eye: 'assets/icons/eye.svg#eye',
   'eye-off': 'assets/icons/eye-off.svg#eye-off',
   flame: 'assets/icons/flame.svg#flame',
+  info: 'assets/icons/info.svg#info',
   logout: 'assets/icons/logout.svg#logout',
   sparkle: 'assets/icons/sparkle.svg#sparkle',
   settings: 'assets/icons/settings.svg#settings',
   sprout: 'assets/icons/sprout.svg#sprout',
   unarchive: 'assets/icons/unarchive.svg#unarchive',
+  'x-circle': 'assets/icons/x-circle.svg#x-circle',
 };
 
 @Component({
-  selector: 'habit-maker-ui-icon',
+  selector: 'hm-icon',
   standalone: true,
   templateUrl: './habit-maker-ui-icon.html',
   styleUrl: './habit-maker-ui-icon.css',

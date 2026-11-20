@@ -13,7 +13,7 @@ const meta: Meta<HabitMakerUIBadge> = {
           'Pass one of `default`, `secondary`, `destructive`, `outline`, `ghost`, or `link` to `variant`. It defaults to `default`; the label is projected as content.',
           '',
           '```html',
-          '<habit-maker-ui-badge variant="secondary">Current</habit-maker-ui-badge>',
+          '<hm-badge variant="secondary">Current</hm-badge>',
           '```',
         ].join('\n'),
       },
@@ -41,8 +41,7 @@ export const Playground: Story = {
   },
   render: (args) => ({
     props: args,
-    template:
-      '<habit-maker-ui-badge [variant]="variant">Este dispositivo</habit-maker-ui-badge>',
+    template: '<hm-badge [variant]="variant">Este dispositivo</hm-badge>',
   }),
 };
 
@@ -51,12 +50,12 @@ export const AllVariants: Story = {
   render: () => ({
     template: `
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;">
-        <habit-maker-ui-badge variant="default">Default</habit-maker-ui-badge>
-        <habit-maker-ui-badge variant="secondary">Secondary</habit-maker-ui-badge>
-        <habit-maker-ui-badge variant="destructive">Destructive</habit-maker-ui-badge>
-        <habit-maker-ui-badge variant="outline">Outline</habit-maker-ui-badge>
-        <habit-maker-ui-badge variant="ghost">Ghost</habit-maker-ui-badge>
-        <habit-maker-ui-badge variant="link">Link</habit-maker-ui-badge>
+        <hm-badge variant="default">Default</hm-badge>
+        <hm-badge variant="secondary">Secondary</hm-badge>
+        <hm-badge variant="destructive">Destructive</hm-badge>
+        <hm-badge variant="outline">Outline</hm-badge>
+        <hm-badge variant="ghost">Ghost</hm-badge>
+        <hm-badge variant="link">Link</hm-badge>
       </div>
     `,
   }),

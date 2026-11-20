@@ -21,7 +21,6 @@
   background-color: var(--color-surface);
   color: var(--color-text-primary);
   font: inherit;
-  font-size: 1.25rem;
   cursor: pointer;
   transition:
     border-color 150ms ease,

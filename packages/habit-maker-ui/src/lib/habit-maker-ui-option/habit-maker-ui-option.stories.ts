@@ -11,15 +11,15 @@ const meta: Meta<HabitMakerUIOption> = {
     docs: {
       description: {
         component: [
-          '`habit-maker-ui-option` is an option for `habit-maker-ui-select`; render it as a child of a select so it can use the select context and keyboard behavior.',
+          '`hm-option` is an option for `hm-select`; render it as a child of a select so it can use the select context and keyboard behavior.',
           '',
           'Provide a unique `value`. The option label comes from `label` when supplied, otherwise from its projected text. Set `disabled` to make an option unavailable.',
           '',
           '```html',
-          '<habit-maker-ui-select aria-label="Choose a habit">',
-          '  <habit-maker-ui-option value="read">Read</habit-maker-ui-option>',
-          '  <habit-maker-ui-option value="walk" [disabled]="true">Walk</habit-maker-ui-option>',
-          '</habit-maker-ui-select>',
+          '<hm-select aria-label="Choose a habit">',
+          '  <hm-option value="read">Read</hm-option>',
+          '  <hm-option value="walk" [disabled]="true">Walk</hm-option>',
+          '</hm-select>',
           '```',
         ].join('\n'),
       },
@@ -40,10 +40,10 @@ export const Playground: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <habit-maker-ui-select aria-label="Option playground" placeholder="Choose an option">
-        <habit-maker-ui-option [value]="value" [label]="label" [disabled]="disabled">{{ label }}</habit-maker-ui-option>
-        <habit-maker-ui-option value="another">Another option</habit-maker-ui-option>
-      </habit-maker-ui-select>
+      <hm-select aria-label="Option playground" placeholder="Choose an option">
+        <hm-option [value]="value" [label]="label" [disabled]="disabled">{{ label }}</hm-option>
+        <hm-option value="another">Another option</hm-option>
+      </hm-select>
     `,
   }),
 };
@@ -52,11 +52,11 @@ export const AllVariants: Story = {
   parameters: { controls: { disable: true } },
   render: () => ({
     template: `
-      <habit-maker-ui-select aria-label="Option states" [ngModel]="'daily'">
-        <habit-maker-ui-option value="daily">Selected option</habit-maker-ui-option>
-        <habit-maker-ui-option value="weekly">Available option</habit-maker-ui-option>
-        <habit-maker-ui-option value="disabled" disabled>Disabled option</habit-maker-ui-option>
-      </habit-maker-ui-select>
+      <hm-select aria-label="Option states" [ngModel]="'daily'">
+        <hm-option value="daily">Selected option</hm-option>
+        <hm-option value="weekly">Available option</hm-option>
+        <hm-option value="disabled" disabled>Disabled option</hm-option>
+      </hm-select>
     `,
   }),
   play: async ({ canvasElement }) => {

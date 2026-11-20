@@ -39,7 +39,7 @@ export const Playground: Story = {
     template: `
       <fieldset>
         <legend>Choose an emoji</legend>
-        <habit-maker-ui-emoji-picker
+        <hm-emoji-picker
           [noneOptionLabel]="noneOptionLabel"
           [selectedEmoji]="selectedEmoji"
           [pinnedEmoji]="pinnedEmoji"
@@ -59,14 +59,14 @@ export const AllVariants: Story = {
       <div style="display: grid; max-width: 28rem; gap: 1.5rem;">
         <fieldset>
           <legend>Brand icon — no emoji selected</legend>
-          <habit-maker-ui-emoji-picker
+          <hm-emoji-picker
             noneOptionLabel="No emoji"
             [emojis]="emojis"
           />
         </fieldset>
         <fieldset>
           <legend>Reading habit — selected and pinned</legend>
-          <habit-maker-ui-emoji-picker
+          <hm-emoji-picker
             noneOptionLabel="No emoji"
             selectedEmoji="📚"
             pinnedEmoji="📚"
@@ -75,7 +75,7 @@ export const AllVariants: Story = {
         </fieldset>
         <fieldset>
           <legend>Movement habit — selected and pinned</legend>
-          <habit-maker-ui-emoji-picker
+          <hm-emoji-picker
             noneOptionLabel="No emoji"
             selectedEmoji="🏃"
             pinnedEmoji="🏃"

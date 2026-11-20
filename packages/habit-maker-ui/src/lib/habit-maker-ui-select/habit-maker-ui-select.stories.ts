@@ -11,20 +11,20 @@ const meta: Meta<HabitMakerUISelect> = {
     docs: {
       description: {
         component: [
-          'Use `habit-maker-ui-select` with one or more nested `habit-maker-ui-option` elements. Give the select an accessible name with `aria-label` or `aria-labelledby`.',
+          'Use `hm-select` with one or more nested `hm-option` elements. Give the select an accessible name with `aria-label` or `aria-labelledby`.',
           '',
           'The control implements Angular `ControlValueAccessor`, so it works with `[(ngModel)]` or reactive forms. Import `FormsModule` for `ngModel`. `placeholder`, `required`, and `disabled` configure the control.',
           '',
           '```html',
-          '<habit-maker-ui-select',
+          '<hm-select',
           '  name="habit"',
           '  aria-label="Choose a habit"',
           '  placeholder="Select a habit"',
           '  [(ngModel)]="selectedHabit"',
           '>',
-          '  <habit-maker-ui-option value="read">Reading</habit-maker-ui-option>',
-          '  <habit-maker-ui-option value="walk">Walking</habit-maker-ui-option>',
-          '</habit-maker-ui-select>',
+          '  <hm-option value="read">Reading</hm-option>',
+          '  <hm-option value="walk">Walking</hm-option>',
+          '</hm-select>',
           '```',
         ].join('\n'),
       },
@@ -41,16 +41,16 @@ export const Playground: Story = {
   render: (args) => ({
     props: args,
     template: `
-      <habit-maker-ui-select
+      <hm-select
         [placeholder]="placeholder"
         [required]="required"
         [disabled]="disabled"
         aria-label="Choose a habit"
       >
-        <habit-maker-ui-option value="reading">Read for 10 minutes</habit-maker-ui-option>
-        <habit-maker-ui-option value="walk">Take a short walk</habit-maker-ui-option>
-        <habit-maker-ui-option value="journal">Write in a journal</habit-maker-ui-option>
-      </habit-maker-ui-select>
+        <hm-option value="reading">Read for 10 minutes</hm-option>
+        <hm-option value="walk">Take a short walk</hm-option>
+        <hm-option value="journal">Write in a journal</hm-option>
+      </hm-select>
     `,
   }),
 };
@@ -60,17 +60,17 @@ export const AllVariants: Story = {
   render: () => ({
     template: `
       <div style="display: grid; max-width: 22rem; gap: 1rem;">
-        <habit-maker-ui-select aria-label="Choose a habit" placeholder="Select a habit">
-          <habit-maker-ui-option value="read">Reading</habit-maker-ui-option>
-          <habit-maker-ui-option value="walk">Walking</habit-maker-ui-option>
-        </habit-maker-ui-select>
-        <habit-maker-ui-select aria-label="Required habit" placeholder="Required selection" required>
-          <habit-maker-ui-option value="journal">Journaling</habit-maker-ui-option>
-          <habit-maker-ui-option value="stretch">Stretching</habit-maker-ui-option>
-        </habit-maker-ui-select>
-        <habit-maker-ui-select aria-label="Disabled habit" placeholder="Unavailable" disabled>
-          <habit-maker-ui-option value="water">Drink water</habit-maker-ui-option>
-        </habit-maker-ui-select>
+        <hm-select aria-label="Choose a habit" placeholder="Select a habit">
+          <hm-option value="read">Reading</hm-option>
+          <hm-option value="walk">Walking</hm-option>
+        </hm-select>
+        <hm-select aria-label="Required habit" placeholder="Required selection" required>
+          <hm-option value="journal">Journaling</hm-option>
+          <hm-option value="stretch">Stretching</hm-option>
+        </hm-select>
+        <hm-select aria-label="Disabled habit" placeholder="Unavailable" disabled>
+          <hm-option value="water">Drink water</hm-option>
+        </hm-select>
       </div>
     `,
   }),

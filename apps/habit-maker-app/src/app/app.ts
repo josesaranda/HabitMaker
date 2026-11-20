@@ -5,6 +5,7 @@ import {
   NavigationEnd,
   Router,
   RouterLink,
+  RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
 import {
@@ -12,6 +13,7 @@ import {
   HabitMakerUIHeaderOutlet,
   HabitMakerUIIcon,
   HabitMakerUINavbar,
+  HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { filter, map } from 'rxjs';
 import { AuthService } from './auth/auth.service';
@@ -19,11 +21,13 @@ import { AppUpdateService } from './app-update.service';
 
 @Component({
   imports: [
+    HabitMakerUIText,
     HabitMakerUIButtonIcon,
     HabitMakerUIHeaderOutlet,
     HabitMakerUIIcon,
     HabitMakerUINavbar,
     RouterLink,
+    RouterLinkActive,
     RouterOutlet,
     TranslocoPipe,
   ],
@@ -42,8 +46,11 @@ export class App {
     { initialValue: this.router.url },
   );
   protected readonly currentDay = computed(() => new Date().getDate());
+  protected readonly currentPath = computed(
+    () => this.currentUrl().split(/[?#]/, 1)[0],
+  );
   protected readonly shouldShowNavbar = computed(() => {
-    const currentPath = this.currentUrl().split(/[?#]/, 1)[0];
+    const currentPath = this.currentPath();
     const isAuthPage =
       currentPath === '/login' ||
       currentPath === '/signup' ||
@@ -52,6 +59,12 @@ export class App {
 
     return this.authService.authenticated() && !isAuthPage;
   });
+  protected readonly isTodayActive = computed(
+    () => this.currentPath() === '/today',
+  );
+  protected readonly isSettingsActive = computed(
+    () => this.currentPath() === '/settings',
+  );
 
   constructor() {
     inject(AppUpdateService);
