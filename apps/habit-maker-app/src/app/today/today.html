@@ -112,14 +112,4 @@
   >
     <app-new-habit (habitCreated)="newHabitModal.close()" />
   </hm-modal>
-
-  <hm-notification
-    #allDoneNotification
-    type="success"
-    duration="5000"
-    [label]="'today.allDoneTitle' | transloco"
-    position="top-right"
-  >
-    {{ 'today.allDoneMessage' | transloco }}
-  </hm-notification>
 </main>

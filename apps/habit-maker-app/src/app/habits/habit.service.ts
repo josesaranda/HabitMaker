@@ -1,6 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, Subject, tap, throwError } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  catchError,
+  forkJoin,
+  map,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { SupportedLanguage } from '../i18n/language.service';
@@ -124,6 +134,19 @@ export class HabitService {
     );
   }
 
+  getTodayCompletions(ids: string[]): Observable<Record<string, boolean>> {
+    if (ids.length === 0) return this.requireAuthentication(of({}));
+    const requests = ids.map((id) =>
+      this.getTodayCompletion(id).pipe(
+        map((completion) => [id, completion.completed] as const),
+        catchError(() => of([id, false] as const)),
+      ),
+    );
+    return this.requireAuthentication(
+      forkJoin(requests).pipe(map((entries) => Object.fromEntries(entries))),
+    );
+  }
+
   getCompletionsForDates(
     id: string,
     dates: string[],
@@ -148,6 +171,22 @@ export class HabitService {
         `${API_URL}/habits/${encodeURIComponent(id)}/completions/${encodeURIComponent(date)}`,
         { completed },
       ),
+    );
+  }
+
+  getHabitsWithTodayCompletions({ includeArchived = false } = {}): Observable<{
+    habits: Habit[];
+    completions: Record<string, boolean>;
+  }> {
+    return this.getHabits({ includeArchived }).pipe(
+      switchMap((habits) => {
+        if (habits.length === 0) {
+          return of({ habits, completions: {} });
+        }
+        return this.getTodayCompletions(habits.map((habit) => habit.id)).pipe(
+          map((completions) => ({ habits, completions })),
+        );
+      }),
     );
   }
 

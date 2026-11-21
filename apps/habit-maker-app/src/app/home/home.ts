@@ -18,11 +18,12 @@ import {
   HabitMakerUIModal,
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
-import { catchError, forkJoin, of } from 'rxjs';
+
 import { BrowserService } from '../browser/browser.service';
 import { HabitCard } from '../habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
-import { Habit, HabitService } from '../habits/habit.service';
+import { HabitService } from '../habits/habit.service';
+import { HabitStore } from '../habits/habit.store';
 import { NewHabit } from '../new-habit/new-habit';
 import { SettingsService } from '../settings/settings.service';
 
@@ -44,14 +45,15 @@ import { SettingsService } from '../settings/settings.service';
 export class Home implements OnInit {
   private readonly browserService = inject(BrowserService);
   private readonly habitService = inject(HabitService);
+  private readonly habitStore = inject(HabitStore);
   private readonly homePreferences = inject(SettingsService);
   private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly habits = signal<Habit[]>([]);
-  protected readonly showArchived = signal(false);
-  protected readonly hasArchived = signal(false);
-  protected readonly hasLoadedHabits = signal(false);
-  protected readonly loadError = signal('');
+  protected readonly habits = this.habitStore.habits;
+  protected readonly showArchived = this.habitStore.showArchived;
+  protected readonly hasArchived = this.habitStore.hasArchived;
+  protected readonly hasLoadedHabits = this.habitStore.hasLoadedHabits;
+  protected readonly loadError = this.habitStore.loadError;
   protected readonly savingDayHabitIds = signal<ReadonlySet<string>>(new Set());
   protected readonly dayCompletionError = signal('');
   protected readonly completionUpdates = signal<
@@ -78,7 +80,7 @@ export class Home implements OnInit {
   ngOnInit(): void {
     this.browserService.setTitle('pageTitles.home');
     const showArchived = this.homePreferences.getShowArchived();
-    this.showArchived.set(showArchived);
+    this.habitStore.setShowArchived(showArchived);
     this.loadHabits();
     this.habitService.habitCreated$
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -87,7 +89,7 @@ export class Home implements OnInit {
 
   protected toggleShowArchived(): void {
     const wasHidden = !this.showArchived();
-    this.showArchived.update((v) => !v);
+    this.habitStore.setShowArchived(!this.showArchived());
     this.homePreferences.setShowArchived(this.showArchived());
     this.loadHabits({
       onLoaded: wasHidden
@@ -97,30 +99,10 @@ export class Home implements OnInit {
   }
 
   private loadHabits({ onLoaded }: { onLoaded?: () => void } = {}): void {
-    this.loadError.set('');
-    forkJoin({
-      habits: this.habitService
-        .getHabits({ includeArchived: this.showArchived() })
-        .pipe(catchError(() => of(null))),
-      archived: this.habitService
-        .getArchivedCount()
-        .pipe(catchError(() => of({ count: 0 }))),
-    })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ habits, archived }) => {
-        this.hasLoadedHabits.set(habits !== null);
-        if (habits === null) {
-          this.habits.set([]);
-          this.loadError.set('home.loadError');
-        } else {
-          this.habits.set(habits);
-        }
-        this.hasArchived.set(archived.count > 0);
-        this.streakUpdates.set({});
-        if (onLoaded) {
-          setTimeout(onLoaded);
-        }
-      });
+    this.habitStore.load(this.showArchived(), () => {
+      this.streakUpdates.set({});
+      onLoaded?.();
+    });
   }
 
   private scrollToArchived(): void {

@@ -5,10 +5,9 @@ import {
   inject,
   OnInit,
   signal,
-  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   HabitMakerUIButton,
   HabitMakerUIButtonIcon,
@@ -16,18 +15,15 @@ import {
   HabitMakerUIHeader,
   HabitMakerUIIcon,
   HabitMakerUIModal,
-  HabitMakerUINotification,
+  HabitMakerUINotificationService,
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
-import { Observable, catchError, forkJoin, of } from 'rxjs';
+
 import { BrowserService } from '../browser/browser.service';
-import {
-  Habit,
-  HabitCompletionStatus,
-  HabitService,
-} from '../habits/habit.service';
+import { HabitService } from '../habits/habit.service';
+import { HabitStore } from '../habits/habit.store';
 import { LanguageService } from '../i18n/language.service';
-import confetti from '@hiseb/confetti';
+import { ConfettiService } from '../confetti/confetti.service';
 import { NewHabit } from '../new-habit/new-habit';
 import { SettingsService } from '../settings/settings.service';
 
@@ -40,7 +36,6 @@ import { SettingsService } from '../settings/settings.service';
     HabitMakerUIHeader,
     HabitMakerUIIcon,
     HabitMakerUIModal,
-    HabitMakerUINotification,
     NewHabit,
     TranslocoPipe,
   ],
@@ -50,17 +45,22 @@ import { SettingsService } from '../settings/settings.service';
 export class Today implements OnInit {
   private readonly browserService = inject(BrowserService);
   private readonly habitService = inject(HabitService);
+  private readonly habitStore = inject(HabitStore);
   private readonly languageService = inject(LanguageService);
   private readonly homePreferences = inject(SettingsService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly allDoneNotification = viewChild(HabitMakerUINotification);
+  private readonly notificationService = inject(
+    HabitMakerUINotificationService,
+  );
+  private readonly transloco = inject(TranslocoService);
+  private readonly confettiService = inject(ConfettiService);
 
-  protected readonly habits = signal<Habit[]>([]);
+  protected readonly habits = this.habitStore.habits;
   protected readonly completions = signal<Record<string, boolean>>({});
-  protected readonly showArchived = signal(false);
-  protected readonly hasArchived = signal(false);
-  protected readonly hasLoadedHabits = signal(false);
-  protected readonly loadError = signal('');
+  protected readonly showArchived = this.habitStore.showArchived;
+  protected readonly hasArchived = this.habitStore.hasArchived;
+  protected readonly hasLoadedHabits = this.habitStore.hasLoadedHabits;
+  protected readonly loadError = this.habitStore.loadError;
   protected readonly completionError = signal('');
   protected readonly savingHabitIds = signal<ReadonlySet<string>>(new Set());
   protected readonly locale = this.languageService.locale;
@@ -101,7 +101,7 @@ export class Today implements OnInit {
 
   ngOnInit(): void {
     this.browserService.setTitle('pageTitles.today');
-    this.showArchived.set(this.homePreferences.getShowArchived());
+    this.habitStore.setShowArchived(this.homePreferences.getShowArchived());
     this.loadHabits();
     this.habitService.habitCreated$
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -109,7 +109,7 @@ export class Today implements OnInit {
   }
 
   protected toggleShowArchived(): void {
-    this.showArchived.update((value) => !value);
+    this.habitStore.setShowArchived(!this.showArchived());
     this.homePreferences.setShowArchived(this.showArchived());
     this.loadHabits();
   }
@@ -142,8 +142,16 @@ export class Today implements OnInit {
               (habit) => this.completions()[habit.id] === true,
             )
           ) {
-            this.allDoneNotification()?.open();
-            this.launchConfetti();
+            this.notificationService
+              .create({
+                type: 'success',
+                label: this.transloco.translate('today.allDoneTitle'),
+                content: this.transloco.translate('today.allDoneMessage'),
+                position: 'top-right',
+                duration: 5000,
+              })
+              .open();
+            this.confettiService.launch();
           }
         },
         error: () => {
@@ -155,24 +163,6 @@ export class Today implements OnInit {
           this.completionError.set('home.activityError');
         },
       });
-  }
-
-  private launchConfetti(): void {
-    const width = window.innerWidth || 1024;
-    const launchPoints = [0.1, 0.25, 0.4, 0.5, 0.6, 0.75, 0.9].map((fraction) =>
-      Math.round(width * fraction),
-    );
-
-    launchPoints.forEach((x, index) => {
-      setTimeout(() => {
-        confetti({
-          position: { x, y: 0 },
-          count: 140,
-          size: 1.1,
-          velocity: 220,
-        });
-      }, index * 120);
-    });
   }
 
   private setSaving(habitId: string, saving: boolean): void {
@@ -188,58 +178,17 @@ export class Today implements OnInit {
   }
 
   private loadHabits(): void {
-    this.loadError.set('');
-    forkJoin({
-      habits: this.habitService
-        .getHabits({ includeArchived: this.showArchived() })
-        .pipe(catchError(() => of(null))),
-      archived: this.habitService
-        .getArchivedCount()
-        .pipe(catchError(() => of({ count: 0 }))),
-    })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ habits, archived }) => {
-        this.hasLoadedHabits.set(habits !== null);
-        if (habits === null) {
-          this.habits.set([]);
-          this.completions.set({});
-          this.loadError.set('home.loadError');
-        } else {
-          this.habits.set(habits);
-          this.loadTodayCompletions(habits);
-        }
-        this.hasArchived.set(archived.count > 0);
-      });
-  }
-
-  private loadTodayCompletions(habits: Habit[]): void {
-    if (habits.length === 0) {
-      this.completions.set({});
-      return;
-    }
-
-    const requests: Record<
-      string,
-      Observable<HabitCompletionStatus | null>
-    > = {};
-    for (const habit of habits) {
-      requests[habit.id] = this.habitService
-        .getTodayCompletion(habit.id)
-        .pipe(catchError(() => of(null)));
-    }
-
-    forkJoin(requests)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((results) => {
-        this.completions.set(
-          Object.fromEntries(
-            Object.entries(results).map(([habitId, completion]) => [
-              habitId,
-              completion?.completed ?? false,
-            ]),
-          ),
-        );
-      });
+    this.habitStore.load(this.showArchived(), () => {
+      const habits = this.habits();
+      if (habits.length === 0) {
+        this.completions.set({});
+        return;
+      }
+      this.habitService
+        .getTodayCompletions(habits.map((habit) => habit.id))
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((completions) => this.completions.set(completions));
+    });
   }
 
   private getLocalDate(): string {

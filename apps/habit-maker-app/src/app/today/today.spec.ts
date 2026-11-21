@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { EMPTY, Observable, Subject, of, throwError } from 'rxjs';
+import { EMPTY, Observable, Subject, map, of, throwError } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { Habit } from '../habits/habit.service';
 import { HabitService } from '../habits/habit.service';
@@ -66,6 +66,24 @@ describe('Today', () => {
               : habits.filter((habit) => !habit.archivedAt),
           ),
       ),
+      getHabitsWithTodayCompletions: vi.fn(
+        ({ includeArchived = false }: { includeArchived?: boolean } = {}) =>
+          (
+            habitsRequest ??
+            of(
+              includeArchived
+                ? habits
+                : habits.filter((habit) => !habit.archivedAt),
+            )
+          ).pipe(
+            map((list: Habit[]) => ({
+              habits: list,
+              completions: Object.fromEntries(
+                list.map((habit) => [habit.id, completed]),
+              ),
+            })),
+          ),
+      ),
       getArchivedCount: vi.fn(() => of({ count: archivedCount })),
       getTodayCompletion: vi.fn((_id: string) =>
         of({
@@ -73,6 +91,9 @@ describe('Today', () => {
           completed,
           completedAt: completed ? '2026-11-19T08:00:00.000Z' : null,
         }),
+      ),
+      getTodayCompletions: vi.fn((ids: string[]) =>
+        of(Object.fromEntries(ids.map((id) => [id, completed]))),
       ),
       setCompletion: vi.fn(
         (_id: string, date: string, value: boolean) =>

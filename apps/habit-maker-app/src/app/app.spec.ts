@@ -32,6 +32,9 @@ describe('App', () => {
               }),
             getTodayCompletion: () =>
               of({ date: '2026-11-01', completed: false, completedAt: null }),
+            getTodayCompletions: () => of({}),
+            getHabitsWithTodayCompletions: () =>
+              of({ habits: [], completions: {} }),
             getCompletionsForDates: () => of([]),
             getReminder: () =>
               of({ enabled: false, time: null, timeZone: null }),
@@ -183,6 +186,16 @@ describe('App', () => {
         getArchivedCount: () => of({ count: 1 }),
         getTodayCompletion: () =>
           of({ date: '2026-11-19', completed: false, completedAt: null }),
+        getTodayCompletions: () => of({}),
+        getHabitsWithTodayCompletions: ({
+          includeArchived = false,
+        }: { includeArchived?: boolean } = {}) =>
+          of({
+            habits: includeArchived
+              ? [activeHabit, archivedHabit]
+              : [activeHabit],
+            completions: {},
+          }),
         habitCreated$: EMPTY,
       },
     });
