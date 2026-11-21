@@ -1,24 +1,24 @@
 import { Route } from '@angular/router';
-import { authGuard } from './auth/auth.guard';
-import { guestGuard } from './auth/guest.guard';
-import { habitDetailResolver } from './habit-detail/habit-detail.resolver';
+import { authGuard, guestGuard } from '@habit-maker/auth-data-access';
+import { habitDetailResolver } from '@habit-maker/habits-feature';
 
 export const appRoutes: Route[] = [
   {
     path: 'login',
-    loadComponent: () => import('./login/login').then((module) => module.Login),
+    loadComponent: () =>
+      import('@habit-maker/auth-feature').then((module) => module.Login),
     canActivate: [guestGuard],
   },
   {
     path: 'signup',
     loadComponent: () =>
-      import('./signup/signup').then((module) => module.Signup),
+      import('@habit-maker/auth-feature').then((module) => module.Signup),
     canActivate: [guestGuard],
   },
   {
     path: 'forgot-password',
     loadComponent: () =>
-      import('./recover-password/recover-password').then(
+      import('@habit-maker/auth-feature').then(
         (module) => module.RecoverPassword,
       ),
     canActivate: [guestGuard],
@@ -26,24 +26,26 @@ export const appRoutes: Route[] = [
   {
     path: 'reset-password',
     loadComponent: () =>
-      import('./reset-password/reset-password').then(
+      import('@habit-maker/auth-feature').then(
         (module) => module.ResetPassword,
       ),
   },
   {
     path: 'home',
-    loadComponent: () => import('./home/home').then((module) => module.Home),
+    loadComponent: () =>
+      import('@habit-maker/habits-feature').then((module) => module.Home),
     canActivate: [authGuard],
   },
   {
     path: 'today',
-    loadComponent: () => import('./today/today').then((module) => module.Today),
+    loadComponent: () =>
+      import('@habit-maker/today-feature').then((module) => module.Today),
     canActivate: [authGuard],
   },
   {
     path: 'habits/:id',
     loadComponent: () =>
-      import('./habit-detail/habit-detail').then(
+      import('@habit-maker/habits-feature').then(
         (module) => module.HabitDetail,
       ),
     canActivate: [authGuard],
@@ -52,7 +54,7 @@ export const appRoutes: Route[] = [
   {
     path: 'settings',
     loadComponent: () =>
-      import('./settings/settings').then((module) => module.Settings),
+      import('@habit-maker/settings-feature').then((module) => module.Settings),
     canActivate: [authGuard],
   },
   { path: '', pathMatch: 'full', redirectTo: 'login' },

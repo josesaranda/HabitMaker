@@ -15,9 +15,16 @@ import {
 } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
 import { appRoutes } from './app.routes';
-import { authTokenInterceptor } from './auth/auth-token.interceptor';
-import { TranslocoHttpLoader } from './i18n/transloco-loader';
-import { LanguageService } from './i18n/language.service';
+import { environment } from '../environments/environment';
+import {
+  AuthService,
+  authTokenInterceptor,
+} from '@habit-maker/auth-data-access';
+import {
+  LanguageService,
+  TranslocoHttpLoader,
+} from '@habit-maker/i18n-data-access';
+import { API_BASE_URL, AUTH_TOKEN_PROVIDER } from '@habit-maker/shared-config';
 import { PwaPreloadStrategy } from './pwa-preload.strategy';
 
 export const appConfig: ApplicationConfig = {
@@ -27,6 +34,8 @@ export const appConfig: ApplicationConfig = {
       inject(LanguageService);
     }),
     provideHttpClient(withInterceptors([authTokenInterceptor])),
+    { provide: AUTH_TOKEN_PROVIDER, useExisting: AuthService },
+    { provide: API_BASE_URL, useValue: environment.API_URL || '/api' },
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',

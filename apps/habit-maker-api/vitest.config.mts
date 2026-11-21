@@ -5,6 +5,14 @@ export default defineConfig(() => ({
   cacheDir: '../../node_modules/.vite/apps/habit-maker-api',
   resolve: {
     tsconfigPaths: true,
+    dedupe: [
+      '@nestjs/common',
+      '@nestjs/core',
+      '@nestjs/jwt',
+      '@nestjs/typeorm',
+      'nodemailer',
+      'typeorm',
+    ],
   },
   test: {
     name: 'HabitMakerApi',

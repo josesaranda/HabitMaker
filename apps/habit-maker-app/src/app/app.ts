@@ -16,8 +16,8 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { filter, map } from 'rxjs';
-import { AuthService } from './auth/auth.service';
-import { AppUpdateService } from './app-update.service';
+import { AuthService } from '@habit-maker/auth-data-access';
+import { AppUpdateService } from '@habit-maker/settings-data-access';
 
 @Component({
   imports: [

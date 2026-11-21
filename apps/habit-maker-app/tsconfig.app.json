@@ -10,6 +10,36 @@
   "references": [
     {
       "path": "../../packages/habit-maker-ui/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/habits-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/test-support/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/today-feature/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/auth-feature/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/settings-feature/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/habits-feature/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared-config/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/i18n-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/auth-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/settings-data-access/tsconfig.lib.json"
     }
   ]
 }

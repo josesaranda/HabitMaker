@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
+    "rootDir": "../..",
     "module": "commonjs",
     "types": ["node"],
     "experimentalDecorators": true,
@@ -23,5 +24,25 @@
     "src/**/*.spec.js",
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx"
+  ],
+  "references": [
+    {
+      "path": "../../libs/api-push-api/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/api-platform-infrastructure/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/api-version-api/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/api-admin-api/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/api-habits-api/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/api-auth-api/tsconfig.lib.json"
+    }
   ]
 }

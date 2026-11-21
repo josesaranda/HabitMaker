@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["scope:landing", "type:app"]
+  "tags": ["scope:landing", "type:app", "platform:frontend"]
 }

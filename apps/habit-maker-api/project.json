@@ -9,7 +9,9 @@
         "production",
         "^production",
         "{workspaceRoot}/package.json",
-        { "externalDependencies": ["webpack-cli"] },
+        {
+          "externalDependencies": ["webpack-cli"]
+        },
         {
           "json": "{workspaceRoot}/tsconfig.json",
           "fields": ["extends", "files", "include"]
@@ -65,5 +67,13 @@
       }
     }
   },
-  "tags": []
+  "tags": ["type:app", "platform:backend"],
+  "implicitDependencies": [
+    "api-auth-api",
+    "api-habits-api",
+    "api-admin-api",
+    "api-version-api",
+    "api-push-api",
+    "api-platform-infrastructure"
+  ]
 }

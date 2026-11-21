@@ -10,6 +10,7 @@ import {
   HabitMakerUIIcon,
   type HabitMakerUIIconName,
 } from '../habit-maker-ui-icon/habit-maker-ui-icon';
+import { HabitMakerUIText } from '../habit-maker-ui-text/habit-maker-ui-text';
 
 export type HabitMakerUINotificationType =
   'default' | 'success' | 'warning' | 'info' | 'danger';
@@ -21,6 +22,18 @@ export type HabitMakerUINotificationPosition =
   | 'bottom-left'
   | 'bottom-right'
   | 'bottom-center';
+
+export interface HabitMakerUINotificationOptions {
+  type?: HabitMakerUINotificationType;
+  label?: string;
+  content?: string;
+  message?: string;
+  text?: string;
+  body?: string;
+  position?: HabitMakerUINotificationPosition;
+  duration?: number | string;
+  closeLabel?: string;
+}
 
 const NOTIFICATION_ICONS: Partial<
   Record<HabitMakerUINotificationType, HabitMakerUIIconName>
@@ -68,7 +81,7 @@ function normalizeNotificationDuration(value: number | string): number {
 
 @Component({
   selector: 'hm-notification',
-  imports: [HabitMakerUIIcon],
+  imports: [HabitMakerUIIcon, HabitMakerUIText],
   host: {
     class: 'hm-notification',
     '[class.hm-notification--default]': 'type() === "default"',
@@ -113,12 +126,23 @@ export class HabitMakerUINotification implements OnDestroy {
     const dialog = this.dialogRef().nativeElement;
     if (dialog.open) return;
 
+    const previouslyFocused =
+      document.activeElement instanceof HTMLElement &&
+      document.activeElement !== dialog
+        ? document.activeElement
+        : null;
+
     if (typeof dialog.showModal === 'function') {
       dialog.showModal();
     } else {
       dialog.setAttribute('open', '');
     }
-    dialog.querySelector<HTMLElement>('[autofocus]')?.focus();
+
+    if (previouslyFocused?.isConnected) {
+      previouslyFocused.focus({ preventScroll: true });
+    } else {
+      dialog.blur();
+    }
 
     this.startDismissTimer();
   }
@@ -128,13 +152,24 @@ export class HabitMakerUINotification implements OnDestroy {
     const dialog = this.dialogRef().nativeElement;
     if (dialog.open) return;
 
+    const previouslyFocused =
+      document.activeElement instanceof HTMLElement &&
+      document.activeElement !== dialog
+        ? document.activeElement
+        : trigger;
+
     this.triggerElement = trigger;
     if (typeof dialog.showModal === 'function') {
       dialog.showModal();
     } else {
       dialog.setAttribute('open', '');
     }
-    dialog.querySelector<HTMLElement>('[autofocus]')?.focus();
+
+    if (previouslyFocused?.isConnected) {
+      previouslyFocused.focus({ preventScroll: true });
+    } else {
+      trigger.focus({ preventScroll: true });
+    }
 
     this.startDismissTimer();
   }

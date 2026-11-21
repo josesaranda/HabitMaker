@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../dist/out-tsc/admin-domain",
+    "declaration": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"]
+}

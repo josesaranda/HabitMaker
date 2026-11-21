@@ -2,11 +2,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { EMPTY, of } from 'rxjs';
-import { provideTranslocoTesting } from '../../test-support/transloco-testing';
+import { provideTranslocoTesting } from '@habit-maker/test-support';
 import { App } from './app';
 import { appRoutes } from './app.routes';
-import { AuthService } from './auth/auth.service';
-import { HabitService } from './habits/habit.service';
+import { AuthService } from '@habit-maker/auth-data-access';
+import { HabitService } from '@habit-maker/habits-data-access';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -32,6 +32,9 @@ describe('App', () => {
               }),
             getTodayCompletion: () =>
               of({ date: '2026-11-01', completed: false, completedAt: null }),
+            getTodayCompletions: () => of({}),
+            getHabitsWithTodayCompletions: () =>
+              of({ habits: [], completions: {} }),
             getCompletionsForDates: () => of([]),
             getReminder: () =>
               of({ enabled: false, time: null, timeZone: null }),
@@ -183,6 +186,16 @@ describe('App', () => {
         getArchivedCount: () => of({ count: 1 }),
         getTodayCompletion: () =>
           of({ date: '2026-11-19', completed: false, completedAt: null }),
+        getTodayCompletions: () => of({}),
+        getHabitsWithTodayCompletions: ({
+          includeArchived = false,
+        }: { includeArchived?: boolean } = {}) =>
+          of({
+            habits: includeArchived
+              ? [activeHabit, archivedHabit]
+              : [activeHabit],
+            completions: {},
+          }),
         habitCreated$: EMPTY,
       },
     });
