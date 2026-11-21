@@ -68,6 +68,9 @@
   ],
   "analytics": false,
   "targetDefaults": {
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
     "@angular/build:application": {
       "cache": true,
       "dependsOn": ["^build"],
