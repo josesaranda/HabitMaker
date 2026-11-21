@@ -9,15 +9,18 @@ This document describes the Domain-Driven Design (DDD) structure adopted in the 
 - Keep domain logic framework-agnostic where possible.
 - Keep the Angular app (`HabitMakerApp`) and NestJS API (`HabitMakerApi`) as composition shells.
 
-## Layering (per domain)
+## Layering
 
 ```
-feature (UI/screens, routes, controllers)
-  -> data-access (HTTP clients, stores, application services)
-  -> domain (entities, value objects, ports)
+Frontend:
+  feature -> data-access -> domain
+
+Backend:
+  api -> application -> domain
+                  \-> infrastructure -> domain
 ```
 
-Dependency rule: `domain` depends on nothing. `data-access` depends on `domain` and `shared-config`. `feature` depends on `data-access`, `domain`, and shared libraries. Apps compose features.
+Frontend `domain` is framework-free; data-access owns HTTP and state; features own screens and route-level behavior. Backend `domain` owns framework-free contracts, `application` owns use cases, `infrastructure` owns persistence/external integrations, and `api` owns Nest controllers, guards, and modules. The Nx boundary rule enforces the allowed project dependencies. Backend application services still use TypeORM entities/repositories directly in places; extracting repository ports/adapters is a follow-up rather than a completed claim.
 
 ## Workspace layout
 
@@ -32,20 +35,30 @@ apps/
 libs/
   shared-config/            # API_BASE_URL, AUTH_TOKEN_PROVIDER ports
   shared-data-access/       # BrowserService, ConfettiService
+  test-support/             # Shared frontend Transloco test providers/fixtures
 
   auth-domain/              # AuthSession, LogoutOptions, UserRole
   auth-data-access/         # AuthService, interceptor, guards
+  auth-feature/             # login/signup/password-recovery screens + auth story
 
   habits-domain/            # Habit, HabitCompletionStatus, HabitReminder
   habits-data-access/       # HabitService, HabitStore
-  habits-feature/           # NewHabit component
+  habits-feature/           # NewHabit, HabitCard, HabitDetail, Home
 
   i18n-data-access/         # LanguageService, TranslocoHttpLoader
   settings-domain/          # version types
   settings-data-access/     # SettingsService, AppVersionService
+  settings-feature/         # settings screen + user/admin settings
   admin-domain/             # admin user/config types
   admin-data-access/        # AdminService
   today-feature/            # Today screen
+
+  api-auth-{domain,application,infrastructure,api}/
+  api-habits-{domain,application,infrastructure,api}/
+  api-admin-{domain,application,infrastructure,api}/
+  api-push-{domain,application,infrastructure,api}/
+  api-version-{domain,application,infrastructure,api}/
+  api-platform-infrastructure/ # database config and TypeORM composition
 
 packages/
   habit-maker-ui/           # @habit-maker/habit-maker-ui shared UI primitives
@@ -53,39 +66,45 @@ packages/
 
 ## Nx project conventions
 
-- Project names: `<domain>-<layer>` (e.g. `habit-domain`, `auth-data-access`).
+- Frontend project names use `<domain>-<layer>` (e.g. `habit-domain`, `auth-data-access`).
+- Backend projects use `api-<domain>-<layer>` to avoid collisions with frontend projects (e.g. `api-auth-application`).
 - Tags:
   - `type:domain`, `type:data-access`, `type:feature`, `type:shared`
-  - `scope:habits`, `scope:auth`, `scope:i18n`, `scope:settings`, `scope:admin`, `scope:today`, `scope:shared`
+  - backend adds `type:application`, `type:infrastructure`, `type:api`
+  - `platform:frontend` and `platform:backend` keep the two applications isolated
+  - frontend scopes: `scope:habits`, `scope:auth`, `scope:i18n`, `scope:settings`, `scope:admin`, `scope:today`, `scope:shared`
+  - backend scopes: `scope:api-auth`, `scope:api-habits`, `scope:api-admin`, `scope:api-push`, `scope:api-version`, `scope:api-platform`
 - `domain` libraries are non-buildable, pure TypeScript (`bundler: none`).
 - Angular `data-access`/`feature` libraries are non-buildable and consumed by the app bundler.
 - Each library has its own `outDir` (`dist/out-tsc/<lib>`) to avoid declaration/tsbuildinfo collisions.
-- Apps declare project references to the libraries they consume.
+- Each library has a unique `dist/out-tsc/<project>` output and explicit TypeScript project references.
+- The Nx ESLint plugin runs `@nx/enforce-module-boundaries` through inferred `lint` targets. Its constraints enforce platform separation and the frontend/backend layer directions.
 
 ## Ports and configuration
 
 - `API_BASE_URL`: base URL for the API. Provided in `app.config.ts`; libraries fall back to `/api` when absent (useful in unit tests).
 - `AUTH_TOKEN_PROVIDER`: minimal auth port `{ getAuthToken(): string | null }`. `AuthService` is registered via `useExisting`, so `habits-data-access` does not depend on `auth-data-access`.
 
-## Completed migration (frontend)
+## Completed migration
 
-- `habits`: domain + data-access + feature (`NewHabit`).
-- `auth`: domain + data-access (service, token interceptor, route guards).
+- Frontend `habits`: domain + data-access + feature (`NewHabit`, `HabitCard`, `HabitDetail`, `Home`).
+- Frontend `auth`: domain + data-access + feature (service, interceptor, guards, auth screens/story).
+- Frontend `settings`: domain + data-access + feature (settings screen, user/admin settings, app updates).
 - `i18n`: data-access (language service, Transloco loader).
-- `settings`: domain + data-access (settings, app version).
 - `admin`: domain + data-access.
 - `today`: feature library.
 - `shared`: config ports and browser/confetti services.
+- Backend `auth`, `habits`, `admin`, `push`, and `version`: libraries split across domain, application, infrastructure, and API layers.
+- Backend database configuration is in `api-platform-infrastructure`; `HabitMakerApi` composes the Nest modules.
 
-The Angular app now imports these libraries via path aliases and no longer owns the migrated services.
+The apps retain composition responsibilities (providers, routes, root Nest module). Feature and backend source now live in independently addressable Nx projects and are imported through workspace aliases.
+Unit specs for migrated screens, services, guards, and modules now live beside their implementations and run through their owning Nx projects. App projects retain only shell/composition tests (`HabitMakerApp`; `HabitMakerApi`, root controller/service).
 
 ## Next steps
 
-1. Migrate the remaining frontend components (`HabitCard`, `HabitDetail`, `Home`, auth screens) into `feature` libraries.
-2. Migrate the NestJS API to `libs/<domain>-{domain,application,infrastructure,api}`.
-3. Add `@nx/enforce-module-boundaries` with the tags above to protect dependency direction.
-4. Consider buildable libraries for stable domains if cache hits justify the extra build step.
-5. Run `nx sync` after moving/adding libraries so TypeScript project references stay aligned.
+1. Extract repository ports from backend application services and implement them in infrastructure so application no longer imports TypeORM entities directly.
+2. Consider buildable/publishable libraries only where measured cache hits justify the extra build step.
+3. Run `nx sync` after moving/adding libraries so TypeScript project references stay aligned.
 
 ## Caching benefits
 

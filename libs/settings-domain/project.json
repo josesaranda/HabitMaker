@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/settings-domain/src",
   "projectType": "library",
-  "tags": ["type:domain", "scope:settings"],
+  "tags": ["type:domain", "scope:settings", "platform:frontend"],
   "// targets": "to see all targets run: nx show project settings-domain --web",
   "targets": {}
 }

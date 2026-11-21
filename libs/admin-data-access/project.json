@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/admin-data-access/src",
   "prefix": "lib",
-  "tags": ["type:data-access", "scope:admin"],
+  "tags": ["type:data-access", "scope:admin", "platform:frontend"],
   "projectType": "library",
   "// targets": "to see all targets run: nx show project admin-data-access --web",
   "targets": {}

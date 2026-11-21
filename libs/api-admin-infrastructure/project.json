@@ -1,0 +1,9 @@
+{
+  "name": "api-admin-infrastructure",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api-admin-infrastructure/src",
+  "projectType": "library",
+  "tags": ["type:infrastructure", "scope:api-admin", "platform:backend"],
+  "// targets": "to see all targets run: nx show project api-admin-infrastructure --web",
+  "targets": {}
+}

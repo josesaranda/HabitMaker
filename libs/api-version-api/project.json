@@ -1,0 +1,9 @@
+{
+  "name": "api-version-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api-version-api/src",
+  "projectType": "library",
+  "tags": ["type:api", "scope:api-version", "platform:backend"],
+  "// targets": "to see all targets run: nx show project api-version-api --web",
+  "targets": {}
+}

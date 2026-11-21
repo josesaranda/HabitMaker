@@ -41,7 +41,57 @@
         "./libs/shared-data-access/src/index.ts"
       ],
       "@habit-maker/habits-feature": ["./libs/habits-feature/src/index.ts"],
-      "@habit-maker/today-feature": ["./libs/today-feature/src/index.ts"]
+      "@habit-maker/today-feature": ["./libs/today-feature/src/index.ts"],
+      "@habit-maker/auth-feature": ["./libs/auth-feature/src/index.ts"],
+      "@habit-maker/settings-feature": ["./libs/settings-feature/src/index.ts"],
+      "@habit-maker/test-support": ["./libs/test-support/src/index.ts"],
+      "@habit-maker/api-auth-domain": ["./libs/api-auth-domain/src/index.ts"],
+      "@habit-maker/api-auth-application": [
+        "./libs/api-auth-application/src/index.ts"
+      ],
+      "@habit-maker/api-auth-infrastructure": [
+        "./libs/api-auth-infrastructure/src/index.ts"
+      ],
+      "@habit-maker/api-auth-api": ["./libs/api-auth-api/src/index.ts"],
+      "@habit-maker/api-habits-domain": [
+        "./libs/api-habits-domain/src/index.ts"
+      ],
+      "@habit-maker/api-habits-application": [
+        "./libs/api-habits-application/src/index.ts"
+      ],
+      "@habit-maker/api-habits-infrastructure": [
+        "./libs/api-habits-infrastructure/src/index.ts"
+      ],
+      "@habit-maker/api-habits-api": ["./libs/api-habits-api/src/index.ts"],
+      "@habit-maker/api-admin-domain": ["./libs/api-admin-domain/src/index.ts"],
+      "@habit-maker/api-admin-application": [
+        "./libs/api-admin-application/src/index.ts"
+      ],
+      "@habit-maker/api-admin-infrastructure": [
+        "./libs/api-admin-infrastructure/src/index.ts"
+      ],
+      "@habit-maker/api-admin-api": ["./libs/api-admin-api/src/index.ts"],
+      "@habit-maker/api-push-domain": ["./libs/api-push-domain/src/index.ts"],
+      "@habit-maker/api-push-application": [
+        "./libs/api-push-application/src/index.ts"
+      ],
+      "@habit-maker/api-push-infrastructure": [
+        "./libs/api-push-infrastructure/src/index.ts"
+      ],
+      "@habit-maker/api-push-api": ["./libs/api-push-api/src/index.ts"],
+      "@habit-maker/api-version-domain": [
+        "./libs/api-version-domain/src/index.ts"
+      ],
+      "@habit-maker/api-version-application": [
+        "./libs/api-version-application/src/index.ts"
+      ],
+      "@habit-maker/api-version-infrastructure": [
+        "./libs/api-version-infrastructure/src/index.ts"
+      ],
+      "@habit-maker/api-version-api": ["./libs/api-version-api/src/index.ts"],
+      "@habit-maker/api-platform-infrastructure": [
+        "./libs/api-platform-infrastructure/src/index.ts"
+      ]
     }
   }
 }

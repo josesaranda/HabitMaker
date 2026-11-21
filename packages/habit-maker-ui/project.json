@@ -4,7 +4,7 @@
   "sourceRoot": "packages/habit-maker-ui/src",
   "prefix": "hm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["type:shared", "scope:shared", "platform:frontend"],
   "targets": {
     "storybook": {
       "executor": "@storybook/angular:start-storybook",
@@ -31,7 +31,9 @@
       "inputs": [
         "default",
         "^production",
-        { "externalDependencies": ["storybook", "@storybook/angular"] }
+        {
+          "externalDependencies": ["storybook", "@storybook/angular"]
+        }
       ],
       "outputs": ["{options.outputDir}"],
       "options": {

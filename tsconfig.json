@@ -45,6 +45,75 @@
     },
     {
       "path": "./libs/today-feature"
+    },
+    {
+      "path": "./libs/auth-feature"
+    },
+    {
+      "path": "./libs/api-platform-infrastructure"
+    },
+    {
+      "path": "./libs/api-version-infrastructure"
+    },
+    {
+      "path": "./libs/api-habits-infrastructure"
+    },
+    {
+      "path": "./libs/api-admin-infrastructure"
+    },
+    {
+      "path": "./libs/api-auth-infrastructure"
+    },
+    {
+      "path": "./libs/api-push-infrastructure"
+    },
+    {
+      "path": "./libs/api-version-application"
+    },
+    {
+      "path": "./libs/api-habits-application"
+    },
+    {
+      "path": "./libs/api-admin-application"
+    },
+    {
+      "path": "./libs/api-auth-application"
+    },
+    {
+      "path": "./libs/api-push-application"
+    },
+    {
+      "path": "./libs/api-version-domain"
+    },
+    {
+      "path": "./libs/api-habits-domain"
+    },
+    {
+      "path": "./libs/api-admin-domain"
+    },
+    {
+      "path": "./libs/api-auth-domain"
+    },
+    {
+      "path": "./libs/api-push-domain"
+    },
+    {
+      "path": "./libs/api-version-api"
+    },
+    {
+      "path": "./libs/api-habits-api"
+    },
+    {
+      "path": "./libs/api-admin-api"
+    },
+    {
+      "path": "./libs/api-auth-api"
+    },
+    {
+      "path": "./libs/api-push-api"
+    },
+    {
+      "path": "./libs/settings-feature"
     }
   ]
 }
