@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
-import { Habit, HabitService } from '../habits/habit.service';
+import { Habit, HabitService } from '@habit-maker/habits-data-access';
 
 export type HabitDetailResolveResult =
   { habit: Habit; error: null } | { habit: null; error: 'not-found' | 'load' };

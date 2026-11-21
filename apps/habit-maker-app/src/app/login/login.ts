@@ -21,8 +21,8 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { startWith } from 'rxjs';
-import { BrowserService } from '../browser/browser.service';
-import { AuthService } from '../auth/auth.service';
+import { BrowserService } from '@habit-maker/shared-data-access';
+import { AuthService } from '@habit-maker/auth-data-access';
 import { AuthStory } from '../auth-story/auth-story';
 
 @Component({

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { BrowserService } from './browser.service';
+import { BrowserService } from '@habit-maker/shared-data-access';
 
 describe('BrowserService', () => {
   it('sets the page title with the HabitMaker brand', () => {

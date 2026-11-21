@@ -19,13 +19,13 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 
-import { BrowserService } from '../browser/browser.service';
+import { BrowserService } from '@habit-maker/shared-data-access';
 import { HabitCard } from '../habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
-import { HabitService } from '../habits/habit.service';
-import { HabitStore } from '../habits/habit.store';
-import { NewHabit } from '../new-habit/new-habit';
-import { SettingsService } from '../settings/settings.service';
+import { HabitService } from '@habit-maker/habits-data-access';
+import { HabitStore } from '@habit-maker/habits-data-access';
+import { NewHabit } from '@habit-maker/habits-feature';
+import { SettingsService } from '@habit-maker/settings-data-access';
 
 @Component({
   imports: [

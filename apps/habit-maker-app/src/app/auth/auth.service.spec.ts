@@ -5,7 +5,8 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from '../../environments/environment';
-import { AuthService } from './auth.service';
+import { API_BASE_URL } from '@habit-maker/shared-config';
+import { AuthService } from '@habit-maker/auth-data-access';
 
 const createJwt = (expiresAt = Math.floor(Date.now() / 1000) + 3600): string =>
   `header.${btoa(JSON.stringify({ exp: expiresAt }))}.signature`;
@@ -19,7 +20,11 @@ describe('AuthService', () => {
     localStorage.clear();
     sessionStorage.clear();
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: API_BASE_URL, useValue: environment.API_URL || '/api' },
+      ],
     });
     authService = TestBed.inject(AuthService);
     httpTestingController = TestBed.inject(HttpTestingController);

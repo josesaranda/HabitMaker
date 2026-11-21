@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { EMPTY, of, Subject } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { Habit } from '../habits/habit.service';
-import { HabitService } from '../habits/habit.service';
+import { Habit } from '@habit-maker/habits-data-access';
+import { HabitService } from '@habit-maker/habits-data-access';
 import { Home } from './home';
 
 vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));

@@ -1,0 +1,9 @@
+{
+  "name": "habit-domain",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/habits/domain/src",
+  "projectType": "library",
+  "tags": ["type:domain", "scope:habits"],
+  "// targets": "to see all targets run: nx show project habit-domain --web",
+  "targets": {}
+}

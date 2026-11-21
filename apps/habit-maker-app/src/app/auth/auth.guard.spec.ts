@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
-import { authGuard } from './auth.guard';
+import { authGuard } from '@habit-maker/auth-data-access';
 
 describe('authGuard', () => {
   beforeEach(() => {

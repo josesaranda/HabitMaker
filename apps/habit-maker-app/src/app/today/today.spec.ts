@@ -2,9 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { EMPTY, Observable, Subject, map, of, throwError } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { Habit } from '../habits/habit.service';
-import { HabitService } from '../habits/habit.service';
-import { Today } from './today';
+import { Habit } from '@habit-maker/habits-data-access';
+import { HabitService } from '@habit-maker/habits-data-access';
+import { Today } from '@habit-maker/today-feature';
 
 vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));
 

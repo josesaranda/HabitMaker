@@ -13,8 +13,11 @@ import {
   HabitMakerUIDaySelector,
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
-import { HabitCompletionStatus, HabitService } from './habits/habit.service';
-import { LanguageService } from './i18n/language.service';
+import {
+  HabitCompletionStatus,
+  HabitService,
+} from '@habit-maker/habits-data-access';
+import { LanguageService } from '@habit-maker/i18n-data-access';
 
 export interface HabitMakerUICardDayToggleEvent {
   date: string;

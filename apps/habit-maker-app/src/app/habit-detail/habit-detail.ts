@@ -34,7 +34,7 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { firstValueFrom } from 'rxjs';
-import { BrowserService } from '../browser/browser.service';
+import { BrowserService } from '@habit-maker/shared-data-access';
 import { HabitCard } from '../habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card';
 import {
@@ -47,8 +47,8 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { Habit, HabitService } from '../habits/habit.service';
-import { LanguageService } from '../i18n/language.service';
+import { Habit, HabitService } from '@habit-maker/habits-data-access';
+import { LanguageService } from '@habit-maker/i18n-data-access';
 import { HabitDetailResolveResult } from './habit-detail.resolver';
 
 const nonBlankValidator: ValidatorFn = (control) =>

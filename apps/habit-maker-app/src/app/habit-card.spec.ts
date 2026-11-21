@@ -5,7 +5,7 @@ import confetti from '@hiseb/confetti';
 import { HabitMakerUIDaySelector } from '@habit-maker/habit-maker-ui';
 import { of } from 'rxjs';
 import { provideTranslocoTesting } from '../../test-support/transloco-testing';
-import { HabitService } from './habits/habit.service';
+import { HabitService } from '@habit-maker/habits-data-access';
 import { HabitCard } from './habit-card';
 
 vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));

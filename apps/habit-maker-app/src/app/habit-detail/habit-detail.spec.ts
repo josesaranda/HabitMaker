@@ -10,7 +10,7 @@ import { HabitMakerUIHeaderOutlet } from '@habit-maker/habit-maker-ui';
 import confetti from '@hiseb/confetti';
 import { of, throwError } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { HabitService } from '../habits/habit.service';
+import { HabitService } from '@habit-maker/habits-data-access';
 import { HabitDetail } from './habit-detail';
 
 vi.mock('@hiseb/confetti', () => ({ default: vi.fn() }));

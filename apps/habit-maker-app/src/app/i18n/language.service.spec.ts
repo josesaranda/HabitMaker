@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { TranslocoService } from '@jsverse/transloco';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { LanguageService } from './language.service';
+import { LanguageService } from '@habit-maker/i18n-data-access';
 
 describe('LanguageService', () => {
   beforeEach(() => {

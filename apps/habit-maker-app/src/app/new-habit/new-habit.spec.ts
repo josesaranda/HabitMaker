@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { HabitService } from '../habits/habit.service';
-import { NewHabit } from './new-habit';
+import { HabitService } from '@habit-maker/habits-data-access';
+import { NewHabit } from '@habit-maker/habits-feature';
 
 describe('NewHabit', () => {
   let fixture: ComponentFixture<NewHabit>;

@@ -6,6 +6,45 @@
   "references": [
     {
       "path": "./packages/habit-maker-ui"
+    },
+    {
+      "path": "./libs/habits-data-access"
+    },
+    {
+      "path": "./libs/habits-domain"
+    },
+    {
+      "path": "./libs/shared-config"
+    },
+    {
+      "path": "./libs/auth-data-access"
+    },
+    {
+      "path": "./libs/auth-domain"
+    },
+    {
+      "path": "./libs/i18n-data-access"
+    },
+    {
+      "path": "./libs/settings-data-access"
+    },
+    {
+      "path": "./libs/settings-domain"
+    },
+    {
+      "path": "./libs/admin-data-access"
+    },
+    {
+      "path": "./libs/admin-domain"
+    },
+    {
+      "path": "./libs/shared-data-access"
+    },
+    {
+      "path": "./libs/habits-feature"
+    },
+    {
+      "path": "./libs/today-feature"
     }
   ]
 }

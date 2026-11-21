@@ -24,8 +24,8 @@ import {
 } from '@habit-maker/habit-maker-ui';
 import { startWith } from 'rxjs';
 import { AuthStory } from '../auth-story/auth-story';
-import { AuthService } from '../auth/auth.service';
-import { BrowserService } from '../browser/browser.service';
+import { AuthService } from '@habit-maker/auth-data-access';
+import { BrowserService } from '@habit-maker/shared-data-access';
 
 const matchingPasswordsValidator: ValidatorFn = (
   control,

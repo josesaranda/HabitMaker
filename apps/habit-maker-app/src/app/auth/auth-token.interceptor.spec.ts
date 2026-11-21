@@ -10,7 +10,8 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { authTokenInterceptor } from './auth-token.interceptor';
+import { authTokenInterceptor } from '@habit-maker/auth-data-access';
+import { API_BASE_URL } from '@habit-maker/shared-config';
 
 const API_URL = environment.API_URL || '/api';
 
@@ -26,6 +27,7 @@ describe('authTokenInterceptor', () => {
         provideRouter([{ path: 'login', children: [] }]),
         provideHttpClient(withInterceptors([authTokenInterceptor])),
         provideHttpClientTesting(),
+        { provide: API_BASE_URL, useValue: environment.API_URL || '/api' },
       ],
     });
     http = TestBed.inject(HttpClient);

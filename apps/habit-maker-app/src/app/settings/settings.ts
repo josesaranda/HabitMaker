@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { HabitMakerUIHeader } from '@habit-maker/habit-maker-ui';
-import { AuthService } from '../auth/auth.service';
-import { BrowserService } from '../browser/browser.service';
+import { AuthService } from '@habit-maker/auth-data-access';
+import { BrowserService } from '@habit-maker/shared-data-access';
 import { SettingsAdmin } from './settings-admin';
 import { SettingsUser } from './settings-user';
 

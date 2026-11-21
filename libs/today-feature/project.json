@@ -1,0 +1,10 @@
+{
+  "name": "today-feature",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/today-feature/src",
+  "prefix": "lib",
+  "tags": ["type:feature", "scope:today"],
+  "projectType": "library",
+  "// targets": "to see all targets run: nx show project today-feature --web",
+  "targets": {}
+}

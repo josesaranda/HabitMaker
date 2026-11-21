@@ -16,9 +16,12 @@ import {
 } from '@habit-maker/habit-maker-ui';
 import { finalize, take } from 'rxjs';
 import { AppUpdateService } from '../app-update.service';
-import { AuthService, type AuthSession } from '../auth/auth.service';
-import { HabitService } from '../habits/habit.service';
-import { LanguageService, SupportedLanguage } from '../i18n/language.service';
+import { AuthService, type AuthSession } from '@habit-maker/auth-data-access';
+import { HabitService } from '@habit-maker/habits-data-access';
+import {
+  LanguageService,
+  SupportedLanguage,
+} from '@habit-maker/i18n-data-access';
 
 @Component({
   imports: [

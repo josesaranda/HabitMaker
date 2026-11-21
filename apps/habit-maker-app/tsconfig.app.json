@@ -9,7 +9,34 @@
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "references": [
     {
+      "path": "../../libs/admin-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/settings-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/habits-feature/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared-config/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/habit-maker-ui/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/today-feature/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/i18n-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/habits-data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/auth-data-access/tsconfig.lib.json"
     }
   ]
 }

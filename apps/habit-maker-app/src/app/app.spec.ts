@@ -5,8 +5,8 @@ import { EMPTY, of } from 'rxjs';
 import { provideTranslocoTesting } from '../../test-support/transloco-testing';
 import { App } from './app';
 import { appRoutes } from './app.routes';
-import { AuthService } from './auth/auth.service';
-import { HabitService } from './habits/habit.service';
+import { AuthService } from '@habit-maker/auth-data-access';
+import { HabitService } from '@habit-maker/habits-data-access';
 
 describe('App', () => {
   beforeEach(async () => {

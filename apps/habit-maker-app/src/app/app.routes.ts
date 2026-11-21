@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { authGuard } from './auth/auth.guard';
-import { guestGuard } from './auth/guest.guard';
+import { authGuard } from '@habit-maker/auth-data-access';
+import { guestGuard } from '@habit-maker/auth-data-access';
 import { habitDetailResolver } from './habit-detail/habit-detail.resolver';
 
 export const appRoutes: Route[] = [
@@ -37,7 +37,8 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'today',
-    loadComponent: () => import('./today/today').then((module) => module.Today),
+    loadComponent: () =>
+      import('@habit-maker/today-feature').then((module) => module.Today),
     canActivate: [authGuard],
   },
   {

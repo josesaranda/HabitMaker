@@ -3,11 +3,11 @@ import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { of } from 'rxjs';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
-import { AdminService } from '../admin/admin.service';
-import { AuthService } from '../auth/auth.service';
-import { HabitService } from '../habits/habit.service';
+import { AdminService } from '@habit-maker/admin-data-access';
+import { AuthService } from '@habit-maker/auth-data-access';
+import { HabitService } from '@habit-maker/habits-data-access';
 import { AppUpdateService } from '../app-update.service';
-import { AppVersionService } from './app-version.service';
+import { AppVersionService } from '@habit-maker/settings-data-access';
 import { Settings } from './settings';
 
 describe('Settings', () => {

@@ -7,6 +7,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideTranslocoTesting } from '../../../test-support/transloco-testing';
 import { environment } from '../../environments/environment';
+import { API_BASE_URL } from '@habit-maker/shared-config';
 import { RecoverPassword } from './recover-password';
 
 const API_URL = environment.API_URL || '/api';
@@ -23,6 +24,7 @@ describe('RecoverPassword', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideTranslocoTesting(),
+        { provide: API_BASE_URL, useValue: environment.API_URL || '/api' },
       ],
     }).compileComponents();
 

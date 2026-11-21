@@ -20,7 +20,28 @@
     "noUncheckedSideEffectImports": false,
     "types": ["*"],
     "paths": {
-      "@habit-maker/habit-maker-ui": ["./packages/habit-maker-ui/src/index.ts"]
+      "@habit-maker/habit-maker-ui": ["./packages/habit-maker-ui/src/index.ts"],
+      "@habit-maker/habits-domain": ["./libs/habits-domain/src/index.ts"],
+      "@habit-maker/habits-data-access": [
+        "./libs/habits-data-access/src/index.ts"
+      ],
+      "@habit-maker/shared-config": ["./libs/shared-config/src/index.ts"],
+      "@habit-maker/auth-domain": ["./libs/auth-domain/src/index.ts"],
+      "@habit-maker/auth-data-access": ["./libs/auth-data-access/src/index.ts"],
+      "@habit-maker/i18n-data-access": ["./libs/i18n-data-access/src/index.ts"],
+      "@habit-maker/settings-domain": ["./libs/settings-domain/src/index.ts"],
+      "@habit-maker/settings-data-access": [
+        "./libs/settings-data-access/src/index.ts"
+      ],
+      "@habit-maker/admin-domain": ["./libs/admin-domain/src/index.ts"],
+      "@habit-maker/admin-data-access": [
+        "./libs/admin-data-access/src/index.ts"
+      ],
+      "@habit-maker/shared-data-access": [
+        "./libs/shared-data-access/src/index.ts"
+      ],
+      "@habit-maker/habits-feature": ["./libs/habits-feature/src/index.ts"],
+      "@habit-maker/today-feature": ["./libs/today-feature/src/index.ts"]
     }
   }
 }
