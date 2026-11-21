@@ -1,0 +1,49 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../../../dist/out-tsc/auth-feature",
+    "declaration": true,
+    "declarationMap": true,
+    "inlineSources": true,
+    "sourceMap": true,
+    "types": []
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "vite.config.ts",
+    "vite.config.mts",
+    "vitest.config.ts",
+    "vitest.config.mts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.js",
+    "src/**/*.spec.js",
+    "src/**/*.test.jsx",
+    "src/**/*.spec.jsx",
+    "src/test-setup.ts",
+    "src/test-setup.ts"
+  ],
+  "references": [
+    {
+      "path": "../../../shared/config/tsconfig.lib.json"
+    },
+    {
+      "path": "../data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../../shared/data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../../shared/test-support/tsconfig.lib.json"
+    },
+    {
+      "path": "../../habits/feature/tsconfig.lib.json"
+    },
+    {
+      "path": "../../../../packages/habit-maker-ui/tsconfig.lib.json"
+    }
+  ]
+}

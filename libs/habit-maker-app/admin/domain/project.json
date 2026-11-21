@@ -1,0 +1,9 @@
+{
+  "name": "admin-domain",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/habit-maker-app/admin/domain/src",
+  "projectType": "library",
+  "tags": ["type:domain", "scope:admin", "platform:frontend"],
+  "// targets": "to see all targets run: nx show project admin-domain --web",
+  "targets": {}
+}

@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../../../dist/out-tsc/api-push-infrastructure",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
+  "references": [
+    {
+      "path": "../domain/tsconfig.lib.json"
+    },
+    {
+      "path": "../../auth/infrastructure/tsconfig.lib.json"
+    },
+    {
+      "path": "../../habits/infrastructure/tsconfig.lib.json"
+    }
+  ]
+}

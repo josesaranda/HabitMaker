@@ -1,0 +1,19 @@
+{
+  "name": "i18n-data-access",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/habit-maker-app/i18n/data-access/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:i18n", "platform:frontend"],
+  "targets": {
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "buildTarget": "HabitMakerApp:build:development",
+        "tsConfig": "libs/habit-maker-app/i18n/data-access/tsconfig.spec.json",
+        "watch": false,
+        "isolate": true
+      }
+    }
+  }
+}

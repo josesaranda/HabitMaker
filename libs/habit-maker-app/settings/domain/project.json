@@ -1,0 +1,9 @@
+{
+  "name": "settings-domain",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/habit-maker-app/settings/domain/src",
+  "projectType": "library",
+  "tags": ["type:domain", "scope:settings", "platform:frontend"],
+  "// targets": "to see all targets run: nx show project settings-domain --web",
+  "targets": {}
+}

@@ -27,22 +27,22 @@
   ],
   "references": [
     {
-      "path": "../../libs/api-push-api/tsconfig.lib.json"
+      "path": "../../libs/habit-maker-api/push/api/tsconfig.lib.json"
     },
     {
-      "path": "../../libs/api-platform-infrastructure/tsconfig.lib.json"
+      "path": "../../libs/habit-maker-api/platform/infrastructure/tsconfig.lib.json"
     },
     {
-      "path": "../../libs/api-version-api/tsconfig.lib.json"
+      "path": "../../libs/habit-maker-api/version/api/tsconfig.lib.json"
     },
     {
-      "path": "../../libs/api-admin-api/tsconfig.lib.json"
+      "path": "../../libs/habit-maker-api/admin/api/tsconfig.lib.json"
     },
     {
-      "path": "../../libs/api-habits-api/tsconfig.lib.json"
+      "path": "../../libs/habit-maker-api/habits/api/tsconfig.lib.json"
     },
     {
-      "path": "../../libs/api-auth-api/tsconfig.lib.json"
+      "path": "../../libs/habit-maker-api/auth/api/tsconfig.lib.json"
     }
   ]
 }

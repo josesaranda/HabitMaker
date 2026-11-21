@@ -3,6 +3,15 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/habit-maker-api/src",
   "projectType": "application",
+  "tags": ["type:app", "platform:backend"],
+  "implicitDependencies": [
+    "api-auth-api",
+    "api-habits-api",
+    "api-admin-api",
+    "api-version-api",
+    "api-push-api",
+    "api-platform-infrastructure"
+  ],
   "targets": {
     "build": {
       "inputs": [
@@ -50,6 +59,9 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
+      "readyWhen": {
+        "signal": true
+      },
       "options": {
         "buildTarget": "HabitMakerApi:build",
         "runBuildTargetDependencies": false
@@ -61,19 +73,7 @@
         "production": {
           "buildTarget": "HabitMakerApi:build:production"
         }
-      },
-      "readyWhen": {
-        "signal": true
       }
     }
-  },
-  "tags": ["type:app", "platform:backend"],
-  "implicitDependencies": [
-    "api-auth-api",
-    "api-habits-api",
-    "api-admin-api",
-    "api-version-api",
-    "api-push-api",
-    "api-platform-infrastructure"
-  ]
+  }
 }

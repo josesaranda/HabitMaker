@@ -1,0 +1,38 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../../../dist/out-tsc/api-platform-infrastructure",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "vite.config.ts",
+    "vite.config.mts",
+    "vitest.config.ts",
+    "vitest.config.mts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.js",
+    "src/**/*.spec.js",
+    "src/**/*.test.jsx",
+    "src/**/*.spec.jsx"
+  ],
+  "references": [
+    {
+      "path": "../../push/infrastructure/tsconfig.lib.json"
+    },
+    {
+      "path": "../../auth/infrastructure/tsconfig.lib.json"
+    },
+    {
+      "path": "../../habits/infrastructure/tsconfig.lib.json"
+    }
+  ]
+}
