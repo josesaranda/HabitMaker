@@ -1,0 +1,19 @@
+{
+  "name": "habits-feature",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/habit-maker-app/habits/feature/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:feature", "scope:habits", "platform:frontend"],
+  "targets": {
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "buildTarget": "HabitMakerApp:build:development",
+        "tsConfig": "libs/habit-maker-app/habits/feature/tsconfig.spec.json",
+        "watch": false,
+        "isolate": true
+      }
+    }
+  }
+}

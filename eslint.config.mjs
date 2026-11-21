@@ -14,7 +14,10 @@ export default [
       '@nx/enforce-module-boundaries': [
         'error',
         {
-          allow: ['../../../../package.json', '../../../../../package.json'],
+          allow: [
+            '../../../../../../package.json',
+            '../../../../../../../package.json',
+          ],
           checkDynamicDependenciesExceptions: [
             '@habit-maker/auth-feature',
             '@habit-maker/habits-feature',

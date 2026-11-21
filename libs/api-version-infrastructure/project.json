@@ -1,9 +1,0 @@
-{
-  "name": "api-version-infrastructure",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api-version-infrastructure/src",
-  "projectType": "library",
-  "tags": ["type:infrastructure", "scope:api-version", "platform:backend"],
-  "// targets": "to see all targets run: nx show project api-version-infrastructure --web",
-  "targets": {}
-}

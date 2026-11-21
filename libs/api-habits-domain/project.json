@@ -1,9 +1,0 @@
-{
-  "name": "api-habits-domain",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api-habits-domain/src",
-  "projectType": "library",
-  "tags": ["type:domain", "scope:api-habits", "platform:backend"],
-  "// targets": "to see all targets run: nx show project api-habits-domain --web",
-  "targets": {}
-}

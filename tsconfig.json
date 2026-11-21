@@ -8,112 +8,112 @@
       "path": "./packages/habit-maker-ui"
     },
     {
-      "path": "./libs/habits-data-access"
+      "path": "./libs/habit-maker-api/platform/infrastructure"
     },
     {
-      "path": "./libs/habits-domain"
+      "path": "./libs/habit-maker-api/version/infrastructure"
     },
     {
-      "path": "./libs/shared-config"
+      "path": "./libs/habit-maker-api/habits/infrastructure"
     },
     {
-      "path": "./libs/auth-data-access"
+      "path": "./libs/habit-maker-api/admin/infrastructure"
     },
     {
-      "path": "./libs/auth-domain"
+      "path": "./libs/habit-maker-app/settings/data-access"
     },
     {
-      "path": "./libs/i18n-data-access"
+      "path": "./libs/habit-maker-api/auth/infrastructure"
     },
     {
-      "path": "./libs/settings-data-access"
+      "path": "./libs/habit-maker-api/push/infrastructure"
     },
     {
-      "path": "./libs/settings-domain"
+      "path": "./libs/habit-maker-api/version/application"
     },
     {
-      "path": "./libs/admin-data-access"
+      "path": "./libs/habit-maker-api/habits/application"
     },
     {
-      "path": "./libs/admin-domain"
+      "path": "./libs/habit-maker-app/habits/data-access"
     },
     {
-      "path": "./libs/shared-data-access"
+      "path": "./libs/habit-maker-app/admin/data-access"
     },
     {
-      "path": "./libs/habits-feature"
+      "path": "./libs/habit-maker-api/admin/application"
     },
     {
-      "path": "./libs/today-feature"
+      "path": "./libs/habit-maker-api/auth/application"
     },
     {
-      "path": "./libs/auth-feature"
+      "path": "./libs/habit-maker-api/push/application"
     },
     {
-      "path": "./libs/api-platform-infrastructure"
+      "path": "./libs/habit-maker-app/auth/data-access"
     },
     {
-      "path": "./libs/api-version-infrastructure"
+      "path": "./libs/habit-maker-app/i18n/data-access"
     },
     {
-      "path": "./libs/api-habits-infrastructure"
+      "path": "./libs/habit-maker-app/settings/feature"
     },
     {
-      "path": "./libs/api-admin-infrastructure"
+      "path": "./libs/habit-maker-app/settings/domain"
     },
     {
-      "path": "./libs/api-auth-infrastructure"
+      "path": "./libs/habit-maker-api/version/domain"
     },
     {
-      "path": "./libs/api-push-infrastructure"
+      "path": "./libs/habit-maker-app/habits/feature"
     },
     {
-      "path": "./libs/api-version-application"
+      "path": "./libs/habit-maker-api/habits/domain"
     },
     {
-      "path": "./libs/api-habits-application"
+      "path": "./libs/habit-maker-app/habits/domain"
     },
     {
-      "path": "./libs/api-admin-application"
+      "path": "./libs/habit-maker-app/today/feature"
     },
     {
-      "path": "./libs/api-auth-application"
+      "path": "./libs/habit-maker-app/admin/domain"
     },
     {
-      "path": "./libs/api-push-application"
+      "path": "./libs/habit-maker-api/admin/domain"
     },
     {
-      "path": "./libs/api-version-domain"
+      "path": "./libs/habit-maker-app/auth/feature"
     },
     {
-      "path": "./libs/api-habits-domain"
+      "path": "./libs/habit-maker-api/auth/domain"
     },
     {
-      "path": "./libs/api-admin-domain"
+      "path": "./libs/habit-maker-api/push/domain"
     },
     {
-      "path": "./libs/api-auth-domain"
+      "path": "./libs/habit-maker-api/version/api"
     },
     {
-      "path": "./libs/api-push-domain"
+      "path": "./libs/habit-maker-app/auth/domain"
     },
     {
-      "path": "./libs/api-version-api"
+      "path": "./libs/habit-maker-api/habits/api"
     },
     {
-      "path": "./libs/api-habits-api"
+      "path": "./libs/habit-maker-api/admin/api"
     },
     {
-      "path": "./libs/api-admin-api"
+      "path": "./libs/habit-maker-api/auth/api"
     },
     {
-      "path": "./libs/api-auth-api"
+      "path": "./libs/habit-maker-api/push/api"
     },
     {
-      "path": "./libs/api-push-api"
+      "path": "./libs/shared/data-access"
     },
     {
-      "path": "./libs/settings-feature"
+      "path": "./libs/shared/config"
     }
   ]
 }

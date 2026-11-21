@@ -1,0 +1,19 @@
+{
+  "name": "settings-data-access",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/habit-maker-app/settings/data-access/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:data-access", "scope:settings", "platform:frontend"],
+  "targets": {
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "buildTarget": "HabitMakerApp:build:development",
+        "tsConfig": "libs/habit-maker-app/settings/data-access/tsconfig.spec.json",
+        "watch": false,
+        "isolate": true
+      }
+    }
+  }
+}

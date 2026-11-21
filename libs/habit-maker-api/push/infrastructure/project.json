@@ -1,0 +1,9 @@
+{
+  "name": "api-push-infrastructure",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/habit-maker-api/push/infrastructure/src",
+  "projectType": "library",
+  "tags": ["type:infrastructure", "scope:api-push", "platform:backend"],
+  "// targets": "to see all targets run: nx show project api-push-infrastructure --web",
+  "targets": {}
+}
