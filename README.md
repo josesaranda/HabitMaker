@@ -117,10 +117,14 @@ All configuration is managed via environment variables in the `.env` file. The A
 - **For PostgreSQL (Docker):** `POSTGRES_HOST`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`.
 - **For Local Development:** Omit database variables; the API defaults to `sql.js` in-memory storage.
 
+**Settings encryption:**
+
+- `SETTINGS_ENCRYPTION_KEY`: 32-byte key used to encrypt secrets stored in the database (SMTP password and VAPID private key). Generate one with `openssl rand -base64 32`. It must be identical across API instances and must not be stored in the database.
+
 **External Services:**
 
-- **Email (SMTP):** Requires setting `SMTP_HOST`, `SMTP_PORT`, `SMTP_PROTOCOL`, and credentials (`SMTP_USER`/`SMTP_PASSWORD`) if authentication is required.
-- **Web Push Notifications (VAPID):** Use `npx web-push generate-vapid-keys`. Set the resulting `VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`.
+- **Email (SMTP)** and **Web Push Notifications (VAPID):** administrators can configure these from the administration panel. The values are stored in the database and their secrets are encrypted with `SETTINGS_ENCRYPTION_KEY`.
+- The `SMTP_*` and `VAPID_*` environment variables remain supported as a fallback for existing deployments. Once an administrator saves the configuration in the panel, the database becomes the source of truth.
 
 ---
 

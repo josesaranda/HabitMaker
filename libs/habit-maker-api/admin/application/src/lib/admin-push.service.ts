@@ -1,21 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { AdminPushConfiguration } from '@habit-maker/api-admin-domain';
+import type { AdminPushConfiguration } from '@habit-maker/api-admin-domain';
+import { SettingsService } from '@habit-maker/api-settings-infrastructure';
 
 @Injectable()
 export class AdminPushService {
-  getConfiguration(): AdminPushConfiguration {
-    const publicKeyConfigured = Boolean(
-      process.env['VAPID_PUBLIC_KEY']?.trim(),
-    );
-    const privateKeyConfigured = Boolean(
-      process.env['VAPID_PRIVATE_KEY']?.trim(),
-    );
+  constructor(private readonly settingsService: SettingsService) {}
 
-    return {
-      publicKeyConfigured,
-      privateKeyConfigured,
-      subjectConfigured: Boolean(process.env['VAPID_SUBJECT']?.trim()),
-      isConfigured: publicKeyConfigured && privateKeyConfigured,
-    };
+  getConfiguration(): Promise<AdminPushConfiguration> {
+    return this.settingsService.getPublic('push.vapid');
+  }
+
+  async updateConfiguration(
+    input: unknown,
+    userId: string,
+  ): Promise<AdminPushConfiguration> {
+    await this.settingsService.update('push.vapid', input, userId);
+    return this.getConfiguration();
   }
 }

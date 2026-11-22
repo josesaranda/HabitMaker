@@ -13,6 +13,9 @@
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "references": [
     {
+      "path": "../../settings/api/tsconfig.lib.json"
+    },
+    {
       "path": "../infrastructure/tsconfig.lib.json"
     },
     {

@@ -1,5 +1,6 @@
 import { ServiceUnavailableException } from '@nestjs/common';
 import nodemailer from 'nodemailer';
+import { SettingsService } from '@habit-maker/api-settings-infrastructure';
 import { EmailService } from './email.service';
 
 vi.mock('nodemailer', () => ({
@@ -10,17 +11,22 @@ describe('EmailService', () => {
   const createTransport = vi.mocked(nodemailer.createTransport);
   const sendMail = vi.fn();
   const close = vi.fn();
+  const getInternal = vi.fn();
   let service: EmailService;
 
   beforeEach(() => {
-    vi.stubEnv('SMTP_HOST', 'smtp.example.com');
-    vi.stubEnv('SMTP_PORT', '465');
-    vi.stubEnv('SMTP_PROTOCOL', 'smtps');
-    vi.stubEnv('SMTP_USER', 'mailer@example.com');
-    vi.stubEnv('SMTP_PASSWORD', 'smtp-secret');
-    vi.stubEnv('SMTP_FROM', 'HabitMaker <no-reply@example.com>');
     vi.stubEnv('APP_URL', 'https://habitmaker.example');
-    service = new EmailService();
+    getInternal.mockReset().mockResolvedValue({
+      host: 'smtp.example.com',
+      port: 465,
+      protocol: 'smtps',
+      user: 'mailer@example.com',
+      password: 'smtp-secret',
+      from: 'HabitMaker <no-reply@example.com>',
+    });
+    service = new EmailService({
+      getInternal,
+    } as unknown as SettingsService);
     sendMail.mockReset().mockResolvedValue({});
     close.mockReset();
     createTransport.mockReset().mockReturnValue({ sendMail, close } as never);
@@ -31,6 +37,7 @@ describe('EmailService', () => {
   it('sends a password-reset link over the configured SMTP transport', async () => {
     await service.sendPasswordResetEmail('person@example.com', 'secret-token');
 
+    expect(getInternal).toHaveBeenCalledWith('email.smtp');
     expect(createTransport).toHaveBeenCalledWith({
       host: 'smtp.example.com',
       port: 465,
@@ -52,7 +59,7 @@ describe('EmailService', () => {
   });
 
   it('rejects delivery when SMTP is not configured', async () => {
-    vi.stubEnv('SMTP_HOST', '');
+    getInternal.mockResolvedValue({ host: '' });
 
     await expect(
       service.sendPasswordResetEmail('person@example.com', 'secret-token'),

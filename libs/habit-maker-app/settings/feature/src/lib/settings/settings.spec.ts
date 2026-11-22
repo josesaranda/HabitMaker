@@ -188,22 +188,54 @@ describe('Settings', () => {
     const getEmailConfiguration = vi.fn(() =>
       of({
         host: 'smtp.example.com',
-        port: 587,
+        port: '587',
         protocol: 'smtp' as const,
         user: 'mailer@example.com',
         from: 'no-reply@example.com',
         passwordConfigured: true,
         missingVariables: [],
         isConfigured: true,
+        enabled: true,
+        source: 'database' as const,
+      }),
+    );
+    const updateEmailConfiguration = vi.fn(() =>
+      of({
+        host: 'smtp.example.com',
+        port: '587',
+        protocol: 'smtp' as const,
+        user: 'mailer@example.com',
+        from: 'no-reply@example.com',
+        passwordConfigured: true,
+        missingVariables: [],
+        isConfigured: true,
+        enabled: true,
+        source: 'database' as const,
       }),
     );
     const sendTestEmail = vi.fn(() => of({ success: true }));
     const getPushConfiguration = vi.fn(() =>
       of({
+        publicKey: 'public-key',
         publicKeyConfigured: true,
         privateKeyConfigured: false,
+        subject: '',
         subjectConfigured: false,
         isConfigured: false,
+        enabled: true,
+        source: 'database' as const,
+      }),
+    );
+    const updatePushConfiguration = vi.fn(() =>
+      of({
+        publicKey: 'public-key',
+        publicKeyConfigured: true,
+        privateKeyConfigured: false,
+        subject: '',
+        subjectConfigured: false,
+        isConfigured: false,
+        enabled: true,
+        source: 'database' as const,
       }),
     );
     const checkForUpdates = vi.fn(() =>
@@ -234,7 +266,9 @@ describe('Settings', () => {
           useValue: {
             getUsers,
             getEmailConfiguration,
+            updateEmailConfiguration,
             getPushConfiguration,
+            updatePushConfiguration,
             sendTestEmail,
           },
         },
@@ -271,14 +305,14 @@ describe('Settings', () => {
     expect(
       compiled.querySelector('#admin-push-settings-title')?.parentElement
         ?.textContent,
-    ).toContain('VAPID_PUBLIC_KEY');
+    ).toContain('Clave pública VAPID');
     expect(
       compiled.querySelector('#admin-push-settings-title')?.parentElement
         ?.textContent,
-    ).toContain('VAPID_PRIVATE_KEY');
-    expect(compiled.textContent).toContain(
-      'No está definida; se usará el valor predeterminado.',
-    );
+    ).toContain('Clave privada VAPID');
+    expect(
+      compiled.querySelector<HTMLInputElement>('#vapid-subject')?.placeholder,
+    ).toContain('No está definida; se usará el valor predeterminado.');
     expect(compiled.textContent).toContain('Administrador');
     expect(compiled.textContent).toContain('Usuario');
     expect(compiled.querySelector<HTMLInputElement>('#smtp-host')?.value).toBe(
@@ -286,7 +320,10 @@ describe('Settings', () => {
     );
     expect(
       compiled.querySelector<HTMLInputElement>('#smtp-password')?.value,
-    ).toBe('••••••••');
+    ).toBe('');
+    expect(
+      compiled.querySelector<HTMLInputElement>('#smtp-password')?.placeholder,
+    ).toContain('Configurada; déjala vacía para conservarla.');
     expect(
       compiled.querySelector('#app-settings-title')?.textContent,
     ).toContain('Versión de la aplicación');
@@ -339,5 +376,30 @@ describe('Settings', () => {
     expect(compiled.textContent).toContain(
       'El correo de prueba se ha enviado correctamente.',
     );
+
+    const hostInput = compiled.querySelector<HTMLInputElement>('#smtp-host')!;
+    const passwordInput =
+      compiled.querySelector<HTMLInputElement>('#smtp-password')!;
+    hostInput.value = 'smtp.changed.example.com';
+    hostInput.dispatchEvent(new Event('input'));
+    passwordInput.value = 'new-secret';
+    passwordInput.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    hostInput
+      .closest('form')!
+      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(updateEmailConfiguration).toHaveBeenCalledWith({
+      host: 'smtp.changed.example.com',
+      port: '587',
+      protocol: 'smtp',
+      user: 'mailer@example.com',
+      from: 'no-reply@example.com',
+      password: 'new-secret',
+      enabled: true,
+    });
+    expect(compiled.textContent).toContain('Configuración de correo guardada.');
   });
 });

@@ -8,11 +8,13 @@ import { UserEntity } from '@habit-maker/api-auth-infrastructure';
 import { SessionEntity } from '@habit-maker/api-auth-infrastructure';
 import { SessionService } from '@habit-maker/api-auth-application';
 import { EmailService } from '@habit-maker/api-auth-infrastructure';
+import { SettingsModule } from '@habit-maker/api-settings-api';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity, SessionEntity]),
+    SettingsModule,
     JwtModule.register({
       // Set JWT_SECRET in deployed environments so tokens remain verifiable across restarts.
       secret:

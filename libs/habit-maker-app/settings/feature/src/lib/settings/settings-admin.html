@@ -6,355 +6,489 @@
   {{ 'settings.adminTitle' | transloco }}
 </h2>
 <section
-  class="rounded-2xl border border-border bg-surface p-6 sm:p-8"
-  aria-labelledby="admin-settings-title"
+  class="mt-6 rounded-2xl border border-border bg-surface p-6 sm:p-8"
+  aria-labelledby="admin-users-title"
 >
-  <section aria-labelledby="admin-users-title">
-    <h3
-      id="admin-users-title"
-      hmText="body-lg"
-      class="mb-4 font-semibold tracking-tight text-text-primary"
-    >
-      {{ 'settings.usersTitle' | transloco }}
-    </h3>
-    @if (isLoadingUsers()) {
-    <p class="text-text-secondary" role="status">
-      {{ 'settings.loadingUsers' | transloco }}
-    </p>
-    } @else if (usersLoadError()) {
-    <p class="text-error" role="alert">{{ usersLoadError() | transloco }}</p>
-    } @else if (users().length === 0) {
-    <p class="text-text-secondary">{{ 'settings.noUsers' | transloco }}</p>
-    } @else {
-    <div class="overflow-x-auto">
-      <table hmText="body-sm" class="w-full min-w-[24rem] text-left">
-        <thead class="border-b border-border text-text-secondary">
-          <tr>
-            <th class="px-3 py-3 font-semibold" scope="col">
-              {{ 'settings.email' | transloco }}
-            </th>
-            <th class="px-3 py-3 font-semibold" scope="col">
-              {{ 'settings.role' | transloco }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (user of users(); track user.id) {
-          <tr class="border-b border-border last:border-0">
-            <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
-            <td class="px-3 py-3 text-text-secondary">
-              {{ (user.role === 'admin' ? 'settings.adminRole' :
-              'settings.userRole') | transloco }}
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-    }
-  </section>
-  <section
-    class="mt-8 border-t border-border pt-8"
-    aria-labelledby="admin-push-settings-title"
+  <h3
+    id="admin-users-title"
+    hmText="body-lg"
+    class="mb-4 font-semibold tracking-tight text-text-primary"
   >
-    <h3
-      id="admin-push-settings-title"
-      hmText="body-lg"
-      class="mb-4 font-semibold tracking-tight text-text-primary"
-    >
-      {{ 'settings.pushTitle' | transloco }}
-    </h3>
-    @if (isLoadingPushConfiguration()) {
-    <p hmText="body-sm" class="text-text-secondary" role="status">
-      {{ 'settings.loadingPushConfiguration' | transloco }}
-    </p>
-    } @else if (pushConfigurationError()) {
-    <p hmText="body-sm" class="text-error" role="alert">
-      {{ pushConfigurationError() | transloco }}
-    </p>
-    } @else if (pushConfiguration(); as configuration) {
-    <p
-      hmText="body-sm"
-      class="mb-4 font-medium"
-      [class.text-text-primary]="configuration.isConfigured"
-      [class.text-error]="!configuration.isConfigured"
-      role="status"
-    >
-      {{ (configuration.isConfigured ? 'settings.pushConfigured' :
-      'settings.pushNotConfigured') | transloco }}
-    </p>
-    <dl hmText="body-sm" class="grid gap-3 sm:grid-cols-2">
-      <div class="rounded-xl border border-border bg-background p-4">
-        <dt class="font-semibold text-text-primary">VAPID_PUBLIC_KEY</dt>
-        <dd class="mb-0 mt-1 text-text-secondary">
-          {{ (configuration.publicKeyConfigured ?
-          'settings.environmentConfigured' : 'settings.environmentMissing') |
-          transloco }}
-        </dd>
-      </div>
-      <div class="rounded-xl border border-border bg-background p-4">
-        <dt class="font-semibold text-text-primary">VAPID_PRIVATE_KEY</dt>
-        <dd class="mb-0 mt-1 text-text-secondary">
-          {{ (configuration.privateKeyConfigured ?
-          'settings.environmentConfigured' : 'settings.environmentMissing') |
-          transloco }}
-        </dd>
-      </div>
-      <div
-        class="rounded-xl border border-border bg-background p-4 sm:col-span-2"
-      >
-        <dt class="font-semibold text-text-primary">
-          {{ 'settings.pushSubject' | transloco }}
-        </dt>
-        <dd class="mb-0 mt-1 text-text-secondary">
-          {{ (configuration.subjectConfigured ? 'settings.environmentConfigured'
-          : 'settings.pushSubjectDefault') | transloco }}
-        </dd>
-      </div>
-    </dl>
-    }
-  </section>
-  <section
-    class="mt-8 border-t border-border pt-8"
-    aria-labelledby="email-settings-title"
-  >
-    <h3
-      id="email-settings-title"
-      hmText="body-lg"
-      class="mb-4 font-semibold tracking-tight text-text-primary"
-    >
-      {{ 'settings.emailTitle' | transloco }}
-    </h3>
-    @if (isLoadingEmailConfiguration()) {
-    <p hmText="body-sm" class="text-text-secondary" role="status">
-      {{ 'settings.loadingEmailConfiguration' | transloco }}
-    </p>
-    } @else if (emailConfigurationError()) {
-    <p hmText="body-sm" class="text-error" role="alert">
-      {{ emailConfigurationError() | transloco }}
-    </p>
-    } @else if (emailConfiguration(); as configuration) { @if
-    (configuration.missingVariables.length > 0) {
-    <div
-      hmText="body-sm"
-      class="mb-5 rounded-xl border border-border bg-background p-4 text-text-secondary"
-      role="status"
-    >
-      <p>{{ 'settings.emailVariablesMissing' | transloco }}</p>
-      <ul class="mt-2 list-inside list-disc">
-        @for (variable of configuration.missingVariables; track variable) {
-        <li>{{ variable }} — {{ 'settings.notDefined' | transloco }}</li>
+    {{ 'settings.usersTitle' | transloco }}
+  </h3>
+  @if (isLoadingUsers()) {
+  <p class="text-text-secondary" role="status">
+    {{ 'settings.loadingUsers' | transloco }}
+  </p>
+  } @else if (usersLoadError()) {
+  <p class="text-error" role="alert">{{ usersLoadError() | transloco }}</p>
+  } @else if (users().length === 0) {
+  <p class="text-text-secondary">{{ 'settings.noUsers' | transloco }}</p>
+  } @else {
+  <div class="overflow-x-auto">
+    <table hmText="body-sm" class="w-full min-w-[24rem] text-left">
+      <thead class="border-b border-border text-text-secondary">
+        <tr>
+          <th class="px-3 py-3 font-semibold" scope="col">
+            {{ 'settings.email' | transloco }}
+          </th>
+          <th class="px-3 py-3 font-semibold" scope="col">
+            {{ 'settings.role' | transloco }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user.id) {
+        <tr class="border-b border-border last:border-0">
+          <td class="px-3 py-3 text-text-primary">{{ user.email }}</td>
+          <td class="px-3 py-3 text-text-secondary">
+            {{ (user.role === 'admin' ? 'settings.adminRole' :
+            'settings.userRole') | transloco }}
+          </td>
+        </tr>
         }
-      </ul>
-    </div>
-    }
+      </tbody>
+    </table>
+  </div>
+  }
+</section>
+<section
+  class="mt-6 rounded-2xl border border-border bg-surface p-6 sm:p-8"
+  aria-labelledby="admin-push-settings-title"
+>
+  <h3
+    id="admin-push-settings-title"
+    hmText="body-lg"
+    class="mb-4 font-semibold tracking-tight text-text-primary"
+  >
+    {{ 'settings.pushTitle' | transloco }}
+  </h3>
+  @if (isLoadingPushConfiguration()) {
+  <p hmText="body-sm" class="text-text-secondary" role="status">
+    {{ 'settings.loadingPushConfiguration' | transloco }}
+  </p>
+  } @else if (pushConfigurationError()) {
+  <p hmText="body-sm" class="text-error" role="alert">
+    {{ pushConfigurationError() | transloco }}
+  </p>
+  } @else if (pushConfiguration(); as configuration) {
+  <label class="mb-4 inline-flex items-center gap-3">
+    <input
+      hmToggle
+      id="push-enabled"
+      name="enabled"
+      [formControl]="pushForm.controls.enabled"
+      type="checkbox"
+    />
+    {{ 'settings.pushEnabled' | transloco }}
+  </label>
+  <p
+    hmText="body-sm"
+    class="mb-2 font-medium"
+    [class.text-text-primary]="configuration.isConfigured"
+    [class.text-error]="!configuration.isConfigured"
+    role="status"
+  >
+    {{ (configuration.isConfigured ? 'settings.pushConfigured' :
+    'settings.pushNotConfigured') | transloco }}
+  </p>
+  @if (configuration.source === 'environment') {
+  <p
+    hmText="body-sm"
+    class="mb-4 rounded-xl border border-border bg-background p-4 text-text-secondary"
+    role="status"
+  >
+    {{ 'settings.environmentSourceHint' | transloco }}
+  </p>
+  }
+  <form
+    class="space-y-4"
+    novalidate
+    [formGroup]="pushForm"
+    (ngSubmit)="savePushConfiguration()"
+  >
     <div class="grid gap-4 sm:grid-cols-2">
       <hm-form-field>
-        <label hmLabel for="smtp-host">SMTP_HOST</label>
+        <label hmLabel for="vapid-public-key">
+          {{ 'settings.pushPublicKey' | transloco }}
+        </label>
+        <input
+          hmInput
+          id="vapid-public-key"
+          name="publicKey"
+          formControlName="publicKey"
+          type="text"
+          autocomplete="off"
+          required
+        />
+      </hm-form-field>
+      <hm-form-field>
+        <label hmLabel for="vapid-private-key">
+          {{ 'settings.pushPrivateKey' | transloco }}
+        </label>
+        <input
+          hmInput
+          id="vapid-private-key"
+          name="privateKey"
+          formControlName="privateKey"
+          type="password"
+          autocomplete="new-password"
+          [placeholder]="(configuration.privateKeyConfigured ? 'settings.passwordKeep' : 'settings.passwordRequired') | transloco"
+        />
+      </hm-form-field>
+      <hm-form-field class="sm:col-span-2">
+        <label hmLabel for="vapid-subject">
+          {{ 'settings.pushSubject' | transloco }}
+        </label>
+        <input
+          hmInput
+          id="vapid-subject"
+          name="subject"
+          formControlName="subject"
+          type="text"
+          autocomplete="off"
+          [placeholder]="'settings.pushSubjectDefault' | transloco"
+        />
+      </hm-form-field>
+    </div>
+    <div class="flex flex-wrap items-center gap-4">
+      <button
+        hmButton="primary"
+        hmText="body-sm"
+        class="rounded-lg font-semibold"
+        type="submit"
+        [disabled]="isSavingPushConfiguration()"
+      >
+        {{ (isSavingPushConfiguration() ? 'settings.savingPushConfiguration' :
+        'settings.savePushConfiguration') | transloco }}
+      </button>
+      @if (pushConfigurationMessage()) {
+      <p
+        hmText="body-sm"
+        [class.text-error]="pushConfigurationMessage() === 'settings.pushConfigurationSaveError'"
+        [class.text-text-secondary]="pushConfigurationMessage() !== 'settings.pushConfigurationSaveError'"
+        [attr.role]="pushConfigurationMessage() === 'settings.pushConfigurationSaveError' ? 'alert' : 'status'"
+      >
+        {{ pushConfigurationMessage() | transloco }}
+      </p>
+      }
+    </div>
+  </form>
+  }
+</section>
+<section
+  class="mt-6 rounded-2xl border border-border bg-surface p-6 sm:p-8"
+  aria-labelledby="email-settings-title"
+>
+  <h3
+    id="email-settings-title"
+    hmText="body-lg"
+    class="mb-4 font-semibold tracking-tight text-text-primary"
+  >
+    {{ 'settings.emailTitle' | transloco }}
+  </h3>
+  @if (isLoadingEmailConfiguration()) {
+  <p hmText="body-sm" class="text-text-secondary" role="status">
+    {{ 'settings.loadingEmailConfiguration' | transloco }}
+  </p>
+  } @else if (emailConfigurationError()) {
+  <p hmText="body-sm" class="text-error" role="alert">
+    {{ emailConfigurationError() | transloco }}
+  </p>
+  } @else if (emailConfiguration(); as configuration) {
+  <label class="mb-4 inline-flex items-center gap-3">
+    <input
+      hmToggle
+      id="email-enabled"
+      name="enabled"
+      [formControl]="emailForm.controls.enabled"
+      type="checkbox"
+    />
+    {{ 'settings.emailEnabled' | transloco }}
+  </label>
+  @if (configuration.source === 'environment') {
+  <p
+    hmText="body-sm"
+    class="mb-4 rounded-xl border border-border bg-background p-4 text-text-secondary"
+    role="status"
+  >
+    {{ 'settings.environmentSourceHint' | transloco }}
+  </p>
+  } @if (configuration.missingVariables.length > 0) {
+  <div
+    hmText="body-sm"
+    class="mb-5 rounded-xl border border-border bg-background p-4 text-text-secondary"
+    role="status"
+  >
+    <p>{{ 'settings.emailVariablesMissing' | transloco }}</p>
+    <ul class="mt-2 list-inside list-disc">
+      @for (variable of configuration.missingVariables; track variable) {
+      <li>{{ variable }} — {{ 'settings.notDefined' | transloco }}</li>
+      }
+    </ul>
+  </div>
+  }
+  <form
+    class="space-y-4"
+    novalidate
+    [formGroup]="emailForm"
+    (ngSubmit)="saveEmailConfiguration()"
+  >
+    <div class="grid gap-4 sm:grid-cols-2">
+      <hm-form-field>
+        <label hmLabel for="smtp-host">
+          {{ 'settings.smtpHost' | transloco }}
+        </label>
         <input
           hmInput
           id="smtp-host"
+          name="host"
+          formControlName="host"
           type="text"
-          [value]="configuration.host"
-          [placeholder]="!configuration.host ? ('settings.notDefined' | transloco) : ''"
-          readonly
+          autocomplete="off"
+          required
         />
       </hm-form-field>
       <hm-form-field>
-        <label hmLabel for="smtp-port">SMTP_PORT</label>
+        <label hmLabel for="smtp-port">
+          {{ 'settings.smtpPort' | transloco }}
+        </label>
         <input
           hmInput
           id="smtp-port"
+          name="port"
+          formControlName="port"
           type="text"
-          [value]="configuration.port"
-          [placeholder]="!configuration.port ? ('settings.notDefined' | transloco) : ''"
-          readonly
+          inputmode="numeric"
+          autocomplete="off"
+          required
         />
       </hm-form-field>
       <hm-form-field>
-        <label hmLabel for="smtp-protocol">SMTP_PROTOCOL</label>
-        <input
-          hmInput
-          id="smtp-protocol"
-          type="text"
-          [value]="configuration.protocol"
-          [placeholder]="!configuration.protocol ? ('settings.notDefined' | transloco) : ''"
-          readonly
-        />
+        <label hmLabel id="smtp-protocol-label">
+          {{ 'settings.smtpProtocol' | transloco }}
+        </label>
+        <hm-select
+          name="protocol"
+          formControlName="protocol"
+          [aria-labelledby]="'smtp-protocol-label'"
+        >
+          <hm-option
+            value="smtp"
+            [label]="'settings.smtpProtocolSmtp' | transloco"
+            >{{ 'settings.smtpProtocolSmtp' | transloco }}</hm-option
+          >
+          <hm-option
+            value="smtps"
+            [label]="'settings.smtpProtocolSmtps' | transloco"
+            >{{ 'settings.smtpProtocolSmtps' | transloco }}</hm-option
+          >
+        </hm-select>
       </hm-form-field>
       <hm-form-field>
-        <label hmLabel for="smtp-from">SMTP_FROM</label>
+        <label hmLabel for="smtp-from">
+          {{ 'settings.smtpFrom' | transloco }}
+        </label>
         <input
           hmInput
           id="smtp-from"
+          name="from"
+          formControlName="from"
           type="text"
-          [value]="configuration.from"
-          [placeholder]="!configuration.from ? ('settings.notDefined' | transloco) : ''"
-          readonly
+          autocomplete="off"
+          required
         />
       </hm-form-field>
       <hm-form-field>
-        <label hmLabel for="smtp-user">SMTP_USER</label>
+        <label hmLabel for="smtp-user">
+          {{ 'settings.smtpUser' | transloco }}
+        </label>
         <input
           hmInput
           id="smtp-user"
+          name="user"
+          formControlName="user"
           type="text"
-          [value]="configuration.user"
-          [placeholder]="!configuration.user ? ('settings.notDefined' | transloco) : ''"
-          readonly
+          autocomplete="off"
+          required
         />
       </hm-form-field>
       <hm-form-field>
-        <label hmLabel for="smtp-password">SMTP_PASSWORD</label>
+        <label hmLabel for="smtp-password">
+          {{ 'settings.smtpPassword' | transloco }}
+        </label>
         <input
           hmInput
           id="smtp-password"
-          type="text"
-          [value]="configuration.passwordConfigured ? '••••••••' : ''"
-          [placeholder]="(configuration.passwordConfigured ? 'settings.secretConfigured' : 'settings.notDefined') | transloco"
-          readonly
+          name="password"
+          formControlName="password"
+          type="password"
+          autocomplete="new-password"
+          [placeholder]="(configuration.passwordConfigured ? 'settings.passwordKeep' : 'settings.passwordRequired') | transloco"
         />
       </hm-form-field>
     </div>
-    }
-    <form
-      class="mt-6 space-y-4"
-      novalidate
-      [formGroup]="testEmailForm"
-      (ngSubmit)="sendTestEmail()"
-    >
-      <h4 hmText="body" class="font-semibold text-text-primary">
-        {{ 'settings.testEmailTitle' | transloco }}
-      </h4>
-      <hm-form-field>
-        <label hmLabel for="test-email-address">
-          {{ 'settings.testEmailAddress' | transloco }}
-        </label>
-        <input
-          [hmInput]="testEmailAddressError() ? 'error' : 'default'"
-          id="test-email-address"
-          name="testEmailAddress"
-          formControlName="testEmailAddress"
-          type="email"
-          autocomplete="email"
-          [placeholder]="'settings.testEmailPlaceholder' | transloco"
-          [attr.aria-invalid]="testEmailAddressError() ? 'true' : null"
-          [attr.aria-describedby]="testEmailAddressError() ? 'test-email-address-error' : null"
-          required
-          (blur)="testEmailAddressTouched.set(true)"
-        />
-        @if (testEmailAddressError(); as testEmailErrorKey) {
-        <p hmError id="test-email-address-error">
-          {{ testEmailErrorKey | transloco }}
-        </p>
-        }
-      </hm-form-field>
-      <div class="flex flex-wrap items-center gap-4">
-        <button
-          hmButton="primary"
-          hmText="body-sm"
-          class="rounded-lg font-semibold"
-          type="submit"
-          [disabled]="!canSendTestEmail()"
-        >
-          {{ (isSendingTestEmail() ? 'settings.sendingTestEmail' :
-          'settings.sendTestEmail') | transloco }}
-        </button>
-        @if (testEmailMessage()) {
-        <p
-          hmText="body-sm"
-          class=""
-          [class.text-error]="testEmailMessage() === 'settings.testEmailError'"
-          [class.text-text-secondary]="testEmailMessage() === 'settings.testEmailSent'"
-          [attr.role]="testEmailMessage() === 'settings.testEmailError' ? 'alert' : 'status'"
-        >
-          {{ testEmailMessage() | transloco }}
-        </p>
-        }
-      </div>
-    </form>
-  </section>
-  <section
-    class="mt-8 border-t border-border pt-8"
-    aria-labelledby="app-settings-title"
+    <div class="flex flex-wrap items-center gap-4">
+      <button
+        hmButton="primary"
+        hmText="body-sm"
+        class="rounded-lg font-semibold"
+        type="submit"
+        [disabled]="isSavingEmailConfiguration()"
+      >
+        {{ (isSavingEmailConfiguration() ? 'settings.savingEmailConfiguration' :
+        'settings.saveEmailConfiguration') | transloco }}
+      </button>
+      @if (emailConfigurationMessage()) {
+      <p
+        hmText="body-sm"
+        [class.text-error]="emailConfigurationMessage() === 'settings.emailConfigurationSaveError'"
+        [class.text-text-secondary]="emailConfigurationMessage() !== 'settings.emailConfigurationSaveError'"
+        [attr.role]="emailConfigurationMessage() === 'settings.emailConfigurationSaveError' ? 'alert' : 'status'"
+      >
+        {{ emailConfigurationMessage() | transloco }}
+      </p>
+      }
+    </div>
+  </form>
+  }
+  <form
+    class="mt-6 space-y-4"
+    novalidate
+    [formGroup]="testEmailForm"
+    (ngSubmit)="sendTestEmail()"
   >
-    <h3
-      id="app-settings-title"
-      hmText="body-lg"
-      class="mb-4 font-semibold tracking-tight text-text-primary"
-    >
-      {{ 'settings.appVersion' | transloco }}
-    </h3>
-    <div class="space-y-5">
-      <div>
-        @if (isLoadingAppVersion()) {
-        <p hmText="body-sm" class="text-text-secondary" role="status">
-          {{ 'settings.loadingVersion' | transloco }}
-        </p>
-        } @else if (appVersionLoadError()) {
-        <p hmText="body-sm" class="text-error" role="alert">
-          {{ appVersionLoadError() | transloco }}
-        </p>
-        } @else {
-        <p hmText="body-sm" class="text-text-secondary">{{ appVersion() }}</p>
-        }
-      </div>
-
-      <div aria-live="polite">
-        @if (isCheckingUpdates()) {
-        <p hmText="body-sm" class="text-text-secondary" role="status">
-          {{ 'settings.checkingUpdates' | transloco }}
-        </p>
-        } @else if (updateCheckError()) {
-        <p hmText="body-sm" class="text-error" role="alert">
-          {{ updateCheckError() | transloco }}
-        </p>
-        } @else if (updateAvailable()) {
-        <p hmText="body-sm" class="font-medium text-text-primary" role="status">
-          {{ 'settings.updateAvailable' | transloco: { version: latestVersion()
-          } }}
-        </p>
-        } @else if (updateAvailable() === false) {
-        <p hmText="body-sm" class="text-text-secondary" role="status">
-          {{ 'settings.upToDate' | transloco }}
-        </p>
-        }
-      </div>
-
-      <div class="flex flex-wrap items-center gap-4">
-        <button
-          hmButton="primary"
-          hmText="body-sm"
-          class="rounded-lg font-semibold"
-          type="button"
-          [disabled]="isCheckingUpdates()"
-          (click)="checkForUpdates()"
-        >
-          {{ (isCheckingUpdates() ? 'settings.checkingUpdates' :
-          'settings.checkUpdates') | transloco }}
-        </button>
-        <a
-          hmText="body-sm"
-          class="font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
-          href="https://github.com/josesaranda/HabitMaker/releases"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ 'settings.viewReleases' | transloco }}
-        </a>
-        @if (updateAvailable() && releasesUrl() !==
-        'https://github.com/josesaranda/HabitMaker/releases') {
-        <a
-          hmText="body-sm"
-          class="font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
-          [href]="releasesUrl()"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ 'settings.viewVersion' | transloco: { version: latestVersion() } }}
-        </a>
-        }
-      </div>
+    <h4 hmText="body" class="font-semibold text-text-primary">
+      {{ 'settings.testEmailTitle' | transloco }}
+    </h4>
+    <hm-form-field>
+      <label hmLabel for="test-email-address">
+        {{ 'settings.testEmailAddress' | transloco }}
+      </label>
+      <input
+        [hmInput]="testEmailAddressError() ? 'error' : 'default'"
+        id="test-email-address"
+        name="testEmailAddress"
+        formControlName="testEmailAddress"
+        type="email"
+        autocomplete="email"
+        [placeholder]="'settings.testEmailPlaceholder' | transloco"
+        [attr.aria-invalid]="testEmailAddressError() ? 'true' : null"
+        [attr.aria-describedby]="testEmailAddressError() ? 'test-email-address-error' : null"
+        required
+        (blur)="testEmailAddressTouched.set(true)"
+      />
+      @if (testEmailAddressError(); as testEmailErrorKey) {
+      <p hmError id="test-email-address-error">
+        {{ testEmailErrorKey | transloco }}
+      </p>
+      }
+    </hm-form-field>
+    <div class="flex flex-wrap items-center gap-4">
+      <button
+        hmButton="primary"
+        hmText="body-sm"
+        class="rounded-lg font-semibold"
+        type="submit"
+        [disabled]="!canSendTestEmail()"
+      >
+        {{ (isSendingTestEmail() ? 'settings.sendingTestEmail' :
+        'settings.sendTestEmail') | transloco }}
+      </button>
+      @if (testEmailMessage()) {
+      <p
+        hmText="body-sm"
+        class=""
+        [class.text-error]="testEmailMessage() === 'settings.testEmailError'"
+        [class.text-text-secondary]="testEmailMessage() === 'settings.testEmailSent'"
+        [attr.role]="testEmailMessage() === 'settings.testEmailError' ? 'alert' : 'status'"
+      >
+        {{ testEmailMessage() | transloco }}
+      </p>
+      }
     </div>
-  </section>
+  </form>
+</section>
+<section
+  class="mt-6 rounded-2xl border border-border bg-surface p-6 sm:p-8"
+  aria-labelledby="app-settings-title"
+>
+  <h3
+    id="app-settings-title"
+    hmText="body-lg"
+    class="mb-4 font-semibold tracking-tight text-text-primary"
+  >
+    {{ 'settings.appVersion' | transloco }}
+  </h3>
+  <div class="space-y-5">
+    <div>
+      @if (isLoadingAppVersion()) {
+      <p hmText="body-sm" class="text-text-secondary" role="status">
+        {{ 'settings.loadingVersion' | transloco }}
+      </p>
+      } @else if (appVersionLoadError()) {
+      <p hmText="body-sm" class="text-error" role="alert">
+        {{ appVersionLoadError() | transloco }}
+      </p>
+      } @else {
+      <p hmText="body-sm" class="text-text-secondary">{{ appVersion() }}</p>
+      }
+    </div>
+
+    <div aria-live="polite">
+      @if (isCheckingUpdates()) {
+      <p hmText="body-sm" class="text-text-secondary" role="status">
+        {{ 'settings.checkingUpdates' | transloco }}
+      </p>
+      } @else if (updateCheckError()) {
+      <p hmText="body-sm" class="text-error" role="alert">
+        {{ updateCheckError() | transloco }}
+      </p>
+      } @else if (updateAvailable()) {
+      <p hmText="body-sm" class="font-medium text-text-primary" role="status">
+        {{ 'settings.updateAvailable' | transloco: { version: latestVersion() }
+        }}
+      </p>
+      } @else if (updateAvailable() === false) {
+      <p hmText="body-sm" class="text-text-secondary" role="status">
+        {{ 'settings.upToDate' | transloco }}
+      </p>
+      }
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4">
+      <button
+        hmButton="primary"
+        hmText="body-sm"
+        class="rounded-lg font-semibold"
+        type="button"
+        [disabled]="isCheckingUpdates()"
+        (click)="checkForUpdates()"
+      >
+        {{ (isCheckingUpdates() ? 'settings.checkingUpdates' :
+        'settings.checkUpdates') | transloco }}
+      </button>
+      <a
+        hmText="body-sm"
+        class="font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
+        href="https://github.com/josesaranda/HabitMaker/releases"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ 'settings.viewReleases' | transloco }}
+      </a>
+      @if (updateAvailable() && releasesUrl() !==
+      'https://github.com/josesaranda/HabitMaker/releases') {
+      <a
+        hmText="body-sm"
+        class="font-semibold text-primary underline underline-offset-4 hover:text-primary-hover"
+        [href]="releasesUrl()"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {{ 'settings.viewVersion' | transloco: { version: latestVersion() } }}
+      </a>
+      }
+    </div>
+  </div>
 </section>

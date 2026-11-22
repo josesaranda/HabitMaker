@@ -9,13 +9,16 @@ import { AdminUsersController } from './admin-users.controller';
 import { AdminUsersService } from '@habit-maker/api-admin-application';
 import { AdminPushController } from './admin-push.controller';
 import { AdminPushService } from '@habit-maker/api-admin-application';
+import { AdminSettingsController } from './admin-settings.controller';
+import { SettingsModule } from '@habit-maker/api-settings-api';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), AuthModule],
+  imports: [TypeOrmModule.forFeature([UserEntity]), AuthModule, SettingsModule],
   controllers: [
     AdminUsersController,
     AdminEmailController,
     AdminPushController,
+    AdminSettingsController,
   ],
   providers: [
     AdminUsersService,

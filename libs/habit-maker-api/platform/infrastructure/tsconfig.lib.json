@@ -26,6 +26,9 @@
   ],
   "references": [
     {
+      "path": "../../settings/infrastructure/tsconfig.lib.json"
+    },
+    {
       "path": "../../push/infrastructure/tsconfig.lib.json"
     },
     {

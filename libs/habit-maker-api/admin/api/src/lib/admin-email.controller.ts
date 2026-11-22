@@ -4,9 +4,14 @@ import {
   Controller,
   Get,
   Post,
+  Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@habit-maker/api-auth-api';
+import {
+  JwtAuthGuard,
+  type AuthenticatedUserRequest,
+} from '@habit-maker/api-auth-api';
 import { AdminEmailService } from '@habit-maker/api-admin-infrastructure';
 import { AdminRoleGuard } from './admin-role.guard';
 
@@ -22,6 +27,14 @@ export class AdminEmailController {
   @Get('configuration')
   getConfiguration() {
     return this.adminEmailService.getConfiguration();
+  }
+
+  @Put('configuration')
+  updateConfiguration(
+    @Body() body: unknown,
+    @Req() request: AuthenticatedUserRequest,
+  ) {
+    return this.adminEmailService.updateConfiguration(body, request.user.id);
   }
 
   @Post('test')

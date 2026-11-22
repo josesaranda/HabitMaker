@@ -8,6 +8,7 @@ import { PushController } from './push.controller';
 import { PushDeliveryEntity } from '@habit-maker/api-push-infrastructure';
 import { PushSubscriptionEntity } from '@habit-maker/api-push-infrastructure';
 import { PushService } from '@habit-maker/api-push-application';
+import { SettingsModule } from '@habit-maker/api-settings-api';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PushService } from '@habit-maker/api-push-application';
       PushDeliveryEntity,
     ]),
     AuthModule,
+    SettingsModule,
   ],
   controllers: [PushController],
   providers: [PushService],
