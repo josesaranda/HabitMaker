@@ -26,6 +26,15 @@
   ],
   "references": [
     {
+      "path": "../../settings/api/tsconfig.lib.json"
+    },
+    {
+      "path": "../../settings/infrastructure/tsconfig.lib.json"
+    },
+    {
+      "path": "../../settings/domain/tsconfig.lib.json"
+    },
+    {
       "path": "../../auth/infrastructure/tsconfig.lib.json"
     },
     {

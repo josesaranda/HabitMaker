@@ -127,6 +127,15 @@
       ],
       "@habit-maker/api-platform-infrastructure": [
         "./libs/habit-maker-api/platform/infrastructure/src/index.ts"
+      ],
+      "@habit-maker/api-settings-domain": [
+        "./libs/habit-maker-api/settings/domain/src/index.ts"
+      ],
+      "@habit-maker/api-settings-infrastructure": [
+        "./libs/habit-maker-api/settings/infrastructure/src/index.ts"
+      ],
+      "@habit-maker/api-settings-api": [
+        "./libs/habit-maker-api/settings/api/src/index.ts"
       ]
     }
   }

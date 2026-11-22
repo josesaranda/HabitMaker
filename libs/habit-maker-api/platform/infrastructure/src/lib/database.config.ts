@@ -5,6 +5,7 @@ import { UserEntity } from '@habit-maker/api-auth-infrastructure';
 import { SessionEntity } from '@habit-maker/api-auth-infrastructure';
 import { PushSubscriptionEntity } from '@habit-maker/api-push-infrastructure';
 import { PushDeliveryEntity } from '@habit-maker/api-push-infrastructure';
+import { SettingEntity } from '@habit-maker/api-settings-infrastructure';
 
 const entities = [
   UserEntity,
@@ -13,6 +14,7 @@ const entities = [
   HabitCompletionEntity,
   PushSubscriptionEntity,
   PushDeliveryEntity,
+  SettingEntity,
 ];
 const postgresVariables = [
   'POSTGRES_HOST',

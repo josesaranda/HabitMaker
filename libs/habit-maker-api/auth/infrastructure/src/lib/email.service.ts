@@ -1,31 +1,20 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import nodemailer from 'nodemailer';
+import {
+  EmailSmtpSettings,
+  parseEmailSmtpSettings,
+} from '@habit-maker/api-settings-domain';
+import { SettingsService } from '@habit-maker/api-settings-infrastructure';
 
 @Injectable()
 export class EmailService {
+  constructor(private readonly settingsService: SettingsService) {}
+
   async sendPasswordResetEmail(
     recipient: string,
     resetToken: string,
   ): Promise<void> {
-    const host = process.env['SMTP_HOST']?.trim() ?? '';
-    const port = Number.parseInt(process.env['SMTP_PORT']?.trim() ?? '', 10);
-    const protocol = process.env['SMTP_PROTOCOL']?.trim().toLowerCase() ?? '';
-    const username = process.env['SMTP_USER']?.trim() ?? '';
-    const password = process.env['SMTP_PASSWORD'] ?? '';
-    const from = process.env['SMTP_FROM']?.trim() ?? '';
-
-    if (
-      !host ||
-      !Number.isInteger(port) ||
-      port < 1 ||
-      port > 65535 ||
-      (protocol !== 'smtp' && protocol !== 'smtps') ||
-      !username ||
-      !password.trim() ||
-      !from
-    ) {
-      throw new ServiceUnavailableException('Email delivery is not configured');
-    }
+    const settings = await this.getSmtpSettings();
 
     const appUrl = process.env['APP_URL']?.trim() || 'http://localhost:4200';
     let resetUrl: URL;
@@ -37,16 +26,16 @@ export class EmailService {
     resetUrl.searchParams.set('token', resetToken);
 
     const transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure: protocol === 'smtps',
-      requireTLS: protocol === 'smtp',
-      auth: { user: username, pass: password },
+      host: settings.host,
+      port: settings.port,
+      secure: settings.protocol === 'smtps',
+      requireTLS: settings.protocol === 'smtp',
+      auth: { user: settings.user, pass: settings.password },
     });
 
     try {
       await transporter.sendMail({
-        from,
+        from: settings.from,
         to: recipient,
         subject: 'HabitMaker - Reset your password',
         text: `We received a request to reset your HabitMaker password. Open this link to choose a new password (it expires in one hour): ${resetUrl.toString()}\n\nIf you did not request this, you can ignore this email.`,
@@ -58,6 +47,21 @@ export class EmailService {
       );
     } finally {
       transporter.close();
+    }
+  }
+
+  private async getSmtpSettings(): Promise<EmailSmtpSettings> {
+    const settings = await this.settingsService.getInternal('email.smtp');
+
+    try {
+      const parsed = parseEmailSmtpSettings(settings);
+      if (!parsed.enabled) {
+        throw new ServiceUnavailableException('Email delivery is disabled');
+      }
+      return parsed;
+    } catch (error) {
+      if (error instanceof ServiceUnavailableException) throw error;
+      throw new ServiceUnavailableException('Email delivery is not configured');
     }
   }
 }

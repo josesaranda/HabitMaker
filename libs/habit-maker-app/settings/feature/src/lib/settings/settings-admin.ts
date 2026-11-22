@@ -8,12 +8,15 @@ import {
 } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
+  HabitMakerUIButton,
   HabitMakerUIFormField,
   HabitMakerUIFormFieldError,
   HabitMakerUIFormFieldLabel,
   HabitMakerUIInput,
-  HabitMakerUIButton,
+  HabitMakerUIOption,
+  HabitMakerUISelect,
   HabitMakerUIText,
+  HabitMakerUIToggle,
 } from '@habit-maker/habit-maker-ui';
 import { finalize, startWith } from 'rxjs';
 import {
@@ -21,6 +24,8 @@ import {
   AdminPushConfiguration,
   AdminService,
   AdminUser,
+  UpdateEmailConfigurationInput,
+  UpdatePushConfigurationInput,
 } from '@habit-maker/admin-data-access';
 import {
   AppVersionService,
@@ -37,8 +42,11 @@ const RELEASES_URL = 'https://github.com/josesaranda/HabitMaker/releases';
     HabitMakerUIFormFieldLabel,
     HabitMakerUIInput,
     HabitMakerUIButton,
+    HabitMakerUIOption,
+    HabitMakerUISelect,
     ReactiveFormsModule,
     TranslocoPipe,
+    HabitMakerUIToggle,
   ],
   selector: 'app-settings-admin',
   templateUrl: './settings-admin.html',
@@ -51,11 +59,48 @@ export class SettingsAdmin implements OnInit {
     signal<AdminEmailConfiguration | null>(null);
   protected readonly isLoadingEmailConfiguration = signal(false);
   protected readonly emailConfigurationError = signal('');
+  protected readonly emailForm = new FormGroup({
+    host: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    port: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern(/^\d+$/)],
+    }),
+    protocol: new FormControl('smtp', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    user: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    from: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    password: new FormControl('', { nonNullable: true }),
+    enabled: new FormControl(true, { nonNullable: true }),
+  });
+  protected readonly isSavingEmailConfiguration = signal(false);
+  protected readonly emailConfigurationMessage = signal('');
   protected readonly pushConfiguration = signal<AdminPushConfiguration | null>(
     null,
   );
   protected readonly isLoadingPushConfiguration = signal(false);
   protected readonly pushConfigurationError = signal('');
+  protected readonly pushForm = new FormGroup({
+    publicKey: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    privateKey: new FormControl('', { nonNullable: true }),
+    subject: new FormControl('', { nonNullable: true }),
+    enabled: new FormControl(true, { nonNullable: true }),
+  });
+  protected readonly isSavingPushConfiguration = signal(false);
+  protected readonly pushConfigurationMessage = signal('');
   protected readonly testEmailForm = new FormGroup({
     testEmailAddress: new FormControl('', {
       nonNullable: true,
@@ -158,7 +203,18 @@ export class SettingsAdmin implements OnInit {
       .getEmailConfiguration()
       .pipe(finalize(() => this.isLoadingEmailConfiguration.set(false)))
       .subscribe({
-        next: (configuration) => this.emailConfiguration.set(configuration),
+        next: (configuration) => {
+          this.emailConfiguration.set(configuration);
+          this.emailForm.patchValue({
+            host: configuration.host,
+            port: configuration.port,
+            protocol: configuration.protocol || 'smtp',
+            user: configuration.user,
+            from: configuration.from,
+            password: '',
+            enabled: configuration.enabled,
+          });
+        },
         error: () => {
           this.emailConfigurationError.set('settings.emailConfigurationError');
         },
@@ -171,9 +227,99 @@ export class SettingsAdmin implements OnInit {
       .getPushConfiguration()
       .pipe(finalize(() => this.isLoadingPushConfiguration.set(false)))
       .subscribe({
-        next: (configuration) => this.pushConfiguration.set(configuration),
+        next: (configuration) => {
+          this.pushConfiguration.set(configuration);
+          this.pushForm.patchValue({
+            publicKey: configuration.publicKey,
+            privateKey: '',
+            subject: configuration.subject,
+            enabled: configuration.enabled,
+          });
+        },
         error: () => {
           this.pushConfigurationError.set('settings.pushConfigurationError');
+        },
+      });
+  }
+
+  protected saveEmailConfiguration(): void {
+    this.emailForm.markAllAsTouched();
+    if (this.emailForm.invalid || this.isSavingEmailConfiguration()) return;
+
+    const value = this.emailForm.getRawValue();
+    const input: UpdateEmailConfigurationInput = {
+      host: value.host.trim(),
+      port: value.port.trim(),
+      protocol: value.protocol,
+      user: value.user.trim(),
+      from: value.from.trim(),
+      enabled: value.enabled,
+    };
+    const password = value.password.trim();
+    if (password) input.password = password;
+
+    this.isSavingEmailConfiguration.set(true);
+    this.emailConfigurationMessage.set('');
+    this.adminService
+      .updateEmailConfiguration(input)
+      .pipe(finalize(() => this.isSavingEmailConfiguration.set(false)))
+      .subscribe({
+        next: (configuration) => {
+          this.emailConfiguration.set(configuration);
+          this.emailForm.patchValue({
+            host: configuration.host,
+            port: configuration.port,
+            protocol: configuration.protocol || 'smtp',
+            user: configuration.user,
+            from: configuration.from,
+            password: '',
+            enabled: configuration.enabled,
+          });
+          this.emailConfigurationMessage.set(
+            'settings.emailConfigurationSaved',
+          );
+        },
+        error: () => {
+          this.emailConfigurationMessage.set(
+            'settings.emailConfigurationSaveError',
+          );
+        },
+      });
+  }
+
+  protected savePushConfiguration(): void {
+    this.pushForm.markAllAsTouched();
+    if (this.pushForm.invalid || this.isSavingPushConfiguration()) return;
+
+    const value = this.pushForm.getRawValue();
+    const input: UpdatePushConfigurationInput = {
+      publicKey: value.publicKey.trim(),
+      subject: value.subject.trim(),
+      enabled: value.enabled,
+    };
+    const privateKey = value.privateKey.trim();
+    if (privateKey) input.privateKey = privateKey;
+
+    this.isSavingPushConfiguration.set(true);
+    this.pushConfigurationMessage.set('');
+    this.adminService
+      .updatePushConfiguration(input)
+      .pipe(finalize(() => this.isSavingPushConfiguration.set(false)))
+      .subscribe({
+        next: (configuration) => {
+          this.pushConfiguration.set(configuration);
+          this.pushForm.patchValue({
+            publicKey: configuration.publicKey,
+            privateKey: '',
+            subject: configuration.subject,
+            enabled: configuration.enabled,
+          });
+          this.pushConfigurationMessage.set('settings.pushConfigurationSaved');
+        },
+        error: () => {
+          this.pushConfigurationMessage.set(
+            'settings.pushConfigurationSaveError',
+          );
         },
       });
   }

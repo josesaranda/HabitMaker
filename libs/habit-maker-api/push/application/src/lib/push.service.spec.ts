@@ -9,6 +9,7 @@ import {
   PushDeliveryEntity,
   PushSubscriptionEntity,
 } from '@habit-maker/api-push-infrastructure';
+import { SettingsService } from '@habit-maker/api-settings-infrastructure';
 import { PushService } from './push.service';
 
 vi.mock('web-push', () => ({
@@ -20,13 +21,15 @@ describe('PushService', () => {
   let dataSource: DataSource;
   let service: PushService;
   let subscription: PushSubscriptionEntity;
-  const originalPublicKey = process.env.VAPID_PUBLIC_KEY;
-  const originalPrivateKey = process.env.VAPID_PRIVATE_KEY;
+  const getInternal = vi.fn();
 
   beforeEach(async () => {
     vi.clearAllMocks();
-    process.env.VAPID_PUBLIC_KEY = 'test-public-key';
-    process.env.VAPID_PRIVATE_KEY = 'test-private-key';
+    getInternal.mockResolvedValue({
+      publicKey: 'test-public-key',
+      privateKey: 'test-private-key',
+      subject: 'mailto:admin@example.com',
+    });
     dataSource = new DataSource({
       type: 'sqljs',
       autoSave: false,
@@ -71,14 +74,13 @@ describe('PushService', () => {
       dataSource.getRepository(HabitCompletionEntity),
       dataSource.getRepository(PushSubscriptionEntity),
       dataSource.getRepository(PushDeliveryEntity),
+      { getInternal } as unknown as SettingsService,
     );
   });
 
   afterEach(async () => {
     await dataSource.destroy();
     vi.restoreAllMocks();
-    restoreEnvironment('VAPID_PUBLIC_KEY', originalPublicKey);
-    restoreEnvironment('VAPID_PRIVATE_KEY', originalPrivateKey);
   });
 
   it("delivers once for the user's local daily occurrence across daylight saving time", async () => {
@@ -216,8 +218,3 @@ describe('PushService', () => {
     );
   });
 });
-
-function restoreEnvironment(name: string, value: string | undefined): void {
-  if (value === undefined) delete process.env[name];
-  else process.env[name] = value;
-}

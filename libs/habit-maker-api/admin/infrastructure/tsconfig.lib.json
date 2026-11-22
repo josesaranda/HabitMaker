@@ -26,7 +26,13 @@
   ],
   "references": [
     {
+      "path": "../../settings/domain/tsconfig.lib.json"
+    },
+    {
       "path": "../domain/tsconfig.lib.json"
+    },
+    {
+      "path": "../../settings/infrastructure/tsconfig.lib.json"
     }
   ]
 }

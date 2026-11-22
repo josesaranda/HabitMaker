@@ -13,6 +13,9 @@
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "references": [
     {
+      "path": "../../settings/domain/tsconfig.lib.json"
+    },
+    {
       "path": "../../auth/domain/tsconfig.lib.json"
     }
   ]

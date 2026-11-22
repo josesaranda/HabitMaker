@@ -19,6 +19,11 @@ import {
   PushSubscriptionEntity,
 } from '@habit-maker/api-push-infrastructure';
 import type { PushLanguage } from '@habit-maker/api-push-domain';
+import {
+  parsePushVapidSettings,
+  PushVapidSettings,
+} from '@habit-maker/api-settings-domain';
+import { SettingsService } from '@habit-maker/api-settings-infrastructure';
 
 interface WebPushSubscriptionInput {
   endpoint: string;
@@ -34,8 +39,7 @@ interface LocalDateTime {
 @Injectable()
 export class PushService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(PushService.name);
-  private readonly publicKey = process.env['VAPID_PUBLIC_KEY'] ?? '';
-  private readonly privateKey = process.env['VAPID_PRIVATE_KEY'] ?? '';
+  private vapid: PushVapidSettings | null = null;
   private interval: NodeJS.Timeout | undefined;
   private dispatching = false;
 
@@ -50,15 +54,11 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
     private readonly subscriptions: Repository<PushSubscriptionEntity>,
     @InjectRepository(PushDeliveryEntity)
     private readonly deliveries: Repository<PushDeliveryEntity>,
+    private readonly settingsService: SettingsService,
   ) {}
 
-  onModuleInit(): void {
-    if (!this.isConfigured()) return;
-    webpush.setVapidDetails(
-      process.env['VAPID_SUBJECT'] ?? 'mailto:admin@habitmaker.local',
-      this.publicKey,
-      this.privateKey,
-    );
+  async onModuleInit(): Promise<void> {
+    await this.refreshVapid();
     this.interval = setInterval(() => void this.dispatchDueReminders(), 15_000);
     this.interval.unref();
     void this.dispatchDueReminders();
@@ -68,12 +68,14 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
     if (this.interval) clearInterval(this.interval);
   }
 
-  getPublicKey(): string | null {
-    return this.isConfigured() ? this.publicKey : null;
+  async getPublicKey(): Promise<string | null> {
+    await this.refreshVapid();
+    return this.vapid?.publicKey ?? null;
   }
 
   async saveSubscription(input: unknown, userId: string): Promise<void> {
-    if (!this.isConfigured()) {
+    await this.refreshVapid();
+    if (!this.vapid) {
       throw new ServiceUnavailableException(
         'Push notifications are not configured',
       );
@@ -118,7 +120,8 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
   }
 
   async dispatchDueReminders(now = new Date()): Promise<void> {
-    if (!this.isConfigured() || this.dispatching) return;
+    await this.refreshVapid();
+    if (!this.vapid || this.dispatching) return;
     this.dispatching = true;
     try {
       const habits = await this.habits.find({
@@ -300,7 +303,18 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  private isConfigured(): boolean {
-    return Boolean(this.publicKey && this.privateKey);
+  private async refreshVapid(): Promise<void> {
+    try {
+      const settings = await this.settingsService.getInternal('push.vapid');
+      const vapid = parsePushVapidSettings(settings);
+      if (!vapid.enabled) {
+        this.vapid = null;
+        return;
+      }
+      webpush.setVapidDetails(vapid.subject, vapid.publicKey, vapid.privateKey);
+      this.vapid = vapid;
+    } catch {
+      this.vapid = null;
+    }
   }
 }

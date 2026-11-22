@@ -1,62 +1,37 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import nodemailer from 'nodemailer';
-import { AdminEmailConfiguration } from '@habit-maker/api-admin-domain';
-
-const REQUIRED_SMTP_VARIABLES = [
-  'SMTP_HOST',
-  'SMTP_PORT',
-  'SMTP_PROTOCOL',
-  'SMTP_USER',
-  'SMTP_PASSWORD',
-  'SMTP_FROM',
-] as const;
+import type { AdminEmailConfiguration } from '@habit-maker/api-admin-domain';
+import {
+  EmailSmtpSettings,
+  parseEmailSmtpSettings,
+} from '@habit-maker/api-settings-domain';
+import { SettingsService } from '@habit-maker/api-settings-infrastructure';
 
 @Injectable()
 export class AdminEmailService {
-  getConfiguration(): AdminEmailConfiguration {
-    const host = process.env['SMTP_HOST']?.trim() ?? '';
-    const port = process.env['SMTP_PORT']?.trim() ?? '';
-    const protocol = process.env['SMTP_PROTOCOL']?.trim().toLowerCase() ?? '';
-    const user = process.env['SMTP_USER']?.trim() ?? '';
-    const from = process.env['SMTP_FROM']?.trim() ?? '';
-    const passwordConfigured = Boolean(process.env['SMTP_PASSWORD']?.trim());
-    const missingVariables = REQUIRED_SMTP_VARIABLES.filter(
-      (variable) => !process.env[variable]?.trim(),
-    );
-    const numericPort = Number.parseInt(port, 10);
-    const validPort =
-      Number.isInteger(numericPort) && numericPort > 0 && numericPort <= 65535;
-    const validProtocol = protocol === 'smtp' || protocol === 'smtps';
+  constructor(private readonly settingsService: SettingsService) {}
 
-    return {
-      host,
-      port,
-      protocol,
-      user,
-      from,
-      passwordConfigured,
-      missingVariables: [...missingVariables],
-      isConfigured: missingVariables.length === 0 && validPort && validProtocol,
-    };
+  getConfiguration(): Promise<AdminEmailConfiguration> {
+    return this.settingsService.getPublic('email.smtp');
+  }
+
+  async updateConfiguration(
+    input: unknown,
+    userId: string,
+  ): Promise<AdminEmailConfiguration> {
+    await this.settingsService.update('email.smtp', input, userId);
+    return this.getConfiguration();
   }
 
   async sendTestEmail(recipient: string): Promise<void> {
-    const configuration = this.getConfiguration();
-    const username = process.env['SMTP_USER']?.trim() ?? '';
-    const password = process.env['SMTP_PASSWORD'] ?? '';
-
-    if (!configuration.isConfigured) {
-      throw new ServiceUnavailableException(
-        'All SMTP environment variables must be configured with valid values',
-      );
-    }
+    const configuration = await this.getSmtpSettings();
 
     const transporter = nodemailer.createTransport({
       host: configuration.host,
-      port: Number.parseInt(configuration.port, 10),
+      port: configuration.port,
       secure: configuration.protocol === 'smtps',
       requireTLS: configuration.protocol === 'smtp',
-      auth: { user: username, pass: password },
+      auth: { user: configuration.user, pass: configuration.password },
     });
 
     try {
@@ -72,6 +47,23 @@ export class AdminEmailService {
       );
     } finally {
       transporter.close();
+    }
+  }
+
+  private async getSmtpSettings(): Promise<EmailSmtpSettings> {
+    const settings = await this.settingsService.getInternal('email.smtp');
+
+    try {
+      const parsed = parseEmailSmtpSettings(settings);
+      if (!parsed.enabled) {
+        throw new ServiceUnavailableException('Email delivery is disabled');
+      }
+      return parsed;
+    } catch (error) {
+      if (error instanceof ServiceUnavailableException) throw error;
+      throw new ServiceUnavailableException(
+        'All SMTP settings must be configured with valid values',
+      );
     }
   }
 }

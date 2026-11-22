@@ -7,6 +7,8 @@ import {
   AdminEmailConfiguration,
   AdminPushConfiguration,
   AdminUser,
+  UpdateEmailConfigurationInput,
+  UpdatePushConfigurationInput,
 } from '@habit-maker/admin-domain';
 
 @Injectable({ providedIn: 'root' })
@@ -37,6 +39,19 @@ export class AdminService {
     );
   }
 
+  updateEmailConfiguration(
+    configuration: UpdateEmailConfigurationInput,
+  ): Observable<AdminEmailConfiguration> {
+    if (this.authService.getUserRole() !== 'admin') {
+      return throwError(() => new Error('Administrator access is required'));
+    }
+
+    return this.http.put<AdminEmailConfiguration>(
+      `${this.apiUrl}/admin/email/configuration`,
+      configuration,
+    );
+  }
+
   getPushConfiguration(): Observable<AdminPushConfiguration> {
     if (this.authService.getUserRole() !== 'admin') {
       return throwError(() => new Error('Administrator access is required'));
@@ -44,6 +59,19 @@ export class AdminService {
 
     return this.http.get<AdminPushConfiguration>(
       `${this.apiUrl}/admin/push/configuration`,
+    );
+  }
+
+  updatePushConfiguration(
+    configuration: UpdatePushConfigurationInput,
+  ): Observable<AdminPushConfiguration> {
+    if (this.authService.getUserRole() !== 'admin') {
+      return throwError(() => new Error('Administrator access is required'));
+    }
+
+    return this.http.put<AdminPushConfiguration>(
+      `${this.apiUrl}/admin/push/configuration`,
+      configuration,
     );
   }
 

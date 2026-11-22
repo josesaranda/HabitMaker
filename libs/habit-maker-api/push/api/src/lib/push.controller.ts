@@ -19,8 +19,8 @@ export class PushController {
   constructor(private readonly pushService: PushService) {}
 
   @Get('public-key')
-  getPublicKey() {
-    return { publicKey: this.pushService.getPublicKey() };
+  async getPublicKey() {
+    return { publicKey: await this.pushService.getPublicKey() };
   }
 
   @Put('subscriptions')

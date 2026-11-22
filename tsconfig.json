@@ -114,6 +114,15 @@
     },
     {
       "path": "./libs/shared/config"
+    },
+    {
+      "path": "./libs/habit-maker-api/settings/infrastructure"
+    },
+    {
+      "path": "./libs/habit-maker-api/settings/domain"
+    },
+    {
+      "path": "./libs/habit-maker-api/settings/api"
     }
   ]
 }

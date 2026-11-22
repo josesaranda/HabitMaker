@@ -1,4 +1,8 @@
 import type { UserRole } from '@habit-maker/api-auth-domain';
+import type {
+  PublicEmailSmtpSettings,
+  PublicPushVapidSettings,
+} from '@habit-maker/api-settings-domain';
 
 export interface AdminUser {
   id: string;
@@ -6,20 +10,6 @@ export interface AdminUser {
   role: UserRole;
 }
 
-export interface AdminEmailConfiguration {
-  host: string;
-  port: string;
-  protocol: string;
-  user: string;
-  from: string;
-  passwordConfigured: boolean;
-  missingVariables: string[];
-  isConfigured: boolean;
-}
+export type AdminEmailConfiguration = PublicEmailSmtpSettings;
 
-export interface AdminPushConfiguration {
-  publicKeyConfigured: boolean;
-  privateKeyConfigured: boolean;
-  subjectConfigured: boolean;
-  isConfigured: boolean;
-}
+export type AdminPushConfiguration = PublicPushVapidSettings;

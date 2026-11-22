@@ -1,34 +1,55 @@
+import { SettingsService } from '@habit-maker/api-settings-infrastructure';
 import { AdminPushService } from './admin-push.service';
 
 describe('AdminPushService', () => {
-  afterEach(() => vi.unstubAllEnvs());
+  const getPublic = vi.fn();
+  const update = vi.fn();
+  const service = new AdminPushService({
+    getPublic,
+    update,
+  } as unknown as SettingsService);
 
-  it('reports which VAPID variables are configured without returning their values', () => {
-    vi.stubEnv('VAPID_PUBLIC_KEY', 'public-secret-value');
-    vi.stubEnv('VAPID_PRIVATE_KEY', 'private-secret-value');
-    vi.stubEnv('VAPID_SUBJECT', 'mailto:admin@example.com');
-
-    const configuration = new AdminPushService().getConfiguration();
-
-    expect(configuration).toEqual({
+  beforeEach(() => {
+    getPublic.mockReset().mockResolvedValue({
+      publicKey: 'public-key',
       publicKeyConfigured: true,
       privateKeyConfigured: true,
+      subject: 'mailto:admin@example.com',
       subjectConfigured: true,
       isConfigured: true,
+      source: 'database',
+      enabled: true,
     });
-    expect(JSON.stringify(configuration)).not.toContain('secret-value');
+    update.mockReset().mockResolvedValue(undefined);
   });
 
-  it('treats the subject as optional but requires both VAPID keys', () => {
-    vi.stubEnv('VAPID_PUBLIC_KEY', 'public-key');
-    vi.stubEnv('VAPID_PRIVATE_KEY', ' ');
-    vi.stubEnv('VAPID_SUBJECT', '');
+  it('returns the public VAPID configuration without the private key', async () => {
+    const configuration = await service.getConfiguration();
 
-    expect(new AdminPushService().getConfiguration()).toEqual({
+    expect(getPublic).toHaveBeenCalledWith('push.vapid');
+    expect(configuration).toEqual({
+      publicKey: 'public-key',
       publicKeyConfigured: true,
-      privateKeyConfigured: false,
-      subjectConfigured: false,
-      isConfigured: false,
+      privateKeyConfigured: true,
+      subject: 'mailto:admin@example.com',
+      subjectConfigured: true,
+      isConfigured: true,
+      source: 'database',
+      enabled: true,
     });
+    expect(JSON.stringify(configuration)).not.toContain('private-key');
+  });
+
+  it('persists the VAPID configuration through the settings service', async () => {
+    const input = {
+      publicKey: 'new-public-key',
+      privateKey: 'new-private-key',
+      subject: 'mailto:admin@example.com',
+    };
+
+    await service.updateConfiguration(input, 'admin-1');
+
+    expect(update).toHaveBeenCalledWith('push.vapid', input, 'admin-1');
+    expect(getPublic).toHaveBeenCalledWith('push.vapid');
   });
 });
