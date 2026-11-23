@@ -1,3 +1,16 @@
+# [1.15.0](https://github.com/josesaranda/HabitMaker/compare/v1.14.0...v1.15.0) (2026-11-23)
+
+
+### Features
+
+* add desktop application support for HabitMaker ([30aa9ab](https://github.com/josesaranda/HabitMaker/commit/30aa9ab600e9a550f35ea78ac074d02d6fd6ef7c))
+* add typecheck target dependency to targetDefaults ([6006a7a](https://github.com/josesaranda/HabitMaker/commit/6006a7a82614a083769950ccba5028eb85f359e2))
+* **ci:** add installation of Linux dependencies for desktop builds ([b40bfcd](https://github.com/josesaranda/HabitMaker/commit/b40bfcdf4cfed6d92be64f99535a266d739d0dc1))
+* enhance habit tracking with new services and notification system ([e3add1e](https://github.com/josesaranda/HabitMaker/commit/e3add1e51df6a8d3858ea7976093377f2cf74ca9))
+* **i18n:** add Spanish translations for the application ([ea07833](https://github.com/josesaranda/HabitMaker/commit/ea07833b46a698e81685d67c5ef565d8802e606d))
+* **i18n:** add TranslocoHttpLoader for translation loading ([4b55a2d](https://github.com/josesaranda/HabitMaker/commit/4b55a2dc6e5f6f09ea9bc7b1c2dca20124339e05))
+* **settings:** enhance email and push notification configurations ([308e408](https://github.com/josesaranda/HabitMaker/commit/308e408f0378b1b14c1be9c4bb1bd2376e4a48a5))
+
 # [1.14.0](https://github.com/josesaranda/HabitMaker/compare/v1.13.0...v1.14.0) (2026-11-20)
 
 
