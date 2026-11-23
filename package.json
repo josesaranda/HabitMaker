@@ -8,6 +8,7 @@
     "start:api": "nx serve HabitMakerApi",
     "start:landing": "nx serve HabitMakerLanding",
     "start:storybook": "nx storybook HabitMakerUI",
+    "build:desktop": "nx build HabitMakerDesktop",
     "test": "nx run-many -t lint test build typecheck --parallel --maxParallel=3",
     "release": "semantic-release",
     "postversion": "node sync-package-lock-version.cjs"
