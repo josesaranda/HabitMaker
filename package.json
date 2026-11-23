@@ -100,6 +100,7 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.0.0",
     "@nestjs/typeorm": "^12.0.2",
+    "@tauri-apps/api": "^2.12.5",
     "@vercel/analytics": "^2.0.1",
     "nodemailer": "^10.3.1",
     "pg": "^8.23.1",

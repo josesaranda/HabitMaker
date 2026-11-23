@@ -21,7 +21,7 @@ import {
   HabitMakerUILink,
 } from '@habit-maker/habit-maker-ui';
 import { startWith } from 'rxjs';
-import { BrowserService } from '@habit-maker/shared-data-access';
+import { TitleService } from '@habit-maker/shared-data-access';
 import { AuthService } from '@habit-maker/auth-data-access';
 import { AuthStory } from '../auth-story/auth-story';
 
@@ -46,7 +46,7 @@ import { AuthStory } from '../auth-story/auth-story';
   templateUrl: './signup.html',
 })
 export class Signup {
-  private readonly browserService = inject(BrowserService);
+  private readonly titleService = inject(TitleService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   protected readonly form = new FormGroup({
@@ -105,7 +105,7 @@ export class Signup {
   );
 
   constructor() {
-    this.browserService.setTitle('pageTitles.signup');
+    this.titleService.setTitle('pageTitles.signup');
   }
 
   protected readonly nameError = computed(() => {

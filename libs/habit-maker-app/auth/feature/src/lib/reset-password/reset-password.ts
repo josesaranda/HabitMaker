@@ -25,7 +25,7 @@ import {
 import { startWith } from 'rxjs';
 import { AuthStory } from '../auth-story/auth-story';
 import { AuthService } from '@habit-maker/auth-data-access';
-import { BrowserService } from '@habit-maker/shared-data-access';
+import { TitleService } from '@habit-maker/shared-data-access';
 
 const matchingPasswordsValidator: ValidatorFn = (
   control,
@@ -55,7 +55,7 @@ const matchingPasswordsValidator: ValidatorFn = (
   templateUrl: './reset-password.html',
 })
 export class ResetPassword {
-  private readonly browserService = inject(BrowserService);
+  private readonly titleService = inject(TitleService);
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
 
@@ -129,7 +129,7 @@ export class ResetPassword {
   protected readonly currentYear = signal(new Date().getFullYear());
 
   constructor() {
-    this.browserService.setTitle('pageTitles.resetPassword');
+    this.titleService.setTitle('pageTitles.resetPassword');
   }
 
   protected onPasswordBlur(): void {
