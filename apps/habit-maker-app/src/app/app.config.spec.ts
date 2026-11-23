@@ -1,5 +1,34 @@
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { isQueryParamOnlyNavigation } from './app.config';
+import { DESKTOP_API_URL_STORAGE_KEY } from '@habit-maker/shared-data-access';
+import { environment } from '../environments/environment';
+import { isQueryParamOnlyNavigation, resolveApiBaseUrl } from './app.config';
+
+describe('resolveApiBaseUrl', () => {
+  afterEach(() => {
+    localStorage.removeItem(DESKTOP_API_URL_STORAGE_KEY);
+    delete (window as { __TAURI_INTERNALS__?: unknown }).__TAURI_INTERNALS__;
+  });
+
+  it('uses the environment API URL on the web', () => {
+    expect(resolveApiBaseUrl()).toBe(environment.API_URL || '/api');
+  });
+
+  it('uses the configured API URL in the desktop app', () => {
+    (window as { __TAURI_INTERNALS__?: unknown }).__TAURI_INTERNALS__ = {};
+    localStorage.setItem(
+      DESKTOP_API_URL_STORAGE_KEY,
+      'https://habits.example.com/api',
+    );
+
+    expect(resolveApiBaseUrl()).toBe('https://habits.example.com/api');
+  });
+
+  it('returns an empty API URL in the desktop app until one is configured', () => {
+    (window as { __TAURI_INTERNALS__?: unknown }).__TAURI_INTERNALS__ = {};
+
+    expect(resolveApiBaseUrl()).toBe('');
+  });
+});
 
 describe('isQueryParamOnlyNavigation', () => {
   it('identifies query-param changes within the same route tree', () => {

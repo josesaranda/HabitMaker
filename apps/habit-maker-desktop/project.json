@@ -1,0 +1,34 @@
+{
+  "name": "HabitMakerDesktop",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/habit-maker-desktop/src-tauri/src",
+  "projectType": "application",
+  "tags": ["type:app", "platform:desktop"],
+  "implicitDependencies": ["HabitMakerApp"],
+  "targets": {
+    "serve": {
+      "continuous": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tauri dev",
+        "cwd": "apps/habit-maker-desktop"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "tauri build",
+        "cwd": "apps/habit-maker-desktop"
+      }
+    },
+    "build-debug": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "tauri build --debug",
+        "cwd": "apps/habit-maker-desktop"
+      }
+    }
+  }
+}

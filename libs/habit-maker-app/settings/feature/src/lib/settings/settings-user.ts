@@ -22,6 +22,13 @@ import {
   SupportedLanguage,
 } from '@habit-maker/i18n-data-access';
 import { AppUpdateService } from '@habit-maker/settings-data-access';
+import {
+  getDesktopApiUrl,
+  isDesktopApp,
+  normalizeDesktopApiUrl,
+  saveDesktopApiUrl,
+  testDesktopApiConnection,
+} from '@habit-maker/shared-data-access';
 
 @Component({
   imports: [
@@ -47,6 +54,11 @@ export class SettingsUser implements OnInit {
   private readonly habitService = inject(HabitService, { optional: true });
   private readonly appUpdateService = inject(AppUpdateService);
   protected readonly languageService = inject(LanguageService);
+  protected readonly isDesktop = signal(isDesktopApp());
+  protected readonly serverUrl = signal(getDesktopApiUrl() ?? '');
+  protected readonly serverStatus = signal<
+    'idle' | 'saving' | 'invalid' | 'unreachable'
+  >('idle');
   protected readonly email = signal(this.authService.getUserEmail());
   protected readonly sessions = signal<AuthSession[]>([]);
   protected readonly isLoadingSessions = signal(true);
@@ -135,5 +147,31 @@ export class SettingsUser implements OnInit {
         .savePushSubscription(subscription.toJSON(), language)
         .subscribe({ error: () => undefined });
     });
+  }
+
+  protected updateServerUrl(value: string): void {
+    this.serverUrl.set(value);
+    this.serverStatus.set('idle');
+  }
+
+  protected async saveServerUrl(event: Event): Promise<void> {
+    event.preventDefault();
+    if (this.serverStatus() === 'saving') return;
+
+    const apiUrl = normalizeDesktopApiUrl(this.serverUrl());
+    if (!apiUrl) {
+      this.serverStatus.set('invalid');
+      return;
+    }
+
+    this.serverStatus.set('saving');
+    const reachable = await testDesktopApiConnection(apiUrl);
+    if (!reachable) {
+      this.serverStatus.set('unreachable');
+      return;
+    }
+
+    saveDesktopApiUrl(apiUrl);
+    window.location.reload();
   }
 }

@@ -6,3 +6,6 @@
 .nx/self-healing
 .angular
 /CHANGELOG.md
+# Tauri build output
+/apps/habit-maker-desktop/src-tauri/target
+/apps/habit-maker-desktop/src-tauri/gen

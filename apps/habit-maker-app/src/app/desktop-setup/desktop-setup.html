@@ -1,0 +1,71 @@
+<main
+  class="flex min-h-screen items-center justify-center bg-background px-4 py-10"
+>
+  <section
+    class="w-full max-w-lg rounded-3xl border border-border bg-surface p-6 shadow-lg sm:p-10"
+    aria-labelledby="desktop-setup-title"
+  >
+    <div class="mb-6 flex flex-col gap-3">
+      <hm-brand />
+      <p hmText="overline" class="text-text-secondary">
+        {{ 'desktopSetup.eyebrow' | transloco }}
+      </p>
+      <h1
+        id="desktop-setup-title"
+        hmText="heading-md"
+        class="font-semibold tracking-tight text-text-primary"
+      >
+        {{ 'desktopSetup.title' | transloco }}
+      </h1>
+      <p hmText="body-sm" class="text-text-secondary">
+        {{ 'desktopSetup.intro' | transloco }}
+      </p>
+    </div>
+
+    <form class="grid gap-5" (submit)="submit($event)">
+      <hm-form-field>
+        <label hmLabel for="desktop-api-url">
+          {{ 'desktopSetup.apiUrlLabel' | transloco }}
+        </label>
+        <input
+          #apiUrlInput
+          id="desktop-api-url"
+          name="apiUrl"
+          type="url"
+          inputmode="url"
+          autocomplete="url"
+          spellcheck="false"
+          [hmInput]="error() ? 'error' : 'default'"
+          [value]="apiUrl()"
+          (input)="updateApiUrl(apiUrlInput.value)"
+          [attr.aria-invalid]="error() ? true : null"
+          [attr.aria-describedby]="
+            error() ? 'desktop-api-url-error' : 'desktop-api-url-hint'
+          "
+        />
+        @if (error()) {
+        <p hmError id="desktop-api-url-error">{{ error() | transloco }}</p>
+        } @else {
+        <p hmHint id="desktop-api-url-hint">
+          {{ 'desktopSetup.apiUrlHint' | transloco }}
+        </p>
+        }
+      </hm-form-field>
+
+      <button
+        hmButton="primary"
+        hmText="body-sm"
+        class="rounded-lg font-semibold"
+        type="submit"
+        [disabled]="status() === 'checking'"
+      >
+        {{ (status() === 'checking' ? 'desktopSetup.checking' :
+        'desktopSetup.submit') | transloco }}
+      </button>
+    </form>
+
+    <p hmText="caption" class="mt-6 text-text-secondary">
+      {{ 'desktopSetup.footer' | transloco }}
+    </p>
+  </section>
+</main>

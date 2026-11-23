@@ -25,6 +25,10 @@ import {
   TranslocoHttpLoader,
 } from '@habit-maker/i18n-data-access';
 import { API_BASE_URL, AUTH_TOKEN_PROVIDER } from '@habit-maker/shared-config';
+import {
+  getDesktopApiUrl,
+  isDesktopApp,
+} from '@habit-maker/shared-data-access';
 import { PwaPreloadStrategy } from './pwa-preload.strategy';
 
 export const appConfig: ApplicationConfig = {
@@ -35,9 +39,9 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(withInterceptors([authTokenInterceptor])),
     { provide: AUTH_TOKEN_PROVIDER, useExisting: AuthService },
-    { provide: API_BASE_URL, useValue: environment.API_URL || '/api' },
+    { provide: API_BASE_URL, useFactory: resolveApiBaseUrl },
     provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
+      enabled: !isDevMode() && !isDesktopApp(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
     provideTransloco({
@@ -61,6 +65,14 @@ export const appConfig: ApplicationConfig = {
     ),
   ],
 };
+
+export function resolveApiBaseUrl(): string {
+  if (isDesktopApp()) {
+    return getDesktopApiUrl() ?? '';
+  }
+
+  return environment.API_URL || '/api';
+}
 
 export function isQueryParamOnlyNavigation(
   from: ActivatedRouteSnapshot,

@@ -40,6 +40,9 @@
     },
     {
       "path": "../../libs/habit-maker-app/auth/data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared/data-access/tsconfig.lib.json"
     }
   ]
 }
