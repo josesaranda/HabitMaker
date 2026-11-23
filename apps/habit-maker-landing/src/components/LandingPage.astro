@@ -79,6 +79,9 @@ const dockerSteps = copy.dockerSteps.map((step, index) => ({
         <a class="rounded-sm transition hover:text-forest" href="#docker">
           {copy.navDocker}
         </a>
+        <a class="rounded-sm transition hover:text-forest" href="#desktop">
+          {copy.navDesktop}
+        </a>
       </nav>
 
       <div class="flex shrink-0 items-center gap-2">
@@ -130,6 +133,12 @@ const dockerSteps = copy.dockerSteps.map((step, index) => ({
         href="#docker"
       >
         {copy.navDocker}
+      </a>
+      <a
+        class="whitespace-nowrap rounded-sm py-2 hover:text-forest"
+        href="#desktop"
+      >
+        {copy.navDesktop}
       </a>
     </nav>
   </div>
@@ -519,6 +528,35 @@ const dockerSteps = copy.dockerSteps.map((step, index) => ({
             </li>
           ))}
         </ol>
+      </div>
+    </section>
+
+    <section
+      id="desktop"
+      class="scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28 lg:px-12"
+    >
+      <div class="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#d6e2d4] px-6 py-12 sm:px-12 sm:py-16 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-16">
+        <div class="max-w-2xl">
+          <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-forest-soft">
+            {copy.desktopEyebrow}
+          </p>
+          <h2 class="font-display text-4xl leading-tight tracking-[-0.045em] text-forest sm:text-5xl">
+            {copy.desktopHeading}
+          </h2>
+          <p class="mt-4 max-w-xl text-base leading-7 text-forest/65">
+            {copy.desktopDescription}
+          </p>
+        </div>
+        <div class="mt-8 flex shrink-0 flex-col gap-3 sm:flex-row lg:mt-0 lg:flex-col xl:flex-row">
+          <a
+            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-forest px-6 text-sm font-bold text-white no-underline transition hover:bg-forest-soft"
+            href={`${repository}/releases`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {copy.desktopReleases} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </div>
     </section>
 

@@ -15,6 +15,7 @@ export interface LandingCopy {
   navWhy: string;
   navScreenshots: string;
   navDocker: string;
+  navDesktop: string;
   languageLabel: string;
   switchToEnglish: string;
   switchToSpanish: string;
@@ -54,6 +55,10 @@ export interface LandingCopy {
   dockerRequirements: string;
   dockerSteps: { title: string; description: string }[];
   readSetupGuide: string;
+  desktopEyebrow: string;
+  desktopHeading: string;
+  desktopDescription: string;
+  desktopReleases: string;
   contributeEyebrow: string;
   contributeHeading: string;
   contributeDescription: string;
@@ -79,6 +84,7 @@ export const ui: Record<Lang, LandingCopy> = {
     navWhy: 'Why HabitMaker',
     navScreenshots: 'Screenshots',
     navDocker: 'Get started',
+    navDesktop: 'Desktop',
     languageLabel: 'Language',
     switchToEnglish: 'Switch language to English',
     switchToSpanish: 'Switch language to Spanish',
@@ -179,6 +185,11 @@ export const ui: Record<Lang, LandingCopy> = {
       },
     ],
     readSetupGuide: 'Read the full setup guide',
+    desktopEyebrow: 'Native desktop apps',
+    desktopHeading: 'Take HabitMaker to your desktop.',
+    desktopDescription:
+      'HabitMaker is also available as a native desktop app for macOS, Windows, and Linux, built with Tauri. Download the latest release from GitHub.',
+    desktopReleases: 'Download from GitHub Releases',
     contributeEyebrow: 'Good things grow together',
     contributeHeading: 'Have an idea? There’s room to grow.',
     contributeDescription:
@@ -203,6 +214,7 @@ export const ui: Record<Lang, LandingCopy> = {
     navWhy: 'Por qué HabitMaker',
     navScreenshots: 'Capturas',
     navDocker: 'Cómo empezar',
+    navDesktop: 'Escritorio',
     languageLabel: 'Idioma',
     switchToEnglish: 'Cambiar idioma a inglés',
     switchToSpanish: 'Cambiar idioma a español',
@@ -304,6 +316,11 @@ export const ui: Record<Lang, LandingCopy> = {
       },
     ],
     readSetupGuide: 'Consulta la guía completa de instalación',
+    desktopEyebrow: 'Aplicaciones nativas de escritorio',
+    desktopHeading: 'Lleva HabitMaker a tu escritorio.',
+    desktopDescription:
+      'HabitMaker también está disponible como aplicación nativa de escritorio para macOS, Windows y Linux, creada con Tauri. Descarga la última versión desde GitHub.',
+    desktopReleases: 'Descargar desde GitHub Releases',
     contributeEyebrow: 'Las cosas buenas crecen en comunidad',
     contributeHeading: '¿Tienes una idea? Hagámosla crecer.',
     contributeDescription:
