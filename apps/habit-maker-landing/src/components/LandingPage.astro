@@ -535,27 +535,41 @@ const dockerSteps = copy.dockerSteps.map((step, index) => ({
       id="desktop"
       class="scroll-mt-32 px-5 py-20 sm:px-8 sm:py-28 lg:px-12"
     >
-      <div class="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#d6e2d4] px-6 py-12 sm:px-12 sm:py-16 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-16">
-        <div class="max-w-2xl">
-          <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-forest-soft">
-            {copy.desktopEyebrow}
-          </p>
-          <h2 class="font-display text-4xl leading-tight tracking-[-0.045em] text-forest sm:text-5xl">
-            {copy.desktopHeading}
-          </h2>
-          <p class="mt-4 max-w-xl text-base leading-7 text-forest/65">
-            {copy.desktopDescription}
-          </p>
-        </div>
-        <div class="mt-8 flex shrink-0 flex-col gap-3 sm:flex-row lg:mt-0 lg:flex-col xl:flex-row">
-          <a
-            class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-forest px-6 text-sm font-bold text-white no-underline transition hover:bg-forest-soft"
-            href={`${repository}/releases`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {copy.desktopReleases} <span aria-hidden="true">↗</span>
-          </a>
+      <div class="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#d6e2d4] p-6 sm:p-10 lg:p-12">
+        <div class="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+          <div>
+            <p class="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-forest-soft">
+              {copy.desktopEyebrow}
+            </p>
+            <h2 class="font-display text-4xl leading-tight tracking-[-0.045em] text-forest sm:text-5xl">
+              {copy.desktopHeading}
+            </h2>
+            <p class="mt-4 max-w-xl text-base leading-7 text-forest/65">
+              {copy.desktopDescription}
+            </p>
+            <div class="mt-8">
+              <a
+                class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-forest px-6 text-sm font-bold text-white no-underline transition hover:bg-forest-soft"
+                href={`${repository}/releases`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {copy.desktopReleases} <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="overflow-hidden rounded-[1.5rem] border border-white/70 bg-white shadow-[0_28px_70px_rgb(23_47_43_/_18%)]">
+              <img
+                class="block w-full"
+                src="/screenshots/home.svg"
+                alt={copy.desktopHeading}
+                width="960"
+                height="620"
+                loading="lazy"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

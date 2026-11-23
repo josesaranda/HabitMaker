@@ -60,7 +60,7 @@
     "@types/web-push": "^3.6.4",
     "@vitest/coverage-v8": "^4.0.0",
     "@vitest/ui": "^4.0.0",
-    "astro": "^7.4.5",
+    "astro": "^7.4.13",
     "cookie": "^2.0.1",
     "eslint": "^9.8.0",
     "jsdom": "^27.1.0",
