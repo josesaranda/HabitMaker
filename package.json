@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start:app": "nx serve HabitMakerApp",
+    "start:desktop": "nx serve HabitMakerDesktop",
     "start:api": "nx serve HabitMakerApi",
     "start:landing": "nx serve HabitMakerLanding",
     "start:storybook": "nx storybook HabitMakerUI",
@@ -52,6 +53,7 @@
     "@swc/helpers": "0.5.18",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/vite": "^4.3.4",
+    "@tauri-apps/cli": "^2.12.6",
     "@types/node": "^24.0.0",
     "@types/nodemailer": "^8.0.2",
     "@types/web-push": "^3.6.4",

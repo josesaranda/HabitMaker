@@ -54,6 +54,12 @@
               "with": "apps/habit-maker-app/src/environments/environment.local.ts"
             }
           ]
+        },
+        "desktop": {
+          "optimization": true,
+          "extractLicenses": true,
+          "sourceMap": false,
+          "outputHashing": "all"
         }
       }
     },

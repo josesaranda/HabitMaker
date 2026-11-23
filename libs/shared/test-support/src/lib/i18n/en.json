@@ -29,6 +29,18 @@
     "habitDetail": "Habit details",
     "habitNamed": "Habit: {{name}}"
   },
+  "desktopSetup": {
+    "eyebrow": "Desktop app",
+    "title": "Connect to your HabitMaker server",
+    "intro": "Enter the address of the server where your habits live. You can change it later from Settings.",
+    "apiUrlLabel": "Server API URL",
+    "apiUrlHint": "For example, http://localhost:8080/api or https://habits.example.com. If you only enter the server address, /api is added automatically.",
+    "invalidUrl": "Enter a valid http or https URL.",
+    "unreachable": "Couldn't reach the HabitMaker API at that address. Check the URL and that the server is running.",
+    "checking": "Checking connection…",
+    "submit": "Connect",
+    "footer": "Your data stays on your own server."
+  },
   "login": {
     "title": "Log in",
     "intro": "Pick up your habits right where you left off.",
@@ -224,6 +236,14 @@
     "english": "English",
     "spanish": "Español",
     "email": "Email address",
+    "serverTitle": "Server",
+    "serverDescription": "Desktop app: the server this app connects to. Saving will reload the app.",
+    "serverUrl": "API URL",
+    "serverHint": "For example, http://localhost:8080/api or https://habits.example.com.",
+    "serverInvalid": "Enter a valid http or https URL.",
+    "serverUnreachable": "Couldn't reach the API. Check the URL and that the server is running.",
+    "serverSave": "Save and reload",
+    "serverSaving": "Checking connection…",
     "sessionsTitle": "Open sessions",
     "sessionsDescription": "See which devices have access to your account and close sessions you no longer use.",
     "loadingSessions": "Loading sessions…",

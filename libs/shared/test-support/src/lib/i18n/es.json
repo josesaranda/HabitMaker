@@ -29,6 +29,18 @@
     "habitDetail": "Detalle del hábito",
     "habitNamed": "Hábito: {{name}}"
   },
+  "desktopSetup": {
+    "eyebrow": "App de escritorio",
+    "title": "Conecta con tu servidor de HabitMaker",
+    "intro": "Introduce la dirección del servidor donde están tus hábitos. Podrás cambiarla más adelante desde Ajustes.",
+    "apiUrlLabel": "URL de la API del servidor",
+    "apiUrlHint": "Por ejemplo, http://localhost:8080/api o https://habitos.ejemplo.com. Si solo introduces la dirección del servidor, se añade /api automáticamente.",
+    "invalidUrl": "Introduce una URL http o https válida.",
+    "unreachable": "No se pudo conectar con la API de HabitMaker en esa dirección. Comprueba la URL y que el servidor esté en marcha.",
+    "checking": "Comprobando conexión…",
+    "submit": "Conectar",
+    "footer": "Tus datos permanecen en tu propio servidor."
+  },
   "login": {
     "title": "Inicia sesión",
     "intro": "Retoma tus hábitos justo donde los dejaste.",
@@ -224,6 +236,14 @@
     "english": "English",
     "spanish": "Español",
     "email": "Correo electrónico",
+    "serverTitle": "Servidor",
+    "serverDescription": "App de escritorio: el servidor al que se conecta esta app. Al guardar, la app se recargará.",
+    "serverUrl": "URL de la API",
+    "serverHint": "Por ejemplo, http://localhost:8080/api o https://habitos.ejemplo.com.",
+    "serverInvalid": "Introduce una URL http o https válida.",
+    "serverUnreachable": "No se pudo conectar con la API. Comprueba la URL y que el servidor esté en marcha.",
+    "serverSave": "Guardar y recargar",
+    "serverSaving": "Comprobando conexión…",
     "sessionsTitle": "Sesiones abiertas",
     "sessionsDescription": "Consulta los dispositivos con acceso a tu cuenta y cierra las sesiones que ya no uses.",
     "loadingSessions": "Cargando sesiones…",

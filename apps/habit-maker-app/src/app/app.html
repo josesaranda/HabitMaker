@@ -1,4 +1,6 @@
-@if (shouldShowNavbar()) {
+@if (desktopSetupRequired()) {
+<app-desktop-setup (configured)="reloadAfterDesktopSetup()" />
+} @else { @if (shouldShowNavbar()) {
 <div class="app-navbar-shell">
   <hm-navbar
     class="app-navbar"
@@ -85,3 +87,4 @@
 >
   <router-outlet />
 </div>
+}

@@ -6,13 +6,14 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
+import { resolveCorsOrigins } from './app/cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.enableCors({
-    origin: process.env.CORS_ORIGIN ?? 'http://localhost:4200',
+    origin: resolveCorsOrigins(process.env.CORS_ORIGIN),
   });
   const port = process.env.SERVER_PORT || 3000;
   await app.listen(port);

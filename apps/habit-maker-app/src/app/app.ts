@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -18,9 +18,15 @@ import {
 import { filter, map } from 'rxjs';
 import { AuthService } from '@habit-maker/auth-data-access';
 import { AppUpdateService } from '@habit-maker/settings-data-access';
+import {
+  getDesktopApiUrl,
+  isDesktopApp,
+} from '@habit-maker/shared-data-access';
+import { DesktopSetup } from './desktop-setup/desktop-setup';
 
 @Component({
   imports: [
+    DesktopSetup,
     HabitMakerUIText,
     HabitMakerUIButtonIcon,
     HabitMakerUIHeaderOutlet,
@@ -65,9 +71,16 @@ export class App {
   protected readonly isSettingsActive = computed(
     () => this.currentPath() === '/settings',
   );
+  protected readonly desktopSetupRequired = signal(
+    isDesktopApp() && !getDesktopApiUrl(),
+  );
 
   constructor() {
     inject(AppUpdateService);
+  }
+
+  protected reloadAfterDesktopSetup(): void {
+    window.location.reload();
   }
 
   protected logout(): void {

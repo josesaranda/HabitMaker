@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "HabitMaker",
+  "version": "../../../package.json",
+  "identifier": "app.habitmaker.desktop",
+  "build": {
+    "beforeDevCommand": {
+      "cwd": "../../..",
+      "script": "npm exec nx run HabitMakerApp:serve"
+    },
+    "devUrl": "http://localhost:4200",
+    "beforeBuildCommand": {
+      "cwd": "../../..",
+      "script": "npm exec nx run HabitMakerApp:build:desktop"
+    },
+    "frontendDist": "../../../dist/apps/habit-maker-app/browser"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "HabitMaker",
+        "width": 1280,
+        "height": 900,
+        "minWidth": 360,
+        "minHeight": 640,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Productivity",
+    "shortDescription": "Build and track your daily habits.",
+    "longDescription": "HabitMaker helps you build habits that feel good, one day at a time, against your own HabitMaker server.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

@@ -43,6 +43,65 @@
       </hm-select>
     </hm-form-field>
   </div>
+  @if (isDesktop()) {
+  <section
+    class="mt-8 border-t border-border pt-8"
+    aria-labelledby="server-settings-title"
+  >
+    <div class="mb-4">
+      <h3
+        id="server-settings-title"
+        hmText="body-lg"
+        class="font-semibold tracking-tight text-text-primary"
+      >
+        {{ 'settings.serverTitle' | transloco }}
+      </h3>
+      <p hmText="body-sm" class="mt-1 text-text-secondary">
+        {{ 'settings.serverDescription' | transloco }}
+      </p>
+    </div>
+    <form class="grid gap-4" (submit)="saveServerUrl($event)">
+      <hm-form-field>
+        <label hmLabel for="server-api-url">
+          {{ 'settings.serverUrl' | transloco }}
+        </label>
+        <input
+          #serverUrlInput
+          id="server-api-url"
+          name="serverUrl"
+          type="url"
+          inputmode="url"
+          autocomplete="url"
+          spellcheck="false"
+          [hmInput]="serverStatus() === 'invalid' ? 'error' : 'default'"
+          [value]="serverUrl()"
+          (input)="updateServerUrl(serverUrlInput.value)"
+          [attr.aria-invalid]="serverStatus() === 'invalid' ? true : null"
+        />
+        @if (serverStatus() === 'invalid') {
+        <p hmError>{{ 'settings.serverInvalid' | transloco }}</p>
+        } @else {
+        <p hmHint>{{ 'settings.serverHint' | transloco }}</p>
+        }
+      </hm-form-field>
+      <button
+        hmButton="primary"
+        hmText="body-sm"
+        class="w-fit rounded-lg font-semibold"
+        type="submit"
+        [disabled]="serverStatus() === 'saving'"
+      >
+        {{ (serverStatus() === 'saving' ? 'settings.serverSaving' :
+        'settings.serverSave') | transloco }}
+      </button>
+    </form>
+    @if (serverStatus() === 'unreachable') {
+    <p hmText="body-sm" class="mt-3 text-error" role="alert">
+      {{ 'settings.serverUnreachable' | transloco }}
+    </p>
+    }
+  </section>
+  }
   <section
     class="mt-8 border-t border-border pt-8"
     aria-labelledby="sessions-title"
