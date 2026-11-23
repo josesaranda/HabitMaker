@@ -19,6 +19,7 @@ HabitMaker is a feature-rich habit tracking web application built as an Nx monor
 - **Internationalization (i18n):** Seamless interface switching between English and Spanish.
 - **Administration:** Comprehensive user management and application version checking for administrators.
 - **Desktop Client:** Native desktop application (Tauri) that reuses the web frontend and connects to any HabitMaker server.
+
 ---
 
 ## 🛠️ Tech Stack & Architecture
@@ -33,6 +34,7 @@ This project utilizes a modern, enterprise-grade stack orchestrated by Nx:
 | **Data Layer**       | TypeORM & PostgreSQL / sql.js              | **Production:** PostgreSQL for reliable persistence. **Development Default:** In-memory `sql.js` for quick local iteration. |
 | **Shared UI**        | Angular Component Library                  | Reusable components (`@habit-maker/ui`) to ensure design consistency across all features.                                   |
 | **Desktop**          | Tauri 2 (Rust)                             | Packages the Angular web app as a native desktop client, sharing the same frontend codebase.                                |
+
 ### 📂 Workspace Structure
 
 ```text
@@ -154,13 +156,14 @@ All configuration is managed via environment variables in the `.env` file. The A
 
 Use `npm exec nx <target> [project]` to run tasks.
 
-| Goal                       | Command Example                   | Notes                                                       |
-| :------------------------- | :-------------------------------- | :---------------------------------------------------------- |
-| **Run All Tests**          | `npm exec nx test HabitMakerApp`  | Run tests for a specific application (e.g., API, App).      |
-| **Build Frontend**         | `npm exec nx build HabitMakerApp` | Output written to `dist/apps/habit-maker-app`.              |
-| **Build Backend**          | `npm exec nx build HabitMakerApi` | Output written to `dist/apps/habit-maker-api`.              |
-| **Build Desktop**          | `npm run build:desktop`          | Tauri bundles written to `apps/habit-maker-desktop/src-tauri/target/`. |
-| **View Project Structure** | Use the `nx-workspace` skill.     | Ideal for understanding dependencies and available targets. |
+| Goal                       | Command Example                   | Notes                                                                  |
+| :------------------------- | :-------------------------------- | :--------------------------------------------------------------------- |
+| **Run All Tests**          | `npm exec nx test HabitMakerApp`  | Run tests for a specific application (e.g., API, App).                 |
+| **Build Frontend**         | `npm exec nx build HabitMakerApp` | Output written to `dist/apps/habit-maker-app`.                         |
+| **Build Backend**          | `npm exec nx build HabitMakerApi` | Output written to `dist/apps/habit-maker-api`.                         |
+| **Build Desktop**          | `npm run build:desktop`           | Tauri bundles written to `apps/habit-maker-desktop/src-tauri/target/`. |
+| **View Project Structure** | Use the `nx-workspace` skill.     | Ideal for understanding dependencies and available targets.            |
+
 ### 🔖 Release Management
 
 Releases are published with [`semantic-release`](https://github.com/semantic-release/semantic-release) when the **Release** workflow is manually dispatched on `next`, after CI has passed for that commit.
