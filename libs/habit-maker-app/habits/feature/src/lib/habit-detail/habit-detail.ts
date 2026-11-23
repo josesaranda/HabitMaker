@@ -34,7 +34,7 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { firstValueFrom } from 'rxjs';
-import { BrowserService } from '@habit-maker/shared-data-access';
+import { TitleService } from '@habit-maker/shared-data-access';
 import { HabitCard } from '../habit-card/habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card/habit-card';
 import {
@@ -80,7 +80,7 @@ const nonBlankValidator: ValidatorFn = (control) =>
   templateUrl: './habit-detail.html',
 })
 export class HabitDetail implements OnInit {
-  private readonly browserService = inject(BrowserService);
+  private readonly titleService = inject(TitleService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly habitService = inject(HabitService);
@@ -158,7 +158,7 @@ export class HabitDetail implements OnInit {
   protected readonly reminderPublicKey = signal<string | null>(null);
   protected readonly reminderNotice = signal('');
   ngOnInit(): void {
-    this.browserService.setTitle('pageTitles.habitDetail');
+    this.titleService.setTitle('pageTitles.habitDetail');
     this.route.queryParamMap
       .pipe(
         map((params) => params.get('from')),
@@ -209,7 +209,7 @@ export class HabitDetail implements OnInit {
           const habit = result.habit;
           this.habit.set(habit);
           this.loadReminder(habit.id);
-          this.browserService.setTitle('pageTitles.habitNamed', {
+          this.titleService.setTitle('pageTitles.habitNamed', {
             name: habit.name,
           });
           this.isLoading.set(false);
@@ -496,7 +496,7 @@ export class HabitDetail implements OnInit {
         next: (habit) => {
           this.isSavingHabitName.set(false);
           this.habit.set(habit);
-          this.browserService.setTitle('pageTitles.habitNamed', {
+          this.titleService.setTitle('pageTitles.habitNamed', {
             name: habit.name,
           });
           modal.close();

@@ -19,7 +19,7 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 
-import { BrowserService } from '@habit-maker/shared-data-access';
+import { TitleService } from '@habit-maker/shared-data-access';
 import { HabitService } from '@habit-maker/habits-data-access';
 import { HabitStore } from '@habit-maker/habits-data-access';
 import { LanguageService } from '@habit-maker/i18n-data-access';
@@ -43,7 +43,7 @@ import { SettingsService } from '@habit-maker/settings-data-access';
   templateUrl: './today.html',
 })
 export class Today implements OnInit {
-  private readonly browserService = inject(BrowserService);
+  private readonly titleService = inject(TitleService);
   private readonly habitService = inject(HabitService);
   private readonly habitStore = inject(HabitStore);
   private readonly languageService = inject(LanguageService);
@@ -100,7 +100,7 @@ export class Today implements OnInit {
   });
 
   ngOnInit(): void {
-    this.browserService.setTitle('pageTitles.today');
+    this.titleService.setTitle('pageTitles.today');
     this.habitStore.setShowArchived(this.homePreferences.getShowArchived());
     this.loadHabits();
     this.habitService.habitCreated$

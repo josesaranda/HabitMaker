@@ -19,7 +19,7 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 
-import { BrowserService } from '@habit-maker/shared-data-access';
+import { TitleService } from '@habit-maker/shared-data-access';
 import { HabitCard } from '../habit-card/habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card/habit-card';
 import { HabitService } from '@habit-maker/habits-data-access';
@@ -43,7 +43,7 @@ import { SettingsService } from '@habit-maker/settings-data-access';
   templateUrl: './home.html',
 })
 export class Home implements OnInit {
-  private readonly browserService = inject(BrowserService);
+  private readonly titleService = inject(TitleService);
   private readonly habitService = inject(HabitService);
   private readonly habitStore = inject(HabitStore);
   private readonly homePreferences = inject(SettingsService);
@@ -78,7 +78,7 @@ export class Home implements OnInit {
     viewChild<ElementRef<HTMLElement>>('archivedSection');
 
   ngOnInit(): void {
-    this.browserService.setTitle('pageTitles.home');
+    this.titleService.setTitle('pageTitles.home');
     const showArchived = this.homePreferences.getShowArchived();
     this.habitStore.setShowArchived(showArchived);
     this.loadHabits();

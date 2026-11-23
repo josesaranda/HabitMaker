@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { HabitMakerUIHeader } from '@habit-maker/habit-maker-ui';
 import { AuthService } from '@habit-maker/auth-data-access';
-import { BrowserService } from '@habit-maker/shared-data-access';
+import { TitleService } from '@habit-maker/shared-data-access';
 import { SettingsAdmin } from './settings-admin';
 import { SettingsUser } from './settings-user';
 
@@ -12,13 +12,13 @@ import { SettingsUser } from './settings-user';
   templateUrl: './settings.html',
 })
 export class Settings {
-  private readonly browserService = inject(BrowserService);
+  private readonly titleService = inject(TitleService);
   private readonly authService = inject(AuthService);
   protected readonly isAdmin = signal(
     this.authService.getUserRole() === 'admin',
   );
 
   constructor() {
-    this.browserService.setTitle('pageTitles.settings');
+    this.titleService.setTitle('pageTitles.settings');
   }
 }
