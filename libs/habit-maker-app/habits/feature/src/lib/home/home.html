@@ -35,7 +35,7 @@
     @for (habit of activeHabits(); track habit.id) {
     <app-habit-card
       class="hm-card-enter"
-      [style.animation-delay.ms]="$index * 50"
+      [style.animation-delay.ms]="$index * 100"
       [id]="habit.id"
       [name]="habit.name"
       [emoji]="habit.emoji ?? null"
@@ -66,7 +66,7 @@
       @for (habit of archivedHabits(); track habit.id) {
       <app-habit-card
         class="hm-card-enter"
-        [style.animation-delay.ms]="(activeHabits().length + $index) * 50"
+        [style.animation-delay.ms]="(activeHabits().length + $index) * 100"
         [id]="habit.id"
         [name]="habit.name"
         [emoji]="habit.emoji ?? null"

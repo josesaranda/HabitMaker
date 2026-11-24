@@ -40,7 +40,7 @@
       [emoji]="habit.emoji ?? null"
       [selected]="completions()[habit.id] ?? false"
       [actionLabel]="completionLabels()[habit.id]"
-      [style.animation-delay.ms]="$index * 50"
+      [style.animation-delay.ms]="$index * 100"
       (toggle)="toggleCompletion(habit.id, $event)"
     >
       {{ habit.name }}
@@ -92,7 +92,7 @@
         [selected]="completions()[habit.id] ?? false"
         disabled
         [actionLabel]="completionLabels()[habit.id]"
-        [style.animation-delay.ms]="(activeHabits().length + $index) * 50"
+        [style.animation-delay.ms]="(activeHabits().length + $index) * 100"
       >
         {{ habit.name }}
       </hm-card-compact>
