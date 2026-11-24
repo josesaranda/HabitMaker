@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoPipe } from '@jsverse/transloco';
 import {
@@ -22,6 +22,7 @@ import {
   getDesktopApiUrl,
   isDesktopApp,
 } from '@habit-maker/shared-data-access';
+import { DesktopMenuService } from '@habit-maker/desktop-data-access';
 import { DesktopSetup } from './desktop-setup/desktop-setup';
 
 @Component({
@@ -44,6 +45,7 @@ import { DesktopSetup } from './desktop-setup/desktop-setup';
 export class App {
   protected readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly desktopMenuService = inject(DesktopMenuService);
   private readonly currentUrl = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -77,10 +79,24 @@ export class App {
 
   constructor() {
     inject(AppUpdateService);
+
+    if (isDesktopApp()) {
+      void this.desktopMenuService.setup();
+      effect(() => {
+        if (this.desktopMenuService.connectRequested() > 0) {
+          this.desktopSetupRequired.set(true);
+        }
+      });
+    }
   }
 
   protected reloadAfterDesktopSetup(): void {
     window.location.reload();
+  }
+
+  public connectToServer(): void {
+    this.desktopMenuService.connectToServer();
+    this.desktopSetupRequired.set(true);
   }
 
   protected logout(): void {

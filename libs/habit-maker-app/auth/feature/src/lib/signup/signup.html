@@ -118,6 +118,16 @@
           {{ 'signup.submit' | transloco }}
           <hm-icon name="arrow-right" />
         </button>
+        @if (isDesktop()) {
+        <a
+          class="text-center"
+          hmLink
+          href="#"
+          (click)="connectToServer(); $event.preventDefault()"
+        >
+          {{ 'desktopSetup.ownServerLink' | transloco }}
+        </a>
+        }
         <p class="form-message" aria-live="polite">
           {{ message() | transloco }}
         </p>

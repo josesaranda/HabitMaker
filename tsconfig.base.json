@@ -43,6 +43,9 @@
       "@habit-maker/settings-data-access": [
         "./libs/habit-maker-app/settings/data-access/src/index.ts"
       ],
+      "@habit-maker/desktop-data-access": [
+        "./libs/habit-maker-app/desktop/data-access/src/index.ts"
+      ],
       "@habit-maker/admin-domain": [
         "./libs/habit-maker-app/admin/domain/src/index.ts"
       ],
