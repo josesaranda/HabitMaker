@@ -266,7 +266,7 @@ describe('Today', () => {
     const cards = compiled.querySelectorAll<HTMLElement>('hm-card-compact');
 
     expect(cards[0].style.animationDelay).toBe('0ms');
-    expect(cards[1].style.animationDelay).toBe('50ms');
+    expect(cards[1].style.animationDelay).toBe('100ms');
   });
 
   it('does not show the empty state when loading habits fails', async () => {

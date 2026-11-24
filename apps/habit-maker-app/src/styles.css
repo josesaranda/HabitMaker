@@ -93,19 +93,45 @@ body {
   }
 }
 
+@property --hm-card-enter-opacity {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --hm-card-enter-offset {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* WebKit drops backdrop-filter while opacity or transform is animated and
+   paints it again when the animation ends. That is the post-entrance blink
+   on iOS and macOS. Animating registered custom properties keeps the fade
+   and slide without putting those properties in the animation. */
 @keyframes hm-card-enter {
   from {
-    opacity: 0;
-    transform: translateY(0.5rem);
+    --hm-card-enter-opacity: 0;
+    --hm-card-enter-offset: 0.5rem;
   }
 
   to {
-    opacity: 1;
-    transform: none;
+    --hm-card-enter-opacity: 1;
+    --hm-card-enter-offset: 0px;
   }
 }
 
+.hm-card-enter {
+  opacity: var(--hm-card-enter-opacity);
+  transform: translate3d(0, var(--hm-card-enter-offset), 0);
+  animation: hm-card-enter 600ms ease-in-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hm-card-enter {
+    animation: none;
+  }
+
   ::view-transition-group(*),
   ::view-transition-old(root),
   ::view-transition-new(root),

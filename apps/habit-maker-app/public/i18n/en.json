@@ -39,7 +39,8 @@
     "unreachable": "Couldn't reach the HabitMaker API at that address. Check the URL and that the server is running.",
     "checking": "Checking connection…",
     "submit": "Connect",
-    "footer": "Your data stays on your own server."
+    "footer": "Your data stays on your own server.",
+    "ownServerLink": "I have my own server"
   },
   "login": {
     "title": "Log in",

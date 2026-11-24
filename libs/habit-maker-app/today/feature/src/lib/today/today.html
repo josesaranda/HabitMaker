@@ -36,11 +36,11 @@
   >
     @for (habit of activeHabits(); track habit.id) {
     <hm-card-compact
-      class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
+      class="hm-card-enter"
       [emoji]="habit.emoji ?? null"
       [selected]="completions()[habit.id] ?? false"
       [actionLabel]="completionLabels()[habit.id]"
-      [style.animation-delay.ms]="$index * 50"
+      [style.animation-delay.ms]="$index * 100"
       (toggle)="toggleCompletion(habit.id, $event)"
     >
       {{ habit.name }}
@@ -87,12 +87,12 @@
     >
       @for (habit of archivedHabits(); track habit.id) {
       <hm-card-compact
-        class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
+        class="hm-card-enter"
         [emoji]="habit.emoji ?? null"
         [selected]="completions()[habit.id] ?? false"
         disabled
         [actionLabel]="completionLabels()[habit.id]"
-        [style.animation-delay.ms]="(activeHabits().length + $index) * 50"
+        [style.animation-delay.ms]="(activeHabits().length + $index) * 100"
       >
         {{ habit.name }}
       </hm-card-compact>

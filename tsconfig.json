@@ -123,6 +123,9 @@
     },
     {
       "path": "./libs/habit-maker-api/settings/api"
+    },
+    {
+      "path": "./libs/habit-maker-app/desktop/data-access"
     }
   ]
 }

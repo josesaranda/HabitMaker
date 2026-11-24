@@ -265,6 +265,32 @@ export class PushService implements OnModuleInit, OnModuleDestroy {
     };
   }
 
+  async getDueDesktopReminders(
+    userId: string,
+    now = new Date(),
+  ): Promise<Array<{ habitId: string; habitName: string }>> {
+    const habits = await this.habits.find({
+      where: { user: { id: userId }, reminderEnabled: true },
+      relations: { user: true },
+    });
+    const result: Array<{ habitId: string; habitName: string }> = [];
+    for (const habit of habits) {
+      const time = habit.reminderTime;
+      const timeZone = habit.reminderTimeZone;
+      if (!time || !timeZone) continue;
+      const occurrence = this.getDueOccurrence(now, timeZone, time);
+      if (!occurrence) continue;
+      const completed = await this.completions.findOneBy({
+        habit: { id: habit.id },
+        date: occurrence.date,
+        completed: true,
+      });
+      if (completed) continue;
+      result.push({ habitId: habit.id, habitName: habit.name });
+    }
+    return result;
+  }
+
   private parseSubscription(input: unknown): WebPushSubscriptionInput {
     if (!input || typeof input !== 'object') {
       throw new BadRequestException('A push subscription is required');

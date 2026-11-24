@@ -34,8 +34,8 @@
   >
     @for (habit of activeHabits(); track habit.id) {
     <app-habit-card
-      class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
-      [style.animation-delay.ms]="$index * 50"
+      class="hm-card-enter"
+      [style.animation-delay.ms]="$index * 100"
       [id]="habit.id"
       [name]="habit.name"
       [emoji]="habit.emoji ?? null"
@@ -65,8 +65,8 @@
     >
       @for (habit of archivedHabits(); track habit.id) {
       <app-habit-card
-        class="motion-reduce:animate-none animate-[hm-card-enter_300ms_cubic-bezier(0.22,1,0.36,1)_both]"
-        [style.animation-delay.ms]="(activeHabits().length + $index) * 50"
+        class="hm-card-enter"
+        [style.animation-delay.ms]="(activeHabits().length + $index) * 100"
         [id]="habit.id"
         [name]="habit.name"
         [emoji]="habit.emoji ?? null"

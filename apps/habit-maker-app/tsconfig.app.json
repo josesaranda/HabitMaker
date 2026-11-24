@@ -9,6 +9,9 @@
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "references": [
     {
+      "path": "../../libs/habit-maker-app/desktop/data-access/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/habit-maker-app/settings/data-access/tsconfig.lib.json"
     },
     {

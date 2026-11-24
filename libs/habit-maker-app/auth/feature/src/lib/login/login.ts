@@ -21,8 +21,9 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { startWith } from 'rxjs';
-import { TitleService } from '@habit-maker/shared-data-access';
+import { TitleService, isDesktopApp } from '@habit-maker/shared-data-access';
 import { AuthService } from '@habit-maker/auth-data-access';
+import { DesktopMenuService } from '@habit-maker/desktop-data-access';
 import { AuthStory } from '../auth-story/auth-story';
 
 @Component({
@@ -49,6 +50,10 @@ export class Login {
   private readonly titleService = inject(TitleService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly desktopMenuService = inject(DesktopMenuService, {
+    optional: true,
+  });
+  protected readonly isDesktop = signal(isDesktopApp());
   protected readonly form = new FormGroup({
     email: new FormControl('', {
       nonNullable: true,
@@ -131,5 +136,9 @@ export class Login {
       next: () => void this.router.navigateByUrl('/home'),
       error: () => this.message.set('login.error'),
     });
+  }
+
+  protected connectToServer(): void {
+    this.desktopMenuService?.connectToServer();
   }
 }
