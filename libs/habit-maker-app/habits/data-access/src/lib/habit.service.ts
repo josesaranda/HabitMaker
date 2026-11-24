@@ -103,6 +103,16 @@ export class HabitService {
     );
   }
 
+  getDueDesktopReminders(): Observable<
+    Array<{ habitId: string; habitName: string }>
+  > {
+    return this.requireAuthentication(
+      this.http.get<Array<{ habitId: string; habitName: string }>>(
+        `${this.apiUrl}/push/desktop-reminders`,
+      ),
+    );
+  }
+
   savePushSubscription(
     subscription: PushSubscriptionJSON,
     language: SupportedLanguage,

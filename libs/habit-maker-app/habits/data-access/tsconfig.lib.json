@@ -31,6 +31,15 @@
     },
     {
       "path": "../domain/tsconfig.lib.json"
+    },
+    {
+      "path": "../../auth/data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../i18n/data-access/tsconfig.lib.json"
+    },
+    {
+      "path": "../../../shared/data-access/tsconfig.lib.json"
     }
   ]
 }

@@ -34,7 +34,7 @@ import {
   HabitMakerUIText,
 } from '@habit-maker/habit-maker-ui';
 import { firstValueFrom } from 'rxjs';
-import { TitleService } from '@habit-maker/shared-data-access';
+import { TitleService, isDesktopApp } from '@habit-maker/shared-data-access';
 import { HabitCard } from '../habit-card/habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card/habit-card';
 import {
@@ -237,6 +237,34 @@ export class HabitDetail implements OnInit {
       return;
     }
 
+    if (isDesktopApp()) {
+      if (typeof Notification === 'undefined') {
+        this.reminderNotice.set('habitDetail.reminderUnsupported');
+        return;
+      }
+      if (Notification.permission === 'denied') {
+        this.reminderNotice.set('habitDetail.reminderBlocked');
+        return;
+      }
+      if (Notification.permission === 'default') {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          this.reminderNotice.set('habitDetail.reminderBlocked');
+          return;
+        }
+      }
+
+      this.isSavingReminder.set(true);
+      this.reminderNotice.set('');
+      try {
+        await this.persistReminder(true, this.savedReminderTime(), true);
+      } catch {
+        this.isSavingReminder.set(false);
+        this.reminderNotice.set('habitDetail.reminderError');
+      }
+      return;
+    }
+
     if (!this.swPush?.isEnabled || typeof Notification === 'undefined') {
       this.reminderNotice.set('habitDetail.reminderUnsupported');
       return;
@@ -311,6 +339,19 @@ export class HabitDetail implements OnInit {
           this.reminderNotice.set('habitDetail.reminderError');
         },
       });
+    if (isDesktopApp()) {
+      this.reminderPublicKey.set(null);
+      if (typeof Notification === 'undefined') {
+        this.pushConfigurationState.set('missing');
+      } else {
+        this.pushConfigurationState.set('available');
+        if (Notification.permission === 'denied') {
+          this.reminderNotice.set('habitDetail.reminderBlocked');
+        }
+      }
+      return;
+    }
+
     this.habitService
       .getPushPublicKey()
       .pipe(takeUntilDestroyed(this.destroyRef))

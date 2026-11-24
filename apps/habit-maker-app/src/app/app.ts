@@ -23,6 +23,7 @@ import {
   isDesktopApp,
 } from '@habit-maker/shared-data-access';
 import { DesktopMenuService } from '@habit-maker/desktop-data-access';
+import { DesktopReminderService } from '@habit-maker/habits-data-access';
 import { DesktopSetup } from './desktop-setup/desktop-setup';
 
 @Component({
@@ -82,6 +83,8 @@ export class App {
 
     if (isDesktopApp()) {
       void this.desktopMenuService.setup();
+      const desktopReminderService = inject(DesktopReminderService);
+      desktopReminderService.start();
       effect(() => {
         if (this.desktopMenuService.connectRequested() > 0) {
           this.desktopSetupRequired.set(true);

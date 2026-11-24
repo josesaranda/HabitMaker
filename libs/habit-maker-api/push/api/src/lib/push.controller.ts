@@ -39,4 +39,9 @@ export class PushController {
   ): Promise<void> {
     return this.pushService.removeSubscription(body, request.user.id);
   }
+
+  @Get('desktop-reminders')
+  getDueDesktopReminders(@Req() request: AuthenticatedUserRequest) {
+    return this.pushService.getDueDesktopReminders(request.user.id);
+  }
 }
