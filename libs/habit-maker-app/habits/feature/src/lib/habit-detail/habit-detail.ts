@@ -37,7 +37,6 @@ import {
 } from '@habit-maker/habit-maker-ui';
 import { firstValueFrom } from 'rxjs';
 import { TitleService, isDesktopApp } from '@habit-maker/shared-data-access';
-import { HabitCard } from '../habit-card/habit-card';
 import type { HabitMakerUICardDayToggleEvent } from '../habit-card/habit-card';
 import {
   EMPTY,
@@ -61,7 +60,6 @@ const nonBlankValidator: ValidatorFn = (control) =>
 @Component({
   imports: [
     HabitMakerUIText,
-    HabitCard,
     HabitMakerUIButton,
     HabitMakerUIButtonIcon,
     HabitMakerUIEmojiPicker,

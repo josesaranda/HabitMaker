@@ -26,7 +26,7 @@ describe('Home', () => {
           useValue: {
             getHabits: () => of(habits),
             getArchivedCount: () => of({ count: 0 }),
-            getCompletionsForDates: vi.fn(() => of([])),
+            getCompletionsForRange: vi.fn(() => of([])),
             setCompletion: vi.fn(
               (_id: string, date: string, completed: boolean) =>
                 of({
@@ -142,7 +142,7 @@ describe('Home', () => {
       true,
     );
     expect(
-      TestBed.inject(HabitService).getCompletionsForDates,
+      TestBed.inject(HabitService).getCompletionsForRange,
     ).toHaveBeenCalledTimes(1);
     expect(compiled.querySelector('.hm-button-day--selected')).not.toBeNull();
   });
@@ -208,7 +208,7 @@ describe('Home', () => {
               return requestCount === 1 ? of([]) : of([habit]);
             },
             getArchivedCount: () => of({ count: 0 }),
-            getCompletionsForDates: () => of([]),
+            getCompletionsForRange: () => of([]),
             habitCreated$: habitCreated.asObservable(),
           },
         },
