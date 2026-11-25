@@ -147,6 +147,7 @@ export class HabitService {
     );
   }
 
+  /** @deprecated Use getCompletionsForRange instead. */
   getCompletionsForDates(
     id: string,
     dates: string[],
@@ -155,6 +156,19 @@ export class HabitService {
       this.http.get<HabitCompletionStatus[]>(
         `${this.apiUrl}/habits/${encodeURIComponent(id)}/completions`,
         { params: { dates: dates.join(',') } },
+      ),
+    );
+  }
+
+  getCompletionsForRange(
+    id: string,
+    from: string,
+    to: string,
+  ): Observable<HabitCompletionStatus[]> {
+    return this.requireAuthentication(
+      this.http.get<HabitCompletionStatus[]>(
+        `${this.apiUrl}/habits/${encodeURIComponent(id)}/completions`,
+        { params: { from, to } },
       ),
     );
   }

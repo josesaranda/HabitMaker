@@ -27,7 +27,8 @@ describe('HabitCard', () => {
         {
           provide: HabitService,
           useValue: {
-            getCompletionsForDates: (_id: string, dates: string[]) => {
+            getCompletionsForRange: (_id: string, from: string, to: string) => {
+              const dates = getDatesInRange(from, to);
               requestedDates.push(dates);
               return of(
                 dates.map((date) => ({
@@ -381,6 +382,17 @@ function toLocalDate(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function getDatesInRange(from: string, to: string): string[] {
+  const dates: string[] = [];
+  const date = new Date(`${from}T00:00:00`);
+  const end = new Date(`${to}T00:00:00`);
+  while (date <= end) {
+    dates.push(toLocalDate(date));
+    date.setDate(date.getDate() + 1);
+  }
+  return dates;
 }
 
 function formatSpanishDate(date: string): string {

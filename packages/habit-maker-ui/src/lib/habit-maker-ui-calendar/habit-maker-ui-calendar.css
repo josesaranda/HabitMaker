@@ -1,0 +1,98 @@
+:host(.hm-calendar__host) {
+  display: block;
+  width: 100%;
+}
+
+.hm-calendar {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.hm-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.hm-calendar__title {
+  margin: 0;
+  color: var(--color-text-white);
+  text-transform: capitalize;
+}
+
+.hm-calendar__title--current {
+  font-weight: 700;
+}
+
+.hm-calendar__navigation-button {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 15%);
+  border-radius: 9999px;
+  background: transparent;
+  color: rgb(255 255 255 / 70%);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.hm-calendar__navigation-button:hover:not(:disabled) {
+  background: rgb(255 255 255 / 10%);
+  color: var(--color-text-white);
+}
+
+.hm-calendar__navigation-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.hm-calendar__navigation-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.hm-calendar__navigation-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.hm-calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  color: rgb(255 255 255 / 55%);
+  text-align: center;
+}
+
+.hm-calendar__weekday {
+  display: grid;
+  place-items: center;
+}
+
+.hm-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+  justify-items: center;
+}
+
+.hm-calendar__empty-cell {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.hm-calendar__day {
+  justify-self: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-calendar__navigation-button {
+    transition-duration: 1ms;
+  }
+}

@@ -84,12 +84,28 @@ jobs:
           name: node-modules
       - run: tar -xzf node_modules.tar.gz && rm node_modules.tar.gz
 
+      - name: Determine whether desktop build is required
+        id: desktop
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ] || [ "${{ github.ref }}" = "refs/heads/main" ] || [ "${{ github.ref }}" = "refs/heads/next" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install Linux dependencies for desktop builds
+        if: steps.desktop.outputs.build == 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
-      - run: npx nx affected -t build --base="$NX_BASE" --head="$NX_HEAD"
+      - name: Build affected projects
+        run: |
+          if [ "${{ steps.desktop.outputs.build }}" = "true" ]; then
+            npx nx affected -t build --base="$NX_BASE" --head="$NX_HEAD"
+          else
+            npx nx affected -t build --base="$NX_BASE" --head="$NX_HEAD" --exclude=HabitMakerDesktop
+          fi
 
   test:
     needs: [dependencies, quality]

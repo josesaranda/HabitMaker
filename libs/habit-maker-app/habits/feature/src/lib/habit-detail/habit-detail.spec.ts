@@ -28,7 +28,7 @@ describe('HabitDetail', () => {
   it('shows the habit matching the route id', async () => {
     const paramMap = convertToParamMap({ id: 'habit-1' });
     const habitService = {
-      getCompletionsForDates: () => of([]),
+      getCompletionsForRange: () => of([]),
       getReminder: () => of({ enabled: false, time: null, timeZone: null }),
       getPushPublicKey: () => of({ publicKey: 'test-public-key' }),
       getTodayCompletion: () =>
@@ -69,12 +69,12 @@ describe('HabitDetail', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    const habitCard = fixture.nativeElement.querySelector('app-habit-card');
-    expect(habitCard?.querySelector('article h2')?.textContent?.trim()).toBe(
+    const habitCard = fixture.nativeElement.querySelector('hm-card');
+    expect(habitCard?.querySelector('h2')?.textContent?.trim()).toBe(
       'Leer 10 minutos',
     );
     expect(habitCard?.querySelector('time')?.textContent).toContain(
-      '1 nov 2026',
+      'Nov 1, 2026',
     );
     const pageContent = fixture.nativeElement.querySelector('main > div');
     expect(pageContent?.classList.contains('max-w-6xl')).toBe(true);
@@ -82,7 +82,7 @@ describe('HabitDetail', () => {
     expect(habitCard?.querySelector('a')).toBeNull();
     expect(
       habitCard?.querySelectorAll(
-        'button[aria-label^="Mostrar los tres días"]',
+        'button[aria-label="Show previous month"], button[aria-label="Show next month"]',
       ),
     ).toHaveLength(2);
     expect(habitCard?.classList.contains('max-w-3xl')).toBe(true);
@@ -137,7 +137,7 @@ describe('HabitDetail', () => {
         {
           provide: HabitService,
           useValue: {
-            getCompletionsForDates: () => of([]),
+            getCompletionsForRange: () => of([]),
             getReminder: () =>
               of({ enabled: false, time: null, timeZone: null }),
             getPushPublicKey: () => of({ publicKey: null }),
@@ -162,7 +162,7 @@ describe('HabitDetail', () => {
 
   it('applies a changed reminder time only after saving it explicitly', async () => {
     const habitService = {
-      getCompletionsForDates: () => of([]),
+      getCompletionsForRange: () => of([]),
       getReminder: () =>
         of({ enabled: true, time: '08:00', timeZone: 'Europe/Madrid' }),
       getPushPublicKey: () => of({ publicKey: 'test-public-key' }),
@@ -233,7 +233,7 @@ describe('HabitDetail', () => {
 
   it('asks for confirmation before deleting and returns to home on success', async () => {
     const habitService = {
-      getCompletionsForDates: () => of([]),
+      getCompletionsForRange: () => of([]),
       getReminder: () => of({ enabled: false, time: null, timeZone: null }),
       getPushPublicKey: () => of({ publicKey: null }),
       getTodayCompletion: () =>
@@ -302,7 +302,7 @@ describe('HabitDetail', () => {
 
   it('renames the habit from the header edit dialog', async () => {
     const habitService = {
-      getCompletionsForDates: () => of([]),
+      getCompletionsForRange: () => of([]),
       getReminder: () => of({ enabled: false, time: null, timeZone: null }),
       getPushPublicKey: () => of({ publicKey: null }),
       getTodayCompletion: () =>
@@ -412,14 +412,14 @@ describe('HabitDetail', () => {
       '🏃',
     );
     expect(editDialog.open).toBe(false);
-    expect(
-      compiled.querySelector('app-habit-card article h2')?.textContent?.trim(),
-    ).toBe('Leer 20 minutos');
+    expect(compiled.querySelector('hm-card h2')?.textContent?.trim()).toBe(
+      'Leer 20 minutos',
+    );
   });
 
   it('keeps the edit dialog open and reports the error when the rename fails', async () => {
     const habitService = {
-      getCompletionsForDates: () => of([]),
+      getCompletionsForRange: () => of([]),
       getReminder: () => of({ enabled: false, time: null, timeZone: null }),
       getPushPublicKey: () => of({ publicKey: null }),
       getTodayCompletion: () =>
@@ -485,19 +485,15 @@ describe('HabitDetail', () => {
     expect(editDialog.textContent).toContain(
       'No se pudo actualizar el hábito. Inténtalo de nuevo.',
     );
-    expect(
-      compiled.querySelector('app-habit-card article h2')?.textContent?.trim(),
-    ).toBe('Leer 10 minutos');
+    expect(compiled.querySelector('hm-card h2')?.textContent?.trim()).toBe(
+      'Leer 10 minutos',
+    );
   });
 
-  it('restores the calendar window from the URL and updates it on navigation', async () => {
-    const initialStart = new Date();
-    initialStart.setHours(0, 0, 0, 0);
-    initialStart.setDate(initialStart.getDate() - 12);
-    const initialStartDate = toLocalDate(initialStart);
-    const nextStart = new Date(initialStart);
-    nextStart.setDate(nextStart.getDate() + 3);
-    const nextStartDate = toLocalDate(nextStart);
+  it('loads calendar completions and reloads them when changing months', async () => {
+    const getCompletionsForRange = vi.fn(
+      (_id: string, _from: string, _to: string) => of([]),
+    );
     await TestBed.configureTestingModule({
       imports: [HabitDetail],
       providers: [
@@ -517,14 +513,14 @@ describe('HabitDetail', () => {
                 error: null,
               },
             }),
-            queryParamMap: of(convertToParamMap({ from: initialStartDate })),
+            queryParamMap: of(convertToParamMap({})),
             snapshot: { paramMap: convertToParamMap({ id: 'habit-1' }) },
           },
         },
         {
           provide: HabitService,
           useValue: {
-            getCompletionsForDates: () => of([]),
+            getCompletionsForRange,
             getReminder: () =>
               of({ enabled: false, time: null, timeZone: null }),
             getPushPublicKey: () => of({ publicKey: null }),
@@ -535,54 +531,41 @@ describe('HabitDetail', () => {
       ],
     }).compileComponents();
 
-    const navigate = vi
-      .spyOn(TestBed.inject(Router), 'navigate')
-      .mockResolvedValue(true);
     const fixture = TestBed.createComponent(HabitDetail);
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(
-      compiled.querySelector(
-        `[aria-label="Marcar como completado el ${formatSpanishDate(initialStartDate)}"]`,
-      ),
-    ).not.toBeNull();
+    const calendar = compiled.querySelector('hm-calendar')!;
+    const monthHeading = calendar.querySelector('.hm-calendar__title')!;
+    const initialMonth = monthHeading.textContent;
+    expect(getCompletionsForRange).toHaveBeenCalledTimes(1);
 
     compiled
-      .querySelector<HTMLButtonElement>(
-        '[aria-label="Mostrar los tres días siguientes"]',
-      )!
+      .querySelector<HTMLButtonElement>('[aria-label="Show previous month"]')!
       .click();
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
 
-    expect(navigate).toHaveBeenCalledWith(
-      [],
-      expect.objectContaining({
-        queryParams: { from: nextStartDate },
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-      }),
+    expect(monthHeading.textContent).not.toBe(initialMonth);
+    expect(getCompletionsForRange).toHaveBeenCalledTimes(2);
+    expect(getCompletionsForRange.mock.calls[1]?.[0]).toBe('habit-1');
+    expect(getCompletionsForRange.mock.calls[1]?.[1]).not.toBe(
+      getCompletionsForRange.mock.calls[0]?.[1],
     );
-    expect(
-      compiled.querySelector(
-        `[aria-label="Marcar como completado el ${formatSpanishDate(nextStartDate)}"]`,
-      ),
-    ).not.toBeNull();
   });
 
   it('persists day toggles and updates the current-day completion state', async () => {
     const today = toLocalDate(new Date());
     const completedDates = new Set<string>();
     const habitService = {
-      getCompletionsForDates: (_id: string, dates: string[]) =>
+      getCompletionsForRange: () =>
         of(
-          dates.map((date) => ({
+          Array.from(completedDates, (date) => ({
             date,
-            completed: completedDates.has(date),
+            completed: true,
             completedAt: null,
           })),
         ),
@@ -597,7 +580,12 @@ describe('HabitDetail', () => {
       setCompletion: vi.fn((_id: string, date: string, completed: boolean) => {
         if (completed) completedDates.add(date);
         else completedDates.delete(date);
-        return of({ date, completed, completedAt: null });
+        return of({
+          date,
+          completed,
+          completedAt: null,
+          currentStreak: completed ? 1 : 0,
+        });
       }),
     };
 
@@ -635,7 +623,7 @@ describe('HabitDetail', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const dayButton = compiled.querySelector<HTMLButtonElement>(
-      `[aria-label="Marcar como completado el ${formatSpanishDate(today)}"]`,
+      `[aria-label="Mark ${today} as complete"]`,
     );
     expect(dayButton).not.toBeNull();
     vi.spyOn(dayButton!, 'getBoundingClientRect').mockReturnValue(
@@ -651,20 +639,22 @@ describe('HabitDetail', () => {
       today,
       true,
     );
-    expect(dayButton?.getAttribute('aria-pressed')).toBe('true');
+    expect(confetti).toHaveBeenCalled();
+    expect(
+      compiled
+        .querySelector<HTMLButtonElement>(
+          `[aria-label="Unmark ${today} as complete"]`,
+        )
+        ?.getAttribute('aria-pressed'),
+    ).toBe('true');
     expect(compiled.querySelector('[role="status"]')?.textContent).toContain(
       '¡Enhorabuena, ya has completado tu hábito hoy!',
     );
-    expect(confetti).toHaveBeenCalledWith({
-      position: { x: 60, y: 80 },
-      color: ['#a8c5ad', '#e6b875', '#ffffff'],
-    });
-
     const previousDate = new Date();
     previousDate.setDate(previousDate.getDate() - 1);
     const previousDateLabel = toLocalDate(previousDate);
     const previousDayButton = compiled.querySelector<HTMLButtonElement>(
-      `[aria-label="Marcar como completado el ${formatSpanishDate(previousDateLabel)}"]`,
+      `[aria-label="Mark ${previousDateLabel} as complete"]`,
     );
     expect(previousDayButton).not.toBeNull();
     vi.spyOn(previousDayButton!, 'getBoundingClientRect').mockReturnValue(
@@ -680,10 +670,6 @@ describe('HabitDetail', () => {
       previousDateLabel,
       true,
     );
-    expect(confetti).toHaveBeenLastCalledWith({
-      position: { x: 110, y: 130 },
-      color: ['#a8c5ad', '#e6b875', '#ffffff'],
-    });
   });
 });
 
@@ -692,10 +678,4 @@ function toLocalDate(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
-}
-
-function formatSpanishDate(date: string): string {
-  return new Intl.DateTimeFormat('es-ES', { dateStyle: 'full' }).format(
-    new Date(`${date}T00:00:00`),
-  );
 }

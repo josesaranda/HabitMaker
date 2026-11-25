@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'node:crypto';
-import { In, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { HabitEntity } from '@habit-maker/api-habits-infrastructure';
 import { HabitCompletionEntity } from '@habit-maker/api-habits-infrastructure';
 
@@ -89,6 +89,7 @@ export class HabitCompletionsService {
     });
   }
 
+  /** @deprecated Use findForRange instead. */
   async findForDates(
     habitId: string,
     datesInput: unknown,
@@ -104,6 +105,41 @@ export class HabitCompletionsService {
     );
 
     return dates.map((date) => {
+      const completion = completionsByDate.get(date);
+      return {
+        date,
+        completed: completion?.completed ?? false,
+        completedAt: completion?.completedAt ?? null,
+      };
+    });
+  }
+
+  async findForRange(
+    habitId: string,
+    fromInput: unknown,
+    toInput: unknown,
+    userId: string,
+  ): Promise<HabitCompletionStatus[]> {
+    const from = this.parseDate(fromInput);
+    const to = this.parseDate(toInput);
+    if (from > to) {
+      throw new BadRequestException('from must be before or equal to to');
+    }
+
+    const rangeDates = this.buildDateRange(from, to);
+    if (rangeDates.length === 0 || rangeDates.length > 42) {
+      throw new BadRequestException('Request between 1 and 42 dates');
+    }
+
+    await this.findOwnedHabit(habitId, userId);
+    const completions = await this.completions.find({
+      where: { habit: { id: habitId }, date: Between(from, to) },
+    });
+    const completionsByDate = new Map(
+      completions.map((completion) => [completion.date, completion]),
+    );
+
+    return rangeDates.map((date) => {
       const completion = completionsByDate.get(date);
       return {
         date,
@@ -223,6 +259,21 @@ export class HabitCompletionsService {
     }
 
     return input;
+  }
+
+  private buildDateRange(from: string, to: string): string[] {
+    const dates: string[] = [];
+    const [fromYear, fromMonth, fromDay] = from.split('-').map(Number);
+    const cursor = new Date(Date.UTC(fromYear, fromMonth - 1, fromDay));
+    const [toYear, toMonth, toDay] = to.split('-').map(Number);
+    const end = new Date(Date.UTC(toYear, toMonth - 1, toDay));
+
+    while (cursor <= end) {
+      dates.push(cursor.toISOString().slice(0, 10));
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+
+    return dates;
   }
 
   private parseDates(input: unknown): string[] {
