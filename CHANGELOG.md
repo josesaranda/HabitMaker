@@ -1,3 +1,20 @@
+# [1.16.0](https://github.com/josesaranda/HabitMaker/compare/v1.15.0...v1.16.0) (2026-11-25)
+
+
+### Features
+
+* add desktop client support and update README with desktop app instructions ([a506881](https://github.com/josesaranda/HabitMaker/commit/a506881aef6606a796f0c3f5671f5c7a5d448f9d))
+* add desktop section and navigation to LandingPage with localized content ([dc8a900](https://github.com/josesaranda/HabitMaker/commit/dc8a9002cc902763d2e427dc0ac811e8acd9e012))
+* add desktop support with menu integration and localization ([f6d71c8](https://github.com/josesaranda/HabitMaker/commit/f6d71c8812dcc0d537b2cf84ebcac2a4145d80a6))
+* add unit tests for DesktopMenuService to validate connection logic ([4c57e08](https://github.com/josesaranda/HabitMaker/commit/4c57e08159284ea75c7bb5fb429e38d5bdba23de))
+* enhance card animations and styles with custom properties and backdrop filters ([8cf662b](https://github.com/josesaranda/HabitMaker/commit/8cf662bce6fe8129b6164163f19ae4417a0223b2))
+* enhance CI workflow to conditionally build desktop projects based on event type ([0dd2d3a](https://github.com/josesaranda/HabitMaker/commit/0dd2d3ad0d43de9dce42e189823a7daf2aff0c3a))
+* implement desktop reminders with notification support and service integration ([73b1ee0](https://github.com/josesaranda/HabitMaker/commit/73b1ee080989616b684d0d37618cab48c35c2466))
+* implement habit completion range queries and update UI components ([432edad](https://github.com/josesaranda/HabitMaker/commit/432edad8580cd6e77c72c31e6711064b607fc37f))
+* increase animation delay for habit cards to enhance visual experience ([45a82a6](https://github.com/josesaranda/HabitMaker/commit/45a82a67d77c0d1a3ea9da7cacdd0acd2e62d54b))
+* refactor habit completion methods to use date range and update related tests ([d4a5b1a](https://github.com/josesaranda/HabitMaker/commit/d4a5b1a499a26a188ce9522d0e060fa748c817e7))
+* replace BrowserService with TitleService for title management across the application ([e62a69c](https://github.com/josesaranda/HabitMaker/commit/e62a69c974ffaae5cb6c0aedac65d93fd52df9d5))
+
 # [1.15.0](https://github.com/josesaranda/HabitMaker/compare/v1.14.0...v1.15.0) (2026-11-23)
 
 
