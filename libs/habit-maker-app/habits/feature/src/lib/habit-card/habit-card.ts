@@ -150,13 +150,22 @@ export class HabitCard {
         return;
       }
 
-      const dates = calendarDays.map(({ date }) => date);
-      const subscription = this.habitService
-        .getCompletionsForDates(habitId, dates)
-        .subscribe({
-          next: (completions) => this.setCompletions(completions),
-          error: () => this.completionError.set(true),
-        });
+      const firstDate = calendarDays[0]?.date;
+      const lastDate = calendarDays[calendarDays.length - 1]?.date;
+      const subscription =
+        firstDate && lastDate
+          ? this.habitService
+              .getCompletionsForRange(habitId, firstDate, lastDate)
+              .subscribe({
+                next: (completions) => this.setCompletions(completions),
+                error: () => this.completionError.set(true),
+              })
+          : undefined;
+
+      if (!subscription) {
+        this.completionError.set(true);
+        return;
+      }
 
       onCleanup(() => subscription.unsubscribe());
     });

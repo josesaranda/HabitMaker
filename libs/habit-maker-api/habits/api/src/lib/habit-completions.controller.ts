@@ -45,12 +45,21 @@ export class HabitCompletionsController {
     );
   }
 
+  /**
+   * @deprecated Use `from` and `to` query parameters instead of `dates`.
+   */
   @Get()
   findAll(
     @Param('habitId') habitId: string,
     @Query('dates') dates: string | undefined,
+    @Query('from') from: string | undefined,
+    @Query('to') to: string | undefined,
     @Req() request: AuthenticatedUserRequest,
   ) {
+    if (from !== undefined && to !== undefined) {
+      return this.completions.findForRange(habitId, from, to, request.user.id);
+    }
+
     if (dates !== undefined) {
       return this.completions.findForDates(habitId, dates, request.user.id);
     }

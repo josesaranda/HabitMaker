@@ -26,6 +26,8 @@ import {
   HabitMakerUIFormFieldLabel,
   HabitMakerUIHeader,
   HabitMakerUIIcon,
+  HabitMakerUICalendar,
+  HabitMakerUICard,
   HabitMakerUIInput,
   HabitMakerUIModal,
   HabitMakerUIModalContent,
@@ -68,6 +70,8 @@ const nonBlankValidator: ValidatorFn = (control) =>
     HabitMakerUIFormFieldLabel,
     HabitMakerUIHeader,
     HabitMakerUIIcon,
+    HabitMakerUICalendar,
+    HabitMakerUICard,
     HabitMakerUIInput,
     HabitMakerUIModal,
     HabitMakerUIModalContent,
@@ -96,6 +100,13 @@ export class HabitDetail implements OnInit {
   protected readonly completionUpdate =
     signal<HabitMakerUICardDayToggleEvent | null>(null);
   protected readonly calendarWindowStart = signal<string | null>(null);
+  protected readonly calendarMonth = signal<string | null>(null);
+  protected readonly calendarCompletions = signal<Record<string, boolean>>({});
+  protected readonly calendarCompletedDates = computed(() =>
+    Object.keys(this.calendarCompletions()).filter(
+      (date) => this.calendarCompletions()[date],
+    ),
+  );
   protected readonly dayCompletionError = signal('');
   protected readonly loadError = signal('');
   protected readonly isDeletingHabit = signal(false);
@@ -158,6 +169,10 @@ export class HabitDetail implements OnInit {
   protected readonly reminderPublicKey = signal<string | null>(null);
   protected readonly reminderNotice = signal('');
   ngOnInit(): void {
+    const today = new Date();
+    this.calendarMonth.set(
+      this.toLocalDate(new Date(today.getFullYear(), today.getMonth(), 1)),
+    );
     this.titleService.setTitle('pageTitles.habitDetail');
     this.route.queryParamMap
       .pipe(
@@ -209,6 +224,9 @@ export class HabitDetail implements OnInit {
           const habit = result.habit;
           this.habit.set(habit);
           this.loadReminder(habit.id);
+          if (this.calendarMonth()) {
+            this.loadCalendarCompletions(this.calendarMonth()!);
+          }
           this.titleService.setTitle('pageTitles.habitNamed', {
             name: habit.name,
           });
@@ -463,6 +481,57 @@ export class HabitDetail implements OnInit {
     return value;
   }
 
+  protected updateCalendarMonth(monthStart: string): void {
+    this.calendarMonth.set(monthStart);
+    this.loadCalendarCompletions(monthStart);
+  }
+
+  private loadCalendarCompletions(monthStart: string): void {
+    const currentHabit = this.habit();
+    if (!currentHabit) return;
+    if (typeof this.habitService.getCompletionsForRange !== 'function') return;
+
+    const [yearValue, monthValue] = monthStart.split('-').map(Number);
+    const monthStartsOn = new Date(yearValue, monthValue - 1, 1);
+    const leadingEmpty = (monthStartsOn.getDay() + 6) % 7;
+    const monthDays = new Date(yearValue, monthValue, 0).getDate();
+    const displayedCellCount = 42;
+    const trailingDays = displayedCellCount - leadingEmpty - monthDays;
+
+    const firstDisplayedDate = new Date(
+      yearValue,
+      monthValue - 1,
+      1 - leadingEmpty,
+    );
+    const lastDisplayedDate = new Date(
+      yearValue,
+      monthValue - 1,
+      monthDays + trailingDays,
+    );
+
+    const from = this.toLocalDate(firstDisplayedDate);
+    const to = this.toLocalDate(lastDisplayedDate);
+
+    this.habitService
+      .getCompletionsForRange(currentHabit.id, from, to)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (completions) => {
+          this.calendarCompletions.set(
+            Object.fromEntries(
+              completions.map((completion) => [
+                completion.date,
+                completion.completed,
+              ]),
+            ),
+          );
+        },
+        error: () => {
+          this.calendarCompletions.set({});
+        },
+      });
+  }
+
   protected toggleDayCompletion(event: HabitMakerUICardDayToggleEvent): void {
     const currentHabit = this.habit();
     if (!currentHabit || this.isSavingDayCompletion()) return;
@@ -475,6 +544,10 @@ export class HabitDetail implements OnInit {
       .subscribe({
         next: (completion) => {
           this.isSavingDayCompletion.set(false);
+          this.calendarCompletions.update((completions) => ({
+            ...completions,
+            [completion.date]: completion.completed,
+          }));
           this.completionUpdate.set({
             date: completion.date,
             completed: completion.completed,

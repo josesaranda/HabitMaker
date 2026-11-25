@@ -36,6 +36,7 @@ describe('App', () => {
             getHabitsWithTodayCompletions: () =>
               of({ habits: [], completions: {} }),
             getCompletionsForDates: () => of([]),
+            getCompletionsForRange: () => of([]),
             getReminder: () =>
               of({ enabled: false, time: null, timeZone: null }),
             getPushPublicKey: () => of({ publicKey: null }),
@@ -109,9 +110,8 @@ describe('App', () => {
       fixture.nativeElement.querySelector('hm-header-outlet h1')?.textContent,
     ).toContain('Detalle del hábito');
     expect(
-      fixture.nativeElement.querySelector(
-        'app-habit-detail app-habit-card hm-card article h2',
-      )?.textContent,
+      fixture.nativeElement.querySelector('app-habit-detail hm-card article h2')
+        ?.textContent,
     ).toContain('Leer 10 minutos');
   });
 

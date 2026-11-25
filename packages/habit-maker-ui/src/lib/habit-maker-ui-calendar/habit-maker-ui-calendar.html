@@ -1,0 +1,53 @@
+<div class="hm-calendar">
+  <div class="hm-calendar__header">
+    <button
+      class="hm-calendar__navigation-button hm-calendar__navigation-button--previous"
+      type="button"
+      [attr.aria-label]="previousLabel()"
+      [disabled]="!canGoPrevious()"
+      (click)="previousMonth()"
+    >
+      <hm-icon class="size-5" name="arrow-left" />
+    </button>
+
+    <h2
+      hmText="body-md"
+      class="hm-calendar__title"
+      [class.hm-calendar__title--current]="isCurrentMonth()"
+    >
+      {{ monthLabel() }}
+    </h2>
+
+    <button
+      class="hm-calendar__navigation-button hm-calendar__navigation-button--next"
+      type="button"
+      [attr.aria-label]="nextLabel()"
+      [disabled]="!canGoNext()"
+      (click)="nextMonth()"
+    >
+      <hm-icon class="size-5" name="arrow-right" />
+    </button>
+  </div>
+
+  <div class="hm-calendar__weekdays" aria-hidden="true">
+    @for (weekday of localeDays(); track $index) {
+    <span hmText="caption-xs" class="hm-calendar__weekday">{{ weekday }}</span>
+    }
+  </div>
+
+  <div class="hm-calendar__grid" role="grid" [attr.aria-label]="monthLabel()">
+    @for (day of calendarDays(); track $index) {
+    <hm-button-day
+      class="hm-calendar__day"
+      [dayOfMonth]="day.dayOfMonth"
+      [selected]="day.completed"
+      [today]="day.today"
+      [state]="day.completed ? 'selected' : day.today ? 'today' : 'default'"
+      [interactive]="dayToggleEnabled()"
+      [disabled]="day.disabled"
+      [ariaLabel]="day.ariaLabel"
+      (pressed)="toggleDay(day)"
+    />
+    }
+  </div>
+</div>
